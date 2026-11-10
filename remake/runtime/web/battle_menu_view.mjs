@@ -2,7 +2,7 @@ import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {battleViewport,battleActorPositions,battleBallState} from './core/battle/battle_layout.mjs';
 import {commandForActor} from './core/battle/battle_scheduler.mjs';
-import {operationMnuTextOptions} from './core/ui/menu_presentation.mjs';
+import {operationMnuTextOptions,techniqueDisplayName} from './core/ui/menu_presentation.mjs';
 import {TECHNIQUE_CATEGORIES,TECHNIQUE_WHEEL_NAVIGATION} from './core/ui/menu_techniques.mjs';
 import {BattleResultView} from './battle_result_view.mjs';
 import {battleResources,drawBattleImage} from './core/battle/battle_resources.mjs';
@@ -69,7 +69,11 @@ export class BattleMenuView{
     if(this.stage==='result')return;
     let message='';
     if(this.stage==='actors')message=this.snapshot?.actors.find(a=>a.id===this.snapshot.player_id)?.name??'';
-    else if(this.stage==='wheel')message=this.commandSlots?.[this.focusIndex]?.name??'';
+    else if(this.stage==='wheel'){
+      const slot=this.commandSlots?.[this.focusIndex];
+      const names=slot?.skill?.component_skill_names;
+      message=slot?.type===1&&names?.length?`${slot.name}=${names.map(techniqueDisplayName).join(' + ')}`:slot?.name??'';
+    }
     else if(['skills','items'].includes(this.stage))message=this.entries?.[this.listIndex]?.name??(this.stage==='skills'?'此分类没有招式。':'没有可用的药品。');
     else if(this.stage==='target'){
       const preview=this.targetPreview();
@@ -81,7 +85,7 @@ export class BattleMenuView{
   ready(){return this.battle.readyPlayerIds?.()??(this.snapshot?.phase==='command'?[this.snapshot.player_id]:[]);}
   available(id=this.snapshot?.player_id){return this.battle?.canCommand?.(id)??this.snapshot?.phase==='command';}
   skills(){const id=this.snapshot.player_id,order=this.snapshot.source.player_command_order?.[id]??[];return Object.values(this.battle.skills).filter(s=>s.actor_id===id).sort((a,b)=>(order.indexOf(a.id)<0?999:order.indexOf(a.id))-(order.indexOf(b.id)<0?999:order.indexOf(b.id)));}
-  slots(){const skills=this.skills(),bindings=this.getBindings?.(this.snapshot.player_id);return (bindings??[...Array.from({length:3},(_,i)=>({type:0,index_one_based:(skills[i]?.original_skill_index??i)+1})),...[1,2,3,4].map(n=>({type:2,index_one_based:n,icon:n-1,color:0}))]).map((slot,i)=>{const skill=slot.type===0?(bindings?skills.find(s=>s.original_skill_index===slot.index_one_based-1):skills[i]):slot.type===1?skills.find(s=>s.technique_index_one_based===slot.index_one_based):null;return {...slot,skill,name:slot.type===2?['使用招式','使用物品','防御','逃跑'][slot.index_one_based-1]:skill?.name??slot.name??(slot.type===1?'编成技巧':'当前不可用')};});}
+  slots(){const skills=this.skills(),bindings=this.getBindings?.(this.snapshot.player_id);return (bindings??[...Array.from({length:3},(_,i)=>({type:0,index_one_based:(skills[i]?.original_skill_index??i)+1})),...[1,2,3,4].map(n=>({type:2,index_one_based:n,icon:n-1,color:0}))]).map((slot,i)=>{const skill=slot.type===0?(bindings?skills.find(s=>s.original_skill_index===slot.index_one_based-1):skills[i]):slot.type===1?skills.find(s=>s.technique_index_one_based===slot.index_one_based):null;return {...slot,skill,name:slot.type===2?['使用招式','使用物品','防御','逃跑'][slot.index_one_based-1]:techniqueDisplayName(skill?.name??slot.name??(slot.type===1?'编成技巧':'当前不可用'))};});}
   remember(){if(this.snapshot){const previous=this.memory.get(this.snapshot.player_id)??{};this.memory.set(this.snapshot.player_id,{...previous,wheel:this.focusIndex,list:['skills','items'].includes(this.stage)?this.listIndex:previous.list??this.listIndex,target:this.targetId,...(this.stage==='skills'?{skillCategory:this.skillCategory}:{})});}}
   update(snapshot){
     if(this.disposed)return;const previous=this.snapshot;this.snapshot=snapshot;this.root.dataset.phase=snapshot.phase;this.root.dataset.actorId=snapshot.player_id;this.root.dataset.ticks=String(snapshot.scheduler?.ticks??0);this.root.dataset.readyIds=this.ready().join(',');
@@ -132,7 +136,7 @@ export class BattleMenuView{
     else if(slot?.type===2&&slot.index_one_based===4&&this.battle.chooseEscape)this.commitFixed('escape');
     else this.reject('当前无法执行此指令。');
   }
-  skillEntries(){return this.skills().filter(s=>skillCategory(s)===this.skillCategory).map(s=>({id:s.id,name:s.name,description:this.battle.skillUnavailableReason?.(s.id)||`${s.name}　MP ${s.mp_cost}`,available:this.battle.canChoose(s.id),skill:s}));}
+  skillEntries(){return this.skills().filter(s=>skillCategory(s)===this.skillCategory).map(s=>({id:s.id,name:techniqueDisplayName(s.name),description:this.battle.skillUnavailableReason?.(s.id)||`${s.name}　MP ${s.mp_cost}`,available:this.battle.canChoose(s.id),skill:s}));}
   openSkills(){const memory=this.getSettings?.().battleCursor==='memory'?this.memory.get(this.snapshot.player_id):null;this.skillCategory=memory?.skillCategory??0;this.entries=this.skillEntries();this.openList('skills');}
   selectSkillCategory(index){
     if(this.stage!=='skills'||index===this.skillCategory)return;
@@ -206,15 +210,17 @@ export class BattleMenuView{
     this.root.dataset.compositeMode='webgl-source-over-lighter';
   }
   asset(id,index,x,y,{blend='source-over',mask=false}={}){const a=this.manifest.assets[id];if(!a)return;const f=a.frames[((index%a.frames.length)+a.frames.length)%a.frames.length],c=blend==='lighter'?this.glowCtx:this.ctx,image=this.images.get(mask&&f.inverse_mask_image?f.inverse_mask_image:f.image);c.save();c.globalCompositeOperation=blend;if(image)drawBattleImage(c,image,x,y);if(f.indexed_image){const indexed=this.images.get(f.indexed_image);if(indexed){this.glowCtx.save();this.glowCtx.globalCompositeOperation='lighter';drawBattleImage(this.glowCtx,indexed,x,y);this.glowCtx.restore();}}c.restore();}
-  text(value,x,y,{font='12px SimSun',bitmapFont='simsun12_text',color='#ffffff',align='left',width=null,widget=null}={}){
+  text(value,x,y,{font='12px SimSun',bitmapFont='simsun12_text',color='#ffffff',align='left',width=null,widget=null,wrap=false}={}){
     const c=this.ctx;value=String(value);if(!value)return;
     if(this.textRenderer){
       let options;if(widget){options=this.fontOptions.get(widget);if(!options){options={...operationMnuTextOptions(widget),maxLines:1};this.fontOptions.set(widget,options);}}
       else options={font:bitmapFont,foreground:color,shadow:'#000000',align,maxWidth:width,maxLines:1};
+      if(wrap)options={...options,maxLines:Infinity};
       const key=JSON.stringify([value,options]);let rendered=this.textCache.get(key);
       if(!rendered){const canvas=this.doc.createElement('canvas');rendered={canvas,...this.textRenderer.paint(canvas,value,options)};if(this.textCache.size>128)this.textCache.clear();this.textCache.set(key,rendered);}
       const anchor=!widget&&width===null?(align==='right'?1:align==='center'?.5:0)*this.textRenderer.measure(value,bitmapFont):0;
-      drawImageRegion(c,rendered.canvas,x-anchor+rendered.offsetX,y+rendered.offsetY);return;
+      const top=y+rendered.offsetY;
+      drawImageRegion(c,rendered.canvas,x-anchor+rendered.offsetX,wrap?Math.min(top,this.canvas.height-rendered.canvas.height):top);return;
     }
     c.font=font;c.textAlign=align;c.textBaseline='top';c.fillStyle='#000';c.fillText(value,x+1,y+1,width??640);c.fillStyle=color;c.fillText(value,x,y,width??640);
   }
@@ -237,7 +243,9 @@ export class BattleMenuView{
       this.asset('time_glass',0,x+16,y+1,{mask:true});
       if(actor.id===playerId&&canCommand)this.asset('fight_mark',Math.floor(now/120),x-30,y-16,{blend:'lighter'});
     });
-    const info=this.menus.get('fight_info'),infoText=info.widgets.find(w=>w.name==='TEXT');this.image(info.images[0].image,0,443);this.text(this.message,infoText.rect.left,443+infoText.rect.top,{font:'14px SimSun',widget:infoText});
+    const info=this.menus.get('fight_info'),infoText=info.widgets.find(w=>w.name==='TEXT');
+    const wrap=this.stage==='wheel'&&this.commandSlots?.[this.focusIndex]?.type===1;
+    this.image(info.images[0].image,0,443);this.text(this.message,infoText.rect.left,443+infoText.rect.top,{font:'14px SimSun',widget:infoText,wrap});
     if(this.stage!=='result')this.drawWheel(now);
     if(['skills','items'].includes(this.stage))this.drawList();
     const selected=party.find(a=>a.id===playerId);

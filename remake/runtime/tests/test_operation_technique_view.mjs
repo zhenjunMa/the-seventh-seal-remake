@@ -76,18 +76,30 @@ test('list repaint preserves both row icons and a single selected strip after mo
   const {view}=fixture();view.action='set';view.category=1;view.stage='candidates';view.paint();view.focus('content');view.key('ArrowDown');view.paint();
   const rows=view.element.querySelectorAll('.technique-row');assert.equal(rows.length,2);
   assert.equal(rows.filter(row=>row.querySelector('img[data-highlight]')?.hidden===false).length,1);
-  for(const row of rows){assert.ok(row.querySelector('[data-row-icon]'));assert.equal(row.querySelectorAll('[data-row-level]').length,row._entry.slot.color>0?1:0);assert.equal(row.querySelectorAll('[data-row-attribute]').length,Array.from({length:5},(_,n)=>Boolean(row._entry.source.type_flags_u32_0x32&(1<<(8+n)))).filter(Boolean).length);assert.equal(row.querySelectorAll('[data-row-experience]').length,1);}
+  for(const row of rows){assert.ok(row.querySelector('[data-row-icon]'));assert.ok(row.querySelector('[data-row-level]'));assert.equal(row.querySelectorAll('[data-row-attribute]').length,Array.from({length:5},(_,n)=>Boolean(row._entry.source.type_flags_u32_0x32&(1<<(8+n)))).filter(Boolean).length);assert.equal(row.querySelectorAll('[data-row-experience]').length,1);}
 });
 test('skill rows read source level, feature bits and experience digits at native positions without writing progress',()=>{
   const {view,world}=fixture(),before=JSON.stringify(world.value),base=view.candidateEntries()[0];
-  const skill=(flags,units,experience,required)=>{const source=structuredClone(base.source),bytes=Uint8Array.from(source.fixed_raw_hex.match(/../g),n=>parseInt(n,16)),v=new DataView(bytes.buffer);v.setUint32(0x32,flags,true);v.setUint32(0x36,units,true);v.setInt32(0x2f7,required,true);v.setInt32(0x2fb,experience,true);source.fixed_raw_hex=Array.from(bytes,n=>n.toString(16).padStart(2,'0')).join('');return source;};
+  const skill=(flags,units,level,experience,required)=>{
+    const source=structuredClone(base.source);
+    const bytes=Uint8Array.from(source.fixed_raw_hex.match(/../g),n=>parseInt(n,16));
+    const record=new DataView(bytes.buffer);
+    record.setUint8(0x2d,level);
+    record.setUint32(0x32,flags,true);
+    record.setUint32(0x36,units,true);
+    record.setInt32(0x2f7,required,true);
+    record.setInt32(0x2fb,experience,true);
+    source.fixed_raw_hex=Array.from(bytes,n=>n.toString(16).padStart(2,'0')).join('');
+    return source;
+  };
   view.element.replaceChildren();view.stage='candidates';
-  view.paintList([{...base,source:skill(0x1f11,3,304,800),slot:{...base.slot,icon:1}},
-    {...base,index:99,source:skill(0x101,1,0,800)},
-    {...base,index:100,source:skill(0x201,1,800,800)},
-    {...base,index:101,source:skill(1,1,0,0)}], 'game002_1b');
+  view.paintList([{...base,source:skill(0x1f11,3,6,304,800),slot:{...base.slot,icon:1}},
+    {...base,index:99,source:skill(0x101,0,4,0,800)},
+    {...base,index:100,source:skill(0x201,1,1,800,800)},
+    {...base,index:101,source:skill(1,1,7,0,0)}], 'game002_1b');
   const rows=view.element.querySelectorAll('.technique-row'),level=rows[0].querySelector('[data-row-level]');
-  assert.equal(level.src,supplement.icons.magic_ball1_num.frames[9]);assert.equal(level.style.left,'22px');assert.equal(level.style.top,'17px');
+  assert.deepEqual(rows.map(row=>row.querySelector('[data-row-level]')?.dataset.rowLevel),['6','4','1','7']);
+  assert.equal(level.src,supplement.icons.magic_ball1_num.frames[12]);assert.equal(level.style.left,'22px');assert.equal(level.style.top,'17px');
   assert.deepEqual(rows[0].querySelectorAll('[data-row-attribute]').map(n=>[n.dataset.rowAttribute,n.style.left,n.style.top]),[0,1,2,3,4].map(n=>[String(n),(204+n*24)+'px','5px']));
   assert.equal(rows[0].querySelector('[data-row-experience]').dataset.rowExperience,'38');assert.equal(rows[0].querySelector('[data-row-experience]').style.left,'339px');
   assert.equal(rows[0].querySelector('[data-row-experience]').querySelector('span').style.backgroundColor,'rgb(63,176,96)');

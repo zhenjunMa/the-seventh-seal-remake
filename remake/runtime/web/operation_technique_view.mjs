@@ -1,7 +1,7 @@
 import {setImageSource} from './core/ui/image_dom.mjs';
 import {menuText,menuStyle,menuImage} from './menu_dom.mjs';
 import {techniqueSlots,sourceTechniqueSlot,techniqueSlotName,techniqueCandidates,TECHNIQUE_CATEGORIES,TECHNIQUE_WHEEL_NAVIGATION,techniqueCombinations,techniqueCombinationName} from './core/ui/menu_techniques.mjs';
-import {operationSummaryFields} from './core/ui/menu_presentation.mjs';
+import {operationSummaryFields,techniqueDisplayName} from './core/ui/menu_presentation.mjs';
 
 const position=(node,x,y,w=null,h=null)=>Object.assign(node.style,{position:'absolute',left:x+'px',top:y+'px',...(w===null?{}:{width:w+'px'}),...(h===null?{}:{height:h+'px'})});
 const skillRecords=new WeakMap();
@@ -158,7 +158,7 @@ export class OperationTechniqueView{
     for(let n=0;n<7-Math.max(0,Math.min(7,this.capacity));n++){const widget=menu.widgets[n+2],image=this.image(this.supplement.icons.char_ball.frames[7],o.x+widget.rect.left-1,o.y+widget.rect.top-2);image.dataset.compositionLocked=widget.name;}
     this.text(this.world.party.find(role=>role.id===this.roleId)?.name??'',o.x+20,o.y+10);this.paintPreview();
   }
-  slotName(slot){const record=slot.type===1?techniqueCombinations(this.world,this.source,this.roleId)[slot.index_one_based-1]:null;return record?techniqueCombinationName(record,this.supplement.name_charset):techniqueSlotName(this.source,this.roleId,slot);}
+  slotName(slot){const record=slot.type===1?techniqueCombinations(this.world,this.source,this.roleId)[slot.index_one_based-1]:null;return techniqueDisplayName(record?techniqueCombinationName(record,this.supplement.name_charset):techniqueSlotName(this.source,this.roleId,slot));}
   paintIcon(slot,x,y,active=false,parent=this.element){const bank=this.supplement.icons[slot.type===2?'other_ball':slot.type===1?'name_ball':'magic_ball1'],frame=slot.icon+(active?(slot.type===2?4:slot.type===1?88:6):0);if(bank?.frames[frame])this.image(bank.frames[frame],x,y,parent);if(slot.color){const numbers=this.supplement.icons.magic_ball1_num,index=(slot.type===1?Math.floor(slot.icon/11):slot.icon)*7-1+slot.color;if(numbers?.frames[index])this.image(numbers.frames[index],x+14,y+12,parent);}}
   paintShortcuts(confirm){
     const o=this.supplement.origins.shortcuts;this.image(this.asset('game002d'),o.x,o.y).dataset.shortcutBoard='true';const slots=techniqueSlots(this.world,this.source,this.roleId),icons=[];
@@ -235,10 +235,10 @@ export class OperationTechniqueView{
       for(let visible=0;visible<6;visible++){
         const entry=entries[this.listOffset+visible];let button=this.listButtons[visible];
         if(!entry){if(button)button.hidden=true;continue;}
-        const widget=this.menus.get(menuId).widgets[visible+3],r=widget.rect;
-        if(!button){button=this.button('',entry.name,r.left+o.x,r.top+o.y,r.right-r.left+1,r.bottom-r.top+1,{click:()=>this.confirmEntry(button._entry),focus:()=>this.previewEntry(button._entry,button)});button.className='technique-row';this.listButtons[visible]=button;}
+        const widget=this.menus.get(menuId).widgets[visible+3],r=widget.rect,label=techniqueDisplayName(entry.name);
+        if(!button){button=this.button('',label,r.left+o.x,r.top+o.y,r.right-r.left+1,r.bottom-r.top+1,{click:()=>this.confirmEntry(button._entry),focus:()=>this.previewEntry(button._entry,button)});button.className='technique-row';this.listButtons[visible]=button;}
         button.hidden=false;position(button,r.left+o.x,r.top+o.y,r.right-r.left+1,r.bottom-r.top+1);
-        button.dataset.techniqueKey='entry-'+entry.type+'-'+entry.index;button.dataset.techniqueGroup=['targets','slot-confirm'].includes(this.stage)?'background':'content';button.disabled=['targets','slot-confirm'].includes(this.stage);button.setAttribute('aria-label',entry.name);
+        button.dataset.techniqueKey='entry-'+entry.type+'-'+entry.index;button.dataset.techniqueGroup=['targets','slot-confirm'].includes(this.stage)?'background':'content';button.disabled=['targets','slot-confirm'].includes(this.stage);button.setAttribute('aria-label',label);
         const before=button._entry;button._entry=entry;button._rowWidget=widget;
         if(!before||before.type!==entry.type||before.index!==entry.index||before.source?.fixed_raw_hex!==entry.source?.fixed_raw_hex){
           for(const selector of ['[data-row-level]','[data-row-attribute]','[data-row-experience]','[data-row-experience-digit]'])for(const node of button.querySelectorAll(selector))node.remove();
@@ -262,11 +262,12 @@ export class OperationTechniqueView{
   }
   paintRowDetails(button){
     const entry=button._entry;if(entry.type===2)return;
-    const data=entry.source?raw(entry.source):null,units=data?data.getUint32(0x36,true):entry.record?.total_units??entry.slot.color;
-    // 450110/451670 use this same numeric bank. +0x36 is also the
-    // composition-unit count; do not substitute the character's level.
-    const numberFrame=(entry.type===1?Math.floor(entry.slot.icon/11):entry.slot.icon)*7+units-1;
-    if(units>0&&this.supplement.icons.magic_ball1_num.frames[numberFrame]){const image=this.image(this.supplement.icons.magic_ball1_num.frames[numberFrame],22,17,button);image.dataset.rowLevel=String(units);}
+    const data=entry.source?raw(entry.source):null;
+    // Direct skills use the saved rank replayed onto the skill record. A
+    // composition has no rank, so its badge shows the total units instead.
+    const number=data?data.getUint8(0x2d):entry.record?.total_units??entry.slot.color;
+    const numberFrame=(entry.type===1?Math.floor(entry.slot.icon/11):entry.slot.icon)*7+number-1;
+    if(number>0&&this.supplement.icons.magic_ball1_num.frames[numberFrame]){const image=this.image(this.supplement.icons.magic_ball1_num.frames[numberFrame],22,17,button);image.dataset.rowLevel=String(number);}
     if(!data)return;
     const flags=data.getUint32(0x32,true),attributes=this.supplement.icons.magic_ball1_attr;
     for(let n=0;n<5;n++)if(flags&(1<<(8+n))){const image=this.image(attributes.frames[n],34+170+n*attributes.width,5,button);image.dataset.rowAttribute=String(n);}
@@ -293,7 +294,7 @@ export class OperationTechniqueView{
       ...(direct?{layout:'mnu',advanceOverride:19,lineHeight:19,maxWidth:250,maxLines:1}:{})};
     const cost=this.section==='use'?mpCostText(entry.source?.mp_cost):'';
     if(!button._labelNode)button._labelNode=this.text('',34,direct?5:7,button,'',options);
-    menuStyle(button._labelNode,{top:(direct?5:7)+'px',color:options.foreground});this.paintText(button._labelNode,entry.name+cost,'simsun19_text',options);
+    menuStyle(button._labelNode,{top:(direct?5:7)+'px',color:options.foreground});this.paintText(button._labelNode,techniqueDisplayName(entry.name)+cost,'simsun19_text',options);
   }
   updateCompositionPreview(index){
     const button=this.element.querySelector('[data-technique-key="entry-0-'+index+'"]');
@@ -308,7 +309,7 @@ export class OperationTechniqueView{
     if(entry.record){
       const skills=entry.record.indices.map(index=>this.source.roles[this.roleId].skills[index]);
       const cost=skills.reduce((sum,skill)=>sum+skill.mp_cost,0);
-      this.onInfo?.(skills.map(skill=>skill.name).join(' → ')+mpCostText(cost));
+      this.onInfo?.(skills.map(skill=>techniqueDisplayName(skill.name)).join(' → ')+mpCostText(cost));
     }else{
       const cost=this.section==='edit'?mpCostText(entry.source?.mp_cost):'';
       this.onInfo?.(description(entry.source)+cost);

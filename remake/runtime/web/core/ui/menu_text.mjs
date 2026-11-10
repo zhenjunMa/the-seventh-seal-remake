@@ -36,7 +36,12 @@ export async function createMenuTextRenderer(manifest, options = {}) {
     // 0x5344F0 draws that word with TextOut's character extra still enabled.
     // Do not apply this measurement to the whole-string 0x5358C4 path.
     for(let index=0;index<characters.length;){
-      if(characters[index].codePointAt(0)>127){glyph(characters[index]);result.push({text:characters[index++],advance:unit,wrapWidth:unit});continue;}
+      if(characters[index].codePointAt(0)>127){
+        const char=characters[index++],g=glyph(char);
+        // Keep the middle dot's font spacing inside fixed-width CJK rows.
+        const advance=char==='·'?g.advance:unit;
+        result.push({text:char,advance,wrapWidth:advance});continue;
+      }
       let word='',width=0;
       while(index<characters.length&&characters[index].codePointAt(0)<128&&characters[index]!==' '){
         const char=characters[index++],g=glyph(char);

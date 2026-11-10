@@ -17,6 +17,7 @@ export function createBattleTechniques(world,source,skills,charset=null){
     const id=battleTechniqueId(role.id,index+1);
     result[id]={id,actor_id:role.id,name:charset?techniqueCombinationName(record,charset):`编成技巧 ${index+1}`,
       battle_handler:'combination',technique_index_one_based:index+1,component_skill_ids:members.map(skill=>skill?.id??null),
+      component_skill_names:record.indices.map(i=>source.roles[role.id].skills[i].name),
       component_indices:[...record.indices],mp_cost:members.reduce((sum,skill)=>sum+(skill?.mp_cost??0),0),
       unavailable_reason:unavailable,icon:record.icon,color:record.total_units,
       source:{kind:'saved-technique',role_id:role.id,native_raw_hex:record.native_raw_hex},

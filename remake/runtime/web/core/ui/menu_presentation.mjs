@@ -20,6 +20,10 @@ export function operationColorRef(value) {
   return '#'+[value&255,(value>>>8)&255,(value>>>16)&255].map(channel=>channel.toString(16).padStart(2,'0')).join('');
 }
 
+export function techniqueDisplayName(name) {
+  return name.replaceAll('．','·');
+}
+
 export function operationMnuTextOptions(widget) {
   if(widget?.type_raw!==7||typeof widget.raw_hex!=='string'||widget.raw_hex.length!==946)throw new Error('Invalid source MNU text widget');
   const bytes=Uint8Array.from(widget.raw_hex.match(/../g),value=>parseInt(value,16)),view=new DataView(bytes.buffer);
