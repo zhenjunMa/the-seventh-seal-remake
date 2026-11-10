@@ -211,7 +211,7 @@ export class BattleMenuView{
     if(this.textRenderer){
       let options;if(widget){options=this.fontOptions.get(widget);if(!options){options={...operationMnuTextOptions(widget),maxLines:1};this.fontOptions.set(widget,options);}}
       else options={font:bitmapFont,foreground:color,shadow:'#000000',align,maxWidth:width,maxLines:1};
-      const key=JSON.stringify([value,options]);let rendered=this.textCache.get(key);
+      const key=JSON.stringify([this.textRenderer.revision,value,options]);let rendered=this.textCache.get(key);
       if(!rendered){const canvas=this.doc.createElement('canvas');rendered={canvas,...this.textRenderer.paint(canvas,value,options)};if(this.textCache.size>128)this.textCache.clear();this.textCache.set(key,rendered);}
       const anchor=!widget&&width===null?(align==='right'?1:align==='center'?.5:0)*this.textRenderer.measure(value,bitmapFont):0;
       drawImageRegion(c,rendered.canvas,x-anchor+rendered.offsetX,y+rendered.offsetY);return;

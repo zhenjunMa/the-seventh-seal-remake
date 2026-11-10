@@ -23,11 +23,11 @@ export class RewardNoticeView {
     const text=this.queue.shift();
     if(text===undefined){this.close();return;}
     this.started=now;this.text=text;this.label.textContent=`获得 ${text}`;
-    this.bounds=this.textRenderer.paint(this.ink,text,{font:'simsun20_text',foreground:'#35270a',shadow:'#000000',
-      shadowOffsets:[],maxWidth:this.resource.width-10,maxLines:1,boxHeight:this.resource.height-3,align:'center',verticalAlign:'center'});
     this.log?.({type:'chest-reward-notice',text});this.draw(now);
   }
   draw(now){
+    this.bounds=this.textRenderer.paint(this.ink,this.text,{font:'simsun20_text',foreground:'#35270a',shadow:'#000000',
+      shadowOffsets:[],maxWidth:this.resource.width-10,maxLines:1,boxHeight:this.resource.height-3,align:'center',verticalAlign:'center'});
     const {context:c,resource:r}=this,ticks=Math.floor((now-this.started)/40),travel=Math.ceil(r.width/10);
     const exit=Math.max(0,ticks-travel-40),offset=ticks<travel?r.width-Math.min(r.width,ticks*10):Math.min(r.width,exit*10);
     c.clearRect(0,0,640,480);

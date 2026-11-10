@@ -49,7 +49,7 @@ export class BattleResultView{
     // The requested original typeface is unavailable on this host. Reuse the
     // checked GDI SimSun18 glyphs where covered, retaining Canvas fallback.
     if(this.textRenderer?.supports(value,'simsun18')){
-      const key=JSON.stringify([value,width,align,shadow]);let entry=this.textCache.get(key);
+      const key=JSON.stringify([this.textRenderer.revision,value,width,align,shadow]);let entry=this.textCache.get(key);
       if(!entry){const canvas=this.doc.createElement('canvas'),placement=this.textRenderer.paint(canvas,value,{font:'simsun18',foreground:'#fff',shadow:shadow?'#000':null,maxWidth:width,maxLines:1,align});entry={canvas,...placement};if(this.textCache.size>=128)this.textCache.clear();this.textCache.set(key,entry);}
       drawImageRegion(ctx,entry.canvas,x+entry.offsetX,y+entry.offsetY);return;
     }

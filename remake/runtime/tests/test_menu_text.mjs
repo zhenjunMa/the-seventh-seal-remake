@@ -12,12 +12,29 @@ function canvas() {
     set globalCompositeOperation(value){},set fillStyle(value){},set imageSmoothingEnabled(value){},
   };}};
 }
-async function renderer(definition=manifest) {
+async function renderer(definition=manifest,windowsFonts) {
   return createMenuTextRenderer(definition,{
+    windowsFonts,
     document:{createElement(){return canvas();}},
     makeImage:()=>({width:1280,height:1200,async decode(){}}),
   });
 }
+
+test('font selection updates cached ink and metrics and returns to the unchanged Noto definition',async()=>{
+  const windows=structuredClone(manifest),before=JSON.stringify(manifest);
+  windows.fonts.simsun18.glyphs['9'].advance+=3;
+  windows.fonts.simsun18.glyphs['9'].offset_x+=2;
+  const text=await renderer(manifest,windows),target=canvas(),width=text.measure('99','simsun18');
+  text.paint(target,'99');const notoSignature=target.menuTextSignature,draws=target.calls.length;
+  text.paint(target,'99');assert.equal(target.calls.length,draws);
+  text.selectFonts('windows');
+  assert.equal(text.measure('99','simsun18'),width+6);
+  text.paint(target,'99');assert.notEqual(target.menuTextSignature,notoSignature);
+  assert.ok(target.calls.length>draws);
+  text.selectFonts('noto');text.paint(target,'99');
+  assert.equal(text.measure('99','simsun18'),width);
+  assert.equal(JSON.stringify(manifest),before);
+});
 
 test('all connected skill and item descriptions and enemy target names have exported menu and battle glyphs',async()=>{
   const text=await renderer(),load=name=>JSON.parse(fs.readFileSync(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));

@@ -313,6 +313,10 @@ class MediaDefinitions:
         for filename, folder in [('menu_fonts.json', 'menu'), ('dialogue_fonts.json', 'dialogue'), ('prologue_fonts.json', 'prologue')]:
             for key, row in self.documents['data/' + filename]['fonts'].items():
                 self.add(row['image'], 'builtin', file=f'fonts/{folder}/{key}.png')
+            windows = self.documents.get('data/' + filename.replace('.json', '_windows.json'))
+            if windows:
+                for key, row in windows['fonts'].items():
+                    self.add(row['image'], 'builtin', file=f'fonts/windows/{folder}/{key}.png')
         for data in self.documents.values():
             if 'default_composition' not in data or 'layers' not in data:
                 continue

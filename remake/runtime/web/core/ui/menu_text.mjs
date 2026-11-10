@@ -1,16 +1,23 @@
 import {registerGlyph} from '../../phaser/rendering/recorded_surface.mjs';
-// GDI-derived menu masks; see data/menu_fonts.json for source parameters.
+// Bitmap masks; manifests retain the rasterizer and actual source face.
 // Whole-string shadow passes follow native 0x5358C4 before the foreground pass.
 export async function createMenuTextRenderer(manifest, options = {}) {
   const document = options.document ?? globalThis.document;
   const makeImage = options.makeImage ?? (() => new Image());
-  const atlases = new Map(), tinted = new Map();
-  await Promise.all(Object.entries(manifest.fonts).map(async ([key,font]) => {
+  const sets={noto:{manifest,atlases:new Map()}},tinted=new Map();
+  if(options.windowsFonts)sets.windows={manifest:options.windowsFonts,atlases:new Map()};
+  let selected='noto',revision=0,atlases=sets.noto.atlases;
+  await Promise.all(Object.values(sets).flatMap(set=>Object.entries(set.manifest.fonts).map(async ([key,font]) => {
     const image = makeImage(); image.src = font.image;
     if (image.decode) await image.decode();
     else await new Promise((resolve,reject) => {image.onload=resolve;image.onerror=reject;});
-    atlases.set(key,image);
-  }));
+    set.atlases.set(key,image);
+  })));
+  function selectFonts(name){
+    if(name===selected)return;
+    selected=name;manifest=sets[name].manifest;atlases=sets[name].atlases;
+    tinted.clear();revision++;
+  }
   function atlas(key,color) {
     const cacheKey=key+':'+color;
     if (!tinted.has(cacheKey)) {
@@ -56,9 +63,11 @@ export async function createMenuTextRenderer(manifest, options = {}) {
     const font=manifest.fonts[key];
     return Boolean(font&&[...String(text)].every(char=>char==='\n'||font.glyphs[char]));
   }
-  function paint(canvas,text,{font:key='simsun18',foreground='#ffffff',shadow='#222222',
-      maxWidth=null,maxLines=Infinity,lineHeight=null,align='left',advanceOverride=null,boxHeight=null,verticalAlign='top',layout='textout',shadowOffsets=[[-1,-1],[1,1]]}={}) {
-    text=String(text);const signature=JSON.stringify([text,key,foreground,shadow,maxWidth,maxLines,lineHeight,align,advanceOverride,boxHeight,verticalAlign,layout,shadowOffsets]);
+  function paint(canvas,text,options={}) {
+    const {font:key='simsun18',foreground='#ffffff',shadow='#222222',
+      maxWidth=null,maxLines=Infinity,lineHeight=null,align='left',advanceOverride=null,boxHeight=null,verticalAlign='top',layout='textout',shadowOffsets=[[-1,-1],[1,1]]}=options;
+    text=String(text);const signature=JSON.stringify([revision,text,key,foreground,shadow,maxWidth,maxLines,lineHeight,align,advanceOverride,boxHeight,verticalAlign,layout,shadowOffsets]);
+    canvas.menuTextRenderer=renderer;canvas.menuTextRequest=[text,options];
     const font=manifest.fonts[key];
     if(!font)throw new Error('菜单字形来源不存在');
     if(maxWidth!==null&&(!Number.isFinite(maxWidth)||maxWidth<=0))throw new Error('菜单文本宽度无效');
@@ -136,5 +145,6 @@ export async function createMenuTextRenderer(manifest, options = {}) {
     canvas.menuTextSignature=signature;canvas.menuTextBounds={width:canvas.width,height:canvas.height,offsetX,offsetY,lineCount:visible.length,truncated:rows.length>visible.length};
     registerGlyph(canvas);return canvas.menuTextBounds;
   }
-  return {paint,measure,supports};
+  const renderer={paint,measure,supports,selectFonts,get revision(){return revision;},get fonts(){return manifest.fonts;}};
+  return renderer;
 }

@@ -4,12 +4,12 @@ import {CaptionPlayback,captionLayout} from './core/ui/caption.mjs';
 import {createMenuTextRenderer} from './core/ui/menu_text.mjs';
 
 export class CaptionView {
-  static async create({manifest,fonts,image,...options}) {
+  static async create({manifest,fonts,windowsFonts,image,...options}) {
     const resources={};
     await Promise.all(Object.entries(manifest.resources).map(async([key,value])=>{
       resources[key]={...value,bitmaps:await Promise.all(value.frames.map(frame=>image(frame.image)))};
     }));
-    return new CaptionView({...options,manifest,resources,font:fonts.fonts.caption19,textRenderer:await createMenuTextRenderer(fonts)});
+    return new CaptionView({...options,manifest,resources,font:fonts.fonts.caption19,textRenderer:await createMenuTextRenderer(fonts,{windowsFonts})});
   }
   constructor({root,manifest,resources,font,textRenderer,onAdvance,log,clock=null}) {
     Object.assign(this,{root,manifest,resources,font,textRenderer,onAdvance,log,clock});
@@ -28,6 +28,7 @@ export class CaptionView {
   }
   show(text) {
     this.close();this.active=true;this.root.hidden=false;this.label.textContent=text;
+    this.font=this.textRenderer.fonts.caption19;this.fontRevision=this.textRenderer.revision;
     this.layout=captionLayout(text,this.manifest.font_height,{
       font:this.font,characterStep:this.manifest.character_step,
       waitWidth:this.resources.wait.width,waitHeight:this.resources.wait.height});
@@ -45,6 +46,11 @@ export class CaptionView {
   }
   draw(now) {
     if(!this.active)return;
+    if(this.fontRevision!==this.textRenderer.revision){
+      this.fontRevision=this.textRenderer.revision;this.font=this.textRenderer.fonts.caption19;this.lastText=null;
+      this.layout=captionLayout(this.label.textContent,this.manifest.font_height,{font:this.font,
+        characterStep:this.manifest.character_step,waitWidth:this.resources.wait.width,waitHeight:this.resources.wait.height});
+    }
     const text=this.playback.tick(now),{manifest:m,resources:r,layout:l,context:c}=this;
     if(text!==this.lastText){
       this.inkBounds=this.textRenderer.paint(this.ink,text,{font:'caption19',foreground:m.foreground,
