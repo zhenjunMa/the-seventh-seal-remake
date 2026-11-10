@@ -1,0 +1,19 @@
+remake/runtime/web/operation_technique_view.mjs
+  s_804e0ed78b3c92::t_e97b50cac27a13 34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "31c2e00c7d0b46a50f2fc3b988cda0d9608bb280",
+  "prompts": {},
+  "sessions": {
+    "s_804e0ed78b3c92": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c2ba-4e22-7b53-bb8f-db954b483122",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
