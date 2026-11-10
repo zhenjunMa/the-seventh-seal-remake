@@ -1,0 +1,55 @@
+remake/runtime/web/core/resources/image_regions.mjs
+  s_acb59ee7be25aa::t_b632f2b511db9f 6,24-25,43
+  s_acb59ee7be25aa::t_3b1aede45cd812 31-36
+remake/runtime/web/core/resources/hd_images.mjs
+  s_acb59ee7be25aa::t_6bcd5428f49536 11,13
+  s_acb59ee7be25aa::t_0fc56bf29721b7 1-2,15-35,37-51,53-57,61-77,107
+  s_acb59ee7be25aa::t_cf2a3283aa0c08 3-10,12,14,36,52,58-60,78-106
+remake/runtime/web/core/ui/menu_text.mjs
+  s_acb59ee7be25aa::t_3b90fbe0d18e42 2,11-12,22-44,111-113,135,137-140,142,150-156,160,167-173,187,190
+remake/runtime/web/core/resources/image_resources.mjs
+  s_acb59ee7be25aa::t_37b2275d8dfbbe 3,25-37,40-42,44,46,101-105
+remake/runtime/web/phaser/rendering/battle_surface.mjs
+  s_acb59ee7be25aa::t_40c4600a93b7db 113
+remake/runtime/web/controllers/input.mjs
+  s_acb59ee7be25aa::t_a96a182d15d2b4 10,94-106
+README.md
+  s_acb59ee7be25aa::t_6bcd5428f49536 39
+  s_acb59ee7be25aa::t_d534c946333f59 49-50
+  s_acb59ee7be25aa::t_0181c02d1dfe8f 37-38,40-48,51
+remake/runtime/web/core/battle/battle_resources.mjs
+  s_acb59ee7be25aa::t_01dc231a37b8a6 2,68,74-87
+remake/runtime/web/battle_menu_view.mjs
+  s_acb59ee7be25aa::t_2786bb4d26b173 229
+remake/runtime/web/phaser/rendering/texture_cache.mjs
+  s_acb59ee7be25aa::t_bd9b42c782e9d9 65-67
+  s_acb59ee7be25aa::t_f92a820a80f9c8 90-91
+remake/runtime/web/index.html
+  s_acb59ee7be25aa::t_c88290928e4141 75
+remake/runtime/web/phaser/scenes/exploration_scene.mjs
+  s_acb59ee7be25aa::t_5bfe8f82888ab5 34
+remake/runtime/web/phaser/components/sprite_pose.mjs
+  s_acb59ee7be25aa::t_9643fd42dbdbe8 22
+remake/runtime/web/core/ui/image_dom.mjs
+  s_acb59ee7be25aa::t_54fe89633f0556 7-15,28,51,54
+  s_acb59ee7be25aa::t_497c3be3d09139 20-27,29
+remake/runtime/web/controllers/boot.mjs
+  s_acb59ee7be25aa::t_66d9f7e8d3cfd1 205-208,216-224
+  s_acb59ee7be25aa::t_f2821327c477ed 31,65
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "c4d18fe96b4cebc0e90e43415b545bad05d3a0a6",
+  "prompts": {},
+  "sessions": {
+    "s_acb59ee7be25aa": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c476-40e8-7500-ba2c-6b117f41db75",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
