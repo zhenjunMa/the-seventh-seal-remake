@@ -31,6 +31,7 @@ export class OperationTechniqueView{
       .technique-ui .technique-name{font-size:22px;line-height:26px;white-space:nowrap;text-shadow:1px 1px #111}
       .technique-ui .technique-row{font-size:19px;line-height:28px;white-space:nowrap}
       .technique-ui .technique-row img{z-index:1}.technique-ui .technique-row img[data-highlight]{z-index:0}.technique-ui .technique-row span{position:absolute;z-index:2}
+      .technique-ui .technique-row img[data-row-level]{z-index:2}
       .technique-ui .technique-row[data-selected=true]{color:#ffff00}
       .technique-ui .technique-target-name{position:absolute;left:20px;top:13px;font-size:20px;line-height:22px}
       .technique-ui .technique-target-value{position:absolute;font-size:18px;line-height:20px}
