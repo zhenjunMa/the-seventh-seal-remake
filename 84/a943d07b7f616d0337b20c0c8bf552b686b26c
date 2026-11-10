@@ -1,0 +1,23 @@
+remake/runtime/serve.py
+  s_ac8f7518f734db::t_46e6fa7e3536ab 11,120-125,158-199
+  s_ac8f7518f734db::t_62456ba7eb4cdf 200
+remake/runtime/web/startup_view.mjs
+  s_ac8f7518f734db::t_87a7c9a338b102 66,117-118,120-121
+  s_ac8f7518f734db::t_cee2352a1903c2 119
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "84a943d07b7f616d0337b20c0c8bf552b686b26c",
+  "prompts": {},
+  "sessions": {
+    "s_ac8f7518f734db": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c36e-3751-7cb2-8a18-25352a433c13",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
