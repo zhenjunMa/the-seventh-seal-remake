@@ -92,7 +92,7 @@ export class BattleMenuView{
     const changed=previous?.player_id!==snapshot.player_id;
     if(changed){this.draft=null;this.entries=null;this.listIndex=0;this.listOffset=0;this.setStage(this.available()?'actors':'waiting');const memory=this.getSettings?.().battleCursor==='memory'?this.memory.get(snapshot.player_id):null;this.focusIndex=memory?.wheel??0;this.targetId=memory?.target??null;this.syncInfo();}
     if(terminal(snapshot.phase)){this.draft=null;this.setStage('result');this.setInfo(snapshot.phase==='victory'?'战斗胜利':snapshot.phase==='defeat'?'队伍已经倒下':snapshot.phase==='escaped'?'已经逃离战斗':snapshot.error??'战斗结束');this.openResult(snapshot);}
-    else if(!this.available()){this.draft=null;if(this.stage!=='waiting')this.setStage('waiting');this.setInfo('');}
+    else if(!this.available()){this.draft=null;if(this.stage!=='waiting')this.setStage('waiting');this.setInfo(snapshot.test_exit_requested?'正在返回技巧测试…':'');}
     else if(this.stage==='waiting'){this.focusIndex=this.getSettings?.().battleCursor==='memory'?(this.memory.get(snapshot.player_id)?.wheel??0):0;this.setStage('actors');this.needsFocus=true;this.syncInfo();}
     if(this.stage==='items')this.refreshItems();
     if(this.stage==='skills')for(const entry of this.entries??[])entry.available=this.battle.canChoose(entry.id);
@@ -186,7 +186,13 @@ export class BattleMenuView{
     if(this.resultView?.active)return this.resultView.key(key,repeat);
     if(this.disposed)return false;if(['Enter',' ','Escape'].includes(key)&&repeat)return true;
     if(this.snapshot?.phase==='escaped'||this.autoReturnOnDefeat&&this.snapshot?.phase==='defeat')return true;
-    if(key==='Escape'){this.escape();return true;}if(key==='Tab'||key==='x'||key==='z'){this.cycleActor(key==='z'?-1:1);return true;}
+    if(key==='Escape'){
+      if(this.snapshot?.test_mode&&this.stage==='result')this.onReturn();
+      else if(this.snapshot?.test_mode&&['actors','waiting'].includes(this.stage))this.battle.requestTechniqueTestExit();
+      else this.escape();
+      return true;
+    }
+    if(key==='Tab'||key==='x'||key==='z'){this.cycleActor(key==='z'?-1:1);return true;}
     if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter',' '].includes(key))return false;
     if(this.stage==='skills'&&this.skillListKey(key))return true;
     if(this.stage==='result'){if(['Enter',' '].includes(key))this.onReturn();return true;}

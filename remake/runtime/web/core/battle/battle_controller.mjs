@@ -161,6 +161,7 @@ export class BattleController {
       scheduler,
       rewards,
       test_mode,
+      test_exit_requested,
     } = state;
     const mode = (state.source.runtime_configuration ?? state.source.skill_configuration)?.mode;
     return copy({
@@ -175,6 +176,7 @@ export class BattleController {
       scheduler,
       rewards,
       test_mode,
+      test_exit_requested,
       chain: state.reward_ledger?.chain ?? null,
       lifecycle_events: state.lifecycle_events ?? [],
       pending_outcome: state.pending_outcome ?? null,
@@ -876,6 +878,7 @@ export class BattleController {
     // Confirmation locks this actor until its queued action has completed.
     return Boolean(
       ['command', 'charging', 'action'].includes(this.state.phase) &&
+      !this.state.test_exit_requested &&
       !this.state.pending_outcome &&
       !commandForActor(scheduler, id) &&
       !this.activeActions?.has(id) &&
@@ -977,6 +980,17 @@ export class BattleController {
   }
   async chooseEscape() {
     return this.chooseFixedCommand('escape');
+  }
+  requestTechniqueTestExit() {
+    if (
+      !this.testMode ||
+      this.state.test_exit_requested ||
+      !['command', 'charging', 'action'].includes(this.state.phase)
+    )
+      return;
+    this.state.test_exit_requested = true;
+    this.refreshCommandState();
+    this.publish();
   }
   async chooseFixedCommand(kind) {
     requireValue(['defend', 'escape'].includes(kind), '固定战斗命令无效');
@@ -1337,9 +1351,10 @@ export class BattleController {
       victory = this.lockedOutcome
         ? this.lockedOutcome === 'victory'
         : this.state.actors.filter((a) => a.side === 'enemy').every(fallenActor);
-    if (this.testMode && this.state.test_exit_requested && !this.running) {
+    if (this.testMode && this.state.test_exit_requested) {
       this.clearCommands();
       s.command_stage = 'closed';
+      if (this.running) return;
       if (this.hasLifecycle() || this.pendingCarriers.size || this.pendingPresentations?.size) {
         this.state.pending_outcome = 'escaped';
         this.state.phase = 'charging';

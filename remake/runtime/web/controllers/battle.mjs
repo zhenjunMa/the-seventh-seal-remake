@@ -408,7 +408,7 @@ export function createBattleController({host, sessions = createBattleSessions()}
     try{
       await enterBattle({before,startedAt,testSession:session});
       host.presentation.label('技巧测试');
-      actions.status('技巧测试：目标不主动攻击，技能不消耗HP／MP；道具照常消耗。选择逃跑返回技巧页面。');
+      actions.status('技巧测试：目标不主动攻击，技能不消耗HP／MP；道具照常消耗。Esc 逐层取消，在选人或等待界面按 Esc 返回技巧页面。');
       const rules=session.rules;
       actions.log({type:'technique-test-opened',battle_id:current().battle.state.id,stage_id:rules.stage.stage_id,enemy_resources:rules.enemy_resources,world_revision:session.revision});
     }catch(error){before?.destroy?.();restoreTechniqueTest(session,'测试启动失败');throw error;}
