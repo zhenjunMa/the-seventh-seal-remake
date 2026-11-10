@@ -2882,7 +2882,7 @@
     },
     "battle_packs.json": {
       "root": [
-        696025
+        716409
       ],
       "format": {
         "indent": null,
@@ -2890,8 +2890,8 @@
         "crlf": false,
         "newline": true
       },
-      "sha256": "bb46f7a6ad055f856ca96d64d7c10db1d52179c7b7a755c19bd127df4b0030a0",
-      "bytes": 44505017
+      "sha256": "5a471374e77d2640b42661e7525d6195c5d0ca1662f8c1ea0e190c6d4325ec30",
+      "bytes": 44615982
     },
     "battle_scheduler.json": {
       "root": [
@@ -11982,7 +11982,7 @@
     },
     "party_battle_view.json": {
       "root": [
-        188300
+        715430
       ],
       "format": {
         "indent": 2,
@@ -11990,8 +11990,8 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "81cc536a45cfb49e6aeee690fb6422ae63a7d7acb95be8b5f342dcc91907d612",
-      "bytes": 11044342
+      "sha256": "c6a003f03237ab47b68284a94660c0cad7c9d8d5db0c53d04d039e7612698791",
+      "bytes": 11111094
     },
     "party_combat.json": {
       "root": [
@@ -12034,7 +12034,7 @@
     },
     "party_role_layers_001.json": {
       "root": [
-        256553
+        715510
       ],
       "format": {
         "indent": 2,
@@ -12042,8 +12042,8 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "ac9bc7601241d17140c5c64476aeb9a5b5d14dd6de24751d73430e16465bd232",
-      "bytes": 301621
+      "sha256": "84efd26d36f7b9eb8649e5a295613c45339f4d3d65c591fd5ec2ebc212de8695",
+      "bytes": 310392
     },
     "party_role_layers_002.json": {
       "root": [
@@ -12060,7 +12060,7 @@
     },
     "party_role_layers_003.json": {
       "root": [
-        263012
+        715725
       ],
       "format": {
         "indent": 2,
@@ -12068,12 +12068,12 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "c114db078fa40e3971f00134d53c971cec0d5db237a15ae1a027583b08e04eef",
-      "bytes": 429819
+      "sha256": "548ba1ce55344c55deead15dbaadf833e30d397c2519bbc578689863326ab314",
+      "bytes": 449790
     },
     "party_role_layers_004.json": {
       "root": [
-        264123
+        715802
       ],
       "format": {
         "indent": 2,
@@ -12081,12 +12081,12 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "da39879a2c26081b9b29d77f7585b6d600e87b117bb2fdabdad798e79b73236b",
-      "bytes": 130031
+      "sha256": "8bc16e90888ce93068cb3ec844d0d11921046132f7cbd2e72cf1bb3b9d050a7b",
+      "bytes": 138801
     },
     "party_role_layers_005.json": {
       "root": [
-        265908
+        715864
       ],
       "format": {
         "indent": 2,
@@ -12094,12 +12094,12 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "28f14c01c12096d1805a8bb5a2951e1772005be1af1bf172d496f9c57bba440c",
-      "bytes": 207061
+      "sha256": "073bc4d38b2674dcaa51c6b29655d26b4df96c97f82ecd1c82c9ec3a7968ac07",
+      "bytes": 214077
     },
     "party_role_layers_006.json": {
       "root": [
-        268890
+        716021
       ],
       "format": {
         "indent": 2,
@@ -12107,12 +12107,12 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "b65f32fa0564328f7d6f5a7c2fa0beefe495a4f5763d12ca19f820405d45a1e8",
-      "bytes": 347540
+      "sha256": "5a87271b679b29c7e39b885a7aecab8f9dcda9322bec2b71e5a214cde77ec062",
+      "bytes": 365098
     },
     "party_skills.json": {
       "root": [
-        647424
+        715261
       ],
       "format": {
         "indent": 2,
@@ -12120,8 +12120,8 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "2ccf28e34c5004aa5b8117c0dd3d8488ea8d3afb72af910546d50bac38bcd478",
-      "bytes": 5514360
+      "sha256": "a10b9d3a0f8147ad7bdd030d67428bd1ad369e82e5e44687a8221ee74c0628ac",
+      "bytes": 5584980
     },
     "prologue_fonts.json": {
       "root": [
@@ -19987,6 +19987,6 @@
     "0084": "5350b6f0102923debbe2ed0f6e8fd1dedb23f09a2697b4d4646170d5cfab9e76",
     "0085": "c2003dc0c8774cec278189fcf239b8ee0f7eee1faa9d78fd26c42f5a56a4aff4",
     "0086": "fccbde1e40f839695b47dc97337310a73078610a22f2c02a652739a22bf0ba9e",
-    "0087": "0481a26aaa84efd02d88288b71a94630be068f32719bf31c4c1ad5bc91b809bc"
+    "0087": "3a8c96c78a0756caef5900eaf523cc5575dd67046d0c4c3e0fc11cb10075da79"
   }
 }

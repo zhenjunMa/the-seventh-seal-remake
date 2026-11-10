@@ -34,7 +34,11 @@ export function assembleForestSample(sample,data,group,schedulerData=null,aiData
     enemy_selection:{policy:'fixed learned commands; full AI and multihit not integrated'},limitations:clone(data.limits)}};
   if(sample.skill_data)result.skill_data=sample.skill_data;
   if(schedulerData){
-    result.scheduler_data=retainDefinition(schedulerData);
+    const partySkills=sample.skill_data;
+    result.scheduler_data=retainDefinition(partySkills?.idle_skills
+      ? {...schedulerData,idle_skills:{...schedulerData.idle_skills,...partySkills.idle_skills},
+        low_hp_skills:{...schedulerData.low_hp_skills,...partySkills.low_hp_skills}}
+      : schedulerData);
     result.source.scope='Native fresh forest gauge/dispatch with live ready-player command input; fixed enemy command and first contact.';
     result.source.order={policy:'native mode0 gauge scheduler',evidence:clone(schedulerData.evidence),preview_policy:clone(schedulerData.policy)};
     result.source.limitations=['One saved player; full 1-6 source-generated enemies. Native scalar charging/dispatch; frame clock and ready-player input. Full enemy selection/combinations, contacts, native visual clocks and rewards deferred.'];

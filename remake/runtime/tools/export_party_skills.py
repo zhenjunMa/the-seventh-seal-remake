@@ -176,6 +176,15 @@ def enrich_sequence(c, d, index, runtime_id=None, handler=None):
     return v
 
 
+def idle_skill(c, d, role, raw_id, suffix):
+    index = next(i for i, skill in enumerate(c.skills) if skill['id_raw'] == raw_id)
+    view = enrich_sequence(c, d, index)
+    source = role['skills'][index]
+    record = {key: source[key] for key in (
+        'actor_id', 'original_skill_index', 'name', 'fixed_raw_hex', 'class_raw', 'action_mask_raw', 'source')}
+    return view, dict(record, id=f'{role["id"]}_{suffix}', segments=view['segments'])
+
+
 def export_role_assets(role, c, d, sources, checks, group='party'):
     views = [role['skill']] + role['alternate_skills'] + role['response_skills']
     segments = [s for v in views for s in v['segments']] + role.get('idle_sequence', {}).get('segments', [role['idle']]) + [role['reaction']]
@@ -409,6 +418,7 @@ def main():
     commands = {}
     field_commands = {}
     idles = {}
+    low_hp_idles = {}
     for ident, role in roles.items():
         for index, runtime_id in COMMANDS[ident].items():
             skill = dict(role['skills'][index])
@@ -442,10 +452,6 @@ def main():
             skill['id'] = runtime_id
             skill['evidence'] = list(evidence.values()) + [NATIVE_IDS['range'], NATIVE_IDS['events']]
             commands[runtime_id] = skill
-        idle = role['skills'][0]
-        idles[ident] = {k: idle[k] for k in ('actor_id', 'name', 'fixed_raw_hex',
-                                            'class_raw', 'action_mask_raw', 'source')}
-        idles[ident]['id'] = ident + '_idle'
         for index, runtime_id in FIELD_COMMANDS.get(ident, {}).items():
             skill = dict(role['skills'][index])
             assert skill['type_flags_u32_0x32'] & (1 << 13)
@@ -463,16 +469,6 @@ def main():
         if not retained or retained['fixed_raw_hex'] != block['fixed_raw_hex'] or retained['effect_raw_hex'] != block['effect_raw_hex']:
             raise ValueError(f'{key}: source status table must be rebuilt by enemies before party-skills')
     native_ref = dict(path=native.relative_to(RUNTIME).as_posix(), sha256=sha(native))
-    save(WEB / 'data/party_skills.json', dict(schema='seventh-seal-party-skills', version=1,
-        skills=commands, field_skills=field_commands, roles=roles, idle_skills=idles, source_hashes=sources,
-        evidence=evidence, native_bundle=native_ref,
-        policy=dict(eligibility='登记与学习状态独立；运行按原学习状态、技能类型、等级及资源条件判断可用性。',
-            commands='战斗与场外技能按runtime_content.json登记；原前三个合资格技能用于默认快捷键来源，操作菜单与战斗使用已保存的七槽绑定。',
-            source='基于原CHR定义；登记不改写原学习字节、等级条件或存档进度。',
-            original_game_execution_observed=False),
-        limits=['技能接入范围以runtime_content.json为准；保留完整CHR技能用于来源核对，不表示全部技能已实现。',
-                '登记未学习技能不会自动解锁；开发样本的显式技能授予只作用于该样本。',
-                '七槽绑定、组合编辑与执行复用已接入技能；原type0及空白记录保留来源资格。项目说明见仓库根README.md。']))
     reactions = read(WEB / 'data/enemy_reactions.json')
     reactions['roles'].update(roles)
     reactions['source_hashes'].update({p: sources[p] for p in original_paths if p.endswith('.CHR')})
@@ -492,10 +488,13 @@ def main():
         ordered = [primary, *[index for index in COMMANDS[ident] if index!=primary]]
         views = [enrich_sequence(c, d, i, COMMANDS[ident][i]) for i in ordered]
         responses = [enrich_sequence(c, d, i) for i, s in enumerate(c.skills) if s['id_raw'] in RESPONSE_IDS]
+        idle, idles[ident] = idle_skill(c, d, roles[ident], 0, 'idle')
+        low_hp, low_hp_idles[ident] = idle_skill(c, d, roles[ident], 7, 'low_hp_idle')
+        responses.append(low_hp)
         role = dict(id=ident, name=c.name, frame_width=d.width, frame_height=d.height,
             cursor_height_raw=d.cursor_height_raw,
             anchor=dict(x=d.anchor_raw[0], y=d.anchor_raw[1], source='DGP extra_header+0x10/+0x14', native_use_verified=False),
-            mirror=False, direction=0, idle=enrich_sequence(c, d, 0)['segments'][0],
+            mirror=False, direction=0, idle=idle['segments'][0], idle_sequence=idle,
             reaction=enrich_sequence(c, d, 1)['segments'][0], skill=views[0],
             alternate_skills=views[1:], response_skills=responses,
             reaction_basis='Native fixed-id lookup selects each source response; id12 death source is included.')
@@ -514,6 +513,16 @@ def main():
     meta['limits'] = ['Source sprites, logical contacts, reaction/death actions and main/intrinsic layers for every registered player and enemy.',
         'All six players retain their own source command records, learning gates and effect ranges; absent literal files and out-of-pool frames follow native no-draw behavior.',
         'Coordinate projection, interpolation, sprite-scale and additive Canvas remain remake presentation policies; original renderer and clocks were not executed.']
+    save(WEB / 'data/party_skills.json', dict(schema='seventh-seal-party-skills', version=1,
+        skills=commands, field_skills=field_commands, roles=roles, idle_skills=idles,
+        low_hp_skills=low_hp_idles, source_hashes=sources, evidence=evidence, native_bundle=native_ref,
+        policy=dict(eligibility='登记与学习状态独立；运行按原学习状态、技能类型、等级及资源条件判断可用性。',
+            commands='战斗与场外技能按runtime_content.json登记；原前三个合资格技能用于默认快捷键来源，操作菜单与战斗使用已保存的七槽绑定。',
+            source='基于原CHR定义；登记不改写原学习字节、等级条件或存档进度。',
+            original_game_execution_observed=False),
+        limits=['技能接入范围以runtime_content.json为准；保留完整CHR技能用于来源核对，不表示全部技能已实现。',
+                '登记未学习技能不会自动解锁；开发样本的显式技能授予只作用于该样本。',
+                '七槽绑定、组合编辑与执行复用已接入技能；原type0及空白记录保留来源资格。项目说明见仓库根README.md。']))
     save(WEB / 'data/party_battle_view.json', meta)
     assert all(sha(ROOT / p) == v for p, v in meta['source_hashes'].items())
     assert all(sha(RUNTIME / p) == v for p, v in historical.items())

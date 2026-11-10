@@ -289,7 +289,7 @@ export function createBattleController({host, sessions = createBattleSessions()}
         if(testing)world=new WorldStore(mapWorld.snapshot(),mapWorld.mapIds);
         else{current().battleSampleMode=sampleMode;if(newParty&&!group)throw new Error('请在野外行走遇敌。');}
         progress({completed:10,total:100});
-        const scheduler={...configured.scheduler,policy:{...configured.scheduler.policy,commands:'Frame-driven charging with per-player buffered commands; input continues during charging and hit reactions, confirmation locks until action completion, and dispatch waits for execution readiness.'},...(newParty?{idle_skills:{...configured.scheduler.idle_skills,...host.partySkills.idle_skills}}:{})};
+        const scheduler={...configured.scheduler,policy:{...configured.scheduler.policy,commands:'Frame-driven charging with per-player buffered commands; input continues during charging and hit reactions, confirmation locks until action completion, and dispatch waits for execution readiness.'}};
         // Factories read the world synchronously and build isolated combat data.
         sample=await measure('assembly',()=>testing?createSkillTestSample(world.value,host.partyCombat,host.partySkills,configured,current().itemData,rules,host.partyReactions,host.statusData,host.menu.nameCharset)
           :newParty?assembleForestSample(createPartySample(world.value,host.partyCombat,host.partySkills,configured,current().itemData,host.menu.nameCharset),configured.forest,group,scheduler,configured.ai,configured.rewards,host.partyReactions,host.statusData)
@@ -356,9 +356,8 @@ export function createBattleController({host, sessions = createBattleSessions()}
         const entrySignal=transitionSignal??signal,entryCheck=()=>{entrySignal?.throwIfAborted();check();};
         entryCheck();await host.loadCombatData(entrySignal);entryCheck();
         const configured=await playbackTask(actions.readConfiguredData({shared:true}),entrySignal);entryCheck();current().itemData=configured.items;
-        const scheduler={...configured.scheduler,idle_skills:{...configured.scheduler.idle_skills,...host.partySkills.idle_skills}};
         const sample=assembleForestSample(createPartySample(simulation.world.value,host.partyCombat,host.partySkills,configured,current().itemData,host.menu.nameCharset),
-          configured.forest,group,scheduler,configured.ai,configured.rewards,host.partyReactions,host.statusData);
+          configured.forest,group,configured.scheduler,configured.ai,configured.rewards,host.partyReactions,host.statusData);
         if(sample.actors.filter(actor=>actor.side==='player').every(actor=>actor.hp.current===0))throw new Error('队伍已经倒下，无法进入剧情战斗');
         const preparedView=await playbackTask(prepareView({mode:'scripted',newParty:true,stagePath:'/'+battleStage(group.stage).path,lifecycle:true,actors:sample.actors,skills:sample.skills,inventory:simulation.world.value.inventory,signal:entrySignal}),entrySignal);entryCheck();
         session.view=current().battleView=preparedView;
