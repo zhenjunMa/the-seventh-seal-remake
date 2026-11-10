@@ -34,6 +34,8 @@ Windows 也可以双击根目录的 `start-game.cmd` 启动服务，再打开上
 
 画面下方的“字体：Noto／Windows 原版”按钮可在当前场景直接切换位图字库，并记住选择。默认使用 Noto；Windows 版本独立保存在 `runtime/builtin/fonts/windows/`，生成后的图片可在其他平台读取。本机的宋体和 Arial 可直接解析；原版请求的“全真特黑體”和 Benguiat Bk BT 在本机解析为宋体，因此这套字库用于比较当前 Windows 的原版字体效果。
 
+战斗轮盘聚焦编成技巧时，INFO 按原版显示 `组合名=技能一┼技能二`，成员顺序与编成记录一致；Noto 和 Windows 位图字库均包含 `=`、`┼`。
+
 需要重新生成对照字库时，在 Windows 执行 `python -B remake/runtime/tools/export_windows_fonts.py --original-dir "原版安装目录"`；它按现有三套 Noto 清单的全部字符逐个字号生成，不修改 Noto 字库。维护构建配方时，再通过 `export_data_recipes.py` 更新三个 `*_fonts_windows.json` 文档。
 
 `remake/saves/` 中的 `SaveGame0.Dat` 至 `SaveGame19.Dat` 为普通档，`Game.SAV` 为快速档。

@@ -68,6 +68,15 @@ test('holding one direction stops at the wheel edge instead of cycling through c
   assert.equal(view.focusIndex,1);assert.equal(cues.length,2);
 });
 
+test('wheel INFO retains the native combination name=member┼member format and source order',()=>{
+  const {view}=fixture();
+  view.commandSlots=[{name:'炎刺'},{name:'火炎斩',skill:{battle_handler:'combination',component_names:['炎突','炎刺','炎摧']}},
+    {name:'独奏',skill:{battle_handler:'combination',component_names:['炎刺']}},{name:'使用招式'}];
+  for(const [index,expected]of ['炎刺','火炎斩=炎突┼炎刺┼炎摧','独奏=炎刺','使用招式'].entries()){
+    view.focusIndex=index;view.syncInfo();assert.equal(view.message,expected);assert.equal(view.info.textContent,expected);
+  }
+});
+
 test('moving onto the central escape command only focuses it; confirmation executes it',async()=>{
   const {view}=fixture(),commands=[];
   view.available=()=>true;view.battle={chooseEscape:()=>commands.push('escape')};

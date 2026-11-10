@@ -69,7 +69,11 @@ export class BattleMenuView{
     if(this.stage==='result')return;
     let message='';
     if(this.stage==='actors')message=this.snapshot?.actors.find(a=>a.id===this.snapshot.player_id)?.name??'';
-    else if(this.stage==='wheel')message=this.commandSlots?.[this.focusIndex]?.name??'';
+    else if(this.stage==='wheel'){
+      const slot=this.commandSlots?.[this.focusIndex];
+      // GAME.exe 0x429340 formats type 1 as %s=%s%s; 0x425df0 joins members with GBK a9e0 (┼).
+      message=slot?.skill?.battle_handler==='combination'?`${slot.name}=${slot.skill.component_names.join('┼')}`:slot?.name??'';
+    }
     else if(['skills','items'].includes(this.stage))message=this.entries?.[this.listIndex]?.name??(this.stage==='skills'?'此分类没有招式。':'没有可用的药品。');
     else if(this.stage==='target'){
       const preview=this.targetPreview();

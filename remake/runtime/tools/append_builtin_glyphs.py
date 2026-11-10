@@ -1,4 +1,4 @@
-"""Append wide glyphs and math symbols to fixed built-in atlases.
+"""Append visible glyphs to fixed built-in atlases.
 
 The font file must match the manifest's font_source SHA. This maintenance
 command never resolves system fonts and is not part of normal media builds.
@@ -121,14 +121,12 @@ def main():
     parser.add_argument('--font-directory', type=Path, required=True,
                         help='Directory containing the exact font_source filenames and bytes.')
     parser.add_argument('--keys', required=True, help='Comma-separated explicit font profile keys.')
-    parser.add_argument('--characters', required=True, help='Printable wide characters or non-ASCII math symbols to append.')
+    parser.add_argument('--characters', required=True, help='Visible characters to append.')
     parser.add_argument('--evidence', required=True, help='New JSON filename inside runtime/evidence.')
     args = parser.parse_args()
     characters = ''.join(dict.fromkeys(args.characters))
-    if any(not c.isprintable() or c.isascii() or
-           (unicodedata.east_asian_width(c) not in 'FW' and unicodedata.category(c) != 'Sm')
-           for c in characters):
-        parser.error('Only printable wide characters and non-ASCII math symbols are supported.')
+    if any(not c.isprintable() or c.isspace() for c in characters):
+        parser.error('Only visible printable characters are supported.')
     evidence = RUNTIME / 'evidence' / args.evidence
     if evidence.parent.resolve() != (RUNTIME / 'evidence').resolve() or evidence.exists():
         parser.error('--evidence must be a new filename inside runtime/evidence')

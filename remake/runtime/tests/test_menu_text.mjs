@@ -37,7 +37,8 @@ test('font selection updates cached ink and metrics and returns to the unchanged
 });
 
 test('all connected skill and item descriptions and enemy target names have exported menu and battle glyphs',async()=>{
-  const text=await renderer(),load=name=>JSON.parse(fs.readFileSync(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
+  const load=name=>JSON.parse(fs.readFileSync(new URL(`../web/data/${name}.json`,import.meta.url),'utf8'));
+  const text=await renderer(manifest,load('menu_fonts_windows'));
   const menu=load('operation_menu').menus.find(m=>m.id==='game001'),battle=load('battle_ui').menus.find(m=>m.id==='fight_info');
   const profiles=[operationMnuTextOptions(menu.widgets.find(w=>w.name==='INFO')).font,operationMnuTextOptions(battle.widgets.find(w=>w.name==='TEXT')).font,'simsun12_text'];
   const descriptions=Object.values(load('items').definitions).flatMap(item=>[item.name,item.description??'']);
@@ -46,8 +47,11 @@ test('all connected skill and item descriptions and enemy target names have expo
     const skill=role.skills[index],raw=Buffer.from(skill.fixed_raw_hex,'hex').subarray(0x3b,0x3b+200);
     descriptions.push(skill.name,new TextDecoder('gbk').decode(raw.subarray(0,raw.indexOf(0))));
   }
-  descriptions.push(' → ','　MP 999');
-  for(const font of profiles)for(const description of descriptions)assert.equal(text.supports(description,font),true,`${font}: ${description}`);
+  descriptions.push(' → ','　MP 999','火炎斩=炎剑．旋樱斩┼炎剑．燕突');
+  for(const set of ['noto','windows']){
+    text.selectFonts(set);
+    for(const font of profiles)for(const description of descriptions)assert.equal(text.supports(description,font),true,`${set}/${font}: ${description}`);
+  }
 });
 
 test('caption single lower-right shadow does not inherit both menu shadow passes',async()=>{
