@@ -63,6 +63,7 @@ export class StartupView {
   stopMedia(video){
     video.onended=null;
     video.onerror=null;
+    video.onloadedmetadata=null;
     video.onloadeddata=null;
     video.hidden=true;
     video.pause();
@@ -113,6 +114,11 @@ export class StartupView {
       if(video.readyState>=video.HAVE_CURRENT_DATA)reveal();
     }else{
       video.src=clip.url;
+      if(stage==='gametitle')video.onloadedmetadata=()=>{
+        video.onloadedmetadata=null;
+        // 原版片头前约 3 秒全黑且静音，约第 3 秒开始有声音，因此从这里开播。
+        if(this.sequence.epoch===epoch)video.currentTime=3;
+      };
       if(stage==='preopenpress'){
         this.pressVideo.src=this.media.media.openpress.url;
         this.pressVideo.hidden=false;

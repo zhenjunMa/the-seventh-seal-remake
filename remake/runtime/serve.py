@@ -8,6 +8,7 @@ import hashlib
 import io
 import json
 import os
+import re
 import sys
 import tempfile
 import threading
@@ -116,6 +117,12 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
     def do_GET(self):
         slot = self.save_slot()
         if slot is None:
+            path = urlsplit(self.path).path
+            if path.startswith('/assets/video/') and path.endswith('.mp4'):
+                match = re.fullmatch(r'bytes=([0-9]{0,20})-([0-9]{0,20})', self.headers.get('Range', ''))
+                if (match and any(match.groups())
+                        and 'If-Modified-Since' not in self.headers and 'If-None-Match' not in self.headers):
+                    return self.send_video_range(*match.groups())
             return super().do_GET()
         if not self.local_request():
             return self.json_response(403, {'error': '存档接口仅供本地游戏访问'})
@@ -147,6 +154,49 @@ class RuntimeHandler(SimpleHTTPRequestHandler):
         except OSError:
             return self.json_response(500, {'error': '无法读取 remake/saves 中的存档'})
         self.json_response(200, value)
+
+    def send_video_range(self, first, last):
+        try:
+            stream = open(self.translate_path(self.path), 'rb')
+        except OSError:
+            return super().do_GET()
+        with stream:
+            stat = os.fstat(stream.fileno())
+            modified = self.date_time_string(stat.st_mtime)
+            if self.headers.get('If-Range', modified) != modified:
+                return super().do_GET()
+            size = stat.st_size
+            if first:
+                start = int(first)
+                end = min(int(last), size - 1) if last else size - 1
+            else:
+                start, end = max(0, size - int(last)), size - 1
+            if start > end:
+                self.send_response(416)
+                self.send_header('Content-Range', f'bytes */{size}')
+                self.send_header('Content-Length', '0')
+                self.end_headers()
+                return
+
+            remaining = end - start + 1
+            stream.seek(start)
+            self.send_response(206)
+            self.send_header('Content-Type', 'video/mp4')
+            self.send_header('Accept-Ranges', 'bytes')
+            self.send_header('Content-Range', f'bytes {start}-{end}/{size}')
+            self.send_header('Content-Length', str(remaining))
+            self.send_header('Last-Modified', modified)
+            self.end_headers()
+            try:
+                while remaining:
+                    chunk = stream.read(min(remaining, 64 * 1024))
+                    if not chunk:
+                        self.close_connection = True
+                        break
+                    self.wfile.write(chunk)
+                    remaining -= len(chunk)
+            except (BrokenPipeError, ConnectionResetError):
+                self.close_connection = True
 
     def do_PUT(self):
         # Reject unread request bodies by closing this HTTP/1.1 connection.
