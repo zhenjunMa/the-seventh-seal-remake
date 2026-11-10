@@ -1,0 +1,44 @@
+remake/runtime/web/core/config/runtime_config_worker.mjs
+  s_ac8f7518f734db::t_c1e41c39f96d39 23-24
+  s_ac8f7518f734db::t_631ff36cfcd4b6 1-22,25-37
+remake/runtime/web/controllers/services.mjs
+  s_ac8f7518f734db::t_fef89abdfd161e 101
+  s_ac8f7518f734db::t_a97c3379f4793b 66,74
+  s_ac8f7518f734db::t_33bb983c704ce7 103,105
+  s_ac8f7518f734db::t_154ad6337abc2d 10,28,31,36,132-135
+remake/runtime/serve.py
+  s_ac8f7518f734db::t_9b18f3975c44ef 8,19,64-67,69-74,80-82,84-86,257-258,261-275,286-290
+  s_ac8f7518f734db::t_1fad5dedae6e52 68,75-79,83,276-278
+  s_ac8f7518f734db::t_f48d90de0b24dc 279
+remake/runtime/web/startup_view.mjs
+  s_ac8f7518f734db::t_8db429af5f969c 16,19-24,26-27,79-81,83,98,135-140,154,176,195,278
+  s_ac8f7518f734db::t_e246d9d113b211 25,31
+remake/runtime/web/controllers/session.mjs
+  s_ac8f7518f734db::t_33bb983c704ce7 54,126,148
+remake/runtime/web/core/resources/image_catalog.mjs
+  s_ac8f7518f734db::t_631ff36cfcd4b6 25-26
+remake/runtime/web/app.js
+  s_ac8f7518f734db::t_33bb983c704ce7 29-44,46
+remake/runtime/web/controllers/input.mjs
+  s_ac8f7518f734db::t_33bb983c704ce7 42-48,114,147
+  s_ac8f7518f734db::t_a97c3379f4793b 16-17
+remake/runtime/web/controllers/boot.mjs
+  s_ac8f7518f734db::t_bdece8d47242e5 49-51,68-69,72,82-91,97,111
+  s_ac8f7518f734db::t_8ba33a8477bde1 32-48,52-62,65-67,70-71,73-81,92-96,98-110,112-136,173-178,277-284,287
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "381db2f80e27f84e40f929805d261c218aeb83ad",
+  "prompts": {},
+  "sessions": {
+    "s_ac8f7518f734db": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c36e-3751-7cb2-8a18-25352a433c13",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
