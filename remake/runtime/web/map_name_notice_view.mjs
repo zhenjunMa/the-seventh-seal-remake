@@ -16,12 +16,12 @@ export class MapNameNoticeView {
   }
   show(name){
     this.close();this.started=this.clock.time;this.label.textContent=name;
-    this.bounds=this.textRenderer.paint(this.ink,name,{font:'map_name18',foreground:'#000000',shadow:null,
-      maxWidth:this.resource.width-6,maxLines:1,lineHeight:18,boxHeight:this.resource.height-1,
-      layout:'mnu',align:'center',verticalAlign:'center'});
     this.root.hidden=false;this.resize();this.draw(this.started);
   }
   draw(now){
+    this.bounds=this.textRenderer.paint(this.ink,this.label.textContent,{font:'map_name18',foreground:'#000000',shadow:null,
+      maxWidth:this.resource.width-6,maxLines:1,lineHeight:18,boxHeight:this.resource.height-1,
+      layout:'mnu',align:'center',verticalAlign:'center'});
     const {context:c,resource:r}=this,ticks=Math.floor((now-this.started)/24),travel=Math.ceil(r.width/8);
     const exit=Math.max(0,ticks-travel-60);
     c.clearRect(0,0,640,480);

@@ -71,8 +71,8 @@ export class BattleMenuView{
     if(this.stage==='actors')message=this.snapshot?.actors.find(a=>a.id===this.snapshot.player_id)?.name??'';
     else if(this.stage==='wheel'){
       const slot=this.commandSlots?.[this.focusIndex];
-      const names=slot?.skill?.component_skill_names;
-      message=slot?.type===1&&names?.length?`${slot.name}=${names.map(techniqueDisplayName).join(' + ')}`:slot?.name??'';
+      const names=slot?.skill?.component_names;
+      message=slot?.skill?.battle_handler==='combination'&&names?.length?`${slot.name}=${names.map(techniqueDisplayName).join(' + ')}`:slot?.name??'';
     }
     else if(['skills','items'].includes(this.stage))message=this.entries?.[this.listIndex]?.name??(this.stage==='skills'?'此分类没有招式。':'没有可用的药品。');
     else if(this.stage==='target'){
@@ -216,7 +216,7 @@ export class BattleMenuView{
       let options;if(widget){options=this.fontOptions.get(widget);if(!options){options={...operationMnuTextOptions(widget),maxLines:1};this.fontOptions.set(widget,options);}}
       else options={font:bitmapFont,foreground:color,shadow:'#000000',align,maxWidth:width,maxLines:1};
       if(wrap)options={...options,maxLines:Infinity};
-      const key=JSON.stringify([value,options]);let rendered=this.textCache.get(key);
+      const key=JSON.stringify([this.textRenderer.revision,value,options]);let rendered=this.textCache.get(key);
       if(!rendered){const canvas=this.doc.createElement('canvas');rendered={canvas,...this.textRenderer.paint(canvas,value,options)};if(this.textCache.size>128)this.textCache.clear();this.textCache.set(key,rendered);}
       const anchor=!widget&&width===null?(align==='right'?1:align==='center'?.5:0)*this.textRenderer.measure(value,bitmapFont):0;
       const top=y+rendered.offsetY;

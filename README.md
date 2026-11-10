@@ -32,6 +32,12 @@ Windows 也可以双击根目录的 `start-game.cmd` 启动服务，再打开上
 
 方向键或 `WASD` 移动，`Shift` 切换跑走，`Tab` 切换队员，`Esc` 打开菜单或返回，空格交互，空格或 `Enter` 确认，`F4` 快速保存，`F5` 快速读取。
 
+画面下方的“字体：Noto／Windows 原版”按钮可在当前场景直接切换位图字库，并记住选择。默认使用 Noto；Windows 版本独立保存在 `runtime/builtin/fonts/windows/`，生成后的图片可在其他平台读取。本机的宋体和 Arial 可直接解析；原版请求的“全真特黑體”和 Benguiat Bk BT 在本机解析为宋体，因此这套字库用于比较当前 Windows 的原版字体效果。
+
+战斗轮盘聚焦编成技巧时，INFO 显示 `火炎斩=火精·炎羽 + 火精·炎月`，成员顺序与编成记录一致。Noto 和 Windows 位图字库都支持这套显示格式。
+
+需要重新生成对照字库时，在 Windows 执行 `python -B remake/runtime/tools/export_windows_fonts.py --original-dir "原版安装目录"`；它按现有三套 Noto 清单的全部字符逐个字号生成，不修改 Noto 字库。维护构建配方时，再通过 `export_data_recipes.py` 更新三个 `*_fonts_windows.json` 文档。
+
 `remake/saves/` 中的 `SaveGame0.Dat` 至 `SaveGame19.Dat` 为普通档，`Game.SAV` 为快速档。
 
 ## 游戏事件索引
@@ -94,4 +100,4 @@ Windows 也可以双击根目录的 `start-game.cmd` 启动服务，再打开上
 
 原版《第七封印：魔神苏醒》的程序、素材、剧情及相关商标归各自权利人所有，不在上述授权范围内。仓库不分发原版程序和提取媒体。
 
-Phaser 采用 [MIT 许可证](remake/runtime/web/vendor/phaser/LICENSE.md)。内置位图字库源自 Noto Serif CJK SC 和 Noto Sans CJK SC，采用 [SIL Open Font License 1.1](remake/runtime/builtin/fonts/LICENSE.txt)。
+Phaser 采用 [MIT 许可证](remake/runtime/web/vendor/phaser/LICENSE.md)。默认 Noto 位图字库源自 Noto Serif CJK SC 和 Noto Sans CJK SC，采用 [SIL Open Font License 1.1](remake/runtime/builtin/fonts/LICENSE.txt)。独立的 Windows 对照字库不适用该许可证；随游戏分发逐字位图字库需要相应字体授权，参见 [微软字体许可 FAQ](https://learn.microsoft.com/en-us/typography/fonts/font-faq#document-embedding)。

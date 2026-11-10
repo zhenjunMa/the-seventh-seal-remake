@@ -89,21 +89,41 @@ export function createBootController({state, actions, $, canvas, ctx}) {
     const operationManifest=await actions.json('data/operation_menu.json');
     state.saveMenu=await SaveMenuView.create({manifest:await actions.json('data/save_menu.json'),root:$('saveMenu'),image:actions.image,onConfirm:actions.selectSaveSlot,onClose:actions.closeSaveMenu,log:actions.log});
     await Promise.all(['assets/menu/main.png',...['game001d','game001a','game001a_2','game002a','game002_1','game003a','game003_1','game005'].map(id=>operationManifest.menus.find(menu=>menu.id===id).composed)].map(actions.image));
-    const textRenderer=await createMenuTextRenderer(await actions.json('data/menu_fonts.json'));
+    const [menuFonts,windowsMenuFonts,windowsDialogueFonts,windowsPrologueFonts]=await Promise.all([
+      'menu_fonts','menu_fonts_windows','dialogue_fonts_windows','prologue_fonts_windows'
+    ].map(name=>actions.json(`data/${name}.json`)));
+    const textRenderer=await createMenuTextRenderer(menuFonts,{windowsFonts:windowsMenuFonts});
     state.prologuePresentation=await actions.json('data/prologue_presentation.json');
     state.captionView=await CaptionView.create({manifest:state.prologuePresentation,
-      fonts:await actions.json(state.prologuePresentation.font_manifest),image:actions.image,
+      fonts:await actions.json(state.prologuePresentation.font_manifest),windowsFonts:windowsPrologueFonts,image:actions.image,
       root:$('storyCaption'),clock:state.engine?.exploration.clock,onAdvance:()=>actions.advanceDialogue(),log:actions.log});
     state.loadingView=await LoadingView.create({manifest:state.prologuePresentation.loading,
       image:actions.image,root:$('sceneLoading'),clock:state.engine?.clock,log:actions.log});
     state.battleTransition=new BattleTransitionView({renderer:state.engine.transitions,log:actions.log});
     const dialogueManifest=await actions.json('data/dialogue_ui.json');state.dialogueManifest=dialogueManifest;
-    state.dialogueView=await DialogueView.create({manifest:dialogueManifest,fonts:await actions.json(dialogueManifest.font_manifest),
+    state.dialogueView=await DialogueView.create({manifest:dialogueManifest,fonts:await actions.json(dialogueManifest.font_manifest),windowsFonts:windowsDialogueFonts,
       image:actions.image,root:$('dialogue'),clock:state.engine?.exploration.clock,onAdvance:actions.advanceDialogue,onChoose:actions.chooseDialogue,log:actions.log});
     state.rewardNoticeView=new RewardNoticeView({root:$('rewardNotice'),resource:state.dialogueView.resources.reward,
       textRenderer,clock:state.engine.exploration.clock,log:actions.log});
     state.mapNameNoticeView=new MapNameNoticeView({root:$('mapNameNotice'),resource:state.dialogueView.resources.map_name,
       textRenderer:state.dialogueView.textRenderer,clock:state.engine.exploration.clock});
+    const fontButton=$('fontToggle');
+    let fontSet=localStorage.getItem('seventh-seal-font-set')==='windows'?'windows':'noto';
+    const selectFonts=()=>{
+      for(const renderer of [textRenderer,state.dialogueView.textRenderer,state.captionView.textRenderer])renderer.selectFonts(fontSet);
+      for(const surface of document.querySelectorAll('canvas'))if(surface.menuTextRenderer){
+        const bounds=surface.menuTextRenderer.paint(surface,...surface.menuTextRequest);
+        surface.style.left=bounds.offsetX+'px';surface.style.top=bounds.offsetY+'px';
+      }
+      fontButton.textContent=fontSet==='windows'?'字体：Windows 原版':'字体：Noto';
+      fontButton.setAttribute('aria-pressed',String(fontSet==='windows'));
+    };
+    selectFonts();fontButton.disabled=false;
+    fontButton.onclick=()=>{
+      fontSet=fontSet==='noto'?'windows':'noto';selectFonts();
+      localStorage.setItem('seventh-seal-font-set',fontSet);
+      actions.log({type:'font-set-changed',font_set:fontSet});canvas.focus();
+    };
     state.menuSettings=createMenuSettings({storage:localStorage});
     const menuTransaction=fn=>state.menuFeedback?state.menuFeedback.transaction(fn):fn();
     state.operationMenu=new OperationMenuView({manifest:operationManifest,textRenderer,techniquesSupplement:await actions.json('data/operation_techniques.json'),root:$('partyMenu'),onPage:actions.showOperationPage,

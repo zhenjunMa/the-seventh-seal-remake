@@ -18,3 +18,5 @@
 .fullscreen-controls{position:absolute;top:8px;right:8px;z-index:100;display:flex;align-items:center;gap:10px;max-width:calc(100% - 16px);padding:5px 8px;background:#101b1deb;border:1px solid #435352;border-radius:4px;color:var(--muted);font-size:11px;opacity:.35;transition:opacity .15s}
 .fullscreen-controls:hover,.fullscreen-controls:focus-within{opacity:1}
 .fullscreen-controls button{flex:none;padding:5px 9px;font-size:11px}
+
+.game-controls>div{flex-wrap:wrap}.game-controls #fontToggle{white-space:nowrap}

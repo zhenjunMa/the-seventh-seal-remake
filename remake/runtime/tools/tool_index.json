@@ -1,7 +1,7 @@
 {
   "schema": "seventh-seal-tool-index",
   "version": 1,
-  "updated": "2026-11-08",
+  "updated": "2026-11-10",
   "registered_steps": 59,
   "content_plan": [
     "chapter-maps",
@@ -582,7 +582,8 @@
       "imported_by": [
         "export_dialogue_ui.py",
         "export_menu_text_gdi.py",
-        "export_prologue_presentation.py"
+        "export_prologue_presentation.py",
+        "export_windows_fonts.py"
       ]
     },
     {
@@ -850,6 +851,12 @@
       "imported_by": []
     },
     {
+      "path": "export_windows_fonts.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
       "path": "export_world_map_ui.py",
       "role": "registered-build",
       "build_targets": [
@@ -906,6 +913,7 @@
         "export_skill_layers.py",
         "export_skill_test.py",
         "export_story_media.py",
+        "export_windows_fonts.py",
         "incremental_atlas.py",
         "refresh_audio_map_bindings.py",
         "refresh_item_admission.py",

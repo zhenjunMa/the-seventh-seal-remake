@@ -11891,7 +11891,7 @@
     },
     "menu_fonts.json": {
       "root": [
-        696071
+        714734
       ],
       "format": {
         "indent": 2,
@@ -11899,8 +11899,8 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "a5aea4986145552fdaf035794d7fcf2f41c96b261a99b4c416ae61308c8665bd",
-      "bytes": 3195799
+      "sha256": "37653490b462b7001446dbdc05b6541acffcf7f17229e29189c33b37a1f078c1",
+      "bytes": 3208956
     },
     "native_services.json": {
       "root": [
@@ -19857,6 +19857,45 @@
       },
       "sha256": "6e5bca503519be49d7d943f593b5cc0fcfc9e2753193b45faece4ab171be0947",
       "bytes": 42317
+    },
+    "menu_fonts_windows.json": {
+      "root": [
+        714790
+      ],
+      "format": {
+        "indent": 2,
+        "compact": false,
+        "crlf": false,
+        "newline": true
+      },
+      "sha256": "4082bfed567b2875b5f525e8a209ecb972865349fd571815ae228f8ab3c1a5f4",
+      "bytes": 2921406
+    },
+    "dialogue_fonts_windows.json": {
+      "root": [
+        714328
+      ],
+      "format": {
+        "indent": 2,
+        "compact": false,
+        "crlf": false,
+        "newline": true
+      },
+      "sha256": "6f84480547f9b55e9f78c3caa199869c0c799198f448fc1f4468339a47b32652",
+      "bytes": 2128068
+    },
+    "prologue_fonts_windows.json": {
+      "root": [
+        714631
+      ],
+      "format": {
+        "indent": 2,
+        "compact": false,
+        "crlf": false,
+        "newline": true
+      },
+      "sha256": "24b230220a1eeb5d2c02554938494f0f59b91cc6e30af4250246dc4a20a5294c",
+      "bytes": 66809
     }
   },
   "compression": "gzip",
@@ -19945,6 +19984,9 @@
     "0081": "eb3813669fc314b975cc0dc07f9137e1f9e4ce6f090ee5a4412071b0cefb0eef",
     "0082": "e92f18530ba21c0d472a561d1f04408c0a6630e1c547b7ec33c0bb1c0a13a7f1",
     "0083": "6f9d2ab42832931a7363d9e19246632d7cb66bbaa30dc458ea17d653ff07ab84",
-    "0084": "dddf1bd7551f43360e400e2c9e6d7888f41c1c296f3ec2d94f6c32fb77abba8f"
+    "0084": "5350b6f0102923debbe2ed0f6e8fd1dedb23f09a2697b4d4646170d5cfab9e76",
+    "0085": "c2003dc0c8774cec278189fcf239b8ee0f7eee1faa9d78fd26c42f5a56a4aff4",
+    "0086": "fccbde1e40f839695b47dc97337310a73078610a22f2c02a652739a22bf0ba9e",
+    "0087": "0481a26aaa84efd02d88288b71a94630be068f32719bf31c4c1ad5bc91b809bc"
   }
 }

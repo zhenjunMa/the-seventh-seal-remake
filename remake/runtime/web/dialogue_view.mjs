@@ -4,12 +4,12 @@ import {createMenuTextRenderer} from './core/ui/menu_text.mjs';
 import {dialoguePages,DialoguePlayback} from './core/ui/dialogue.mjs';
 
 export class DialogueView {
-  static async create({manifest,fonts,image,...options}){
+  static async create({manifest,fonts,windowsFonts,image,...options}){
     const resources={};
     await Promise.all(Object.entries(manifest.resources).map(async([key,value])=>{
       resources[key]={...value,bitmaps:await Promise.all(value.frames.map(frame=>image(frame.image)))};
     }));
-    return new DialogueView({...options,manifest,resources,textRenderer:await createMenuTextRenderer(fonts)});
+    return new DialogueView({...options,manifest,resources,textRenderer:await createMenuTextRenderer(fonts,{windowsFonts})});
   }
   constructor({root,manifest,resources,textRenderer,onAdvance,onChoose,log,clock=null}){
     Object.assign(this,{root,manifest,resources,textRenderer,onAdvance,onChoose,log,clock});
@@ -36,6 +36,7 @@ export class DialogueView {
     const profile=this.style===2?m.thought:m.ordinary;
     this.profile={width:profile.text_width,height:profile.text_height,fontHeight:profile.font_height,lineHeight:profile.line_step};
     this.font=profile.font_key;this.latinFont=profile.ascii_font_key;
+    this.fontRevision=this.textRenderer.revision;
     const measureLatin=word=>this.textRenderer.measure(word,this.latinFont);
     this.playback=new DialoguePlayback(dialoguePages(text,{...this.profile,scroll:this.style<=1,measureLatin}),{now:this.readyAt,interval:m.timing.character_interval_ms,choices});
     this.choicesRoot.replaceChildren(...(choices??[]).map(choice=>{
@@ -111,6 +112,17 @@ export class DialogueView {
   }
   draw(now){
     if(!this.active)return;
+    if(this.fontRevision!==this.textRenderer.revision){
+      this.fontRevision=this.textRenderer.revision;this.inkCache.clear();
+      const playback=this.playback,pages=dialoguePages(this.label.textContent,{...this.profile,scroll:this.style<=1,
+        measureLatin:word=>this.textRenderer.measure(word,this.latinFont)});
+      let revealed=playback.pages.slice(0,playback.page).reduce((sum,page)=>sum+page.runs.length,0)+playback.revealed,page=0;
+      while(page+1<pages.length&&revealed>pages[page].runs.length){revealed-=pages[page].runs.length;page++;}
+      playback.pages=pages;playback.page=page;playback.revealed=revealed;
+      playback.started=now-Math.max(0,revealed-1)*playback.interval;
+      if(playback.stage!=='choices')playback.stage=playback.complete?'waiting':'typing';
+      if(!this.choicesRoot.hidden)this.showChoices();
+    }
     const c=this.context,r=this.resources,l=this.geometry();c.clearRect(0,0,640,480);c.imageSmoothingEnabled=false;
     if(this.style===2)drawImageRegion(c,r.think.bitmaps[0],l.board.x,l.board.y);
     else{
