@@ -1,0 +1,26 @@
+remake/runtime/tools/incremental_atlas.py
+  s_33bfd4be785cd0::t_bce240f5d3b9b0 25-26,32-33,38-39,41-42,71-72,106-107,115-142,153-154,186-188,207-214
+  s_33bfd4be785cd0::t_ff8bfa2e46ef10 27
+remake/runtime/tools/battle_pack_inventory.mjs
+  s_33bfd4be785cd0::t_9cd011e7855e79 28,53-57,91
+remake/runtime/tools/export_battle_packs.py
+  s_33bfd4be785cd0::t_0e91aa06593a88 43,51-52,106-107,144,149-150,164,172-174,181-182,195
+remake/runtime/tools/data_recipes/index.json
+  s_33bfd4be785cd0::t_eb7a12a4cf37d2 2885,2893-2894,19990-20001
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "7415c5ea75d7203cd45d9214950e09b2ca12b064",
+  "prompts": {},
+  "sessions": {
+    "s_33bfd4be785cd0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c41b-7146-7033-a9de-db703ef8efec",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
