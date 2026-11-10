@@ -31,7 +31,7 @@ export function explorationScene(Phaser,runtime){
       const tiles=textures.tiles(scene.bitmap);
       for(let i=0;i<tiles.length;i++){const tile=tiles[i];let image=this.backgroundTiles[i];
         if(!image){image=this.add.image(0,0,'__WHITE').setOrigin(0);this.background.add(image);this.backgroundTiles.push(image);}
-        image.setVisible(true).setPosition(tile.x,tile.y).setTexture(tile.key,tile.frame);}
+        image.setVisible(true).setPosition(tile.x,tile.y).setTexture(tile.key,tile.frame).setDisplaySize(tile.width,tile.height);}
       for(let i=tiles.length;i<this.backgroundTiles.length;i++)this.backgroundTiles[i].setVisible(false);
       const zoom=options.nativeViewport?1:view.zoom;
       runtime.configureCamera(this.cameras.main,{x:view.x,y:view.y,zoom});

@@ -226,7 +226,7 @@ export class BattleMenuView{
       if(!rendered){const canvas=this.doc.createElement('canvas');rendered={canvas,...this.textRenderer.paint(canvas,value,options)};if(this.textCache.size>128)this.textCache.clear();this.textCache.set(key,rendered);}
       const anchor=!widget&&width===null?(align==='right'?1:align==='center'?.5:0)*this.textRenderer.measure(value,bitmapFont):0;
       const top=y+rendered.offsetY;
-      drawImageRegion(c,rendered.canvas,x-anchor+rendered.offsetX,wrap?Math.min(top,this.canvas.height-rendered.canvas.height):top);return;
+      drawImageRegion(c,rendered.canvas,x-anchor+rendered.offsetX,wrap?Math.min(top,this.canvas.height-rendered.height):top);return;
     }
     c.font=font;c.textAlign=align;c.textBaseline='top';c.fillStyle='#000';c.fillText(value,x+1,y+1,width??640);c.fillStyle=color;c.fillText(value,x,y,width??640);
   }

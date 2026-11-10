@@ -110,7 +110,7 @@ export class BattleSurface {
     const frame=this.textures.region(source,sx+(area.x-target.x)*sw/target.width,sy+(area.y-target.y)*sh/target.height,
       area.width*sw/target.width,area.height*sh/target.height);
     const sprite=this.take('sprite').setTexture(frame.key,frame.frame).setPosition(area.x,area.y).setDisplaySize(area.width,area.height);
-    sprite.smoothText=Boolean(source.gpuGlyph);
+    sprite.smoothText=Boolean(source.gpuGlyph&&(source.gpuPixelScale??1)===1);
     sprite.xbrBounds=sampleBounds;
     sprite.nativeColorSubtract=this.nativeColorSubtract;
     if(this.nativeAppearance){

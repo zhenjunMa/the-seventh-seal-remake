@@ -1,4 +1,5 @@
 import {registerGlyph} from '../../phaser/rendering/recorded_surface.mjs';
+import {loadHdFont} from '../resources/hd_images.mjs';
 // Bitmap masks; manifests retain the rasterizer and actual source face.
 // Whole-string shadow passes follow native 0x5358C4 before the foreground pass.
 export async function createMenuTextRenderer(manifest, options = {}) {
@@ -7,6 +8,8 @@ export async function createMenuTextRenderer(manifest, options = {}) {
   const sets={noto:{manifest,atlases:new Map()}},tinted=new Map();
   if(options.windowsFonts)sets.windows={manifest:options.windowsFonts,atlases:new Map()};
   let selected='noto',revision=0,atlases=sets.noto.atlases;
+  let hdSet=null,hdAtlases=new Map();
+  const hdTinted=new Map();
   await Promise.all(Object.values(sets).flatMap(set=>Object.entries(set.manifest.fonts).map(async ([key,font]) => {
     const image = makeImage(); image.src = font.image;
     if (image.decode) await image.decode();
@@ -16,7 +19,29 @@ export async function createMenuTextRenderer(manifest, options = {}) {
   function selectFonts(name){
     if(name===selected)return;
     selected=name;manifest=sets[name].manifest;atlases=sets[name].atlases;
-    tinted.clear();revision++;
+    tinted.clear();hdTinted.clear();revision++;
+  }
+  async function prepareHdFonts(name){
+    if(name===hdSet)return;
+    const entries=await Promise.all(Object.entries(sets[name].manifest.fonts).map(async ([key,font])=>
+      [key,await loadHdFont(font,makeImage)]));
+    const changed=name===selected&&(hdAtlases.size||entries.some(([,image])=>image));
+    hdAtlases=new Map(entries.filter(([,image])=>image));hdSet=name;
+    hdTinted.clear();
+    if(changed)revision++;
+  }
+  function tintGlyph(key,char,color,image,glyph){
+    const id=JSON.stringify([key,char,color]);
+    let tile=hdTinted.get(id);
+    if(!tile){
+      tile=document.createElement('canvas');tile.width=glyph.width;tile.height=glyph.height;
+      const c=tile.getContext('2d');
+      c.drawImage(image,glyph.x,glyph.y,glyph.width,glyph.height,0,0,glyph.width,glyph.height);
+      c.globalCompositeOperation='source-in';c.fillStyle=color;c.fillRect(0,0,tile.width,tile.height);
+      if(hdTinted.size>=1024)hdTinted.delete(hdTinted.keys().next().value);
+      hdTinted.set(id,tile);
+    }
+    return tile;
   }
   function atlas(key,color) {
     const cacheKey=key+':'+color;
@@ -83,6 +108,9 @@ export async function createMenuTextRenderer(manifest, options = {}) {
     if(!(maxLines===Infinity||Number.isInteger(maxLines)&&maxLines>0))throw new Error('菜单文本行数无效');
     if(lineHeight!==null&&(!Number.isFinite(lineHeight)||lineHeight<=0))throw new Error('菜单文本行距无效');
     if(canvas.menuTextSignature===signature)return canvas.menuTextBounds;
+    const hd=hdSet===selected?hdAtlases.get(key):null;
+    const scale=hd?.scale??1;
+    const inkGlyphs=hd?.glyphs??font.glyphs;
     const rows=[];
     for(const original of text.split('\n')) {
       let row=[],length=0;
@@ -104,14 +132,14 @@ export async function createMenuTextRenderer(manifest, options = {}) {
       for(const run of row.runs){
         let pen=origin+run.x;
         for(const char of run.text){
-          const glyph=font.glyphs[char];
+          const glyph=inkGlyphs[char];
           if(glyph.width&&glyph.height){
-            inkLeft=Math.min(inkLeft,pen+glyph.offset_x);
-            inkRight=Math.max(inkRight,pen+glyph.offset_x+glyph.width);
-            inkTop=Math.min(inkTop,textTop+index*step+glyph.offset_y);
-            inkBottom=Math.max(inkBottom,textTop+index*step+glyph.offset_y+glyph.height);
+            inkLeft=Math.min(inkLeft,pen+glyph.offset_x/scale);
+            inkRight=Math.max(inkRight,pen+(glyph.offset_x+glyph.width)/scale);
+            inkTop=Math.min(inkTop,textTop+index*step+glyph.offset_y/scale);
+            inkBottom=Math.max(inkBottom,textTop+index*step+(glyph.offset_y+glyph.height)/scale);
           }
-          pen+=advanceOverride!==null&&char.codePointAt(0)>127?advanceOverride:glyph.advance;
+          pen+=advanceOverride!==null&&char.codePointAt(0)>127?advanceOverride:font.glyphs[char].advance;
         }
       }
     }
@@ -119,21 +147,30 @@ export async function createMenuTextRenderer(manifest, options = {}) {
     const right=Math.max(Math.ceil(width)+1,Math.ceil(inkRight)+(shadow===null?0:1));
     const offsetY=Math.min(-1,Math.floor(inkTop)-(shadow===null?0:1));
     const bottom=Math.max(Math.ceil(areaHeight)+1,Math.ceil(inkBottom)+(shadow===null?0:1));
-    canvas.width=right-offsetX;canvas.height=bottom-offsetY;
+    const logicalWidth=right-offsetX,logicalHeight=bottom-offsetY;
+    canvas.width=logicalWidth*scale;canvas.height=logicalHeight*scale;
+    if(scale>1||canvas.gpuPixelScale>1){
+      canvas.style.width=scale>1?`${logicalWidth}px`:'';
+      canvas.style.height=scale>1?`${logicalHeight}px`:'';
+    }
+    canvas.gpuPixelScale=scale;
     canvas.setAttribute('role','img');canvas.setAttribute('aria-label',text);
     const context=canvas.getContext('2d');context.imageSmoothingEnabled=false;
     function pass(color,dx,dy,only=null) {
-      const source=atlas(key,color);
+      const source=hd?null:atlas(key,color);
       for(let index=0;index<visible.length;index++) {
         const row=visible[index],remaining=width-row.width,origin=-offsetX+dx+(align==='center'?Math.floor(remaining/2):align==='right'?remaining:0);
         for(const run of row.runs){
           if(only&&only!==run)continue;
           let pen=origin+run.x;
           for(const char of run.text) {
-            const glyph=font.glyphs[char];
-            if(glyph.width&&glyph.height)context.drawImage(source,glyph.x,glyph.y,glyph.width,glyph.height,
-              pen+glyph.offset_x,-offsetY+dy+textTop+index*step+glyph.offset_y,glyph.width,glyph.height);
-            pen+=advanceOverride!==null&&char.codePointAt(0)>127?advanceOverride:glyph.advance;
+            const glyph=inkGlyphs[char];
+            if(glyph.width&&glyph.height){
+              const x=pen*scale+glyph.offset_x,y=(-offsetY+dy+textTop+index*step)*scale+glyph.offset_y;
+              if(hd)context.drawImage(tintGlyph(key,char,color,hd.image,glyph),x,y);
+              else context.drawImage(source,glyph.x,glyph.y,glyph.width,glyph.height,x,y,glyph.width,glyph.height);
+            }
+            pen+=advanceOverride!==null&&char.codePointAt(0)>127?advanceOverride:font.glyphs[char].advance;
           }
         }
       }
@@ -147,9 +184,9 @@ export async function createMenuTextRenderer(manifest, options = {}) {
       if(shadow!==null)for(const [dx,dy] of shadowOffsets)pass(shadow,dx,dy);
       pass(foreground,0,0);
     }
-    canvas.menuTextSignature=signature;canvas.menuTextBounds={width:canvas.width,height:canvas.height,offsetX,offsetY,lineCount:visible.length,truncated:rows.length>visible.length};
+    canvas.menuTextSignature=signature;canvas.menuTextBounds={width:logicalWidth,height:logicalHeight,offsetX,offsetY,lineCount:visible.length,truncated:rows.length>visible.length};
     registerGlyph(canvas);return canvas.menuTextBounds;
   }
-  const renderer={paint,measure,supports,selectFonts,get revision(){return revision;},get fonts(){return manifest.fonts;}};
+  const renderer={paint,measure,supports,selectFonts,prepareHdFonts,get revision(){return revision;},get fonts(){return manifest.fonts;}};
   return renderer;
 }

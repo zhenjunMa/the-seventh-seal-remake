@@ -28,6 +28,7 @@ import {worldMapEntry} from "../core/exploration/map_connections.mjs";
 import {createSaveStorage} from "../core/world/save_storage.mjs";
 import {SaveMenuView} from "../save_menu_view.mjs";
 import {loadImageCatalog} from '../core/resources/image_catalog.mjs';
+import {configureHdImages,hdImagesPreference} from '../core/resources/hd_images.mjs';
 
 function loadConfiguration(catalog,manifests,signal){
   return new Promise((resolve,reject)=>{
@@ -61,6 +62,7 @@ export function createBootController({state, actions, $, canvas}) {
   }
   async function boot(startEngine,signal){
     actions.busy('boot');
+    configureHdImages(hdImagesPreference());
     state.saveStorage=createSaveStorage();
     const startupMedia=await actions.json('data/startup_media.json');
     signal.throwIfAborted();
@@ -200,8 +202,10 @@ export function createBootController({state, actions, $, canvas}) {
       textRenderer:state.dialogueView.textRenderer,clock:state.engine.exploration.clock});
     const fontButton=$('fontToggle');
     let fontSet=localStorage.getItem('seventh-seal-font-set')==='windows'?'windows':'noto';
-    const selectFonts=()=>{
-      for(const renderer of [textRenderer,state.dialogueView.textRenderer,state.captionView.textRenderer])renderer.selectFonts(fontSet);
+    const selectFonts=async()=>{
+      const renderers=[textRenderer,state.dialogueView.textRenderer,state.captionView.textRenderer];
+      await Promise.all(renderers.map(renderer=>renderer.prepareHdFonts(fontSet)));
+      for(const renderer of renderers)renderer.selectFonts(fontSet);
       for(const surface of document.querySelectorAll('canvas'))if(surface.menuTextRenderer){
         const bounds=surface.menuTextRenderer.paint(surface,...surface.menuTextRequest);
         surface.style.left=bounds.offsetX+'px';surface.style.top=bounds.offsetY+'px';
@@ -209,12 +213,15 @@ export function createBootController({state, actions, $, canvas}) {
       fontButton.textContent=fontSet==='windows'?'字体：Windows 原版':'字体：Noto';
       fontButton.setAttribute('aria-pressed',String(fontSet==='windows'));
     };
-    selectFonts();fontButton.disabled=false;
-    fontButton.onclick=()=>{
-      fontSet=fontSet==='noto'?'windows':'noto';selectFonts();
-      localStorage.setItem('seventh-seal-font-set',fontSet);
-      actions.log({type:'font-set-changed',font_set:fontSet});canvas.focus();
-    };
+    await selectFonts();fontButton.disabled=false;
+    fontButton.onclick=actions.guarded(async()=>{
+      fontButton.disabled=true;
+      try{
+        fontSet=fontSet==='noto'?'windows':'noto';await selectFonts();
+        localStorage.setItem('seventh-seal-font-set',fontSet);
+        actions.log({type:'font-set-changed',font_set:fontSet});canvas.focus();
+      }finally{fontButton.disabled=false;}
+    });
     state.menuSettings=createMenuSettings({storage:localStorage});
     const menuTransaction=fn=>state.menuFeedback?state.menuFeedback.transaction(fn):fn();
     state.operationMenu=new OperationMenuView({manifest:operationManifest,textRenderer,techniquesSupplement:await actions.json('data/operation_techniques.json'),root:$('partyMenu'),onPage:actions.showOperationPage,

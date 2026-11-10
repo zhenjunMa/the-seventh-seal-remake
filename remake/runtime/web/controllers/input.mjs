@@ -7,6 +7,7 @@ import {effectiveSkillSource} from "../core/battle/battle_skill_access.mjs";
 import {createContentSample} from "../core/content/content_sample.mjs";
 import {createPartySkillSample,PARTY_SKILL_SAMPLE_ROSTERS} from "../core/party/party_skill_sample.mjs";
 import {createFullscreenController} from "./fullscreen.mjs";
+import {hdImagesPreference,saveHdImagesPreference} from '../core/resources/hd_images.mjs';
 
 export function createInputController({state, actions, $, canvas, ctx}) {
   const listeners=new AbortController(),options={signal:listeners.signal};
@@ -90,6 +91,19 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     const smoothing=$('actorSmoothing');
     const showSmoothing=()=>{const enabled=state.engine.actorSmoothing;smoothing.textContent=`平滑显示：${enabled?'开':'关'}`;smoothing.setAttribute('aria-pressed',String(enabled));};
     showSmoothing();smoothing.onclick=()=>{state.engine.setActorSmoothing(!state.engine.actorSmoothing,{persist:true});showSmoothing();canvas.focus();};
+    const hd=$('hdImages');
+    const currentHd=hdImagesPreference();
+    const showHd=enabled=>{
+      hd.textContent=`高清素材：${enabled?'开':'关'}${enabled!==currentHd?'（刷新生效）':''}`;
+      hd.setAttribute('aria-pressed',String(enabled));
+    };
+    showHd(currentHd);
+    hd.onclick=actions.guarded(()=>{
+      const enabled=!hdImagesPreference();
+      saveHdImagesPreference(enabled);
+      showHd(enabled);
+      if(enabled!==currentHd)actions.status('高清素材设置已保存，刷新页面后生效。');
+    });
     $('fullscreen').onclick=actions.guarded(fullscreen.toggle);
     $('fullscreenExit').onclick=actions.guarded(fullscreen.toggle);
     document.addEventListener('fullscreenchange',fullscreen.changed,options);

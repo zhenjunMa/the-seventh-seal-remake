@@ -62,7 +62,9 @@ export class TextureCache {
       const patches=imageRegions(source,x,y,width,height);
       if(!patches.length)return {key:'__WHITE',frame:'__BASE',empty:true};
       if(patches.length!==1)throw new Error('单个精灵帧跨纹理页，请重新构建图片资源');
-      const p=patches[0],entry=this.texture(p.bitmap),id=`packed:${p.sx},${p.sy},${p.width},${p.height},${p.x-x},${p.y-y},${width},${height}`;
+      const p=patches[0];
+      if(p.pixelScale!==1)return this.region(p.bitmap,p.sx,p.sy,p.width*p.pixelScale,p.height*p.pixelScale);
+      const entry=this.texture(p.bitmap),id=`packed:${p.sx},${p.sy},${p.width},${p.height},${p.x-x},${p.y-y},${width},${height}`;
       if(!entry.texture.has(id)){
         const frame=entry.texture.add(id,0,p.sx,p.sy,p.width,p.height);
         frame.setTrim(width,height,p.x-x,p.y-y,p.width,p.height);this.stats.frames_created++;
@@ -85,7 +87,8 @@ export class TextureCache {
     return {key:entry.key,frame:name};
   }
   tiles(source){
-    if(source.packed)return imageRegions(source).map(p=>({x:p.x,y:p.y,width:p.width,height:p.height,...this.region(p.bitmap,p.sx,p.sy,p.width,p.height)}));
+    if(source.packed)return imageRegions(source).map(p=>({x:p.x,y:p.y,width:p.width,height:p.height,
+      ...this.region(p.bitmap,p.sx,p.sy,p.width*p.pixelScale,p.height*p.pixelScale)}));
     const result=[];for(let y=0;y<source.height;y+=this.maxSize)for(let x=0;x<source.width;x+=this.maxSize){
     const width=Math.min(this.maxSize,source.width-x),height=Math.min(this.maxSize,source.height-y);result.push({x,y,width,height,...this.region(source,x,y,width,height)});
   }return result;}

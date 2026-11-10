@@ -1,4 +1,5 @@
 import {ownBitmap,bitmapResident,onBitmapEvicted,evictBitmap} from '../resources/bitmap_residency.mjs';
+import {loadHdImage} from '../resources/hd_images.mjs';
 export {drawImageRegion as drawBattleImage} from '../resources/image_regions.mjs';
 
 // Shared, verified battle atlases. Views retain geometry, never private bitmap copies.
@@ -62,17 +63,28 @@ export class BattleResources {
     need(isCurrent(),'资源准备已取消');
     for(const path of new Set(paths)){
       const entry=data.images[canonical(path)];need(entry,`图片未登记到图集：${path}`);
-      for(const region of entry.regions)required.add(region[4]);
       entries.set(path,{packed:true,path,width:entry.width,height:entry.height,regions:entry.regions,pool:this});
     }
-    for(const index of required)this.leases.set(index,(this.leases.get(index)??0)+1);
-    let leased=true,cancelled=false;
+    let leased=false,cancelled=false;
     const releaseLeases=()=>{if(!leased)return;leased=false;
       for(const index of required){const count=this.leases.get(index)-1;if(count)this.leases.set(index,count);else this.leases.delete(index);}};
     const operation={cancel(){cancelled=true;releaseLeases();}},current=()=>!cancelled&&isCurrent();
     if(!this.preparations.has(scope))this.preparations.set(scope,new Set());this.preparations.get(scope).add(operation);
-    let completed=0,next=0;const pages=[...required],total=Math.max(1,pages.length);
     try{
+      const upgrades=[];
+      for(const [path,entry] of entries){
+        const hd=loadHdImage(path,entry);
+        if(hd)upgrades.push(hd.then(image=>{if(image)entries.set(path,image);}));
+      }
+      if(upgrades.length)await Promise.all(upgrades);
+      need(current(),'资源准备已取消');
+      for(const entry of entries.values()){
+        if(entry.pool!==this)continue;
+        for(const region of entry.regions)required.add(region[4]);
+      }
+      for(const index of required)this.leases.set(index,(this.leases.get(index)??0)+1);
+      leased=true;
+      let completed=0,next=0;const pages=[...required],total=Math.max(1,pages.length);
       onProgress({completed,total});
       // Keep a failed request from leaving other workers unobserved or releasing
       // their pending atlas leases before all decoding has settled.

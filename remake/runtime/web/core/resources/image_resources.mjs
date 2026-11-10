@@ -1,5 +1,6 @@
 import {imageCatalog,imageDescriptor} from './image_catalog.mjs';
 import {ownBitmap,evictBitmap} from './bitmap_residency.mjs';
+import {loadHdImage} from './hd_images.mjs';
 
 // Scope-owned decoded images. A failed load can be retried; releasing an
 // unused scene also releases the cache's references to its decoded pixels.
@@ -21,30 +22,34 @@ export class ImageResources {
     this.entries.set(path, entry);
     this.revision++;
     const descriptor=imageDescriptor(path);
+    const hd=loadHdImage(path,descriptor,this.createImage);
+    const original=()=>this.loadOriginal(path,entry,descriptor);
+    entry.promise=(hd?hd.then(image=>image??original()):original()).then(image=>{
+      entry.bitmap=image;
+      if(this.entries.get(path)!==entry)this.prunePages();
+      return image;
+    }).catch(error=>{
+      if(this.entries.get(path)===entry){this.entries.delete(path);this.revision++;}
+      this.prunePages();throw error;
+    });
+    return entry.promise;
+  }
+  loadOriginal(path,entry,descriptor){
     if(descriptor){
       entry.pages=new Set(descriptor.regions.map(r=>r[4]));
-      entry.promise=Promise.all([...entry.pages].map(index=>this.page(index))).then(()=>{
-        const image={packed:true,path,width:descriptor.width,height:descriptor.height,regions:descriptor.regions,pool:this};
-        entry.bitmap=image;
-        if(this.entries.get(path)!==entry)this.prunePages();
-        return image;
-      }).catch(error=>{
-        if(this.entries.get(path)===entry){this.entries.delete(path);this.revision++;}
-        this.prunePages();throw error;
-      });
-      return entry.promise;
+      return Promise.all([...entry.pages].map(index=>this.page(index))).then(()=>({
+        packed:true,path,width:descriptor.width,height:descriptor.height,regions:descriptor.regions,pool:this
+      }));
     }
-    entry.promise = new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       const bitmap = this.createImage();
-      bitmap.onload = () => { bitmap.onload = bitmap.onerror = null; entry.bitmap = bitmap; resolve(bitmap); };
+      bitmap.onload = () => { bitmap.onload = bitmap.onerror = null; resolve(bitmap); };
       bitmap.onerror = () => {
         bitmap.onload = bitmap.onerror = null;
-        if (this.entries.get(path) === entry) { this.entries.delete(path); this.revision++; }
         reject(new Error(`图像加载失败：${path}`));
       };
       bitmap.src = path;
     });
-    return entry.promise;
   }
   page(index){
     let entry=this.pages.get(index);if(entry)return entry.promise;
@@ -93,7 +98,11 @@ export class ImageResources {
     const scopes = new Set();
     for (const entry of this.entries.values()) {
       for (const scope of entry.scopes) scopes.add(scope);
-      if (entry.bitmap) { ready++; if(!entry.bitmap.packed)decodedBytes += entry.bitmap.width * entry.bitmap.height * 4; }
+      if (entry.bitmap) {
+        ready++;
+        const {packed,pixelScale,width,height}=entry.bitmap;
+        if(!packed||pixelScale)decodedBytes+=width*height*(pixelScale??1)**2*4;
+      }
     }
     for(const entry of this.pages.values())if(entry.bitmap)decodedBytes+=entry.bitmap.width*entry.bitmap.height*4;
     return {entries:this.entries.size, ready, pending:this.entries.size - ready,

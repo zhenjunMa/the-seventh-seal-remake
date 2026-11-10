@@ -19,7 +19,7 @@ export class SpritePose {
     this.body.setPosition(body_offset?.x??0,body_offset?.y??0);
     this.body.pixelImage=image.pixels?image:null;
     if(image.pixels){this.body.setVisible(true);this.body.xbrBounds=null;this.body.setTexture('__WHITE').setSize(width,height).setScale(displayWidth/width,displayHeight/height);this.body.pixelRegion={sx,sy,sw:width,sh:height};}
-    else{const main=image.packed?this.textures.actorRegion(image,sx,sy,width,height):this.textures.region(image,sx,sy,width,height);this.body.setVisible(!main.empty);this.body.xbrBounds=main.bounds??null;
+    else{const main=image.packed&&!image.pixelScale?this.textures.actorRegion(image,sx,sy,width,height):this.textures.region(image,sx,sy,width,height);this.body.setVisible(!main.empty);this.body.xbrBounds=main.bounds??null;
       this.body.setTexture(main.key,main.frame).setDisplaySize(displayWidth,displayHeight);}
     this.light.setVisible(Boolean(light));
     if(light){const glow=this.textures.region(light,sx,sy,width,height);this.light.setVisible(!glow.empty);
