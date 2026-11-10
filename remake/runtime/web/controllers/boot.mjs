@@ -5,13 +5,9 @@ import {SceneController} from "../core/exploration/scene_controller.mjs";
 import {WorldMapController} from "../core/exploration/world_map.mjs";
 import {validateEncounterData} from "../core/exploration/encounters.mjs";
 import {createPartyActors} from "../core/party/party_attributes.mjs";
-import {validateScheduler} from "../core/battle/battle_scheduler.mjs";
-import {validateEnemyAIData} from "../core/battle/enemy_ai.mjs";
-import {validateForestRewards} from "../core/battle/battle_rewards.mjs";
 import {validateForestReactionsData} from "../core/battle/battle_reactions.mjs";
 import {validateForestStatusData} from "../core/battle/battle_status.mjs";
 import {ChapterRunner} from "../core/story/chapter_runner.mjs";
-import {validateItemData} from "../core/items/items.mjs";
 import {createAudioController} from "../core/resources/audio.mjs";
 import {createMenuFeedback,operationFeedbackState} from "../core/ui/menu_feedback.mjs";
 import {OperationMenuView} from "../operation_menu_view.mjs";
@@ -33,12 +29,111 @@ import {createSaveStorage} from "../core/world/save_storage.mjs";
 import {SaveMenuView} from "../save_menu_view.mjs";
 import {loadImageCatalog} from '../core/resources/image_catalog.mjs';
 
-export function createBootController({state, actions, $, canvas, ctx}) {
-  async function boot(){
+function loadConfiguration(catalog,manifests,signal){
+  return new Promise((resolve,reject)=>{
+    signal.throwIfAborted();
+    const worker=new Worker(new URL('../core/config/runtime_config_worker.mjs',import.meta.url),{type:'module'});
+    const finish=(complete,value)=>{
+      signal.removeEventListener('abort',abort);
+      worker.terminate();
+      complete(value);
+    };
+    const abort=()=>finish(reject,signal.reason);
+    signal.addEventListener('abort',abort,{once:true});
+    worker.onmessage=({data})=>data.error===undefined?finish(resolve,data.value):finish(reject,new Error(data.error));
+    worker.onerror=event=>{
+      event.preventDefault();
+      finish(reject,new Error(event.message||'无法启动规则加载线程'));
+    };
+    worker.onmessageerror=()=>finish(reject,new Error('无法接收规则加载结果'));
+    const paths=Object.fromEntries(['combat_sample','forest_combat','party_skills','party_rewards','source_skills','source_magic','runtime_config']
+      .map(key=>[key,catalog[key]]));
+    try{worker.postMessage({catalog:paths,manifests});}catch(error){finish(reject,error);}
+  });
+}
+
+export function createBootController({state, actions, $, canvas}) {
+  let gameReady, gamePrepared=false;
+  async function ensureGameReady(){
+    if(gamePrepared)return;
+    actions.status('正在准备游戏资源…');
+    await gameReady;
+  }
+  async function boot(startEngine,signal){
     actions.busy('boot');
-    await loadImageCatalog();
     state.saveStorage=createSaveStorage();
-    state.catalog=await actions.json('data/catalog.json');if(state.catalog.schema!=='seventh-seal-runtime-catalog'||state.catalog.version!==1)throw new Error('运行清单版本不兼容');
+    const startupMedia=await actions.json('data/startup_media.json');
+    signal.throwIfAborted();
+    let phase='boot';
+    let finishIntro;
+    const introReady=new Promise(resolve=>{finishIntro=resolve;});
+    const view=state.startupView=new StartupView({media:startupMedia,$,image:actions.image,
+      onStage:stage=>{
+        if(stage!=='gametitle')finishIntro();
+        phase=stage==='menu'?'menu':stage==='menu-loading'?'boot':'startup';
+        if(state.scenes)state.scenes.setPhase(phase);else actions.busy(phase);
+      },
+      onNew:()=>actions.beginOpening(),onLoad:(_summary,slot)=>actions.loadProgress(slot),onResume:()=>actions.resumeExploration(),
+      getSaves:()=>actions.saveEntries().filter(row=>row.summary),
+      refreshSaves:()=>actions.refreshSaveSlots(),isBusy:()=>Boolean(state.saveOperation),status:actions.status,log:actions.log});
+    actions.wireStartupInput();
+    actions.status('片头按Esc跳过；提示画面按任意键进入主菜单。首次交互启用声音。');
+    view.start();
+    // Let the video submit a frame before WebGL initialization competes for
+    // the main thread. Skip and failed/slow media must also release boot.
+    const video=view.video;
+    const frame=video.requestVideoFrameCallback?.(()=>setTimeout(finishIntro,0));
+    const timeout=setTimeout(finishIntro,300);
+    const afterIntro=introReady.then(()=>{
+      clearTimeout(timeout);
+      if(frame!==undefined)video.cancelVideoFrameCallback(frame);
+      signal.throwIfAborted();
+    });
+
+    const earlyAudio=new AbortController();
+    let interacted=false;
+    const rememberGesture=event=>{if(event.isTrusted)interacted=true;};
+    for(const type of ['pointerdown','keydown'])document.addEventListener(type,rememberGesture,{capture:true,signal:earlyAudio.signal});
+    const pictures=afterIntro.then(()=>loadImageCatalog());
+    const audioReady=Promise.all([
+      actions.json('data/audio.json'),pictures.then(()=>actions.json('data/startup_menu.json')),
+    ]).then(([audioManifest,startupManifest])=>{
+      signal.throwIfAborted();
+      state.audio=createAudioController({...audioManifest,clips:{...audioManifest.clips,...startupManifest.audio.clips}},{storage:localStorage});
+      state.audio.attachUnlock(document);
+      if(interacted)state.audio.unlock();
+      view.audio=state.audio;view.syncVideoAudio(true);
+      $('audioMuted').checked=state.audio.snapshot().muted;$('audioVolume').value=String(Math.round(state.audio.snapshot().volume*100));
+      $('audioMuted').onchange=()=>state.audio.setMuted($('audioMuted').checked);
+      $('audioVolume').oninput=()=>state.audio.setVolume(Number($('audioVolume').value)/100);
+      return {audioManifest,startupManifest};
+    }).finally(()=>earlyAudio.abort());
+    const engineReady=afterIntro.then(startEngine).then(()=>{
+      signal.throwIfAborted();
+      state.engine.start({phase,interface:actions.updateInterface,
+        exploration:actions.updateExploration,battle:actions.updateBattleFrame,suspend:actions.releaseInput});
+      actions.wire();actions.resize();
+    });
+    const menuReady=Promise.all([engineReady,audioReady]).then(([,audio])=>view.prepareMenu(audio.startupManifest));
+    void actions.refreshSaveSlots({quiet:true});
+
+    const catalogReady=pictures.then(async imageCatalog=>{
+      const catalog=await actions.json('data/catalog.json');
+      if(catalog.schema!=='seventh-seal-runtime-catalog'||catalog.version!==1)throw new Error('运行清单版本不兼容');
+      return {catalog,manifests:imageCatalog?.manifests};
+    });
+    const rules=catalogReady.then(({catalog,manifests})=>loadConfiguration(catalog,manifests,signal));
+    rules.catch(()=>{});
+    gameReady=Promise.all([menuReady,catalogReady,audioReady]).then(async ([,{catalog},{audioManifest}])=>{
+      signal.throwIfAborted();
+      state.catalog=catalog;
+      await prepareGame({audioManifest,rules,phase:()=>phase});
+      gamePrepared=true;
+    });
+    gameReady.catch(()=>{});
+    await menuReady;
+  }
+  async function prepareGame({audioManifest,rules,phase}){
     const registration=await actions.json(state.catalog.runtime_content??'data/runtime_content.json');
     validateContentRegistration(runtimeContent);
     if(JSON.stringify(registration)!==JSON.stringify(runtimeContentDefinition))throw new Error('内容登记已变化，请执行 build_runtime.py --target content --run 并刷新页面');
@@ -74,18 +169,13 @@ export function createBootController({state, actions, $, canvas, ctx}) {
         }
       }
     }
-    state.battleData=await actions.json(state.catalog.combat_sample??'data/combat_sample.json');
-    const [worldMapData,loadedEncounters,loadedForest]=await Promise.all([actions.json(state.catalog.world_map),actions.json(state.catalog.encounters),actions.json(state.catalog.forest_combat)]);
-    state.encounterData=validateEncounterData(loadedEncounters);state.forestData=loadedForest;
-    state.schedulerData=validateScheduler(await actions.json('data/battle_scheduler.json'));
     const readReactions=path=>actions.json(path).then(freezeDefinition).then(validateForestReactionsData);
-    [state.aiData,state.rewardData,state.reactionData,state.statusData]=await Promise.all([actions.json('data/forest_ai.json').then(validateEnemyAIData),actions.json('data/forest_rewards.json').then(validateForestRewards),readReactions('data/enemy_reactions.json'),actions.json('data/forest_status.json').then(validateForestStatusData)]);
-    [state.partyCombat,state.partySkills,state.partyRewards,state.partyReactions]=await Promise.all([actions.json(state.catalog.party_combat),actions.json(state.catalog.party_skills),actions.json(state.catalog.party_rewards).then(validateForestRewards),readReactions(state.catalog.party_reactions)]);
-    for(const key of ['aiData','rewardData','reactionData','statusData','partyRewards','partyReactions'])freezeDefinition(state[key]);
-    state.sourceItemData=validateItemData(await actions.json('data/items.json'));
-    if(state.catalog.source_skills)state.sourceSkills=await actions.json(state.catalog.source_skills);
-    if(state.catalog.source_magic)state.sourceMagic=await actions.json(state.catalog.source_magic);
-    state.itemData=(await actions.initializeRuntimeConfiguration({shared:true})).items;
+    const [worldMapData,loadedEncounters,reactionData,statusData,partyCombat,partyReactions]=await Promise.all([
+      actions.json(state.catalog.world_map),actions.json(state.catalog.encounters),readReactions('data/enemy_reactions.json'),
+      actions.json('data/forest_status.json').then(validateForestStatusData),actions.json(state.catalog.party_combat),readReactions(state.catalog.party_reactions),
+    ]);
+    Object.assign(state,{encounterData:validateEncounterData(loadedEncounters),reactionData,
+      statusData:freezeDefinition(statusData),partyCombat,partyReactions});
     const operationManifest=await actions.json('data/operation_menu.json');
     state.saveMenu=await SaveMenuView.create({manifest:await actions.json('data/save_menu.json'),root:$('saveMenu'),image:actions.image,onConfirm:actions.selectSaveSlot,onClose:actions.closeSaveMenu,log:actions.log});
     await Promise.all(['assets/menu/main.png',...['game001d','game001a','game001a_2','game002a','game002_1','game003a','game003_1','game005'].map(id=>operationManifest.menus.find(menu=>menu.id===id).composed)].map(actions.image));
@@ -159,10 +249,6 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       onItemFilter:(type,subtype)=>{state.menuContext.itemFilter=[type,subtype];$('menuMessage').textContent='';actions.refreshPartyMenu();}});
     state.menuFeedback=createMenuFeedback({playCue:(name,key)=>state.audio.playCue(name,key),getState:()=>operationFeedbackState(state.operationMenu)});
     state.menuFeedback.attach($('partyMenu'));
-    const [audioManifest,startupManifest,startupMedia]=await Promise.all([actions.json('data/audio.json'),actions.json('data/startup_menu.json'),actions.json('data/startup_media.json')]);
-    state.audio=createAudioController({...audioManifest,clips:{...audioManifest.clips,...startupManifest.audio.clips}},{storage:localStorage});state.audio.attachUnlock(document);
-    $('audioMuted').checked=state.audio.snapshot().muted;$('audioVolume').value=String(Math.round(state.audio.snapshot().volume*100));
-    $('audioMuted').onchange=()=>state.audio.setMuted($('audioMuted').checked);$('audioVolume').oninput=()=>state.audio.setVolume(Number($('audioVolume').value)/100);
     state.selectedRole=state.world.value.leader_id;
     await Promise.all(state.catalog.roles.flatMap(r=>r.actions.filter(a=>a.index<=2).flatMap(a=>[
       actions.image(a.sheet).then(image=>{a.bitmap=image;}),
@@ -188,18 +274,15 @@ export function createBootController({state, actions, $, canvas, ctx}) {
       root:$('worldMapPanel'),image:actions.image,select:actions.selectWorldMapDestination,
       close:actions.closeWorldMap,status:actions.status,cue:name=>state.audio?.playCue(name)});
     $('boundaries').textContent=state.catalog.boundaries;$('scopeText').textContent=state.catalog.introduction;
-    state.startupView=await StartupView.create({manifest:startupManifest,media:startupMedia,$,image:actions.image,audio:state.audio,
-      onStage:stage=>{state.scenes.setPhase(stage==='menu'?'menu':'startup');},
-      onNew:()=>actions.beginOpening(),onLoad:(_summary,slot)=>actions.loadProgress(slot),onResume:()=>actions.resumeExploration(),
-      getSaves:()=>actions.saveEntries().filter(row=>row.summary),
-      refreshSaves:()=>actions.refreshSaveSlots(),isBusy:()=>Boolean(state.saveOperation),status:actions.status,log:actions.log});
-    actions.wire();actions.resize();await state.scenes.loadLocation(state.world.location,{reason:'boot'});actions.buildHud();
-    await actions.refreshSaveSlots({quiet:true});
+    state.itemData=(await actions.initializeRuntimeConfiguration({shared:true},async()=>{
+      const {menu,battle,sampleBattle,partySkills,partyRewards,initialMoney}=await rules;
+      freezeDefinition({menu,battle,sampleBattle,partySkills,partyRewards});
+      Object.assign(state,{partySkills,partyRewards,battleData:sampleBattle.combat,rewardData:{initial_money:initialMoney}});
+      const select=({sample=false}={})=>sample?sampleBattle:battle;
+      return {menu:()=>menu,battle:select,snapshot:options=>structuredClone(select(options))};
+    })).items;
+    state.scenes.setPhase(phase());
     actions.log({type:'boot',map_id:state.world.location.map_id,source:state.world.value.source,engine:'Phaser 3.90.0'});
-    state.engine.start({phase:state.scenes.phase,interface:actions.updateInterface,
-      exploration:actions.updateExploration,battle:actions.updateBattleFrame,suspend:actions.releaseInput});
-    actions.status('片头按Esc跳过；提示画面按任意键进入主菜单。首次交互启用声音。');state.startupView.start();
-    state.engine.clock.requestFrame(()=>state.engine.clock.requestFrame(()=>void actions.warmBattleShared()));
   }
-  return {boot};
+  return {boot,ensureGameReady};
 }

@@ -13,6 +13,8 @@ export function createInputController({state, actions, $, canvas, ctx}) {
   const fullscreen=createFullscreenController({$,canvas});
   function saveKey(key,repeat=false){
     if(!['F4','F5'].includes(key))return false;
+    const title=state.startupView;
+    if(title?.sequence&&title.sequence.stage!=='closed'&&(title.root.dataset.stage!=='menu'||title.pending))return true;
     if(!repeat){if(state.engine?.paused)actions.status('请先返回游戏，再存取进度。',true);else actions.guarded(()=>key==='F4'?actions.saveProgress('quick'):actions.loadProgress('quick'))();}
     return true;
   }
@@ -36,6 +38,13 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     if (!available.length) return;
     const current = available.findIndex(actor => actor.id === leader_id);
     selectMapActor(available[(current + 1) % available.length].id);
+  }
+  function wireStartupInput(){
+    window.addEventListener('keydown',event=>{
+      if(event.defaultPrevented||state.engine?.paused||['F4','F5'].includes(event.key))return;
+      const key=event.key.length===1?event.key.toLowerCase():event.key;
+      if(state.startupView?.key(key,event.repeat))event.preventDefault();
+    },options);
   }
   function wire(){
     $('partyMenuOpen').onclick=()=>actions.openPartyMenu();
@@ -102,13 +111,13 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     $('layerPrevious').onclick=actions.guarded(async()=>{state.layerIndex=Math.max(0,state.layerIndex-1);await actions.drawLayer();});$('layerNext').onclick=actions.guarded(async()=>{state.layerIndex=Math.min(state.layerData.frames.length-1,state.layerIndex+1);await actions.drawLayer();});$('mainLayer').onchange=actions.guarded(actions.drawLayer);$('intrinsicLayer').onchange=actions.guarded(actions.drawLayer);
     $('layerSelect').onchange=actions.guarded(async()=>{state.layerIndex=Number($('layerSelect').value);await actions.drawLayer();});
     window.addEventListener('keydown',event=>{
+      if(event.defaultPrevented)return;
       const key=event.key.length===1?event.key.toLowerCase():event.key;
       if(actions.gameOverKey?.(key,event.repeat)){event.preventDefault();return;}
       if(saveKey(key,event.repeat)){event.preventDefault();return;}
       if(state.engine?.paused)return;
       if(actions.nativeServiceKey(key,event.repeat)){event.preventDefault();return;}
       if(state.saveMenu?.key(key,event.repeat)){event.preventDefault();return;}
-      if(state.startupView?.key(key,event.repeat)){event.preventDefault();return;}
       if(['event','opening'].includes(state.scenes?.phase)&&actions.dialogueKey(key,event.repeat)){event.preventDefault();return;}
       if(state.worldMapView?.key(key,event.repeat)){event.preventDefault();return;}
       if(state.menuContext){const kind=key==='Escape'?'cancel':[' ','Enter'].includes(key)?'confirm':key==='Tab'?'ignore':'select';const handle=()=>{if(key==='Escape'){if(!event.repeat&&($('partyMenu').hidden||state.operationMenu.escape()))actions.closePartyMenu();return true;}return state.operationMenu.key(key,event.repeat);};const handled=state.menuFeedback?state.menuFeedback.run(kind,handle,{repeat:event.repeat}):handle();if(handled)event.preventDefault();return;}
@@ -135,5 +144,5 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     canvas.addEventListener('wheel',event=>{event.preventDefault();if(!state.engine?.paused&&state.scenes.phase==='map')state.view.zoom=Math.min(3,Math.max(.15,state.view.zoom*(event.deltaY<0?1.1:1/1.1)));},{...options,passive:false});
   }
   function disposeInput(){listeners.abort();fullscreen.dispose();state.keys.clear();}
-  return {wire,disposeInput,saveKey};
+  return {wire,wireStartupInput,disposeInput,saveKey};
 }

@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from urllib.parse import urlsplit, unquote
 import argparse
 import hashlib
+import io
 import json
 import os
 import sys
@@ -15,6 +16,7 @@ sys.path.insert(0, str(ROOT))
 from native_save import decode_native_save, encode_native_save, native_save_summary
 
 MOUNTS = {'/': ROOT / 'web'}
+ITEMS_FILE = ROOT / 'web/data/items.json'
 SAVE_FILES = {**{f'{index:02}': f'SaveGame{index}.Dat' for index in range(20)}, 'quick': 'Game.SAV'}
 MAX_SAVE_BYTES = 8_000_000
 
@@ -58,6 +60,29 @@ def read_save_summary(path, cache=None):
 
 class RuntimeHandler(SimpleHTTPRequestHandler):
     protocol_version = 'HTTP/1.1'
+
+    def send_head(self):
+        if urlsplit(self.path).path != '/data/items.runtime.json':
+            return super().send_head()
+        try:
+            raw, etag = self.server.runtime_items()
+        except FileNotFoundError:
+            self.send_error(404, explain='请先构建运行数据')
+            return None
+        except (OSError, ValueError):
+            self.send_error(500, explain='无法读取道具数据')
+            return None
+        if self.headers.get('If-None-Match') == etag:
+            self.send_response(304)
+            self.send_header('ETag', etag)
+            self.end_headers()
+            return None
+        self.send_response(200)
+        self.send_header('Content-Type', 'application/json; charset=utf-8')
+        self.send_header('Content-Length', str(len(raw)))
+        self.send_header('ETag', etag)
+        self.end_headers()
+        return io.BytesIO(raw)
 
     def json_response(self, status, value):
         raw = json.dumps(value, ensure_ascii=False).encode('utf-8')
@@ -229,7 +254,28 @@ class RuntimeServer(ThreadingHTTPServer):
         self.save_dir = Path(save_dir) if save_dir is not None else ROOT.parent / 'saves'
         self.save_lock = threading.Lock()
         self.save_summary_cache = {}
+        self.runtime_items_lock = threading.Lock()
+        self.runtime_items_cache = None
         super().__init__(*args, **kwargs)
+
+    def runtime_items(self):
+        with self.runtime_items_lock, ITEMS_FILE.open('rb') as stream:
+            stat = os.fstat(stream.fileno())
+            fingerprint = (stat.st_dev, stat.st_ino, stat.st_size, stat.st_mtime_ns, stat.st_ctime_ns)
+            cached = self.runtime_items_cache
+            if cached is not None and cached[0] == fingerprint:
+                return cached[1]
+            data = json.load(stream)
+            if not isinstance(data, dict) or not isinstance(data.get('catalog', {}), dict):
+                raise ValueError('道具数据格式无效')
+            # The full catalog remains the source for exporters and migrations.
+            catalog = data.get('catalog', {})
+            for key in ('equipment_admission', 'item_capability_admission'):
+                catalog.pop(key, None)
+            raw = json.dumps(data, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
+            response = (raw, f'"{hashlib.sha256(raw).hexdigest()}"')
+            self.runtime_items_cache = (fingerprint, response)
+            return response
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -237,6 +283,11 @@ if __name__ == '__main__':
     parser.add_argument('--save-dir', type=Path, help='独立验收存档目录；默认使用 remake/saves')
     args = parser.parse_args()
     server = RuntimeServer(('127.0.0.1', args.port), RuntimeHandler, save_dir=args.save_dir)
+    try:
+        server.runtime_items()
+    except (OSError, ValueError):
+        # The runtime endpoint reports missing or invalid data when requested.
+        pass
     print(f'Seventh Seal runtime: http://127.0.0.1:{args.port}/', flush=True)
     try:
         server.serve_forever()

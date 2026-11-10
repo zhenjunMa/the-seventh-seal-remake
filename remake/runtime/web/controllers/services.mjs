@@ -7,7 +7,7 @@ import {MANUAL_SAVE_SLOTS,normalizeSaveSlot,saveSlotLabel} from "../core/world/s
 import {captureMapNpcState} from '../core/exploration/map_npc_state.mjs';
 
 export function createServicesController({state, actions, $, canvas, ctx,now=()=>performance.now()}) {
-  let configurationReady;
+  let configurationReady, saveListPending;
   let playTime={base:state.world?.value?.play_time_ms??0,elapsed:0,startedAt:null};
   function currentPlayTime(){return Math.floor(playTime.base+playTime.elapsed+(playTime.startedAt===null?0:now()-playTime.startedAt));}
   function resetPlayTime(milliseconds=state.world.value.play_time_ms??0){
@@ -25,15 +25,15 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
     $('eventLog').append(item); while($('eventLog').children.length>50) $('eventLog').firstChild.remove();
   }
   async function json(path,{cache='no-cache'}={}) { const response=await fetch(path,{cache}); if(!response.ok) throw new Error(`资源加载失败：${path}（${response.status}）`); return imageDefinitionJson(path,response); }
-  async function initializeRuntimeConfiguration(options){
+  async function initializeRuntimeConfiguration(options,prepare){
     // Coalesce startup calls, including a failed startup. Refreshing the page
     // creates a new owner; menu/battle/save operations never reload this input.
-    configurationReady??=(async()=>{
+    configurationReady??=(prepare??(async()=>{
       const config=await loadRuntimeConfiguration(json,state.catalog.runtime_config??'data/config/index.json');
       return createRuntimeConfigurationSession({combat:state.battleData,forest:state.forestData,scheduler:state.schedulerData,ai:state.aiData,
         rewards:state.rewardData,party_skills:state.partySkills,items:state.sourceItemData,
         ...(state.sourceSkills?{source_skills:state.sourceSkills}:{}),...(state.sourceMagic?{source_magic:state.sourceMagic}:{})},config,state.partyRewards);
-    })();
+    }))();
     return readConfiguredData(options);
   }
   async function readConfiguredData(options){
@@ -63,7 +63,7 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
     $('newGame').disabled=!['map','menu'].includes(phase);
     $('menuNew').disabled=phase!=='menu';$('menuLoad').disabled=phase!=='menu';
     $('load').disabled=!['map','menu'].includes(phase);$('importSave').disabled=!['map','menu'].includes(phase);
-    if(phase==='map'&&state.encounterData){
+    if(phase==='map'&&state.encounterData&&state.scenes?.current?.data?.id===state.world.location.map_id){
       const {location,encounters}=state.world.value,maps=state.encounterData.maps,map=maps[location.map_id];
       const pool=encounters?.global_pool_map_id===undefined?map:maps[encounters.global_pool_map_id];
       void actions.warmBattleEntry?.({pool:map?.frequency&&pool?.members.length?pool:null});
@@ -71,6 +71,7 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
   }
   function download(value,filename){const url=URL.createObjectURL(value instanceof Blob?value:new Blob([JSON.stringify(value,null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
   function exportRuntimeLog(){
+    if(!state.world)return;
     // Export the latest fight, even after a technique/scripted session has
     // restored its previous controller. Serialize history one entry at a time.
     const parts=['{"schema":"seventh-seal-runtime-log","version":3,"events":['];
@@ -97,10 +98,11 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
     const preview=actions.captureSavePreview(world);return attachSavePreview(await encodeSave(world),preview);
   }
   async function withSaveOperation(kind,work,{fromMenu=false}={}){
+    if(kind==='load'&&actions.ensureGameReady)await actions.ensureGameReady();
     if(state.saveOperation)throw new Error('正在存取进度，请稍候');
-    const phase=state.scenes.phase;
+    const phase=state.scenes?.phase;
     const menuAllowed=fromMenu&&phase==='save-menu'&&state.saveMenuContext?.mode===kind;
-    if(!menuAllowed&&(kind==='save'?!state.scenes.canSave():!['map','menu'].includes(phase)))throw new Error(kind==='save'?'请在地图探索状态保存':'当前操作完成后才能载入');
+    if(!menuAllowed&&(kind==='save'?!state.scenes?.canSave():!['map','menu'].includes(phase)))throw new Error(kind==='save'?'请在地图探索状态保存':'当前操作完成后才能载入');
     const operation={kind,phase};state.saveOperation=operation;state.scenes.setPhase('save-io');
     state.startupView?.updateButtons?.();state.startupView?.updateOptionPositions?.();
     try{return await work(operation);}
@@ -127,7 +129,10 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
   }
   async function refreshSaveSlots({quiet=false}={}){
     const slots=[...MANUAL_SAVE_SLOTS,'quick'],errors=[];let rows;
-    try{rows=await state.saveStorage.list();}catch(error){rows=slots.map(slot=>({slot,summary:null,error:error.message}));}
+    try{
+      saveListPending??=state.saveStorage.list().finally(()=>{saveListPending=null;});
+      rows=await saveListPending;
+    }catch(error){rows=slots.map(slot=>({slot,summary:null,error:error.message}));}
     state.saveErrors??={};
     for(const row of rows){state.saveSlots[row.slot]=row.summary;state.saveErrors[row.slot]=row.error??null;if(row.error)errors.push(`${saveSlotLabel(row.slot)}：${row.error}`);}
     if(errors.length){$('saveStatus').textContent=errors.join('；');if(!quiet)status(errors.join('；'),true);log({type:'save-list-failed',error:errors.join('；')});}

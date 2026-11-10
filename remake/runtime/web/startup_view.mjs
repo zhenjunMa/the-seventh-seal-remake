@@ -13,16 +13,22 @@ const visibleSaveRows=3;
 export class StartupView {
   static async create(options) {
     const view=new StartupView(options);
-    const assets=options.manifest.assets;
-    view.backgroundIndex=Math.floor(Math.random()*assets.menuback.frames.length);
-    const frames=Object.entries(assets).flatMap(([key,asset])=>key==='menuback'?[asset.frames[view.backgroundIndex]]:asset.frames);
-    await Promise.all(frames.map(async frame=>view.images.set(frame.path,await options.image(frame.path))));
+    await view.prepareMenu(options.manifest);
     return view;
+  }
+  async prepareMenu(manifest) {
+    this.manifest=manifest;
+    const assets=manifest.assets;
+    this.backgroundIndex=Math.floor(Math.random()*assets.menuback.frames.length);
+    const frames=Object.entries(assets).flatMap(([key,asset])=>key==='menuback'?[asset.frames[this.backgroundIndex]]:asset.frames);
+    await Promise.all(frames.map(async frame=>this.images.set(frame.path,await this.image(frame.path))));
+    this.ctx??=drawingContext(this.canvas);
+    if(this.sequence.stage==='menu')this.changeStage(this.sequence.snapshot());
   }
   constructor({manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,getSave,getSaves,refreshSaves,isBusy=()=>false,status,log}) {
     Object.assign(this,{manifest,media,$,image,audio,onNew,onLoad,onResume,onStage,refreshSaves,isBusy,status,log});
     this.readSaves=getSaves??(()=>{const summary=getSave?.();return summary?[{slot:'manual',label:'普通存档',summary}]:[];});
-    this.root=$('startMenu');this.canvas=$('startupCanvas');this.ctx=drawingContext(this.canvas);
+    this.root=$('startMenu');this.canvas=$('startupCanvas');this.ctx=manifest?drawingContext(this.canvas):null;
     this.video=$('startupVideo');this.pressVideo=$('startupPressVideo');
     this.images=new Map();this.allowResume=false;this.pending=false;
     this.sequence=new StartupSequence(snapshot=>this.changeStage(snapshot));
@@ -70,9 +76,11 @@ export class StartupView {
       this.stopMedia(this.video);
       this.stopMedia(this.pressVideo);
     }
-    this.pending=false;this.rotation=null;this.root.hidden=stage==='closed';
-    this.root.dataset.stage=stage;
+    const waitingForMenu=stage==='menu'&&!this.ctx;
+    this.pending=false;this.rotation=null;this.root.hidden=stage==='closed'||waitingForMenu;
+    this.root.dataset.stage=waitingForMenu?'menu-loading':stage;
     if(stage==='closed')return;
+    if(waitingForMenu){this.onStage('menu-loading');return;}
     this.onStage(stage);
     this.resize();this.root.focus({preventScroll:true});
     const isMenu=stage==='menu';this.canvas.hidden=!isMenu;
@@ -87,7 +95,7 @@ export class StartupView {
       this.log({type:'startup-main-menu',background:this.backgroundIndex,allow_resume:this.allowResume});
       return;
     }
-    this.audio.suspend();
+    this.audio?.suspend();
     const clip=this.media.media[stage],video=this.activeVideo;
     video.hidden=false;
     this.syncVideoAudio();
@@ -124,9 +132,12 @@ export class StartupView {
     });
   }
   syncVideoAudio(retry=false){
-    const settings=this.audio.snapshot(),channels=settings.channels,video=this.activeVideo;
-    video.muted=!settings.unlocked||channels.master.muted||channels.music.muted;
-    video.volume=Math.max(1,Math.min(127,Math.floor(2*Math.round(channels.master.volume*64)*Math.round(channels.music.volume*64)/64)))/127;
+    const video=this.activeVideo;
+    if(this.audio){
+      const settings=this.audio.snapshot(),channels=settings.channels;
+      video.muted=!settings.unlocked||channels.master.muted||channels.music.muted;
+      video.volume=Math.max(1,Math.min(127,Math.floor(2*Math.round(channels.master.volume*64)*Math.round(channels.music.volume*64)/64)))/127;
+    }
     if(retry&&video.paused&&['gametitle','preopenpress','openpress'].includes(this.sequence.stage))video.play().catch(()=>{});
   }
   cue(name){const id=this.manifest.audio.cues[name];if(id)this.audio.playClip(id);}
@@ -140,7 +151,7 @@ export class StartupView {
     if(this.sequence.stage==='closed')return false;
     this.syncVideoAudio(true);
     if(this.sequence.stage!=='menu')return this.sequence.key(key,repeat);
-    if(repeat||this.pending||this.isBusy()||this.rotation)return true;
+    if(!this.ctx||repeat||this.pending||this.isBusy()||this.rotation)return true;
     if(key==='Escape'){if(this.submenu){this.cue('cancel');this.submenu=null;this.draw();this.renderOptions();this.updateButtons();}return true;}
     if(this.submenu){
       if(this.submenu==='read'&&['ArrowUp','ArrowDown','PageUp','PageDown','Home','End'].includes(key)){
@@ -162,7 +173,7 @@ export class StartupView {
     return true;
   }
   tick(now){
-    if(this.sequence.stage!=='menu')return;
+    if(this.sequence.stage!=='menu'||!this.ctx)return;
     let changed=false;
     if(this.rotation){
       const motion=this.rotation,steps=Math.floor((now-motion.started)/(this.manifest.timing?.button_frame_ms??30));
@@ -181,6 +192,7 @@ export class StartupView {
     if(changed){this.draw();this.updateButtons();this.updateOptionPositions();}
   }
   updateButtons(){
+    if(!this.ctx||this.sequence.stage!=='menu')return;
     // Native MenuBtn is a single rotating image. Transparent semantic targets
     // follow the four visible plaques, while the canvas retains source pixels.
     const spots=[{x:440,y:380,w:95,h:85},{x:540,y:367,w:80,h:75},{x:525,y:333,w:65,h:35},{x:465,y:340,w:62,h:35}];
@@ -263,7 +275,7 @@ export class StartupView {
     }
   }
   async confirm(){
-    if(this.pending||this.isBusy()||this.rotation||this.sequence.stage!=='menu')return;
+    if(!this.ctx||this.pending||this.isBusy()||this.rotation||this.sequence.stage!=='menu')return;
     if(!this.submenu){
       if(this.selected===1){this.cue('confirm');await this.run(this.onNew);return;}
       if(this.selected===3){

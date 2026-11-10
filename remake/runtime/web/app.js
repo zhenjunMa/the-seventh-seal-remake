@@ -26,14 +26,21 @@ Object.assign(actions, createBattleController({host: createBattleHost({
   ...context, exploration: actions.explorationPresentation, story: actions.storyPresentation,
 })}));
 
-const failed=error=>{void actions.cancelStoryPlayback(error);actions.status(error.message,true);$('loading').hidden=false;$('loading').querySelector('p').textContent=error.message;};
-async function start(){
-  state.engine=await PhaserRuntime.create({parent:$('phaserHost'),focusTarget:canvas,onError:failed});
-  window.addEventListener('pagehide',event=>{
-    if(event.persisted)return;
-    void actions.cancelStoryPlayback();state.battleTransition?.cancel();
-    actions.disposeBattles();actions.disposeInput();state.engine.destroy();
-  });
-  await actions.boot();
+const lifetime=new AbortController();
+const failed=error=>{
+  if(lifetime.signal.aborted)return;
+  lifetime.abort(error);state.startupView?.hide();
+  void actions.cancelStoryPlayback(error);actions.status(error.message,true);$('loading').hidden=false;$('loading').querySelector('p').textContent=error.message;
+};
+window.addEventListener('pagehide',event=>{
+  if(event.persisted)return;
+  lifetime.abort();
+  void actions.cancelStoryPlayback();state.battleTransition?.cancel();
+  actions.disposeBattles();actions.disposeInput();state.engine?.destroy();
+});
+async function startEngine(){
+  const engine=await PhaserRuntime.create({parent:$('phaserHost'),focusTarget:canvas,onError:failed});
+  if(lifetime.signal.aborted){engine.destroy();lifetime.signal.throwIfAborted();}
+  state.engine=engine;
 }
-start().catch(failed);
+actions.boot(startEngine,lifetime.signal).catch(failed);

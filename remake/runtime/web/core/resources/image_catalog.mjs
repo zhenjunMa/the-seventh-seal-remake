@@ -22,8 +22,8 @@ export async function loadImageCatalog(read=fetch.bind(globalThis)){
   return installImageCatalog(await response.json());
 }
 
-export async function imageDefinitionJson(path,response){
-  const expected=catalog?.manifests?.['/'+path.replace(/^\/+/, '')];
+export async function imageDefinitionJson(path,response,manifests=catalog?.manifests){
+  const expected=manifests?.['/'+path.replace(/^\/+/, '')];
   if(!expected)return response.json();
   const bytes=await response.arrayBuffer();
   const actual=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',bytes)),n=>n.toString(16).padStart(2,'0')).join('');

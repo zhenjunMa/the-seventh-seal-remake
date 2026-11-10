@@ -51,6 +51,7 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
     state.audio?.setScene({mapId:state.world.location.map_id,battle:false});actions.buildHud();actions.updateNearest();canvas.focus({preventScroll:true});actions.status('已返回当前游戏。');
   }
   async function beginOpening(seed=null){
+    if(actions.ensureGameReady)await actions.ensureGameReady();
     if(state.saveOperation&&state.saveOperation.kind!=='restore-opening')throw new Error('正在存取进度，请稍候');
     if(!['map','menu'].includes(state.scenes.phase))return;
     const previous={scene:state.scenes.current,world:state.world.snapshot(),view:state.scenes.captureView(),phase:state.scenes.phase,playTime:actions.currentPlayTime?.(),
@@ -122,6 +123,7 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
     return openSaveMenu({mode:'save'});
   }
   async function openSaveMenu({mode='save'}={}){
+    if(actions.ensureGameReady)await actions.ensureGameReady();
     const originPhase=state.scenes.phase;
     if(state.saveOperation||state.saveMenuContext||!['map','menu'].includes(originPhase)||mode==='save'&&originPhase!=='map')throw new Error('当前操作完成后才能打开存档页面');
     let resolve;const finished=new Promise(done=>resolve=done),context={mode,originPhase,resolve};state.saveMenuContext=context;state.scenes.setPhase('save-menu');
@@ -143,7 +145,7 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
     }else{await actions.loadProgress(row.slot,{fromMenu:true});closeSaveMenu({loaded:true});}
   }
   function gameOverKey(key,repeat=false){
-    if(state.scenes.phase!=='game-over')return false;
+    if(state.scenes?.phase!=='game-over')return false;
     if(key==='Escape'&&!repeat)finishGameOver?.();
     return true;
   }
