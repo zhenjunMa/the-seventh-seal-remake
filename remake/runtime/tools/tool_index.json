@@ -973,8 +973,7 @@
       "role": "daily-entry",
       "build_targets": [],
       "imported_by": [
-        "build_runtime.py",
-        "verify_delivery.py"
+        "build_runtime.py"
       ]
     },
     {
@@ -1338,12 +1337,6 @@
       "imported_by": []
     },
     {
-      "path": "verify_delivery.py",
-      "role": "specialized-evidence-check",
-      "build_targets": [],
-      "imported_by": []
-    },
-    {
       "path": "verify_dialogue_alignment.py",
       "role": "specialized-evidence-check",
       "build_targets": [],
@@ -1357,12 +1350,6 @@
     },
     {
       "path": "verify_forest_combat.py",
-      "role": "specialized-evidence-check",
-      "build_targets": [],
-      "imported_by": []
-    },
-    {
-      "path": "verify_forest_presentation.py",
       "role": "specialized-evidence-check",
       "build_targets": [],
       "imported_by": []
@@ -1453,12 +1440,6 @@
     },
     {
       "path": "verify_route_browser.py",
-      "role": "specialized-evidence-check",
-      "build_targets": [],
-      "imported_by": []
-    },
-    {
-      "path": "verify_route_delivery.py",
       "role": "specialized-evidence-check",
       "build_targets": [],
       "imported_by": []

@@ -254,7 +254,6 @@
       "description": "本地 HTTP 与磁盘存档集成；需允许监听回环端口",
       "files": [
         "test_build_runtime.py",
-        "test_current_export_reports.py",
         "test_save_files.py"
       ],
       "layer": "component",
@@ -345,7 +344,6 @@
     "test_ember_city_battle_replay.mjs": ["Fight_Role/042.CHR", "remake/runtime/web/assets/enemy_roles/042", "remake/runtime/web/data/battle_lifecycle_layers_042.json"],
     "test_native_services.py": ["python:PIL", "SYSTEM/boss_main.mnu", "remake/runtime/web/data/native_services.json"],
     "test_native_economy.mjs": ["remake/runtime/web/data/items.json", "remake/runtime/web/data/chapter_story.json", "remake/runtime/web/data/runtime_content.json"],
-    "test_current_export_reports.py": ["GAME.exe", "python:PIL", "python:numpy"],
     "test_dgp_geometry_clipping.py": ["python:PIL"],
     "test_effect_layers.py": ["python:PIL", "remake/runtime/evidence/fire_valley_20261025"],
     "test_ember_city_battle_source.py": ["python:PIL", "remake/runtime/evidence/turn_rules_assembly_20261011.json"],
@@ -530,7 +528,6 @@
         "test_verify_tests.py",
         "test_build_runtime.py",
         "test_content_exporters.py",
-        "test_current_export_reports.py",
         "test_media_fingerprints.py",
         "test_data_recipes.py"
       ]
