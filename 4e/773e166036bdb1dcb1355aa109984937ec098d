@@ -1,0 +1,23 @@
+remake/runtime/web/controllers/services.mjs
+  s_ac8f7518f734db::t_a7fcea06983d3b 11,13,15-26,28-30,66-68,167
+remake/runtime/web/controllers/boot.mjs
+  s_ac8f7518f734db::t_0f63a45a31db6f 114-115
+remake/runtime/web/phaser/runtime.mjs
+  s_ac8f7518f734db::t_1aead4b8f4d52c 72,130,132,136-138
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "4e773e166036bdb1dcb1355aa109984937ec098d",
+  "prompts": {},
+  "sessions": {
+    "s_ac8f7518f734db": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c36e-3751-7cb2-8a18-25352a433c13",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
