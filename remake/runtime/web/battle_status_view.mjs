@@ -57,7 +57,10 @@ export function drawBattleStatuses(ctx, images, data, entries, scale) {
     for (const {effect, frame} of visibleBattleStatuses(actor, data)) {
       const width = effect.frame_width, height = effect.frame_height;
       const x = slot[0] - effect.anchor.x * scale;
-      const y = slot[1] - (effect.anchor.y + (effect.above_head ? (role.cursor_height_raw ?? 0) + 32 : 0)) * scale;
+      // Native drawing subtracts 32 px for both the actor and its head status.
+      // The two offsets cancel when using the remake's actor anchor.
+      const headHeight = effect.above_head ? (role.cursor_height_raw ?? 0) : 0;
+      const y = slot[1] - (effect.anchor.y + headHeight) * scale;
       ctx.save();ctx.globalAlpha = alpha;
       for (const layer of ['main', 'intrinsic']) {
         const image = images.get(effect[`${layer}_sheet`]);
