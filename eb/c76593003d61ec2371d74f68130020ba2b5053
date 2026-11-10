@@ -1,0 +1,36 @@
+remake/runtime/web/core/battle/battle_techniques.mjs
+  s_804e0ed78b3c92::t_cdc3469e2db803 20
+remake/runtime/web/core/ui/menu_presentation.mjs
+  s_804e0ed78b3c92::t_ab7f356f718cc6 23-26
+remake/runtime/tests/test_operation_technique_view.mjs
+  s_804e0ed78b3c92::t_7946f6b86d09c4 79,96-99,101-102
+  s_804e0ed78b3c92::t_037fe6d786b43f 83-94
+remake/runtime/web/battle_menu_view.mjs
+  s_804e0ed78b3c92::t_cdc3469e2db803 72-74,76
+  s_804e0ed78b3c92::t_52ab6f803b922e 5,75,88,139
+  s_804e0ed78b3c92::t_e49a9d5faa248d 213,218,222-223,246-248
+remake/runtime/web/core/ui/menu_text.mjs
+  s_804e0ed78b3c92::t_6bbbbd26ba7f18 39-40,42-44
+  s_804e0ed78b3c92::t_74a405b2048a29 41
+remake/runtime/web/operation_technique_view.mjs
+  s_804e0ed78b3c92::t_ab7f356f718cc6 4,161,238-239,241,297,312
+  s_804e0ed78b3c92::t_50ad7cf6d811d2 265-270
+remake/runtime/tools/data_recipes/index.json
+  s_804e0ed78b3c92::t_bb938cac8aff22 11894,11902-11903,19948
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ebc76593003d61ec2371d74f68130020ba2b5053",
+  "prompts": {},
+  "sessions": {
+    "s_804e0ed78b3c92": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1c2ba-4e22-7b53-bb8f-db954b483122",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
