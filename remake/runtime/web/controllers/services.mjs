@@ -8,10 +8,26 @@ import {captureMapNpcState} from '../core/exploration/map_npc_state.mjs';
 
 export function createServicesController({state, actions, $, canvas, ctx,now=()=>performance.now()}) {
   let configurationReady, saveListPending;
+  const untimedPhases=['boot','startup','menu','game-over','story-complete'];
   let playTime={base:state.world?.value?.play_time_ms??0,elapsed:0,startedAt:null};
+  let playTimeEnabled=false, pageHidden=false;
   function currentPlayTime(){return Math.floor(playTime.base+playTime.elapsed+(playTime.startedAt===null?0:now()-playTime.startedAt));}
+  function syncPlayTime(){
+    const running=playTime.startedAt!==null;
+    const shouldRun=playTimeEnabled&&!pageHidden;
+    if(running===shouldRun)return;
+    const at=now();
+    if(running)playTime.elapsed+=at-playTime.startedAt;
+    playTime.startedAt=shouldRun?at:null;
+  }
+  function setPlayTimeHidden(hidden){
+    pageHidden=hidden;
+    syncPlayTime();
+  }
   function resetPlayTime(milliseconds=state.world.value.play_time_ms??0){
-    playTime={base:milliseconds,elapsed:0,startedAt:['boot','startup','menu','game-over','story-complete'].includes(state.scenes.phase)?null:now()};
+    playTimeEnabled=!untimedPhases.includes(state.scenes.phase);
+    playTime={base:milliseconds,elapsed:0,startedAt:null};
+    syncPlayTime();
   }
   function status(message, error=false) { $('status').textContent=message; $('status').classList.toggle('error',error); }
   function log(event) {
@@ -47,9 +63,9 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
   }
   function image(path, scope = 'shared') { return state.resources.load(path, scope); }
   function busy(phase) {
-    const at=now();if(playTime.startedAt!==null)playTime.elapsed+=at-playTime.startedAt;
-    const paused=['boot','startup','menu','game-over','story-complete'].includes(phase)||['save-menu','save-io'].includes(phase)&&playTime.startedAt===null;
-    playTime.startedAt=paused?null:at;
+    // Save menus and I/O inherit the previous phase's timing policy.
+    if(!['save-menu','save-io'].includes(phase))playTimeEnabled=!untimedPhases.includes(phase);
+    syncPlayTime();
     if(!['map','event'].includes(phase))state.rewardNoticeView?.close();
     if(!['map','event','opening'].includes(phase))state.mapNameNoticeView?.close();
     state.engine?.setPhase(phase);
@@ -148,5 +164,5 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
   function releaseInput(){
     state.keys.clear();actions.releaseDialogueKeys?.();actions.battleKeyUp?.(' ');
   }
-  return {status, log, json, initializeRuntimeConfiguration, readConfiguredData, readMenuConfiguration, image, busy, download, exportRuntimeLog, guarded, saveEnvelope, withSaveOperation,saveProgress,loadProgress,refreshSaveSlots,saveEntries,option,updateInterface,releaseInput,currentPlayTime,resetPlayTime};
+  return {status, log, json, initializeRuntimeConfiguration, readConfiguredData, readMenuConfiguration, image, busy, download, exportRuntimeLog, guarded, saveEnvelope, withSaveOperation,saveProgress,loadProgress,refreshSaveSlots,saveEntries,option,updateInterface,releaseInput,currentPlayTime,resetPlayTime,setPlayTimeHidden};
 }

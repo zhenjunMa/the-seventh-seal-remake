@@ -69,6 +69,7 @@ export class PhaserRuntime {
   }
   start(adapters){
     this.adapters=adapters;this.started=true;this.skipDelta=true;
+    this.adapters.setPageHidden?.(this.pauseReasons.has('visibility'));
     this.setPhase(adapters.phase??'map');
   }
   get paused(){return this.pauseReasons.size>0;}
@@ -126,11 +127,15 @@ export class PhaserRuntime {
   }
   pause(reason='manual'){
     if(this.destroyed)return;
+    const becameHidden=reason==='visibility'&&!this.pauseReasons.has(reason);
     const alreadyPaused=this.paused;this.pauseReasons.add(reason);this.syncScenes();
+    if(becameHidden)this.adapters.setPageHidden?.(true);
     if(!alreadyPaused)this.adapters.suspend?.();
   }
   resume(reason='manual'){
-    if(this.destroyed||!this.pauseReasons.delete(reason)||this.paused)return;
+    if(this.destroyed||!this.pauseReasons.delete(reason))return;
+    if(reason==='visibility')this.adapters.setPageHidden?.(false);
+    if(this.paused)return;
     this.skipDelta=true;this.syncScenes();this.adapters.resume?.();
   }
   presentMap(options){this.exploration.present(options);}

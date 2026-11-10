@@ -111,7 +111,8 @@ export function createBootController({state, actions, $, canvas}) {
     const engineReady=afterIntro.then(startEngine).then(()=>{
       signal.throwIfAborted();
       state.engine.start({phase,interface:actions.updateInterface,
-        exploration:actions.updateExploration,battle:actions.updateBattleFrame,suspend:actions.releaseInput});
+        exploration:actions.updateExploration,battle:actions.updateBattleFrame,
+        suspend:actions.releaseInput,setPageHidden:actions.setPlayTimeHidden});
       actions.wire();actions.resize();
     });
     const menuReady=Promise.all([engineReady,audioReady]).then(([,audio])=>view.prepareMenu(audio.startupManifest));
