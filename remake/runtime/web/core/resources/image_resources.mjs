@@ -116,8 +116,8 @@ export class ImageResources {
       for (const scope of entry.scopes) scopes.add(scope);
       if (entry.bitmap) {
         ready++;
-        const {packed,pixelScale,width,height}=entry.bitmap;
-        if(!packed||pixelScale)decodedBytes+=width*height*(pixelScale??1)**2*4;
+        const {packed,pixelScale,width,height,hdRect}=entry.bitmap;
+        if(!packed||pixelScale)decodedBytes+=(hdRect?.[2]??width)*(hdRect?.[3]??height)*(pixelScale??1)**2*4;
       }
     }
     for(const entry of this.pages.values())if(entry.bitmap)decodedBytes+=entry.bitmap.width*entry.bitmap.height*4;

@@ -517,6 +517,14 @@
       "path": "export_hd_animations.py",
       "role": "independent-source-export",
       "build_targets": [],
+      "imported_by": [
+        "export_hd_menu.py"
+      ]
+    },
+    {
+      "path": "export_hd_menu.py",
+      "role": "independent-source-export",
+      "build_targets": [],
       "imported_by": []
     },
     {
@@ -907,6 +915,7 @@
         "export_enemy_content.py",
         "export_forest_stage.py",
         "export_hd_animations.py",
+        "export_hd_menu.py",
         "export_item_presentation.py",
         "export_map_effects.py",
         "export_map_shadows.py",

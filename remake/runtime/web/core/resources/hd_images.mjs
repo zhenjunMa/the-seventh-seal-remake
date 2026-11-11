@@ -9,8 +9,7 @@ const supported = [
   /^startup\/(?:(?:menulbk|menulbx|specialback)\/frame_000|menuback\/frame_00[0-5])\.png$/i,
   /^startup\/(?:(?:menubtn|menusub[0-3]2?)\/frame_\d{3}|menuhlp[0-3][0-2]\/frame_000)\.png$/i,
   /^startup\/menuspecial(?:0[01]|30)\/frame_\d{3}\.png$/i,
-  /^menu\/(?:main|game[a-z\d_]+\/(?:composed|image_000)|actor_panels\/frame_0(?:0\d|1[01]))\.png$/i,
-  /^menu\/(?:item_card_back|item_target_panels\/frame_00[01]|cards\/_[a-z]+\/frame_\d+)\.png$/i,
+  /^menu\/(?:[a-z\d_]+\/)*[a-z\d_]+\.png$/i,
   /^(?:native_services|battle_ui|battle_result)\/[a-z\d_]+\/image_000\.png$/i,
   /^native_services\/(?:ndback|nomoney|(?:worddiscback|lottoback|rotateback|slottoback)\/frame_\d+)\.png$/i,
 ];
@@ -44,16 +43,17 @@ function readManifest() {
 
 // Keep source rectangles in original coordinates. Large images are exposed as
 // regions small enough for the renderer's existing texture slicing path.
-function describe(bitmap, path, width, height, pixelScale) {
+function describe(bitmap, path, width, height, pixelScale, rect) {
   const size = Math.floor(2048 / pixelScale);
+  const [left, top, w, h] = rect ?? [0, 0, width, height];
   const regions = [];
-  for (let y = 0; y < height; y += size) {
-    for (let x = 0; x < width; x += size) {
-      regions.push([x, y, Math.min(size, width - x), Math.min(size, height - y), 0,
+  for (let y = 0; y < h; y += size) {
+    for (let x = 0; x < w; x += size) {
+      regions.push([left + x, top + y, Math.min(size, w - x), Math.min(size, h - y), 0,
         x * pixelScale, y * pixelScale]);
     }
   }
-  return {packed: true, path, width, height, pixelScale, hdUrl: bitmap.src, regions, pool: {pages: new Map([[0, {bitmap}]])}};
+  return {packed: true, path, width, height, pixelScale, hdUrl: bitmap.src, hdRect: rect, regions, pool: {pages: new Map([[0, {bitmap}]])}};
 }
 
 export function loadHdImage(path, original, createImage = () => new Image()) {
@@ -63,18 +63,22 @@ export function loadHdImage(path, original, createImage = () => new Image()) {
   return readManifest().then(pack => {
     const entry = pack?.images?.[key];
     if (!entry) return null;
-    const {width, height, scale} = entry;
+    const {width, height, scale, rect, sourceSha256} = entry;
     if (!Number.isSafeInteger(width) || width <= 0 || !Number.isSafeInteger(height) || height <= 0 ||
         ![2, 3, 4].includes(scale) ||
-        (original && (width !== original.width || height !== original.height))) return null;
+        (original && (width !== original.width || height !== original.height)) ||
+        (sourceSha256 !== undefined && sourceSha256 !== original?.sha256)) return null;
+    if (rect !== undefined && (!Array.isArray(rect) || rect.length !== 4 || !rect.every(Number.isSafeInteger))) return null;
+    const [x, y, w, h] = rect ?? [0, 0, width, height];
+    if (x < 0 || y < 0 || w <= 0 || h <= 0 || x + w > width || y + h > height) return null;
     return new Promise(resolve => {
       const bitmap = createImage();
       const finish = image => {
         bitmap.onload = bitmap.onerror = null;
         resolve(image);
       };
-      bitmap.onload = () => finish(bitmap.width === width * scale && bitmap.height === height * scale
-        ? describe(bitmap, path, width, height, scale) : null);
+      bitmap.onload = () => finish(bitmap.width === w * scale && bitmap.height === h * scale
+        ? describe(bitmap, path, width, height, scale, rect) : null);
       bitmap.onerror = () => finish(null);
       bitmap.src = directory + key.slice('/assets/'.length);
     });

@@ -276,10 +276,17 @@ export class OperationTechniqueView{
     const percent=Math.trunc(experience*100/required),amount=Math.trunc(experience*255/required)&255,signed=amount<128?amount:amount-256;
     // The native byte arithmetic is signed before RGB packing (45067D).
     const redByte=(255-2*signed)&255,color=[redByte<128?redByte:0,(128+(signed>>1))&255,amount];
-    const bank=this.supplement.icons.use_ball,ball=document.createElement('div');position(ball,34+305,3,bank.width,bank.height);ball.style.pointerEvents='none';ball.style.zIndex='1';ball.dataset.rowExperience=String(percent);ball.setAttribute('aria-label',`技巧经验 ${experience}/${required}（${percent}%）`);button.append(ball);this.image(bank.frames[0],0,0,ball);
+    const bank=this.supplement.icons.use_ball,ball=document.createElement('div');position(ball,34+305,3,bank.width,bank.height);ball.style.pointerEvents='none';ball.style.zIndex='1';ball.dataset.rowExperience=String(percent);ball.setAttribute('aria-label',`技巧经验 ${experience}/${required}（${percent}%）`);button.append(ball);const base=this.image(bank.frames[0],0,0,ball);
     // 52945A interpolates the original grayscale sprite toward the packed
     // color with weight128. Alpha masking preserves its original silhouette.
-    const tint=document.createElement('span');position(tint,0,0,bank.width,bank.height);Object.assign(tint.style,{backgroundColor:`rgb(${color.join(',')})`,opacity:'0.5',maskImage:`url("${bank.frames[0]}")`,maskSize:'100% 100%',maskRepeat:'no-repeat',pointerEvents:'none'});ball.append(tint);
+    const tint=document.createElement('span');position(tint,0,0,bank.width,bank.height);
+    Object.assign(tint.style,{backgroundColor:`rgb(${color.join(',')})`,opacity:'0.5',maskRepeat:'no-repeat',pointerEvents:'none'});
+    const syncMask=()=>{
+      const {backgroundImage,backgroundSize,backgroundPosition,clipPath}=base.style;
+      Object.assign(tint.style,{maskImage:backgroundImage||`url("${bank.frames[0]}")`,
+        maskSize:backgroundSize||'100% 100%',maskPosition:backgroundPosition,clipPath});
+    };
+    syncMask();base.assetPromise?.then(syncMask,()=>{});ball.append(tint);
     const digits=this.supplement.icons.use_ball_num;
     const draw=(frame,x)=>{if(digits.frames[frame]){const image=this.image(digits.frames[frame],34+x,15,button);image.dataset.rowExperienceDigit=String(frame);}};
     draw(10,330);draw(percent%10,323);if(percent>=10)draw(Math.trunc(percent/10)%10,316);if(percent>=100)draw(Math.trunc(percent/100),309);

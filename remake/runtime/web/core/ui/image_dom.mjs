@@ -20,9 +20,10 @@ function prepare(node,record){
     if(owners.get(node)===record&&record.path===path&&record.active){
       node.assetImage=image;
       if(image.hdUrl){
+        const {width,height,hdRect}=image,[x,y,w,h]=hdRect??[0,0,width,height];
         node.style.backgroundImage=`url("${image.hdUrl}")`;
-        node.style.backgroundSize='100% 100%';
-        node.style.backgroundPosition='0 0';
+        node.style.backgroundSize=`${w/width*100}% ${h/height*100}%`;
+        node.style.backgroundPosition=`${w===width?0:x/(width-w)*100}% ${h===height?0:y/(height-h)*100}%`;
         node.style.backgroundRepeat='no-repeat';
         node.style.clipPath='';
       }else showOriginal(node,record.image);
