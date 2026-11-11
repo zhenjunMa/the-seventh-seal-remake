@@ -294,6 +294,28 @@ export class BattleMenuView{
       if(this.available()&&b.getAttribute('aria-disabled')==='true')this.asset('fight_board_disable',0,x,y);
     });
   }
-  drawList(){const menu=this.menus.get(this.stage==='items'?'fight002':'fight001'),x=467,y=274;this.image(menu.images[0].image,x,y);if(this.stage==='skills'){const w=menu.widgets.find(w=>w.name===String(this.skillCategory+1).padStart(3,'0'));this.image(w.selected_images.at(-1)??w.active_images.at(-1),x+w.draw_point_raw.x,y+w.draw_point_raw.y);}this.listButtons.forEach((b,i)=>{const entry=this.entries?.[this.listOffset+i];if(!entry)return;const w=menu.widgets.find(w=>w.name.toLowerCase()==='list'+(i+1));if(this.listIndex===this.listOffset+i)this.image(w.active_images[0],x+w.draw_point_raw.x,y+w.draw_point_raw.y);this.text(entry.name,x+w.rect.left+6,y+w.rect.top,{font:'12px SimSun',color:entry.available?this.listIndex===this.listOffset+i?'#ffff44':'#fff':'#777',width:entry.quantity===undefined?124:104});if(entry.quantity!==undefined)this.text(entry.quantity,x+140,y+w.rect.top,{font:'11px Arial',bitmapFont:'arial11_text',align:'right'});});}
+  drawList(){
+    const showSkills=this.stage==='skills',menu=this.menus.get(showSkills?'fight001':'fight002');
+    const x=467,y=274,nameFontSize=12;
+    this.image(menu.images[0].image,x,y);
+    if(showSkills){
+      const category=menu.widgets.find(w=>w.name===String(this.skillCategory+1).padStart(3,'0'));
+      this.image(category.selected_images.at(-1)??category.active_images.at(-1),x+category.draw_point_raw.x,y+category.draw_point_raw.y);
+    }
+    this.listButtons.forEach((_,i)=>{
+      const entry=this.entries?.[this.listOffset+i];if(!entry)return;
+      const row=menu.widgets.find(w=>w.name.toLowerCase()==='list'+(i+1));
+      const {rect,draw_point_raw:drawPoint}=row;
+      const selected=this.listIndex===this.listOffset+i;
+      const rowY=y+rect.top,rowHeight=rect.bottom-rect.top+1;
+      if(selected)this.image(row.active_images[0],x+drawPoint.x,showSkills?rowY:y+drawPoint.y);
+      const nameY=showSkills?rowY+Math.floor((rowHeight-nameFontSize)/2):rowY;
+      this.text(entry.name,x+rect.left+6,nameY,{
+        font:`${nameFontSize}px SimSun`,color:entry.available?(selected?'#ffff44':'#fff'):'#777',
+        width:entry.quantity===undefined?124:104
+      });
+      if(entry.quantity!==undefined)this.text(entry.quantity,x+140,rowY,{font:'11px Arial',bitmapFont:'arial11_text',align:'right'});
+    });
+  }
   dispose(){this.resourceScope.release();this.disposed=true;this.epoch++;this.draft=null;this.resultView?.dispose();this.resizeObserver.disconnect();this.root.replaceChildren();this.images.clear();this.textCache.clear();this.ballCache.clear();}
 }
