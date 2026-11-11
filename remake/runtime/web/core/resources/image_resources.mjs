@@ -1,6 +1,7 @@
 import {imageCatalog,imageDescriptor} from './image_catalog.mjs';
 import {ownBitmap,evictBitmap} from './bitmap_residency.mjs';
 import {loadHdImage} from './hd_images.mjs';
+import {hdAnimation,readAnimationBitmap,selectAnimationRegions} from './hd_animations.mjs';
 
 // Scope-owned decoded images. A failed load can be retried; releasing an
 // unused scene also releases the cache's references to its decoded pixels.
@@ -36,10 +37,8 @@ export class ImageResources {
   }
   loadOriginal(path,entry,descriptor){
     if(descriptor){
-      entry.pages=new Set(descriptor.regions.map(r=>r[4]));
-      return Promise.all([...entry.pages].map(index=>this.page(index))).then(()=>({
-        packed:true,path,width:descriptor.width,height:descriptor.height,regions:descriptor.regions,pool:this
-      }));
+      const plan=hdAnimation(path,descriptor);
+      return plan?plan.then(animation=>this.loadPacked(path,entry,descriptor,animation)):this.loadPacked(path,entry,descriptor);
     }
     return new Promise((resolve, reject) => {
       const bitmap = this.createImage();
@@ -51,18 +50,35 @@ export class ImageResources {
       bitmap.src = path;
     });
   }
-  page(index){
+  async loadPacked(path,entry,descriptor,animation){
+    let regions=descriptor.regions;
+    if(animation){
+      entry.pages=new Set(animation.pages.keys());
+      const ready=new Set();
+      await Promise.all([...animation.pages].map(async ([index,page])=>{
+        try{await this.page(index,page);ready.add(index);}catch{/* An invalid optional page falls back per frame. */}
+      }));
+      regions=selectAnimationRegions(descriptor,animation,index=>ready.has(index));
+    }
+    entry.pages=new Set(regions.map(r=>r[4]));
+    await Promise.all([...entry.pages].filter(index=>!animation?.pages.has(index)).map(index=>this.page(index)));
+    if(animation)this.prunePages();
+    return {packed:true,path,width:descriptor.width,height:descriptor.height,regions,pool:this};
+  }
+  page(index,hdPage){
     let entry=this.pages.get(index);if(entry)return entry.promise;
-    const page=imageCatalog().pages[index];
+    const page=hdPage??imageCatalog().pages[index];
     entry={bitmap:null,promise:null,used:++this.clock};this.pages.set(index,entry);
-    entry.promise=new Promise((resolve,reject)=>{
+    const read=hdPage?readAnimationBitmap(page):new Promise((resolve,reject)=>{
       const bitmap=this.createImage();
       bitmap.onload=()=>{bitmap.onload=bitmap.onerror=null;
         if(bitmap.width!==page.width||bitmap.height!==page.height){reject(new Error('图片纹理页尺寸不符：'+page.path));return;}
-        entry.bitmap=bitmap;ownBitmap(bitmap,this,index);resolve(bitmap);};
+        resolve(bitmap);};
       bitmap.onerror=()=>{bitmap.onload=bitmap.onerror=null;reject(new Error('图片纹理页加载失败：'+page.path));};
       bitmap.src=page.path;
-    }).catch(error=>{if(this.pages.get(index)===entry)this.pages.delete(index);throw error;});
+    });
+    entry.promise=read.then(bitmap=>{entry.bitmap=bitmap;ownBitmap(bitmap,this,index);return bitmap;})
+      .catch(error=>{if(this.pages.get(index)===entry)this.pages.delete(index);throw error;});
     return entry.promise;
   }
   prunePages(){

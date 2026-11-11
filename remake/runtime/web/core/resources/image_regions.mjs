@@ -3,7 +3,6 @@ const selections=new WeakMap();
 // Logical image coordinates remain stable when pixels move to texture pages.
 export function imageRegions(image,sx=0,sy=0,sw=image.width,sh=image.height){
   const result=[];
-  const pixelScale=image.pixelScale??1;
   let regions;
   if(image.packed){
     let bank=selections.get(image);if(!bank){bank=new Map();selections.set(image,bank);}
@@ -15,7 +14,7 @@ export function imageRegions(image,sx=0,sy=0,sw=image.width,sh=image.height){
       bank.set(key,regions);
     }
   }else regions=[[0,0,image.width,image.height,0,0,0]];
-  for(const [x,y,w,h,page,px,py]of regions){
+  for(const [x,y,w,h,page,px,py,pixelScale=image.pixelScale??1]of regions){
     const left=Math.max(sx,x),top=Math.max(sy,y),right=Math.min(sx+sw,x+w),bottom=Math.min(sy+sh,y+h);
     if(right<=left||bottom<=top)continue;
     const entry=image.packed?image.pool.pages.get(page):null,bitmap=image.packed?entry?.bitmap:image;

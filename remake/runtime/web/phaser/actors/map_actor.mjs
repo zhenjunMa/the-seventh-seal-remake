@@ -9,8 +9,7 @@ export class MapActor {
   sync(entry,depth){
     const pose=entry.pose;
     this.container.setPosition(pose.x,pose.y).setDepth(depth).setAlpha(entry.alpha??1).setVisible(true);
-    this.pose.apply(pose);
-    this.pose.body.smoothActor=Boolean(entry.character&&!pose.image.pixels);
+    this.pose.apply(pose,entry.character);
     this.pose.body.setBlendMode(entry.blend==='lighter'?'ADD':'NORMAL');
   }
   destroy(){this.container.destroy();}

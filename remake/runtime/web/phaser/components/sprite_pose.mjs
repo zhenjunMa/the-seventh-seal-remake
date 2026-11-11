@@ -2,6 +2,14 @@
 // them without a second animation clock changing contact or completion times.
 import {shadowRectangle} from '../../map_sprite.mjs';
 import {pixelSprite} from '../rendering/pixel_sprite.mjs';
+
+function place(sprite,frame,x,y,width,height,displayWidth,displayHeight){
+  const scaleX=displayWidth/width,scaleY=displayHeight/height;
+  sprite.setVisible(!frame.empty).setTexture(frame.key,frame.frame)
+    .setPosition(x+(frame.x??0)*scaleX,y+(frame.y??0)*scaleY)
+    .setDisplaySize((frame.width??width)*scaleX,(frame.height??height)*scaleY);
+}
+
 export class SpritePose {
   constructor(scene,container,textures){
     this.textures=textures;
@@ -10,20 +18,23 @@ export class SpritePose {
     this.light=scene.add.sprite(0,0,'__WHITE').setOrigin(0).setBlendMode('ADD');
     container.add([this.shadow,this.body,this.light]);
   }
-  apply({image,light,shadow,shadow_geometry,body_offset,sx=0,sy=0,width=image.width,height=image.height,displayWidth=width,displayHeight=height}){
+  apply({image,light,shadow,shadow_geometry,body_offset,sx=0,sy=0,width=image.width,height=image.height,displayWidth=width,displayHeight=height},character=false){
     this.shadow.setVisible(Boolean(shadow));
     if(shadow){const rect=shadowRectangle(sx,sy,width,height,shadow_geometry,displayWidth/width,displayHeight/height);
       const mask=this.textures.region(shadow,rect.sx,rect.sy,rect.width,rect.height);
       this.shadow.setVisible(!mask.empty);
       this.shadow.setPosition(rect.x,rect.y).setTexture(mask.key,mask.frame).setDisplaySize(rect.displayWidth,rect.displayHeight);}
-    this.body.setPosition(body_offset?.x??0,body_offset?.y??0);
+    const x=body_offset?.x??0,y=body_offset?.y??0;
     this.body.pixelImage=image.pixels?image:null;
-    if(image.pixels){this.body.setVisible(true);this.body.xbrBounds=null;this.body.setTexture('__WHITE').setSize(width,height).setScale(displayWidth/width,displayHeight/height);this.body.pixelRegion={sx,sy,sw:width,sh:height};}
-    else{const main=image.packed&&!image.pixelScale?this.textures.actorRegion(image,sx,sy,width,height):this.textures.region(image,sx,sy,width,height);this.body.setVisible(!main.empty);this.body.xbrBounds=main.bounds??null;
-      this.body.setTexture(main.key,main.frame).setDisplaySize(displayWidth,displayHeight);}
+    this.body.smoothActor=false;
+    if(image.pixels){this.body.setPosition(x,y).setVisible(true);this.body.xbrBounds=null;this.body.setTexture('__WHITE').setSize(width,height).setScale(displayWidth/width,displayHeight/height);this.body.pixelRegion={sx,sy,sw:width,sh:height};}
+    else{
+      const main=image.packed&&!image.pixelScale?this.textures.actorRegion(image,sx,sy,width,height):this.textures.region(image,sx,sy,width,height);
+      this.body.xbrBounds=main.bounds??null;
+      this.body.smoothActor=Boolean(character&&!main.pixelScale);
+      place(this.body,main,x,y,width,height,displayWidth,displayHeight);
+    }
     this.light.setVisible(Boolean(light));
-    if(light){const glow=this.textures.region(light,sx,sy,width,height);this.light.setVisible(!glow.empty);
-      this.light.setPosition(body_offset?.x??0,body_offset?.y??0);
-      this.light.setTexture(glow.key,glow.frame).setDisplaySize(displayWidth,displayHeight);}
+    if(light)place(this.light,this.textures.region(light,sx,sy,width,height),x,y,width,height,displayWidth,displayHeight);
   }
 }

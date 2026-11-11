@@ -15,8 +15,7 @@ export class TextureCache {
   begin(){this.frame++;}
   // Padding is virtual: the shader treats samples outside bounds as transparent.
   // A pose stays on its atlas page, including when smoothing is switched off.
-  actorFrame(source,sx,sy,sw,sh){
-    const patches=imageRegions(source,sx,sy,sw,sh);
+  actorFrame(source,sx,sy,sw,sh,patches=imageRegions(source,sx,sy,sw,sh)){
     if(!patches.length)return null;
     if(patches.length!==1)throw new Error('人物帧必须在构建时完整放入同一纹理页');
     const p=patches[0];
@@ -32,7 +31,9 @@ export class TextureCache {
   }
   actorRegion(source,x,y,width,height){
     if(!source.packed)return this.region(source,x,y,width,height);
-    const pose=this.actorFrame(source,x,y,width,height);
+    const patches=imageRegions(source,x,y,width,height);
+    if(patches[0]?.pixelScale>1)return this.region(source,x,y,width,height);
+    const pose=this.actorFrame(source,x,y,width,height,patches);
     if(!pose)return {key:'__WHITE',frame:'__BASE',empty:true};
     const entry=this.texture(pose.bitmap),id=`actor:${pose.sx},${pose.sy},${pose.width},${pose.height},${pose.x},${pose.y},${width},${height}`;
     if(!entry.texture.has(id)){
@@ -63,7 +64,10 @@ export class TextureCache {
       if(!patches.length)return {key:'__WHITE',frame:'__BASE',empty:true};
       if(patches.length!==1)throw new Error('单个精灵帧跨纹理页，请重新构建图片资源');
       const p=patches[0];
-      if(p.pixelScale!==1)return this.region(p.bitmap,p.sx,p.sy,p.width*p.pixelScale,p.height*p.pixelScale);
+      if(p.pixelScale!==1){
+        const frame=this.region(p.bitmap,p.sx,p.sy,p.width*p.pixelScale,p.height*p.pixelScale);
+        return {...frame,pixelScale:p.pixelScale,x:p.x-x,y:p.y-y,width:p.width,height:p.height};
+      }
       const entry=this.texture(p.bitmap),id=`packed:${p.sx},${p.sy},${p.width},${p.height},${p.x-x},${p.y-y},${width},${height}`;
       if(!entry.texture.has(id)){
         const frame=entry.texture.add(id,0,p.sx,p.sy,p.width,p.height);

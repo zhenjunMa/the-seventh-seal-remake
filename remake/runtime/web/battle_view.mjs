@@ -930,7 +930,7 @@ export class BattleView {
     const pair=this.lifecyclePairs.get(`${roleId}:${action.first_frame+frame}`),image=this.images.get(pair?'/'+pair.main.path:action.sheet);
     const width=role.frame_width,height=role.frame_height,left=pair?0:frame*width;
     let minX=width,minY=height,maxX=-1,maxY=-1;
-    const regions=image?.packed?image.regions.filter(([x,y,w])=>x<left+width&&x+w>left&&y<height):null;
+    const regions=image?.packed?(image.originalRegions??image.regions).filter(([x,y,w])=>x<left+width&&x+w>left&&y<height):null;
     if(regions?.every(([x,y,w,h])=>x>=left&&x+w<=left+width&&y+h<=height)){
       // The atlas exporter crops each actor tile to its nonzero alpha bounds.
       for(const [x,y,w,h]of regions){minX=Math.min(minX,x-left);minY=Math.min(minY,y);maxX=Math.max(maxX,x-left+w-1);maxY=Math.max(maxY,y+h-1);}

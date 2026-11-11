@@ -238,7 +238,9 @@
       "build_targets": [
         "battle-packs"
       ],
-      "imported_by": []
+      "imported_by": [
+        "export_hd_animations.py"
+      ]
     },
     {
       "path": "export_battle_result.py",
@@ -507,6 +509,12 @@
     },
     {
       "path": "export_gameover_video.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": []
+    },
+    {
+      "path": "export_hd_animations.py",
       "role": "independent-source-export",
       "build_targets": [],
       "imported_by": []
@@ -898,6 +906,7 @@
         "export_dialogue_ui.py",
         "export_enemy_content.py",
         "export_forest_stage.py",
+        "export_hd_animations.py",
         "export_item_presentation.py",
         "export_map_effects.py",
         "export_map_shadows.py",

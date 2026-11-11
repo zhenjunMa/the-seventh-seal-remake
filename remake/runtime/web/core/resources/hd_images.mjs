@@ -7,6 +7,8 @@ const supported = [
   /^maps\/[a-z\d_-]+\/(?:background|objects\/\d+_frame_000)\.png$/i,
   /^(?:stages\/stage\d+|forest_stage)\/[a-z\d_]+\/frame_000\.png$/i,
   /^startup\/(?:(?:menulbk|menulbx|specialback)\/frame_000|menuback\/frame_00[0-5])\.png$/i,
+  /^startup\/(?:(?:menubtn|menusub[0-3]2?)\/frame_\d{3}|menuhlp[0-3][0-2]\/frame_000)\.png$/i,
+  /^startup\/menuspecial(?:0[01]|30)\/frame_\d{3}\.png$/i,
   /^menu\/(?:main|game[a-z\d_]+\/(?:composed|image_000)|actor_panels\/frame_0(?:0\d|1[01]))\.png$/i,
   /^menu\/(?:item_card_back|item_target_panels\/frame_00[01]|cards\/_[a-z]+\/frame_\d+)\.png$/i,
   /^(?:native_services|battle_ui|battle_result)\/[a-z\d_]+\/image_000\.png$/i,
@@ -29,6 +31,8 @@ export function configureHdImages(value) {
   enabled = value;
   manifest = undefined;
 }
+
+export const hdImagesEnabled = () => enabled;
 
 function readManifest() {
   manifest ??= fetch(directory + 'manifest.json', {cache: 'no-cache'})

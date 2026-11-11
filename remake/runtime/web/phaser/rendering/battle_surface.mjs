@@ -1,6 +1,6 @@
 import {TextureCache} from './texture_cache.mjs';
 import {pixelSprite} from './pixel_sprite.mjs';
-import {drawImageRegion} from '../../core/resources/image_regions.mjs';
+import {drawImageRegion,imageRegions} from '../../core/resources/image_regions.mjs';
 
 const properties=['globalAlpha','globalCompositeOperation','fillStyle','strokeStyle','lineWidth','font','textAlign','textBaseline','lineJoin','nativeColorSubtract','nativeAppearance'];
 const rgba=value=>{
@@ -81,7 +81,11 @@ export class BattleSurface {
   drawActorImage(source,sx,sy,sw,sh,dx,dy,dw,dh){
     const visible=intersect(this.rectangle(dx,dy,dw,dh),this.clipRect);
     if(visible.width<=0||visible.height<=0)return;
-    const frame=this.textures.actorFrame(source,sx,sy,sw,sh);if(!frame)return;
+    const patches=imageRegions(source,sx,sy,sw,sh);
+    if(patches[0]?.pixelScale>1){
+      drawImageRegion(this,source,sx,sy,sw,sh,dx,dy,dw,dh);return;
+    }
+    const frame=this.textures.actorFrame(source,sx,sy,sw,sh,patches);if(!frame)return;
     const before=this.cursor.sprite;
     this.drawImage(frame.bitmap,frame.sx,frame.sy,frame.width,frame.height,
       dx+frame.x*dw/sw,dy+frame.y*dh/sh,frame.width*dw/sw,frame.height*dh/sh,frame.bounds);

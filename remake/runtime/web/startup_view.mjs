@@ -216,9 +216,10 @@ export class StartupView {
     this.asset('menuhlp'+this.selected+this.plaqueIndex,0,this.helpX??0,400);
     if(this.panelType==='read'&&this.panelX>-432){
       this.asset('menulbk',0,this.panelX-8,60);
-      this.visibleSaves().forEach((_entry,row)=>{
-        this.asset('menulbx',0,this.panelX,81+108*row);
-      });
+      const row=this.subIndex-this.listTop,layout=this.manifest.layout?.read;
+      const y=layout?.selection_y?.[row];
+      if(this.submenu==='read'&&y!==undefined&&this.visibleSaves()[row])
+        this.asset('menulbx',0,this.panelX+layout.selection_x,y);
     }
     if(this.panelType==='extras'&&this.panelX>-432){
       this.asset('specialback',0,this.panelX-8,70);
