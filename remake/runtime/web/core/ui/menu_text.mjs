@@ -94,8 +94,9 @@ export async function createMenuTextRenderer(manifest, options = {}) {
     return Boolean(font&&[...String(text)].every(char=>char==='\n'||font.glyphs[char]));
   }
   function paint(canvas,text,options={}) {
-    const {font:key='simsun18',foreground='#ffffff',shadow='#222222',
+    const {font:key='simsun18',foreground='#ffffff',shadow:baseShadow='#222222',hdShadow=baseShadow,
       maxWidth=null,maxLines=Infinity,lineHeight=null,align='left',advanceOverride=null,boxHeight=null,verticalAlign='top',layout='textout',shadowOffsets=[[-1,-1],[1,1]]}=options;
+    const hd=hdSet===selected?hdAtlases.get(key):null,shadow=hd?hdShadow:baseShadow;
     text=String(text);const signature=JSON.stringify([revision,text,key,foreground,shadow,maxWidth,maxLines,lineHeight,align,advanceOverride,boxHeight,verticalAlign,layout,shadowOffsets]);
     canvas.menuTextRenderer=renderer;canvas.menuTextRequest=[text,options];
     const font=manifest.fonts[key];
@@ -108,7 +109,6 @@ export async function createMenuTextRenderer(manifest, options = {}) {
     if(!(maxLines===Infinity||Number.isInteger(maxLines)&&maxLines>0))throw new Error('菜单文本行数无效');
     if(lineHeight!==null&&(!Number.isFinite(lineHeight)||lineHeight<=0))throw new Error('菜单文本行距无效');
     if(canvas.menuTextSignature===signature)return canvas.menuTextBounds;
-    const hd=hdSet===selected?hdAtlases.get(key):null;
     const scale=hd?.scale??1;
     const inkGlyphs=hd?.glyphs??font.glyphs;
     const rows=[];

@@ -54,7 +54,7 @@ export class CaptionView {
     const text=this.playback.tick(now),{manifest:m,resources:r,layout:l,context:c}=this;
     if(text!==this.lastText){
       this.inkBounds=this.textRenderer.paint(this.ink,text,{font:'caption19',foreground:m.foreground,
-        shadow:m.shadow,shadowOffsets:[[1,1]],advanceOverride:m.character_step});this.lastText=text;
+        shadow:m.shadow,hdShadow:null,shadowOffsets:[[1,1]],advanceOverride:m.character_step});this.lastText=text;
     }
     c.clearRect(0,0,640,480);c.imageSmoothingEnabled=false;
     c.fillStyle='#00000080';c.fillRect(l.shade.x,l.shade.y,l.shade.width,l.shade.height);

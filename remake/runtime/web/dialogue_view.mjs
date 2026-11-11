@@ -76,7 +76,7 @@ export class DialogueView {
     if(!this.inkCache.has(key)){
       const canvas=document.createElement('canvas');
       if(this.textRenderer.supports(text,font)){
-        const bounds=this.textRenderer.paint(canvas,text,{font,foreground,shadow,shadowOffsets:[[1,1]],advanceOverride:this.profile.fontHeight+2});
+        const bounds=this.textRenderer.paint(canvas,text,{font,foreground,shadow,hdShadow:null,shadowOffsets:[[1,1]],advanceOverride:this.profile.fontHeight+2});
         this.inkCache.set(key,{canvas,...bounds});
       }else{
         const height=this.profile.fontHeight;canvas.width=Math.ceil([...text].length*(height+2)+4);canvas.height=height+5;
