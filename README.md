@@ -36,7 +36,7 @@ Windows 用户可在仓库根目录运行 `.\.venv\Scripts\python.exe -X utf8 -B
 
 游戏画面下方的「高清素材」默认关闭。切换后刷新页面生效，设置保存在当前浏览器。开启后，游戏逐张优先使用已安装的高清版，未提供、无法读取或尺寸不符的图片使用原版。
 
-高清素材包放在 `remake/runtime/web/assets/hd/`。开关适用于对话立绘和底板、启动菜单的背景与选项图、载入背景、世界地图、探索底图和静态物件、静态战场图层，以及游戏内菜单的底板、按钮、图标、卡面和人物站立帧。高清包中的图片沿用原素材相对路径。以一张 2 倍立绘为例，将 `496×616` PNG 放在 `dialogue_ui/faces_026.png`，并在高清包根目录写入 `manifest.json`。清单的宽高是原图尺寸，`scale` 支持 2、3 或 4。
+高清素材包放在 `remake/runtime/web/assets/hd/`。开关适用于对话立绘和底板、启动菜单的背景与选项图、载入背景、世界地图、探索底图和静态物件、静态战场图层、战斗胜利结算，以及游戏内菜单的底板、按钮、图标、卡面和人物站立帧。高清包中的图片沿用原素材相对路径。以一张 2 倍立绘为例，将 `496×616` PNG 放在 `dialogue_ui/faces_026.png`，并在高清包根目录写入 `manifest.json`。清单的宽高是原图尺寸，`scale` 支持 2、3 或 4。
 
 ```json
 {
@@ -54,6 +54,8 @@ Windows 用户可在仓库根目录运行 `.\.venv\Scripts\python.exe -X utf8 -B
 ```sh
 python -B remake/runtime/tools/export_hd_menu.py --weights /path/to/RealESRGAN_x4plus_anime_6B.pth
 ```
+
+同一个命令加上 `--battle-result`，可导出战斗胜利结算底板、提示卡和胜利动画的可见图层。
 
 探索角色、NPC、战斗人物和技能特效共用「高清素材」开关。动画纹理页及其索引放在 `remake/runtime/web/assets/hd/animations/`。开启后，游戏在准备地图或战斗动作时加载所需页。有可用的高清帧就采用高清像素，缺帧、损坏或源图不匹配时使用对应原帧。脚底位置、动作节奏和技能光效层级沿用原数据。
 

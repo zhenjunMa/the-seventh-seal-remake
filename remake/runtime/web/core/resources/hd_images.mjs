@@ -11,6 +11,7 @@ const supported = [
   /^startup\/menuspecial(?:0[01]|30)\/frame_\d{3}\.png$/i,
   /^menu\/(?:[a-z\d_]+\/)*[a-z\d_]+\.png$/i,
   /^(?:native_services|battle_ui|battle_result)\/[a-z\d_]+\/image_000\.png$/i,
+  /^battle_result\/(?:fight_report_01\/frame_000_inverse_mask|fight_report_02\/frame_\d{3}|victor\/frame_\d{3}(?:_indexed)?)\.png$/i,
   /^native_services\/(?:ndback|nomoney|(?:worddiscback|lottoback|rotateback|slottoback)\/frame_\d+)\.png$/i,
 ];
 

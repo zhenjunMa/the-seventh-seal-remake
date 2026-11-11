@@ -76,8 +76,8 @@ export class BattleResources {
     if(!this.preparations.has(scope))this.preparations.set(scope,new Set());this.preparations.get(scope).add(operation);
     try{
       const upgrades=[];
-      for(const [path,entry] of entries){
-        const hd=loadHdImage(path,entry);
+      for(const path of entries.keys()){
+        const hd=loadHdImage(path,data.images[canonical(path)]);
         if(hd)upgrades.push(hd.then(image=>{if(image)entries.set(path,image);}));
       }
       if(upgrades.length)await Promise.all(upgrades);

@@ -2,6 +2,8 @@ import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {BattleResultSequence,validateBattleResultManifest} from './core/battle/battle_result.mjs';
 import {battleResources,drawBattleImage} from './core/battle/battle_resources.mjs';
 
+const frameImage=(frame,inverseMask)=>inverseMask?(frame.render_image??frame.inverse_mask_image??frame.image):frame.image;
+
 // Original report assets stay in the battle's 640x480 plane. The reward plan
 // belongs to combat; this view only counts and acknowledges its presentation.
 export class BattleResultView{
@@ -13,8 +15,9 @@ export class BattleResultView{
     this.status=this.doc.createElement('div');this.status.className='sr-only';this.status.setAttribute('role','status');this.status.setAttribute('aria-live','polite');root.append(this.status);
   }
   async prepare({onProgress=()=>{}}={}){
-    const paths=new Set(Object.values(this.manifest.assets).flatMap(a=>a.frames.flatMap(f=>[f.image,f.indexed_image,f.inverse_mask_image,f.render_image].filter(Boolean))));
-    this.images=await this.resourceScope.preparePaths([...paths],{onProgress});this.ready=true;
+    const paths=Object.entries(this.manifest.assets).flatMap(([id,asset])=>asset.frames.flatMap(frame=>
+      [frameImage(frame,id==='fight_report_01'),frame.indexed_image].filter(Boolean)));
+    this.images=await this.resourceScope.preparePaths(paths,{onProgress});this.ready=true;
   }
   open(snapshot,now=this.now()){
     if(this.model?.battleId===snapshot.id)return;
@@ -41,17 +44,27 @@ export class BattleResultView{
   get complete(){return this.model?.done??false;}
   asset(ctx,glow,id,frame,x,y,{inverseMask=false}={}){
     const source=this.manifest.assets[id].frames[frame];if(!source)return;
-    const image=this.images.get(inverseMask?(source.render_image??source.inverse_mask_image??source.image):source.image);if(image)drawBattleImage(ctx,image,x,y);
+    const image=this.images.get(frameImage(source,inverseMask));if(image)drawBattleImage(ctx,image,x,y);
     if(source.indexed_image){const indexed=this.images.get(source.indexed_image);if(indexed){glow.save();glow.globalCompositeOperation='lighter';drawBattleImage(glow,indexed,x,y);glow.restore();}}
   }
   text(ctx,value,x,y,{width=null,align='left',shadow=true}={}){
     value=String(value);ctx.font='18px "全真特黑體", SimSun';ctx.textBaseline='top';ctx.textAlign=align;
-    // The requested original typeface is unavailable on this host. Reuse the
-    // checked GDI SimSun18 glyphs where covered, retaining Canvas fallback.
-    if(this.textRenderer?.supports(value,'simsun18')){
-      const key=JSON.stringify([this.textRenderer.revision,value,width,align,shadow]);let entry=this.textCache.get(key);
-      if(!entry){const canvas=this.doc.createElement('canvas'),placement=this.textRenderer.paint(canvas,value,{font:'simsun18',foreground:'#fff',shadow:shadow?'#000':null,maxWidth:width,maxLines:1,align});entry={canvas,...placement};if(this.textCache.size>=128)this.textCache.clear();this.textCache.set(key,entry);}
-      drawImageRegion(ctx,entry.canvas,x+entry.offsetX,y+entry.offsetY);return;
+    const renderer=this.textRenderer,labelFont='requested_black19_mnu';
+    const font=renderer?.supports(value,'simsun18')?'simsun18':
+      renderer?.hasHdFont?.(labelFont)&&renderer.supports(value,labelFont)?labelFont:null;
+    if(font){
+      const key=JSON.stringify([renderer.revision,value,width,align,shadow]);let entry=this.textCache.get(key);
+      if(!entry){
+        const canvas=this.doc.createElement('canvas');
+        const layoutWidth=width===null?null:Math.max(width,renderer.measure(value,font));
+        const placement=renderer.paint(canvas,value,{font,foreground:'#fff',shadow:shadow?'#000':null,maxWidth:layoutWidth,maxLines:1,align});
+        entry={canvas,...placement,scaleX:width===null?1:width/layoutWidth};
+        if(this.textCache.size>=128)this.textCache.clear();
+        this.textCache.set(key,entry);
+      }
+      if(entry.scaleX===1)drawImageRegion(ctx,entry.canvas,x+entry.offsetX,y+entry.offsetY);
+      else drawImageRegion(ctx,entry.canvas,x+entry.offsetX*entry.scaleX,y+entry.offsetY,entry.width*entry.scaleX,entry.height);
+      return;
     }
     // x is the source rectangle's left edge; Canvas expects the alignment
     // anchor instead. Keep the same rectangle as the glyph-atlas path.

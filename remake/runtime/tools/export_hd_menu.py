@@ -1,4 +1,4 @@
-"""从游戏原版图集生成缺少的 2× 菜单素材。"""
+"""从游戏原版图集生成缺少的 2× 菜单或战斗结算素材。"""
 import argparse
 from functools import lru_cache
 from hashlib import sha256
@@ -13,6 +13,7 @@ from incremental import save_png, write_json
 
 OUT = WEB / 'assets/hd'
 MENU = '/assets/menu/'
+BATTLE_RESULT = '/assets/battle_result/'
 
 
 def read_pack(path):
@@ -70,18 +71,20 @@ def export(catalog, missing, out, enhance):
             source.paste(source_page(index).crop((px, py, px+w, py+h)), (x, y))
         entry = dict(width=width, height=height, scale=SCALE, sourceSha256=original['sha256'])
         box = source.getchannel('A').getbbox()
-        if path.startswith(MENU + 'standing_actors/') and box and box != (0, 0, width, height):
+        if path.startswith((MENU + 'standing_actors/', BATTLE_RESULT)) and box and box != (0, 0, width, height):
             left, top, right, bottom = box
             entry['rect'] = [left, top, right-left, bottom-top]
             source = source.crop(box)
         result = enhance(source) if box else Image.new('RGBA', (width*SCALE, height*SCALE))
+        if path.startswith(BATTLE_RESULT):
+            result.putalpha(source.getchannel('A').resize(result.size, Image.Resampling.BICUBIC))
         target = out / path.removeprefix('/assets/')
         save_png(result, target)
         if not valid_image(target, original, entry):
-            raise ValueError(f'生成的菜单高清图无效：{target}')
+            raise ValueError(f'生成的高清图无效：{target}')
         entries[path] = entry
         if number % 25 == 0 or number == len(missing):
-            print(f'已生成 {number}/{len(missing)} 张菜单高清图', flush=True)
+            print(f'已生成 {number}/{len(missing)} 张高清图', flush=True)
     return entries
 
 
@@ -90,26 +93,35 @@ def main():
     parser.add_argument('--weights', type=Path, help=f'{MODEL}.pth 的本地路径')
     parser.add_argument('--out', type=Path, default=OUT)
     parser.add_argument('--cache', type=Path, default=CACHE)
+    parser.add_argument('--battle-result', action='store_true', help='生成战斗胜利结算实际绘制的非空图层')
     parser.add_argument('--plan', action='store_true', help='只核对缺少的素材数量')
     args = parser.parse_args()
 
     catalog = read('assets/image_catalog.json')
     path = args.out / 'manifest.json'
     images = read_pack(path)['images']
-    missing = {name: original for name, original in sorted(catalog['images'].items())
-               if name.startswith(MENU) and name.endswith('.png') and
-               not valid_image(args.out / name.removeprefix('/assets/'), original, images.get(name))}
-    print(f'需补齐 {len(missing)} 张菜单高清图', flush=True)
+    originals = catalog['images']
+    if args.battle_result:
+        assets = read('data/battle_result.json')['assets']
+        paths = {'/' + image.lstrip('/') for asset in assets.values() for frame in asset['frames']
+                 for image in (frame.get('render_image', frame['image']), frame.get('indexed_image')) if image}
+        candidates = {name: originals[name] for name in sorted(paths) if originals[name]['regions']}
+    else:
+        candidates = {name: original for name, original in sorted(originals.items())
+                      if name.startswith(MENU) and name.endswith('.png')}
+    missing = {name: original for name, original in candidates.items()
+               if not valid_image(args.out / name.removeprefix('/assets/'), original, images.get(name))}
+    print(f'需补齐 {len(missing)} 张高清图', flush=True)
     if args.plan or not missing:
         return
     if not args.weights or not args.weights.is_file():
-        parser.error('生成菜单素材需要 --weights 指向本地模型文件')
+        parser.error('生成素材需要 --weights 指向本地模型文件')
 
     entries = export(catalog, missing, args.out, upscaler(args.weights, args.cache))
     pack = read_pack(path)
     pack['images'].update(entries)
     write_json(path, pack)
-    print(f'已发布 {len(entries)} 张菜单高清图', flush=True)
+    print(f'已发布 {len(entries)} 张高清图', flush=True)
 
 
 if __name__ == '__main__':
