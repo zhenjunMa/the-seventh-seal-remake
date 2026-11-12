@@ -7,7 +7,7 @@ let serial=0;
 export class TextureCache {
   constructor(scene,{idleFrames=120,budgetBytes=64*1024*1024,maxFrames=512}={}){
     Object.assign(this,{scene,idleFrames,budgetBytes,maxFrames});this.sources=new WeakMap();this.entries=new Set();this.frame=0;
-    const gl=scene.game?.renderer?.gl;this.maxSize=Math.min(2048,gl?gl.getParameter(gl.MAX_TEXTURE_SIZE):2048);
+    const gl=scene.game?.renderer?.gl;this.maxSize=Math.min(4096,gl?gl.getParameter(gl.MAX_TEXTURE_SIZE):2048);
     this.cuts=new WeakMap();this.cutOwners=new WeakMap();
     this.unsubscribe=onBitmapEvicted((source,retain)=>{
       const entry=this.sources.get(source);
