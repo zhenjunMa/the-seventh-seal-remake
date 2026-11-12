@@ -470,9 +470,19 @@ export class KeyboardMovement {
             if (distance >= score) continue;
             // Keep the remake's swept feet/actor collision and source-entry
             // escape handling; a source-open neighbour must be reachable.
-            const trial = map.moveAndSlide(x, y, nx * step, ny * step, options);
+            let heading = {dx: nx, dy: ny};
+            let trial = map.moveAndSlide(x, y, nx * step, ny * step, options);
+            if (!trial.moved && trial.hit?.reason === 'terrain' && (!nx || !ny)) {
+              // An open neighbour can be clipped by the wall beside it when
+              // the feet are off-centre. Aim into the opening before backing up.
+              const towardX = (cx + 0.5) * map.cellSize - x;
+              const towardY = (cy + 0.5) * map.cellSize - y;
+              const scale = Math.max(Math.abs(towardX), Math.abs(towardY));
+              heading = {dx: towardX / scale, dy: towardY / scale};
+              trial = map.moveAndSlide(x, y, heading.dx * step, heading.dy * step, options);
+            }
             if (!trial.moved) continue;
-            best = {dx: nx, dy: ny};
+            best = heading;
             score = distance;
           }
           if (!best) {
