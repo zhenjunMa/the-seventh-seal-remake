@@ -49,15 +49,19 @@ Windows 用户可在仓库根目录运行 `.\.venv\Scripts\python.exe -X utf8 -B
 
 高清包可另外登记从字体轮廓重绘的 Noto 和 Windows 字库。清单的 `fonts` 将原字库路径映射到原字库的 SHA-256。同名高清 PNG 和字形坐标 JSON 放在高清包的对应路径。字形按 2 倍像素绘制，字号、字距和换行使用原字库的布局数据。高清字形直接绘制，回退到普通字库的文字继续遵循「平滑显示」设置。
 
-完成素材构建后，可在装有 Real-ESRGAN 的 Python 环境中补齐缺少的 2 倍菜单素材。导出使用现有高清动画的推理缓存。站立帧只保存人物所在的区域，并在清单中记录原画布中的位置。
+完成首次素材构建后，可用 `export_hd_menu.py` 生成 2 倍静态高清包。全量模式包含游戏内菜单、战斗界面和胜利结算、对话和序章提示、启动菜单、载入画面、世界地图、探索底图和静物、静态战场、城镇服务和小游戏及高清字库。图片导出需要装有 Real-ESRGAN 的 Python 环境和本地模型权重。原图指纹和尺寸相同的图片可复用已校验的高清图，其余图片可复用推理缓存。
 
 ```sh
-python -B remake/runtime/tools/export_hd_menu.py --weights /path/to/RealESRGAN_x4plus_anime_6B.pth
+python -B remake/runtime/tools/export_hd_menu.py --all \
+  --weights /path/to/RealESRGAN_x4plus_anime_6B.pth \
+  --font-dir /path/to/font-outlines
 ```
 
-同一个命令加上 `--battle-result`，可导出战斗胜利结算底板、提示卡和胜利动画的可见图层。
+`--font-dir` 可重复指定。生成两套字库需要 `NotoSerifCJKsc-Regular.otf`、`NotoSansCJKsc-Regular.otf`、`simsun.ttc` 和 `arial.ttf`。Noto 字体轮廓使用原字库清单 `font_source` 记录的版本。已有且校验通过的高清图和字库会直接复用。
 
-探索角色、NPC、战斗人物和技能特效共用「高清素材」开关。动画纹理页及其索引放在 `remake/runtime/web/assets/hd/animations/`。开启后，游戏在准备地图或战斗动作时加载所需页。有可用的高清帧就采用高清像素，缺帧、损坏或源图不匹配时使用对应原帧。脚底位置、动作节奏和技能光效层级沿用原数据。
+单独运行时，默认生成游戏内菜单，包括人物站立帧。`--static` 生成其他界面和静态场景图片，`--battle-result` 生成胜利结算底板、提示卡和胜利光效，`--fonts` 只生成字库，只需要 Pillow 和字体轮廓。加入 `--plan` 可检查缺少及可复用的数量，加入 `--reuse-only` 可只发布同源高清图。输出默认写到 `remake/runtime/web/assets/hd/`。
+
+探索角色、NPC、地图动态物件、战斗人物、技能特效和战场动态层共用「高清素材」开关。动画纹理页及其索引放在 `remake/runtime/web/assets/hd/animations/`。开启后，游戏在准备地图或战斗动作时加载所需页。有可用的高清帧就采用高清像素，缺帧、损坏或源图不匹配时使用对应原帧。动作节奏、角色锚点、叠加光效和阴影沿用原数据。
 
 先完成游戏素材构建，再使用装有 Real-ESRGAN 的 Python 环境离线导出。以下命令生成英格妮、沙帝斯、雪泥怪、燕突、破霞和一张超宽敌人帧的试玩包。
 
@@ -65,7 +69,7 @@ python -B remake/runtime/tools/export_hd_menu.py --weights /path/to/RealESRGAN_x
 python -B remake/runtime/tools/export_hd_animations.py --pilot --weights /path/to/RealESRGAN_x4plus_anime_6B.pth
 ```
 
-去掉 `--pilot` 可生成全量包，加入 `--plan` 可先查看覆盖规模。导出会复用已推理的相同帧。可以先用 `--out <暂存目录>` 生成，再用 `--install-from <暂存目录>` 核对帧覆盖、源图指纹和 PNG 页，全部通过后发布游戏读取的索引。
+去掉 `--pilot` 可生成全量包，加入 `--plan` 可先查看覆盖规模。全量导出会校验并复用当前输出目录中已有的高清帧，构建中断后可以用同一条命令续跑。可以先用 `--out <暂存目录>` 生成，再用 `--install-from <暂存目录>` 核对帧覆盖、源图指纹和 PNG 页，全部通过后发布游戏读取的索引。
 
 ## 游戏事件索引
 

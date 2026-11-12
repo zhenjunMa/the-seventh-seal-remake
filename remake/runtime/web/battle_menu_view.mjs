@@ -244,7 +244,14 @@ export class BattleMenuView{
       // the original alpha silhouette and an 8bit colour adapter.
       const state=this.snapshot.scheduler?(actor.hp.current>0&&!(actor.state_raw>=4&&actor.state_raw<=7)?battleBallState(g,threshold):null):{top:0,color:[0,128,0],phase:'charge',level:23};
       const bar=this.images.get(this.manifest.assets.time_bar.frames[0].image),key=state?`${state.phase}:${state.level}`:null;let ball=this.ballCache.get(key);
-      if(state&&state.top<46&&!ball&&bar){ball=this.doc.createElement('canvas');ball.width=47;ball.height=46;const bc=ball.getContext('2d');drawBattleImage(bc,bar,0,0);bc.globalCompositeOperation='multiply';bc.fillStyle=`rgb(${state.color.join(',')})`;bc.fillRect(0,0,47,46);bc.globalCompositeOperation='destination-in';drawBattleImage(bc,bar,0,0);this.ballCache.set(key,ball);}
+      if(state&&state.top<46&&!ball&&bar){
+        const scale=bar.pixelScale??1;
+        ball=this.doc.createElement('canvas');ball.width=47*scale;ball.height=46*scale;ball.gpuPixelScale=scale;
+        const bc=ball.getContext('2d');bc.scale(scale,scale);
+        drawBattleImage(bc,bar,0,0);bc.globalCompositeOperation='multiply';bc.fillStyle=`rgb(${state.color.join(',')})`;
+        bc.fillRect(0,0,47,46);bc.globalCompositeOperation='destination-in';drawBattleImage(bc,bar,0,0);
+        this.ballCache.set(key,ball);
+      }
       if(state&&state.top<46&&ball){c.save();c.beginPath();c.rect(x+16,y+1+state.top,47,46-state.top);c.clip();drawImageRegion(c,ball,x+16,y+1);c.restore();}
       this.asset('time_glass',0,x+16,y+1,{mask:true});
       if(actor.id===playerId&&canCommand)this.asset('fight_mark',Math.floor(now/120),x-30,y-16,{blend:'lighter'});

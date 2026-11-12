@@ -8,11 +8,12 @@ import io
 import json
 from pathlib import Path
 import re
+from time import monotonic
 
 from PIL import Image
 
 from export_battle_packs import WEB, inventory, layout_pages
-from incremental import write_bytes, write_json
+from incremental import build_lock, write_bytes, write_json
 
 OUT = WEB / 'assets/hd/animations'
 CACHE = WEB.parent / '.cache/hd_animations'
@@ -44,6 +45,56 @@ def map_inventory():
         resource = read(f'data/events/{event.name}').get('npc', {}).get('resource') or {}
         if resource.get('sheet'):
             yield canonical(resource['sheet']), resource['frame_width'], resource['frame_height']
+
+
+def map_object_inventory(images):
+    effects = read('data/map_effects.json')
+    banks = {obj['bank'] for scene in effects['maps'].values() for obj in scene['objects']}
+    for name in sorted(banks):
+        bank = effects['object_banks'][name]
+        for action in bank['actions']:
+            for channel in ('main', 'intrinsic', 'shadow'):
+                if path := action.get(f'{channel}_sheet'):
+                    yield canonical(path), bank['frame_width'], bank['frame_height']
+    for role in read('data/map_shadows.json')['roles'].values():
+        for action in role['actions']:
+            bounds = action['shadow_geometry']
+            yield canonical(action['shadow_sheet']), bounds['width'], bounds['height']
+
+    chapters = read('data/chapter_map_resources.json')['object_animations']
+    for path in sorted((WEB / 'data/maps').glob('*.json')):
+        scene = read(path.relative_to(WEB).as_posix())
+        map_id = scene['id']
+        moving = {obj['index'] for obj in effects['maps'].get(map_id, {}).get('objects', [])}
+        objects = chapters.get(map_id, [])
+        moving.update(obj['object_index_zero_based'] for obj in objects)
+        for obj in scene.get('objects', []):
+            if obj['index'] in moving:
+                name = canonical(obj['image'])
+                yield name, images[name]['width'], images[name]['height']
+        for obj in objects:
+            # Plot objects can display individual DGP frames during an action
+            # and when restoring its finished pose from a save.
+            for frame in obj['frames']:
+                name = canonical(frame['image'])
+                yield name, images[name]['width'], images[name]['height']
+
+
+def stage_inventory(manifests):
+    for reference in manifests.values():
+        stage = reference['value']
+        if 'stage_id' not in stage or 'default_composition' not in stage:
+            continue
+        composition = stage['default_composition']
+        visible = {row['layer_id'] for row in [composition['sky'], *composition['scene_objects']]}
+        for layer in stage['layers']:
+            if layer['id'] not in visible or not layer.get('animation'):
+                continue
+            for index in sorted(set(layer['animation']['frames'])):
+                frame = layer['frames'][index]
+                for row in (frame, frame.get('intrinsic')):
+                    if row:
+                        yield canonical(row['path']), layer['source']['width'], layer['source']['height']
 
 
 def pilot_battle(manifests):
@@ -102,10 +153,18 @@ def sources(catalog, battle, pilot=False, patterns=()):
             '/assets/ROLE_001/', '/assets/opening_roles/001/', '/assets/opening_roles/013/', '/assets/map_effects/role_013/'
         )):
             add(path, width, height, map_sprite=True)
+    if not pilot:
+        for path, width, height in map_object_inventory(images):
+            add(path, width, height, map_sprite=True)
+        for path, width, height in stage_inventory(battle['manifests']):
+            add(path, width, height)
     effects = {'effect-_DutyN', 'effect-BFr01_Dn', 'effect-BFr01_Nm'}
     for row in battle['assets']:
         path, group = row['path'], row['group']
-        if not group.startswith(('role-', 'effect-')) or Path(path).stem.endswith(('_shadow', '_mask')) or Path(path).stem == 'shadow':
+        stem = Path(path).stem
+        if not group.startswith(('role-', 'effect-')) or stem.endswith('_mask'):
+            continue
+        if pilot and (stem == 'shadow' or stem.endswith('_shadow')):
             continue
         if not pilot or path in selected or group in effects:
             add(path, row['tile_width'], row['tile_height'], selected.get(path), sha=row['sha256'])
@@ -138,7 +197,7 @@ def png(image):
     return stream.getvalue()
 
 
-def upscaler(weights, cache):
+def upscaler(weights, cache, *, preserve_alpha=False):
     import cv2
     import numpy as np
     import torch
@@ -148,9 +207,13 @@ def upscaler(weights, cache):
     device = 'mps' if torch.backends.mps.is_available() else 'cuda' if torch.cuda.is_available() else 'cpu'
     torch.set_num_threads(5)
     model = RRDBNet(3, 3, num_feat=64, num_block=6, num_grow_ch=32, scale=4)
+    half = preserve_alpha and device == 'mps'
     runner = RealESRGANer(scale=4, model_path=str(weights), model=model, tile=320, tile_pad=40,
-                        pre_pad=0, half=False, device=torch.device(device))
+                        pre_pad=0, half=half, device=torch.device(device))
     recipe = f'{MODEL}:{sha256(weights.read_bytes()).hexdigest()}:tile320:pad40:rgba-lanczos-v1:{device}'
+    original_cache = cache / sha256(recipe.encode()).hexdigest()[:24]
+    if preserve_alpha:
+        recipe += f':source-alpha-v1:half={half}'
     cache = cache / sha256(recipe.encode()).hexdigest()[:24]
     print(f'{MODEL} · {device}', flush=True)
     inferred = 0
@@ -160,18 +223,28 @@ def upscaler(weights, cache):
         key = sha256(f'{image.width},{image.height}:'.encode() + image.tobytes()).hexdigest()
         path = cache / (key + '.png')
         size = (image.width * SCALE, image.height * SCALE)
-        if path.is_file():
-            try:
-                with Image.open(path) as stored:
-                    if stored.size == size and stored.mode == 'RGBA':
-                        return stored.copy()
-            except OSError:
-                pass
-        raw, mode = runner.enhance(cv2.cvtColor(np.asarray(image), cv2.COLOR_RGBA2BGRA), outscale=4)
-        if mode != 'RGBA' or raw.shape[:2] != (image.height * 4, image.width * 4):
+        for candidate in (path, original_cache / path.name) if preserve_alpha else (path,):
+            if candidate.is_file():
+                try:
+                    with Image.open(candidate) as stored:
+                        if stored.size == size and stored.mode == 'RGBA':
+                            result = stored.copy()
+                            if preserve_alpha and candidate != path:
+                                result.putalpha(image.getchannel('A').resize(size, Image.Resampling.BICUBIC))
+                            return result
+                except OSError:
+                    pass
+        alpha = image.getchannel('A') if preserve_alpha else None
+        conversion = cv2.COLOR_RGBA2BGR if preserve_alpha else cv2.COLOR_RGBA2BGRA
+        raw, mode = runner.enhance(cv2.cvtColor(np.asarray(image), conversion), outscale=4)
+        if mode != ('RGB' if preserve_alpha else 'RGBA') or raw.shape[:2] != (image.height * 4, image.width * 4):
             raise ValueError('模型输出的尺寸或透明通道无效')
-        rgba = Image.fromarray(cv2.cvtColor(raw, cv2.COLOR_BGRA2RGBA)).convert('RGBa')
-        result = rgba.resize(size, Image.Resampling.LANCZOS).convert('RGBA')
+        if alpha is None:
+            rgba = Image.fromarray(cv2.cvtColor(raw, cv2.COLOR_BGRA2RGBA)).convert('RGBa')
+            result = rgba.resize(size, Image.Resampling.LANCZOS).convert('RGBA')
+        else:
+            result = Image.fromarray(cv2.cvtColor(raw, cv2.COLOR_BGR2RGB)).resize(size, Image.Resampling.LANCZOS)
+            result.putalpha(alpha.resize(size, Image.Resampling.BICUBIC))
         write_bytes(path, png(result))
         inferred += 1
         if device == 'mps' and inferred % 256 == 0:
@@ -181,7 +254,77 @@ def upscaler(weights, cache):
     return enhance
 
 
-def build(catalog, images, groups, enhance, out):
+def frame_bounds(regions):
+    return (min(r[0] for r in regions), min(r[1] for r in regions),
+            max(r[0]+r[2] for r in regions), max(r[1]+r[3] for r in regions))
+
+
+def frame_fits(parts, regions, pages):
+    if not parts:
+        return False
+    left, top, right, bottom = frame_bounds(regions)
+    covered, area = [], 0
+    for x, y, w, h, name, px, py in parts:
+        page = pages.get(name)
+        if (not page or not all(type(v) is int for v in (x, y, w, h, px, py))
+                or not (left <= x < x+w <= right and top <= y < y+h <= bottom)
+                or not (0 <= px < px+w*SCALE <= page['width'] and 0 <= py < py+h*SCALE <= page['height'])
+                or any(x < r and y < b and x+w > l and y+h > t for l, t, r, b in covered)):
+            return False
+        covered.append((x, y, x+w, y+h))
+        area += w*h
+    return area == (right-left)*(bottom-top)
+
+
+def valid_page(path, page):
+    raw = path.read_bytes()
+    if sha256(raw).hexdigest() != path.stem:
+        raise ValueError(f'高清纹理页指纹不符：{path.name}')
+    with Image.open(io.BytesIO(raw)) as bitmap:
+        if (bitmap.format != 'PNG' or bitmap.mode != 'RGBA' or bitmap.size != (page['width'], page['height'])
+                or max(bitmap.size) > 2048):
+            raise ValueError(f'高清纹理页格式或尺寸不符：{path.name}')
+        bitmap.verify()
+    return raw
+
+
+def resume_frames(out, images, groups):
+    path = out / 'manifest.json'
+    if not path.is_file():
+        return groups, {}
+    existing = json.loads(path.read_text(encoding='utf-8'))
+    if (existing['version'], existing['scale'], existing['model']) != (1, SCALE, MODEL):
+        return groups, {}
+    old_pages, old_images = existing['pages'], existing['images']
+    pages, pending = {}, defaultdict(list)
+
+    @lru_cache(maxsize=None)
+    def usable(name):
+        if not re.fullmatch(r'[a-f0-9]{64}\.png', name):
+            return False
+        try:
+            valid_page(out / name, old_pages[name])
+        except (OSError, ValueError, SyntaxError):
+            return False
+        return True
+
+    for group, frames in groups.items():
+        for path, index, regions in frames:
+            row = images[path]
+            old = old_images.get(path, {})
+            parts = old.get('frames', {}).get(str(index))
+            if (any(old.get(key) != value for key, value in row.items() if key != 'frames')
+                    or not frame_fits(parts, regions, old_pages)
+                    or group[0] and len(parts) != 1
+                    or not all(usable(part[4]) for part in parts)):
+                pending[group].append((path, index, regions))
+                continue
+            row['frames'][str(index)] = parts
+            pages.update((part[4], old_pages[part[4]]) for part in parts)
+    return pending, pages
+
+
+def build(catalog, images, groups, enhance, out, pages=None):
     @lru_cache(maxsize=6)
     def source_page(index):
         page = catalog['pages'][index]
@@ -193,23 +336,31 @@ def build(catalog, images, groups, enhance, out):
                 raise ValueError(f'原图集页尺寸不符：{page["path"]}')
             return source.convert('RGBA')
 
-    pages, skipped = {}, []
+    checkpoint = pages is not None
+    pages = {} if pages is None else pages
+    last_checkpoint = monotonic()
+
+    def publish():
+        ready = {path: row for path, row in images.items() if row['frames']}
+        write_json(out / 'manifest.json', dict(version=1, scale=SCALE, model=MODEL, pages=pages, images=ready), compact=True)
+        return ready
+
     for number, ((map_sprite, _), frames) in enumerate(groups.items(), 1):
         tiles, dedup = [], {}
         for path, index, regions in frames:
-            left = min(r[0] for r in regions)
-            top = min(r[1] for r in regions)
-            width = max(r[0]+r[2] for r in regions) - left
-            height = max(r[1]+r[3] for r in regions) - top
+            left, top, right, bottom = frame_bounds(regions)
+            width, height = right-left, bottom-top
             if map_sprite and max(width, height) > MAX_TILE:
-                skipped.append([path, index, '探索精灵超过单纹理页尺寸'])
-                continue
-            token = tuple(sorted((x-left, y-top, w, h, page, px, py) for x, y, w, h, page, px, py in regions))
+                raise ValueError(f'探索精灵超过单纹理页尺寸：{path}#{index}')
+            stem = Path(path).stem
+            shadow = stem == 'shadow' or stem.endswith('_shadow')
+            crops = tuple(sorted((x-left, y-top, w, h, page, px, py) for x, y, w, h, page, px, py in regions))
+            token = shadow, crops
             if token not in dedup:
                 frame = Image.new('RGBA', (width, height))
-                for x, y, w, h, page, px, py in token:
+                for x, y, w, h, page, px, py in crops:
                     frame.paste(source_page(page).crop((px, py, px+w, py+h)), (x, y))
-                hd = enhance(frame)
+                hd = frame.resize((width*SCALE, height*SCALE), Image.Resampling.BICUBIC) if shadow else enhance(frame)
                 parts = []
                 for ty in range(0, height, MAX_TILE):
                     for tx in range(0, width, MAX_TILE):
@@ -236,10 +387,12 @@ def build(catalog, images, groups, enhance, out):
                     ])
         if number == len(groups) or number % 10 == 0:
             print(f'处理纹理组 {number}/{len(groups)} · 输出 {len(pages)} 页', flush=True)
-    images = {path: row for path, row in images.items() if row['frames']}
-    write_json(out / 'manifest.json', dict(version=1, scale=SCALE, model=MODEL, pages=pages, images=images), compact=True)
+        if checkpoint and monotonic() - last_checkpoint >= 60:
+            publish()
+            last_checkpoint = monotonic()
+    images = publish()
     print(json.dumps(dict(images=len(images), frames=sum(len(r['frames']) for r in images.values()),
-                          pages=len(pages), skipped=skipped), ensure_ascii=False), flush=True)
+                          pages=len(pages)), ensure_ascii=False), flush=True)
 
 
 def install(staged, out, images, groups):
@@ -260,24 +413,10 @@ def install(staged, out, images, groups):
             row = variants[path]
             if any(row[k] != images[path][k] for k in ('width', 'height', 'sha256', 'frameWidth', 'frameHeight')):
                 raise ValueError(f'高清帧源图或网格已变化：{path}')
-            left, top = min(r[0] for r in regions), min(r[1] for r in regions)
-            right, bottom = max(r[0]+r[2] for r in regions), max(r[1]+r[3] for r in regions)
             parts = row['frames'].get(key)
-            if not parts:
-                raise ValueError(f'高清包缺少帧：{path}#{key}')
-            covered, area = [], 0
-            for x, y, w, h, name, px, py in parts:
-                page = pages.get(name)
-                if (not page or not all(type(v) is int for v in (x, y, w, h, px, py))
-                        or not (left <= x < x+w <= right and top <= y < y+h <= bottom)
-                        or not (0 <= px < px+w*SCALE <= page['width'] and 0 <= py < py+h*SCALE <= page['height'])
-                        or any(x < r and y < b and x+w > l and y+h > t for l, t, r, b in covered)):
-                    raise ValueError(f'高清裁片坐标无效：{path}#{key}')
-                covered.append((x, y, x+w, y+h))
-                used_pages.add(name)
-                area += w*h
-            if area != (right-left)*(bottom-top):
-                raise ValueError(f'高清裁片覆盖不完整：{path}#{key}')
+            if not frame_fits(parts, regions, pages):
+                raise ValueError(f'高清裁片缺失或覆盖不完整：{path}#{key}')
+            used_pages.update(part[4] for part in parts)
     if any(row['frames'].keys() != expected[path] for path, row in variants.items()) or used_pages != pages.keys():
         raise ValueError('高清帧或纹理页存在多余登记')
 
@@ -287,16 +426,11 @@ def install(staged, out, images, groups):
         if not re.fullmatch(r'[a-f0-9]{64}\.png', name):
             raise ValueError(f'高清纹理页文件名无效：{name}')
         source = staged / name
-        raw = source.read_bytes()
+        raw = valid_page(source, page)
         total_bytes += len(raw)
-        if sha256(raw).hexdigest() != name[:-4]:
-            raise ValueError(f'高清纹理页指纹不符：{name}')
-        with Image.open(io.BytesIO(raw)) as bitmap:
-            if (bitmap.format != 'PNG' or bitmap.mode != 'RGBA' or bitmap.size != (page['width'], page['height'])
-                    or max(bitmap.size) > 2048):
-                raise ValueError(f'高清纹理页格式或尺寸不符：{name}')
-            bitmap.verify()
         target = out / name
+        if staged.resolve() == out.resolve():
+            continue
         if not target.exists():
             try:
                 target.hardlink_to(source)
@@ -328,10 +462,21 @@ def main():
     if not groups:
         parser.error('所选范围没有可用的动画帧')
     print(f'选中 {len(images)} 个图条或独立帧 · {sum(map(len, groups.values()))} 个非空帧 · {len(groups)} 组', flush=True)
-    if args.install_from:
-        install(args.install_from, args.out, images, groups)
-    elif not args.plan:
-        build(catalog, images, groups, upscaler(args.weights, args.cache), args.out)
+    if args.plan:
+        return
+    with build_lock(args.out / '.build'):
+        if args.install_from:
+            install(args.install_from, args.out, images, groups)
+            return
+        pages = None
+        full = not (args.pilot or args.include)
+        if full:
+            planned = sum(map(len, groups.values()))
+            groups, pages = resume_frames(args.out, images, groups)
+            pending = sum(map(len, groups.values()))
+            print(f'已校验并复用 {planned-pending} 帧 · 待生成 {pending} 帧', flush=True)
+        enhance = upscaler(args.weights, args.cache, preserve_alpha=full) if groups else None
+        build(catalog, images, groups, enhance, args.out, pages)
 
 
 if __name__ == '__main__':

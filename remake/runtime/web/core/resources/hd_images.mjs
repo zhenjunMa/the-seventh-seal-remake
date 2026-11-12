@@ -1,18 +1,19 @@
 const preferenceKey = 'seal:hd-images';
 const directory = '/assets/hd/';
 const supported = [
-  /^dialogue_ui\/(?:faces_\d+|(?:board|think|map_name|reward)_000)\.png$/i,
-  /^world_map\/locate_\d+\/image_000\.png$/i,
-  /^prologue_loading\/(?:background_\d+|progress\/image_000)\.png$/i,
+  /^dialogue_ui\/(?:faces_\d+|(?:board|think|map_name|reward)_000|wait[12]_\d+)\.png$/i,
+  /^world_map\/locate_\d+\/image_\d+\.png$/i,
+  /^prologue\/wait_\d+\.png$/i,
+  /^prologue_loading\/(?:background_\d+|progress\/image_00[01])\.png$/i,
   /^maps\/[a-z\d_-]+\/(?:background|objects\/\d+_frame_000)\.png$/i,
-  /^(?:stages\/stage\d+|forest_stage)\/[a-z\d_]+\/frame_000\.png$/i,
+  /^(?:stages\/stage\d+|forest_stage|skill_test_stage)\/[a-z\d_]+\/(?:frame|intrinsic)_000\.png$/i,
   /^startup\/(?:(?:menulbk|menulbx|specialback)\/frame_000|menuback\/frame_00[0-5])\.png$/i,
   /^startup\/(?:(?:menubtn|menusub[0-3]2?)\/frame_\d{3}|menuhlp[0-3][0-2]\/frame_000)\.png$/i,
   /^startup\/menuspecial(?:0[01]|30)\/frame_\d{3}\.png$/i,
   /^menu\/(?:[a-z\d_]+\/)*[a-z\d_]+\.png$/i,
-  /^(?:native_services|battle_ui|battle_result)\/[a-z\d_]+\/image_000\.png$/i,
+  /^battle_result\/[a-z\d_]+\/image_000\.png$/i,
   /^battle_result\/(?:fight_report_01\/frame_000_inverse_mask|fight_report_02\/frame_\d{3}|victor\/frame_\d{3}(?:_indexed)?)\.png$/i,
-  /^native_services\/(?:ndback|nomoney|(?:worddiscback|lottoback|rotateback|slottoback)\/frame_\d+)\.png$/i,
+  /^(?:battle_ui|native_services)\/(?:[a-z\d_]+\/)*[a-z\d_]+\.png$/i,
 ];
 
 let enabled = false;

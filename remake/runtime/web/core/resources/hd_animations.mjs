@@ -1,8 +1,8 @@
 import {hdImagesEnabled} from './hd_images.mjs';
 
 const root='/assets/hd/animations/';
-const mapSource=/^\/assets\/(?:ROLE_\d+|opening_roles|chapter_roles|npcs|map_effects)\//;
-const battleSource=/^\/assets\/(?:party_roles|enemy_roles|party_layers|enemy_layers|combat_effects|party_effects|enemy_effects|forest_(?:full_)?(?:roles|effects)|forest_response_layers|battle_lifecycle|battle_status|item_presentation|combat_lab|skills)\//;
+const mapSource=/^\/assets\/(?:(?:ROLE_\d+|opening_roles|chapter_roles|npcs|map_effects|map_shadows|chapter_objects)\/|maps\/[^/]+\/objects\/)/;
+const battleSource=/^\/assets\/(?:party_roles|enemy_roles|party_layers|enemy_layers|combat_effects|party_effects|enemy_effects|forest_(?:full_)?(?:roles|effects)|forest_response_layers|battle_lifecycle|battle_status|item_presentation|combat_lab|skills|forest_stage|stages)\//;
 const pageName=/^[a-f0-9]{64}\.png$/;
 const positive=n=>Number.isSafeInteger(n)&&n>0;
 const nonnegative=n=>Number.isSafeInteger(n)&&n>=0;

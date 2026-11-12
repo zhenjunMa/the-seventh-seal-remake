@@ -22,8 +22,7 @@ export class SpritePose {
     this.shadow.setVisible(Boolean(shadow));
     if(shadow){const rect=shadowRectangle(sx,sy,width,height,shadow_geometry,displayWidth/width,displayHeight/height);
       const mask=this.textures.region(shadow,rect.sx,rect.sy,rect.width,rect.height);
-      this.shadow.setVisible(!mask.empty);
-      this.shadow.setPosition(rect.x,rect.y).setTexture(mask.key,mask.frame).setDisplaySize(rect.displayWidth,rect.displayHeight);}
+      place(this.shadow,mask,rect.x,rect.y,rect.width,rect.height,rect.displayWidth,rect.displayHeight);}
     const x=body_offset?.x??0,y=body_offset?.y??0;
     this.body.pixelImage=image.pixels?image:null;
     this.body.smoothActor=false;
