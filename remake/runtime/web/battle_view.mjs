@@ -406,7 +406,7 @@ export class BattleView {
       this.groundFootprints=new Map();this.lifecycleBounds=new Map();
       this._configurePlayback();
       this.playbackRuntime.configureLifecycle(this.lifecycleMeta,{
-        appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),
+        appearanceBounds:(roleId,pose,actorId)=>this._appearanceBounds(roleId,pose,actorId),
         appearanceRenderMs:1000/60,
         skipPlayerEntryAppearance:true,
         disappearanceEffect:(actorId,roleId,mode,event)=>this._particleEffect(actorId,roleId,mode,event),
@@ -840,42 +840,66 @@ export class BattleView {
 
   _role(id) {return this.meta.roles.find(role => role.id === (this.roster.find(a=>a.id===id)?.resource_id??id));}
 
-  _sprite(role, actionIndex, frame, x, y, alpha = 1, pair = null, appearanceScan = null) {
+  _spriteGeometry(role, groundY) {
+    const width = role.frame_width, height = role.frame_height;
+    if (!this.stageMeta) {
+      const scale = this.meta.policy.sprite_scale;
+      return {scaleX:scale,scaleY:scale,anchorX:role.anchor.x*scale,anchorY:role.anchor.y*scale,
+        rasterWidth:Math.ceil(width*scale),rasterHeight:Math.ceil(height*scale)};
+    }
+    const stageScale = 540/480;
+    const ground = this.stageMeta.layers.find(layer=>layer.id===this.stageMeta.default_composition.ground.layer_id);
+    const groundHeight = ground.source.height;
+    const depth = Math.round(groundY/stageScale) - (480-groundHeight);
+    // GAME.exe 513FC0/5149C0 resize each DGP by ground Y before applying Z.
+    const heightDelta = ((groundHeight >> 1) - depth) >> 1;
+    const drawHeight = height - heightDelta;
+    const drawWidth = width - Math.trunc(heightDelta*height/width);
+    // 54F68B and 5458CD apply the same integer anchor to body and shadow.
+    return {scaleX:drawWidth/width*stageScale,scaleY:drawHeight/height*stageScale,
+      anchorX:Math.trunc(role.anchor.x*drawWidth/width)*stageScale,
+      anchorY:Math.trunc((role.anchor.y+32)*drawHeight/height)*stageScale,
+      rasterWidth:drawWidth,rasterHeight:drawHeight};
+  }
+
+  _sprite(role, actionIndex, frame, x, y, alpha, pair, appearanceScan, geometry) {
     const ctx = this.context, action = role.actions.find(item => item.index === actionIndex);
-    const scale = this.meta.policy.sprite_scale, width = role.frame_width, height = role.frame_height;
+    const width = role.frame_width, height = role.frame_height;
+    const {scaleX,scaleY,anchorX,anchorY,rasterWidth,rasterHeight}=geometry;
     if(this.assetPlan&&!pair)pair=this.lifecyclePairs.get(`${role.id}:${action.first_frame+frame}`)??null;
     ctx.save(); ctx.globalAlpha = alpha; ctx.globalCompositeOperation = 'source-over';
-    const dx = x - role.anchor.x * scale, dy = y - role.anchor.y * scale;
+    const dx = x - anchorX, dy = y - anchorY;
+    const drawWidth=width*scaleX,drawHeight=height*scaleY;
     if(appearanceScan&&ctx.supportsNativeAppearance)ctx.nativeAppearance={...appearanceScan,
-      x:dx,y:dy,width:width*scale,height:height*scale,native_width:width*scale,native_height:height*scale};
+      x:dx,y:dy,width:drawWidth,height:drawHeight,native_width:rasterWidth,native_height:rasterHeight};
     const drawActor=(image,sx,sy,sw,sh,tx,ty,tw,th,smooth=true)=>{
       if(appearanceScan&&!ctx.supportsNativeAppearance&&globalThis.document?.createElement){
-        const source=this._appearanceRaster(image,sx,sy,sw,sh,scale,appearanceScan);
+        const source=this._appearanceRaster(image,sx,sy,sw,sh,rasterWidth,rasterHeight,appearanceScan);
         drawBattleImage(ctx,source,0,0,source.width,source.height,tx,ty,tw,th);
       }else if(smooth&&ctx.drawActorImage)ctx.drawActorImage(image,sx,sy,sw,sh,tx,ty,tw,th);
       else drawBattleImage(ctx,image,sx,sy,sw,sh,tx,ty,tw,th);
     };
     if (pair) {
-      drawActor(this.images.get('/' + pair.main.path), 0, 0, width, height, dx, dy, width * scale, height * scale);
+      drawActor(this.images.get('/' + pair.main.path), 0, 0, width, height, dx, dy, drawWidth, drawHeight);
       if (pair.intrinsic.active) {
         ctx.globalCompositeOperation = 'lighter';
-        drawActor(this.images.get('/' + pair.intrinsic.path), 0, 0, width, height, dx, dy, width * scale, height * scale,false);
+        drawActor(this.images.get('/' + pair.intrinsic.path), 0, 0, width, height, dx, dy, drawWidth, drawHeight,false);
       }
     } else {
       drawActor(this.images.get(action.sheet), frame * width, role.direction * height,
-        width, height, dx, dy, width * scale, height * scale);
+        width, height, dx, dy, drawWidth, drawHeight);
     }
     ctx.restore();
   }
 
-  _appearanceRaster(image,sx,sy,width,height,scale,scan){
+  _appearanceRaster(image,sx,sy,width,height,rasterWidth,rasterHeight,scan){
     // Canvas compatibility path. Production uses the batched GPU scan above;
     // retain at most eight small source poses for Canvas pixel comparisons.
     this.appearanceRasters??=new Map();
-    const key=[sx,sy,width,height,scale].join(':');
+    const key=[sx,sy,width,height,rasterWidth,rasterHeight].join(':');
     let cached=[...this.appearanceRasters.values()].find(row=>row.image===image&&row.key===key);
     if(!cached){
-      const canvas=document.createElement('canvas');canvas.width=Math.ceil(width*scale);canvas.height=Math.ceil(height*scale);
+      const canvas=document.createElement('canvas');canvas.width=rasterWidth;canvas.height=rasterHeight;
       const context=canvas.getContext('2d',{willReadFrequently:true});context.imageSmoothingEnabled=false;
       drawBattleImage(context,image,sx,sy,width,height,0,0,canvas.width,canvas.height);
       const original=context.getImageData(0,0,canvas.width,canvas.height),output=context.createImageData(canvas.width,canvas.height);
@@ -988,24 +1012,28 @@ export class BattleView {
     const role=this.meta.roles.find(r=>r.id===roleId),pose=this.lastActorPoses.get(actorId);
     const fallback=appearance?role.idle:role.reaction,action=role.actions.find(a=>a.index===(pose?.action_index??fallback.action_index));
     const frame=pose?.action_frame??(appearance?fallback.frames[0]:fallback.frames.at(-1)),pair=this.lifecyclePairs.get(`${roleId}:${action.first_frame+frame}`);
-    const image=this.images.get(pair?'/'+pair.main.path:action.sheet),scale=this.meta.policy.sprite_scale;
-    const source=document.createElement('canvas');source.width=Math.ceil(role.frame_width*scale);source.height=Math.ceil(role.frame_height*scale);
+    const image=this.images.get(pair?'/'+pair.main.path:action.sheet);
+    const {scaleX,scaleY,anchorX,anchorY}=this._spriteGeometry(role,this._slots(null)[actorId]?.[1]);
+    const source=document.createElement('canvas');source.width=Math.ceil(role.frame_width*scaleX);source.height=Math.ceil(role.frame_height*scaleY);
     const c=source.getContext('2d',{willReadFrequently:true});c.imageSmoothingEnabled=false;
     drawBattleImage(c,image,pair?0:frame*role.frame_width,pair?0:role.direction*role.frame_height,role.frame_width,role.frame_height,0,0,source.width,source.height);
     const effect=createDeathParticleSurface({rgba:c.getImageData(0,0,source.width,source.height).data,width:source.width,height:source.height,
-      anchor:{x:role.anchor.x*scale,y:role.anchor.y*scale},mode,appearance,seed:`${this.lifecycle?.battleId}:${event.life_epoch}:${event.token}`});
+      anchor:{x:anchorX,y:anchorY},mode,appearance,seed:`${this.lifecycle?.battleId}:${event.life_epoch}:${event.token}`});
     if(appearance)effect.pose={action_index:action.index,action_frame:frame,source_frame:action.first_frame+frame};
     return effect;
   }
 
-  _appearanceBounds(roleId,pose){
+  _appearanceBounds(roleId,pose,actorId){
     const role=this.meta.roles.find(r=>r.id===roleId),action=role.actions.find(a=>a.index===(pose?.action_index??role.idle.action_index));
-    const frame=pose?.action_frame??role.idle.frames[0],key=`${roleId}:${action.index}:${frame}`;
+    const frame=pose?.action_frame??role.idle.frames[0];
+    const {rasterWidth,rasterHeight}=this._spriteGeometry(role,this._slots(null)[actorId]?.[1]);
+    const key=`${roleId}:${action.index}:${frame}:${rasterWidth}:${rasterHeight}`;
     if(this.lifecycleBounds.has(key))return this.lifecycleBounds.get(key);
-    const scale=this.meta.policy.sprite_scale;
+    const scaleX=this.stageMeta?rasterWidth/role.frame_width:this.meta.policy.sprite_scale;
+    const scaleY=this.stageMeta?rasterHeight/role.frame_height:this.meta.policy.sprite_scale;
     // Scan the verified source sprite, never the composed battle background.
     const sourcePose={action_index:action.index,action_frame:frame,source_frame:action.first_frame+frame};
-    if(!globalThis.document?.createElement)return {min_x:0,min_y:0,max_x:Math.floor((role.frame_width-1)*scale),max_y:Math.floor((role.frame_height-1)*scale),empty:false,pose:sourcePose};
+    if(!globalThis.document?.createElement)return {min_x:0,min_y:0,max_x:Math.floor((role.frame_width-1)*scaleX),max_y:Math.floor((role.frame_height-1)*scaleY),empty:false,pose:sourcePose};
     const pair=this.lifecyclePairs.get(`${roleId}:${action.first_frame+frame}`),image=this.images.get(pair?'/'+pair.main.path:action.sheet);
     const width=role.frame_width,height=role.frame_height,left=pair?0:frame*width;
     let minX=width,minY=height,maxX=-1,maxY=-1;
@@ -1020,7 +1048,7 @@ export class BattleView {
       const rgba=c.getImageData(0,0,width,height).data;
       for(let y=0;y<height;y++)for(let x=0;x<width;x++)if(rgba[(y*width+x)*4+3]){minX=Math.min(minX,x);minY=Math.min(minY,y);maxX=Math.max(maxX,x);maxY=Math.max(maxY,y);}
     }
-    const bounds={min_x:Math.floor(minX*scale),min_y:Math.floor(minY*scale),max_x:Math.floor(maxX*scale),max_y:Math.floor(maxY*scale),empty:maxY<0,pose:sourcePose};this.lifecycleBounds.set(key,bounds);return bounds;
+    const bounds={min_x:Math.floor(minX*scaleX),min_y:Math.floor(minY*scaleY),max_x:Math.floor(maxX*scaleX),max_y:Math.floor(maxY*scaleY),empty:maxY<0,pose:sourcePose};this.lifecycleBounds.set(key,bounds);return bounds;
   }
 
   _actorPresentation(snapshot,now,{entryPreview=false,run=entryPreview?null:this.playbackRuntime.currentRun}={}){
@@ -1033,14 +1061,14 @@ export class BattleView {
     }
     const actors = new Map((snapshot?.actors || []).map(actor => [actor.id, actor]));
     const victory=!entryPreview&&snapshot?.phase==='victory'?this.victoryPlayback:null;
-    const queue=[...this.roster.filter(a=>a.side==='enemy'),...this.roster.filter(a=>a.side==='player')].map(a=>({...a,depth_y:groundSlots[a.id][1]}));
-    // Ground depth follows approach/return on both stage and preview paths.
-    // Native altitude moves the body only; it must not change occlusion order.
+    const queue=this.roster.map(a=>({...a,depth_y:slots[a.id][1]}));
+    // 5149C0/515310 sort actors by ground Y before adding altitude.
     queue.sort((a,b)=>a.depth_y-b.depth_y);
     const entries=[];
     for (const {id} of queue) {
       if(entryPreview&&snapshot?.lifecycle_events?.some(event=>event.actor_id===id&&event.kind==='entry'))continue;
       const role = this._role(id), actor = actors.get(id), slot = slots[id];
+      const geometry=this._spriteGeometry(role,slot[1]);
       const nativeZ=this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())?this.nativeControl.actor(id)?.native_z_raw:actor?.native_z_raw;
       if(Number.isFinite(nativeZ))slot[1]+=nativeZ*(this.stageMeta?1.125:this.meta.policy.sprite_scale);
       const lifePose=this.lifecycle?.pose(id);
@@ -1095,7 +1123,7 @@ export class BattleView {
       if(visibility){const progress=visibility.complete?1:Math.min(1,Math.max(0,acting.elapsed-visibility.started)/(visibility.complete_ticks*visibility.clock_ms));alpha*=visibility.kind==='appear'?progress:1-progress;}
       else if(actor?.native_visibility?.complete&&actor.native_visibility.kind==='disappear')alpha=0;
       if(!lifePose)alpha*=this.lifecycle?.alpha(id)??1;
-      entries.push({id,role,actor,slot,nativeZ,segment,frame,pair,alpha,acting,appearanceScan});
+      entries.push({id,role,actor,slot,nativeZ,segment,frame,pair,alpha,acting,appearanceScan,geometry});
     }
     return {roots,slots,groundSlots,entries};
   }
@@ -1138,20 +1166,27 @@ export class BattleView {
     // The HUD consumes this frame's positions, including reaction-channel
     // movement and native altitude, rather than reconstructing formation slots.
     this.drawnSlots=slots;
-    for (const {id,role,actor,slot,nativeZ,segment,frame,pair,alpha,acting,appearanceScan} of entries) {
+    for (const {id,role,actor,slot,nativeZ,segment,frame,pair,alpha,acting,appearanceScan,geometry} of entries) {
+      const {scaleX,scaleY,anchorX,anchorY}=geometry;
+      const altitude=Number.isFinite(nativeZ)?nativeZ*(this.stageMeta?1.125:scaleY):0;
       ctx.save();
       if(role.shadow){
-        const s=role.shadow,sourceFrame=role.actions.find(a=>a.index===segment.action_index).first_frame+frame,scale=this.meta.policy.sprite_scale;
+        const s=role.shadow,sourceFrame=role.actions.find(a=>a.index===segment.action_index).first_frame+frame;
         ctx.globalAlpha=alpha;
         drawBattleImage(ctx,this.images.get(s.sheet),(sourceFrame%s.columns)*s.frame_width,Math.floor(sourceFrame/s.columns)*s.frame_height,s.frame_width,s.frame_height,
-          slot[0]+(s.x-role.anchor.x)*scale,slot[1]+(s.y-role.anchor.y)*scale-(Number.isFinite(nativeZ)?nativeZ*(this.stageMeta?1.125:scale):0),s.frame_width*scale,s.frame_height*scale);
+          slot[0]-anchorX+s.x*scaleX,slot[1]-altitude-anchorY+s.y*scaleY,s.frame_width*scaleX,s.frame_height*scaleY);
       }else if(!('shadow' in role)){
         ctx.globalAlpha=alpha*.4;ctx.fillStyle='#071315';ctx.beginPath();
-        const shadow=this.stageMeta?groundSlots[id]:[slot[0],slot[1]+24],footprint=this.stageMeta?this._groundFootprint(role):null;
-        ctx.ellipse(shadow[0],shadow[1],footprint?.radius_x??82,footprint?.radius_y??15,0,0,Math.PI*2);ctx.fill();
+        if(this.stageMeta){
+          const foot=this._groundFootprint(role),scale=this.meta.policy.sprite_scale;
+          const x=slot[0]-anchorX+(role.anchor.x+foot.x/scale)*scaleX;
+          const y=slot[1]-altitude-anchorY+(role.anchor.y+foot.y/scale)*scaleY;
+          ctx.ellipse(x,y,foot.radius_x*scaleX/scale,foot.radius_y*scaleY/scale,0,0,Math.PI*2);
+        }else ctx.ellipse(slot[0],slot[1]+24,82,15,0,0,Math.PI*2);
+        ctx.fill();
       }
       ctx.restore();
-      if(!this.lifecycle?.drawParticles(id,ctx,slot[0],slot[1]))this._sprite(role, segment.action_index, frame, slot[0], slot[1], alpha, pair,appearanceScan);
+      if(!this.lifecycle?.drawParticles(id,ctx,slot[0],slot[1]))this._sprite(role,segment.action_index,frame,slot[0],slot[1],alpha,pair,appearanceScan,geometry);
       if(!entryPreview&&this.statusMeta)drawBattleStatuses(ctx,this.images,this.statusMeta,[{actor,role,slot,alpha}],this.meta.policy.sprite_scale);
       if(acting&&pair?.intrinsic.active&&!run.observations.intrinsic_source_frames.includes(pair.source_frame))run.observations.intrinsic_source_frames.push(pair.source_frame);
     }

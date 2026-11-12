@@ -136,7 +136,7 @@ export class BattleLifecyclePlayback {
           channel.deadline=now;
         }else if(appearance.mode===5||appearance.mode===6){
           if(appearance.render_limit===null){
-            let geometry=this.appearanceBounds?.(channel.resource_id,channel.pose?copy(channel.pose):null);
+            let geometry=this.appearanceBounds?.(channel.resource_id,channel.pose?copy(channel.pose):null,channel.actor_id);
             if(geometry===null||geometry===undefined){
               // Source canvas bounds are a declared conservative adapter when
               // no decoded alpha-pixel bounds are available (e.g. fake canvas).
