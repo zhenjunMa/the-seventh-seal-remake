@@ -389,11 +389,6 @@ def main():
     parser.add_argument('--weights', type=Path, help=f'{MODEL}.pth 的本地路径')
     parser.add_argument('--out', type=Path, default=OUT)
     parser.add_argument('--cache', type=Path, default=CACHE)
-    scope = parser.add_mutually_exclusive_group()
-    scope.add_argument('--battle-result', action='store_true', help='生成战斗胜利结算实际绘制的非空图层')
-    scope.add_argument('--static', action='store_true', help='生成立绘、启动菜单、地图底图、静物及静态战场等图片')
-    scope.add_argument('--fonts', action='store_true', help='从字体轮廓生成 Noto 和 Windows 高清字库')
-    scope.add_argument('--all', action='store_true', help='生成菜单、静态图片、胜利结算和字库')
     parser.add_argument('--font-dir', type=Path, action='append', default=[], help='字体轮廓目录，可重复指定')
     parser.add_argument('--plan', action='store_true', help='只核对缺少的图片和字库数量')
     parser.add_argument('--reuse-only', action='store_true', help='只发布同源高清图，无需运行模型')
@@ -402,30 +397,23 @@ def main():
     with nullcontext() if args.plan else build_lock(args.out / '.build'):
         manifest = args.out / 'manifest.json'
         pack = read_pack(manifest)
-        missing, reusable = {}, {}
-        if not args.fonts:
-            catalog = read('assets/image_catalog.json')
-            originals = catalog['images']
-            paths = set()
-            if args.static or args.all:
-                paths.update(map(canonical, static_images()))
-            if args.battle_result or args.all:
-                paths.update(map(canonical, result_images()))
-            if args.all or not (args.static or args.battle_result):
-                paths.update(path for path in originals if path.startswith(MENU) and path.endswith('.png'))
-            missing = {path: originals[path] for path in sorted(paths) if originals[path]['regions']
-                       and not valid_image(args.out / path.removeprefix('/assets/'), originals[path], pack['images'].get(path))}
-            reusable = reusable_images(args.out, originals, pack['images'], missing)
-            print(f'需补齐 {len(missing)} 张高清图，其中 {len(reusable)} 张可复用', flush=True)
+        catalog = read('assets/image_catalog.json')
+        originals = catalog['images']
+        paths = {path for path in originals if path.startswith(MENU) and path.endswith('.png')}
+        paths.update(map(canonical, static_images()))
+        paths.update(map(canonical, result_images()))
+        missing = {path: originals[path] for path in sorted(paths) if originals[path]['regions']
+                   and not valid_image(args.out / path.removeprefix('/assets/'), originals[path], pack['images'].get(path))}
+        reusable = reusable_images(args.out, originals, pack['images'], missing)
+        print(f'需补齐 {len(missing)} 张高清图，其中 {len(reusable)} 张可复用', flush=True)
 
         fonts = {}
-        if args.fonts or args.all:
-            registered = pack.get('fonts', {})
-            for row in font_profiles():
-                path = canonical(row['image'])
-                if not valid_font(args.out / path.removeprefix('/assets/'), row, registered.get(path)):
-                    fonts[path] = row
-            print(f'需补齐 {len(fonts)} 份高清字库', flush=True)
+        registered = pack.get('fonts', {})
+        for row in font_profiles():
+            path = canonical(row['image'])
+            if not valid_font(args.out / path.removeprefix('/assets/'), row, registered.get(path)):
+                fonts[path] = row
+        print(f'需补齐 {len(fonts)} 份高清字库', flush=True)
         if args.plan or not (missing or fonts):
             return
 

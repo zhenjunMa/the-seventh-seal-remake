@@ -97,80 +97,38 @@ def stage_inventory(manifests):
                         yield canonical(row['path']), layer['source']['width'], layer['source']['height']
 
 
-def pilot_battle(manifests):
-    meta = manifests['/data/party_battle_view.json']['value']
-    selected = defaultdict(set)
-    names = {'001': {'yantu', '001_25'}, '012': set()}
-    for role in meta['roles']:
-        ident = role['id']
-        if ident not in names:
-            continue
-        actions = {action['index']: action for action in role['actions']}
-        sequences = [role['idle'], role['reaction'], *role.get('idle_sequence', {}).get('segments', [])]
-        skills = [role['skill'], *role.get('alternate_skills', [])]
-        for skill in skills:
-            if skill.get('runtime_skill_id') in names[ident] or (ident == '012' and skill is role['skill']):
-                sequences.extend(skill['segments'])
-        for segment in sequences:
-            action = actions[segment['action_index']]
-            selected[action['sheet']].update(segment['frames'])
-            selected[ident].update(action['first_frame'] + frame for frame in segment['frames'])
-    for reference in manifests.values():
-        bank = reference['value']
-        ident = bank.get('role_id')
-        if ident not in names:
-            continue
-        for pair in bank.get('frames', []):
-            if pair['source_frame'] not in selected[ident]:
-                continue
-            selected[canonical(pair['main']['path'])] = None
-            if pair['intrinsic'].get('active'):
-                selected[canonical(pair['intrinsic']['path'])] = None
-    # Include an actual wide boss frame to exercise split rendering.
-    for folder in ('enemy_layers', 'battle_lifecycle'):
-        selected[f'/assets/{folder}/033/frame_0063_main.png'] = None
-    return selected
-
-
-def sources(catalog, battle, pilot=False, patterns=()):
+def sources(catalog, battle, patterns=(), *, skip_action_effects=False):
     images = catalog['images']
-    selected = pilot_battle(battle['manifests']) if pilot else {}
     records = {}
 
-    def add(path, width, height, cells=None, *, sha=None, map_sprite=False):
+    def add(path, width, height, *, sha=None, map_sprite=False):
         if patterns and not any(fnmatchcase(path, pattern) for pattern in patterns):
             return
         original = images[path]
         if (sha and sha != original['sha256']) or original['width'] % width or original['height'] % height:
             raise ValueError(f'动作网格或源图指纹与原图集不一致：{path}')
-        row = (width, height, cells, map_sprite)
+        row = (width, height, map_sprite)
         if path in records and records[path] != row:
             raise ValueError(f'同一素材有不同的动作网格：{path}')
         records[path] = row
 
     for path, width, height in map_inventory():
-        if not pilot or any(path.startswith(p) for p in (
-            '/assets/ROLE_001/', '/assets/opening_roles/001/', '/assets/opening_roles/013/', '/assets/map_effects/role_013/'
-        )):
-            add(path, width, height, map_sprite=True)
-    if not pilot:
-        for path, width, height in map_object_inventory(images):
-            add(path, width, height, map_sprite=True)
-        for path, width, height in stage_inventory(battle['manifests']):
-            add(path, width, height)
-    effects = {'effect-_DutyN', 'effect-BFr01_Dn', 'effect-BFr01_Nm'}
+        add(path, width, height, map_sprite=True)
+    for path, width, height in map_object_inventory(images):
+        add(path, width, height, map_sprite=True)
+    for path, width, height in stage_inventory(battle['manifests']):
+        add(path, width, height)
+
     for row in battle['assets']:
         path, group = row['path'], row['group']
-        stem = Path(path).stem
-        if not group.startswith(('role-', 'effect-')) or stem.endswith('_mask'):
+        if not group.startswith(('role-', 'effect-')) or Path(path).stem.endswith('_mask'):
             continue
-        if pilot and (stem == 'shadow' or stem.endswith('_shadow')):
+        if skip_action_effects and group.startswith('effect-') and not group.startswith('effect-status-'):
             continue
-        if not pilot or path in selected or group in effects:
-            add(path, row['tile_width'], row['tile_height'], selected.get(path), sha=row['sha256'])
+        add(path, row['tile_width'], row['tile_height'], sha=row['sha256'])
 
     images_out, groups = {}, defaultdict(list)
-    for path, (width, height, cells, map_sprite) in sorted(records.items()):
+    for path, (width, height, map_sprite) in sorted(records.items()):
         original = images[path]
         columns = original['width'] // width
         frames = defaultdict(list)
@@ -180,8 +138,7 @@ def sources(catalog, battle, pilot=False, patterns=()):
             if (x+w-1)//width != column or (y+h-1)//height != direction:
                 raise ValueError(f'原图集裁片跨帧：{path}')
             index = direction * columns + column
-            if cells is None or index in cells:
-                frames[index].append(region)
+            frames[index].append(region)
         if not frames:
             continue
         images_out[path] = {**{k: original[k] for k in ('width', 'height', 'sha256')},
@@ -449,7 +406,7 @@ def main():
     parser.add_argument('--weights', type=Path, help=f'{MODEL}.pth 的本地路径')
     parser.add_argument('--out', type=Path, default=OUT)
     parser.add_argument('--cache', type=Path, default=CACHE)
-    parser.add_argument('--pilot', action='store_true', help='仅处理英格妮、沙帝斯、雪泥怪、燕突、破霞及一张超宽帧')
+    parser.add_argument('--skip-action-effects', action='store_true', help='招式和道具的施放特效沿用原帧，仍导出角色动作和状态特效')
     parser.add_argument('--include', action='append', default=[], help='按原素材路径筛选，可重复，可用通配符')
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--plan', action='store_true', help='只统计现有素材范围')
@@ -458,7 +415,7 @@ def main():
     if not (args.plan or args.install_from) and not (args.weights and args.weights.is_file()):
         parser.error('生成图集需要 --weights 指向本地模型文件')
     catalog = read('assets/image_catalog.json')
-    images, groups = sources(catalog, inventory(['--plan']), args.pilot, args.include)
+    images, groups = sources(catalog, inventory(['--plan']), args.include, skip_action_effects=args.skip_action_effects)
     if not groups:
         parser.error('所选范围没有可用的动画帧')
     print(f'选中 {len(images)} 个图条或独立帧 · {sum(map(len, groups.values()))} 个非空帧 · {len(groups)} 组', flush=True)
@@ -469,13 +426,12 @@ def main():
             install(args.install_from, args.out, images, groups)
             return
         pages = None
-        full = not (args.pilot or args.include)
-        if full:
+        if not args.include:
             planned = sum(map(len, groups.values()))
             groups, pages = resume_frames(args.out, images, groups)
             pending = sum(map(len, groups.values()))
             print(f'已校验并复用 {planned-pending} 帧 · 待生成 {pending} 帧', flush=True)
-        enhance = upscaler(args.weights, args.cache, preserve_alpha=full) if groups else None
+        enhance = upscaler(args.weights, args.cache, preserve_alpha=not args.include) if groups else None
         build(catalog, images, groups, enhance, args.out, pages)
 
 

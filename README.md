@@ -4,72 +4,64 @@
 
 ## 快速开始
 
-需要 Python 3.12+、Node.js、FFmpeg（含 FFprobe）和保留目录结构的完整原版安装。请在仓库根目录执行以下命令，并将示例路径替换为自己合法取得的原版安装目录。
+需要 Python 3.12+、Node.js、FFmpeg（含 FFprobe）和保留目录结构的完整原版安装。请在仓库根目录执行命令。首次运行前，创建虚拟环境并安装依赖。
 
-Windows 下用 `python -m venv .venv` 创建虚拟环境，后续将 `.venv/bin/python` 换成 `.\.venv\Scripts\python.exe`。
-
-**首次安装和导出**
-
-```bash
+```sh
 python3 -m venv .venv
 .venv/bin/python -m pip install -r remake/runtime/requirements.txt
-.venv/bin/python -B remake/runtime/tools/build_runtime.py --target media --original-dir "/path/to/DiQiFengYin" --run
 ```
 
-导出工具以只读方式校验原版文件，生成运行数据和媒体，保留自定义参数并复用校验通过的产物。
+Windows 下用 `python -m venv .venv` 创建虚拟环境，并将 `.venv/bin/python` 换成 `.\.venv\Scripts\python.exe`。
 
-**启动游戏**
+### 1. 导出素材
 
-```bash
+```sh
+.venv/bin/python -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/DiQiFengYin" --run
+```
+
+| 参数 | 作用 |
+| --- | --- |
+| `--original-dir <目录>` | 指定原版游戏安装目录。脚本只读原版文件。 |
+| `--run` | 导出运行数据、图片、音频和视频。省略时只检查并列出计划。 |
+| `--ignore-fingerprint` | 确认原版安装来源后，可在整文件指纹与基准有差异时使用。必需文件和导出产物仍须通过校验。 |
+
+### 2. 启动游戏
+
+```sh
 .venv/bin/python -B remake/runtime/serve.py
 ```
 
-服务运行时在浏览器打开 [本地游戏](http://127.0.0.1:8767/)，结束后按 `Ctrl+C` 停止服务。
+在浏览器打开 [本地游戏](http://127.0.0.1:8767/)。结束后按 `Ctrl+C` 停止服务。
 
-Windows 用户可在仓库根目录运行 `.\.venv\Scripts\python.exe -X utf8 -B remake\runtime\serve.py` 启动服务。需要双击启动时，可以把这条命令封装成本地 `.cmd` 或 `.bat` 脚本。
+| 参数 | 作用 |
+| --- | --- |
+| `--port <端口>` | 修改服务端口，默认 `8767`。 |
 
-若已确认使用当前原版安装，可在导出命令中加 `--ignore-fingerprint` 忽略整文件指纹和清单差异。必需文件、剧情与规则数据、完整运行定义和图片输出仍须通过校验。固定定义保留基准来源描述，实际来源指纹记录在本机构建清单中；原版文件保持只读。
+### 3. 生成高清素材（可选）
+
+用装有 Real-ESRGAN 的 Python 环境运行。第一条生成界面、静态场景和字库，第二条生成动画图集。
+
+```sh
+python -B remake/runtime/tools/export_hd_menu.py --weights "/path/to/RealESRGAN_x4plus_anime_6B.pth" --font-dir "/path/to/font-outlines"
+python -B remake/runtime/tools/export_hd_animations.py --weights "/path/to/RealESRGAN_x4plus_anime_6B.pth"
+```
+
+| 参数 | 适用脚本 | 作用 |
+| --- | --- | --- |
+| `--weights <文件>` | 两个脚本 | 指定本地 Real-ESRGAN 模型权重。 |
+| `--font-dir <目录>` | `export_hd_menu.py` | 指定字体轮廓目录，可重复传入。 |
+| `--skip-action-effects` | `export_hd_animations.py` | 让招式和道具的施放特效沿用原版帧，缩小新生成的高清动画包。 |
+| `--plan` | 两个脚本 | 只检查导出范围和数量。 |
+
+重建高清字库需要 `NotoSerifCJKsc-Regular.otf`、`NotoSansCJKsc-Regular.otf`、`simsun.ttc` 和 `arial.ttf`。Noto 版本见原字库清单的 `font_source`。
+
+素材默认输出到 `remake/runtime/web/assets/hd/`，已有且通过校验的素材会复用。「高清素材」默认关闭，生成后在游戏画面下方开启并刷新页面。缺少高清版的素材会用原版显示。
+
+## 操作与存档
 
 方向键或 `WASD` 移动，`Shift` 切换跑走，`Tab` 切换队员，`Esc` 打开菜单或返回，空格交互，空格或 `Enter` 确认，`F4` 快速保存，`F5` 快速读取。
 
 `remake/saves/` 中的 `SaveGame0.Dat` 至 `SaveGame19.Dat` 为普通档，`Game.SAV` 为快速档。
-
-游戏画面下方的「高清素材」默认关闭。切换后刷新页面生效，设置保存在当前浏览器。开启后，游戏逐张优先使用已安装的高清版，未提供、无法读取或尺寸不符的图片使用原版。
-
-高清素材包放在 `remake/runtime/web/assets/hd/`。开关适用于对话立绘和底板、启动菜单的背景与选项图、载入背景、世界地图、探索底图和静态物件、静态战场图层、战斗胜利结算，以及游戏内菜单的底板、按钮、图标、卡面和人物站立帧。高清包中的图片沿用原素材相对路径。以一张 2 倍立绘为例，将 `496×616` PNG 放在 `dialogue_ui/faces_026.png`，并在高清包根目录写入 `manifest.json`。清单的宽高是原图尺寸，`scale` 支持 2、3 或 4。
-
-```json
-{
-  "version": 1,
-  "images": {
-    "/assets/dialogue_ui/faces_026.png": { "width": 248, "height": 308, "scale": 2 }
-  }
-}
-```
-
-高清包可另外登记从字体轮廓重绘的 Noto 和 Windows 字库。清单的 `fonts` 将原字库路径映射到原字库的 SHA-256。同名高清 PNG 和字形坐标 JSON 放在高清包的对应路径。字形按 2 倍像素绘制，字号、字距和换行使用原字库的布局数据。高清字形直接绘制，回退到普通字库的文字继续遵循「平滑显示」设置。
-
-完成首次素材构建后，可用 `export_hd_menu.py` 生成 2 倍静态高清包。全量模式包含游戏内菜单、战斗界面和胜利结算、对话和序章提示、启动菜单、载入画面、世界地图、探索底图和静物、静态战场、城镇服务和小游戏及高清字库。图片导出需要装有 Real-ESRGAN 的 Python 环境和本地模型权重。原图指纹和尺寸相同的图片可复用已校验的高清图，其余图片可复用推理缓存。
-
-```sh
-python -B remake/runtime/tools/export_hd_menu.py --all \
-  --weights /path/to/RealESRGAN_x4plus_anime_6B.pth \
-  --font-dir /path/to/font-outlines
-```
-
-`--font-dir` 可重复指定。生成两套字库需要 `NotoSerifCJKsc-Regular.otf`、`NotoSansCJKsc-Regular.otf`、`simsun.ttc` 和 `arial.ttf`。Noto 字体轮廓使用原字库清单 `font_source` 记录的版本。已有且校验通过的高清图和字库会直接复用。
-
-单独运行时，默认生成游戏内菜单，包括人物站立帧。`--static` 生成其他界面和静态场景图片，`--battle-result` 生成胜利结算底板、提示卡和胜利光效，`--fonts` 只生成字库，只需要 Pillow 和字体轮廓。加入 `--plan` 可检查缺少及可复用的数量，加入 `--reuse-only` 可只发布同源高清图。输出默认写到 `remake/runtime/web/assets/hd/`。
-
-探索角色、NPC、地图动态物件、战斗人物、技能特效和战场动态层共用「高清素材」开关。动画纹理页及其索引放在 `remake/runtime/web/assets/hd/animations/`。开启后，游戏在准备地图或战斗动作时加载所需页。有可用的高清帧就采用高清像素，缺帧、损坏或源图不匹配时使用对应原帧。动作节奏、角色锚点、叠加光效和阴影沿用原数据。
-
-先完成游戏素材构建，再使用装有 Real-ESRGAN 的 Python 环境离线导出。以下命令生成英格妮、沙帝斯、雪泥怪、燕突、破霞和一张超宽敌人帧的试玩包。
-
-```sh
-python -B remake/runtime/tools/export_hd_animations.py --pilot --weights /path/to/RealESRGAN_x4plus_anime_6B.pth
-```
-
-去掉 `--pilot` 可生成全量包，加入 `--plan` 可先查看覆盖规模。全量导出会校验并复用当前输出目录中已有的高清帧，构建中断后可以用同一条命令续跑。可以先用 `--out <暂存目录>` 生成，再用 `--install-from <暂存目录>` 核对帧覆盖、源图指纹和 PNG 页，全部通过后发布游戏读取的索引。
 
 ## 游戏事件索引
 
@@ -124,6 +116,24 @@ python -B remake/runtime/tools/export_hd_animations.py --pilot --weights /path/t
 - `tools/` 存放导出和检查工具。开发约定见 [remake/AGENTS.md](remake/AGENTS.md)。
 
 导出完成后，运行 `.venv/bin/python -B remake/prototype/serve.py` 可打开 [原型预览](http://127.0.0.1:8765/)。
+
+<details>
+<summary>自定义高清素材包格式</summary>
+
+高清包位于 `remake/runtime/web/assets/hd/`，其中的图片沿用原素材相对路径。以一张 2 倍立绘为例，将 `496×616` PNG 放在 `dialogue_ui/faces_026.png`，并在高清包根目录写入 `manifest.json`。清单的宽高是原图尺寸，`scale` 支持 2、3 或 4。
+
+```json
+{
+  "version": 1,
+  "images": {
+    "/assets/dialogue_ui/faces_026.png": { "width": 248, "height": 308, "scale": 2 }
+  }
+}
+```
+
+高清包可另外登记从字体轮廓重绘的 Noto 和 Windows 字库。清单的 `fonts` 将原字库路径映射到原字库的 SHA-256。同名高清 PNG 和字形坐标 JSON 放在高清包的对应路径。字形按 2 倍像素绘制，字号、字距和换行使用原字库的布局数据。高清字形直接绘制，回退到普通字库的文字继续遵循「平滑显示」设置。
+
+</details>
 
 ## 版权说明
 
