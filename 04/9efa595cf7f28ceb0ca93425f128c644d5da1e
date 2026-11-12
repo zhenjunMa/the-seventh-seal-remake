@@ -1,0 +1,26 @@
+README.md
+  s_74cda7a33b4f04::t_82704df92c138c 7,9,14,16,18-19,22-26,28,30-32,34,36-38,40,42,45-46,49-51,53-54,60,62,64,120-122,124-136
+  s_74cda7a33b4f04::t_988b0c54838f67 52,56,58,123
+  s_74cda7a33b4f04::t_8387b14950392d 137
+remake/runtime/tools/export_hd_animations.py
+  s_74cda7a33b4f04::t_00e0f6ffcaf885 104,110,116-121,124,128,131,141,429,434
+  s_74cda7a33b4f04::t_171bca35b548e8 100,126,409,418
+remake/runtime/tools/export_hd_menu.py
+  s_74cda7a33b4f04::t_dba028f84c2b55 400-408,411-416
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "049efa595cf7f28ceb0ca93425f128c644d5da1e",
+  "prompts": {},
+  "sessions": {
+    "s_74cda7a33b4f04": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1cda6-35e5-7a41-bf96-86c0b5018d90",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
