@@ -18,6 +18,8 @@ import {runtimeContent,requireRegisteredRoles} from './core/content/content_regi
 import {validateBattleStatusView,battleStatusAssets,drawBattleStatuses} from './battle_status_view.mjs';
 import {validateForestStage,forestStageAssets,drawForestStageBackground,battleStageCameraOffset} from './forest_stage.mjs';
 const clone = value => structuredClone(value);
+const DAMAGE_TEXT_TICK_MS = 20;
+const DAMAGE_TEXT_TICKS = 30;
 const abortError = reason => Object.assign(new Error(reason || '战斗表现已取消'), {name: 'AbortError'});
 const urlAllowed = path => typeof path === 'string' &&
   /^\/(?:assets\/|data\/)[A-Za-z0-9_./-]+$/.test(path) &&
@@ -714,24 +716,44 @@ export class BattleView {
     if(result.skipped||result.item_used||result.item_effect||result.revived||result.supported&&!(result.hp_delta>0))return;
     const miss=result.hit===false||['miss','MISS'].includes(result.hit);
     if(!miss&&!(Number.isFinite(result.damage)&&result.damage>=0))return;
-    const targetId=channel.result.target_id,slot=this._slots(channel)[targetId];if(!slot)return;
-    this.damageTexts=this.damageTexts.filter(e=>now-e.created_at<900);
-    const lane=this.damageTexts.filter(e=>e.target_id===targetId).length;
-    this.damageTexts.push({id:++this.damageTextSerial,target_id:targetId,text:miss?'MISS':String(result.supported?result.hp_delta:result.damage),miss,healed:Boolean(result.supported),created_at:now,
-      x:this.stageMeta?slot[0]+34+Math.floor(lane/4)*28:Math.max(20,Math.min(940,slot[0]+34+Math.floor(lane/4)*28)),ground_y:slot[1],
-      y:Math.max(28,slot[1]-70-(lane%4)*24)});
+    const targetId=result.target_id??channel.result.target_id;
+    if(!targetId)return;
+    this.damageTexts=this.damageTexts.filter(e=>now-e.created_at<DAMAGE_TEXT_TICKS*DAMAGE_TEXT_TICK_MS);
+    // GAME.exe 50442D raises existing feedback for this target to 1.5 digit heights.
+    const digitHeight=this.damageTextAssets.damage.height;
+    for(const e of this.damageTexts)if(e.target_id===targetId){
+      e.riseOffset=digitHeight+(digitHeight>>1)-3*Math.floor((now-e.created_at)/DAMAGE_TEXT_TICK_MS);
+    }
+    this.damageTexts.push({id:++this.damageTextSerial,target_id:targetId,text:miss?'MISS':String(result.supported?result.hp_delta:result.damage),miss,healed:Boolean(result.supported),created_at:now,riseOffset:0});
   }
 
-  _drawDamageTexts(now){
-    this.damageTexts=this.damageTexts.filter(e=>now-e.created_at<900);
+  _drawDamageTexts(now,groundSlots){
+    this.damageTexts=this.damageTexts.filter(e=>now-e.created_at<DAMAGE_TEXT_TICKS*DAMAGE_TEXT_TICK_MS);
     const c=this.context,scaleX=this.stageMeta?1.125:1.5,scaleY=1.125;
-    for(const e of this.damageTexts){const age=Math.max(0,now-e.created_at);
+    for(const e of this.damageTexts){
+      const ground=groundSlots[e.target_id];if(!ground)continue;
+      // 515230 uses projected actor X/Y without Z. Undo the view's
+      // sprite-specific shadow footprint to recover that ground origin.
+      const foot=this.stageMeta?this._groundFootprint(this._role(e.target_id)):null;
+      const ticks=Math.max(0,Math.floor((now-e.created_at)/DAMAGE_TEXT_TICK_MS));
       const asset=this.damageTextAssets[e.miss?'miss':e.healed?'healed':'damage'];
       const frames=e.miss?[asset.frames[0]]:[...e.text].map(digit=>asset.frames[Number(digit)]);
-      const center=this.stageMeta?Math.max(140,Math.min(820,e.x-this._stageCameraOffset(e.ground_y))):e.x;
-      const width=asset.width*scaleX,height=asset.height*scaleY,x=center-width*frames.length/2,y=e.y-age/60-height;
-      c.save();c.globalAlpha=1-age/900;
-      for(const [index,frame]of frames.entries())drawBattleImage(c,this.images.get('/'+frame.image),x+index*width,y,width,height);
+      // 504590 draws enlarged digits for the first five ticks, centered
+      // over the normal-width run that starts at the target's X.
+      const enlarged=!e.miss&&ticks<5;
+      const width=asset.width+(enlarged?(asset.width>>1):0),height=asset.height+(enlarged?(asset.height>>1):0);
+      const leftShift=((width*frames.length)>>1)-((asset.width*frames.length)>>1);
+      let [x,y]=ground;
+      if(foot){
+        // The source truncates projected X before adding the screen center.
+        const projectedX=(x-foot.x-480)/scaleX;
+        x=480+Math.trunc(projectedX+Math.sign(projectedX)*1e-9)*scaleX;
+        y=Math.round((y-foot.y)/scaleY)*scaleY;
+      }
+      x-=leftShift*scaleX;
+      y+=(1-e.riseOffset-3*ticks)*scaleY;
+      c.save();c.globalAlpha=e.miss?1:1-Math.max(0,ticks-19)*20/256;
+      for(const [index,frame]of frames.entries())drawBattleImage(c,this.images.get('/'+frame.image),x+index*width*scaleX,y,width*scaleX,height*scaleY);
       c.restore();
     }
   }
@@ -1093,7 +1115,7 @@ export class BattleView {
         if(!run.observations.effect_ids.includes(asset.id))run.observations.effect_ids.push(asset.id);
       }
     }
-    if(!entryPreview)this._drawDamageTexts(now);
+    if(!entryPreview)this._drawDamageTexts(now,groundSlots);
     ctx.restore();
     }finally{this.drawing=false;for(const lease of this.retiredLeases.splice(0))lease.release();}
   }

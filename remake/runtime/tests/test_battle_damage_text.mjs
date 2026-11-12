@@ -23,7 +23,7 @@ async function assetLoader(asset){
 }
 async function fixture(){
   const calls=[],stack=[],ctx={globalAlpha:1,globalCompositeOperation:'source-over',
-    setTransform(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},moveTo(){},lineTo(){},stroke(){},ellipse(){},fill(){},
+    setTransform(){},translate(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},moveTo(){},lineTo(){},stroke(){},ellipse(){},fill(){},
     createLinearGradient:()=>({addColorStop(){}}),
     save(){stack.push({globalAlpha:this.globalAlpha,globalCompositeOperation:this.globalCompositeOperation});},
     restore(){Object.assign(this,stack.pop());},
@@ -66,12 +66,20 @@ test('Distinct source hits retain separate visible values and positions',async()
   f.finish();await run.done;
 });
 
-test('A late RAF starts the 900ms feedback lifetime when the source contact is processed',async()=>{
+test('A late RAF starts the original feedback position and 600ms lifetime at contact',async()=>{
   const f=await fixture(),run=start(f.view);f.draw(0);
   const contact=f.view.run.steps.findIndex(step=>step.event);
   f.until(()=>f.view.run.visited===contact-1);
-  const at=f.now+5000;assert.ok(f.draw(at).some(c=>c.text==='37'));assert.equal(run.count(),1);
-  assert.ok(f.draw(at+899).some(c=>c.text==='37'&&c.alpha>0));assert.ok(!f.draw(at+901).some(c=>c.text==='37'));
+  const at=f.now+5000,damageAt=now=>f.draw(now).find(c=>c.text==='37');
+  const first=damageAt(at);assert.ok(first);assert.equal(run.count(),1);
+  const [x,y]=f.view.drawnSlots['001'];
+  assert.deepEqual([first.x,first.y,first.width,first.height],[x-9*1.5,y+1.125,54*1.5,27*1.125]);
+  assert.equal(damageAt(at+19).y,first.y);
+  assert.equal(damageAt(at+20).y,first.y-3*1.125);
+  const settled=damageAt(at+100);
+  assert.deepEqual([settled.x,settled.width],[x,36*1.5]);
+  assert.ok(damageAt(at+599)?.alpha>0);
+  assert.equal(damageAt(at+600),undefined);
   f.finish();await run.done;
 });
 
@@ -86,7 +94,7 @@ test('MISS and a legitimate zero hit each produce feedback while skipped contact
   const f=await fixture(),run=start(f.view,[{hit:false,damage:0,remainingHp:1000},hit(0),skipped()]);f.draw(0);
   const calls=f.until(()=>run.count()===2),miss=calls.find(c=>c.text==='MISS'),zero=calls.find(c=>c.text==='0');
   assert.equal(miss.asset,'fight_miss_text');assert.equal(miss.width,61*1.5);assert.equal(miss.height,23*1.125);
-  assert.equal(zero.asset,'fight_var_text');assert.equal(zero.width,18*1.5);assert.equal(zero.height,18*1.125);
+  assert.equal(zero.asset,'fight_var_text');assert.equal(zero.width,27*1.5);assert.equal(zero.height,27*1.125);
   f.finish();await run.done;
 });
 
