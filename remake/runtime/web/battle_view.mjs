@@ -397,6 +397,7 @@ export class BattleView {
       this.playbackRuntime.configureLifecycle(this.lifecycleMeta,{
         appearanceBounds:(roleId,pose)=>this._appearanceBounds(roleId,pose),
         appearanceRenderMs:1000/60,
+        skipPlayerEntryAppearance:true,
         disappearanceEffect:(actorId,roleId,mode,event)=>this._particleEffect(actorId,roleId,mode,event),
         appearanceEffect:(actorId,roleId,mode,event)=>this._particleEffect(actorId,roleId,mode,event,true),
       });

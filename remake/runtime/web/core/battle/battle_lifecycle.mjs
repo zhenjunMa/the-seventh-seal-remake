@@ -24,13 +24,14 @@ export const APPEARANCE_ALPHA_ADAPTER=Object.freeze({
 // event field name fade_increment_raw. It is never an opacity speed.
 const compiledManifests=new WeakMap();
 export class BattleLifecyclePlayback {
-  constructor(manifest,{appearanceBounds=null,appearanceEffect=null,appearanceRenderMs=0,disappearanceEffect=null,nativeBridge=null,onFrame=null,onControl=null}={}){
+  constructor(manifest,{appearanceBounds=null,appearanceEffect=null,appearanceRenderMs=0,skipPlayerEntryAppearance=false,disappearanceEffect=null,nativeBridge=null,onFrame=null,onControl=null}={}){
     this.onFrame=onFrame;
     this.onControl=onControl;
     this.nativeBridge=nativeBridge;
     this.disappearanceEffect=disappearanceEffect;
     this.appearanceEffect=appearanceEffect;
     this.appearanceRenderMs=appearanceRenderMs;
+    this.skipPlayerEntryAppearance=skipPlayerEntryAppearance;
     need(appearanceBounds===null||typeof appearanceBounds==='function','Lifecycle appearance bounds provider invalid');this.appearanceBounds=appearanceBounds;
     need(Array.isArray(manifest?.roles),'Lifecycle manifest roles missing');this.roles=Object.isFrozen(manifest)?compiledManifests.get(manifest):null;
     if(!this.roles){this.roles=new Map();
@@ -74,6 +75,7 @@ export class BattleLifecyclePlayback {
     need(index===null||index===undefined||skill,'Exact selected lifecycle source skill missing');
     if(skill&&event.source_id_raw!==null&&event.source_id_raw!==undefined)need(skill.id===event.source_id_raw,'Lifecycle selected source ID differs');
     const channel={event:copy(event),actor_id:actor.id,resource_id:roleId,role,side:roster?.side??actor.side??role.side,skill,cursor:0,pose:null,deadline:now,appearance:null,blocked:null,mode:'sequence',nativeBridge:this.nativeBridge?.(actor.id)??null,vertical_wait:false,record_visited:-1,entry_origin_x:actor.native_x_raw};
+    channel.skipAppearance=this.skipPlayerEntryAppearance&&event.kind==='entry'&&channel.side==='player';
     if(event.kind==='escape'){
       // 50E4B0 reverses the 51D960 eight-pixel path with cursor step -10.
       // The fixed 640px battle plane retains the existing camera adapter.
@@ -96,7 +98,7 @@ export class BattleLifecyclePlayback {
     }
     // Entry sprites before command7 prepare its pose; they must stay hidden
     // until the appearance renderer starts revealing that pose.
-    const awaitingAppearance=event.kind==='entry'&&skill?.timeline.some(step=>step.kind==='command'&&step.command_raw===7);
+    const awaitingAppearance=!channel.skipAppearance&&event.kind==='entry'&&skill?.timeline.some(step=>step.kind==='command'&&step.command_raw===7);
     this.channels.set(actor.id,channel);this.alphas.set(actor.id,awaitingAppearance?0:1);return channel;
   }
   _finish(channel){
@@ -177,8 +179,14 @@ export class BattleLifecyclePlayback {
         }
         channel.nativeBridge?.appearanceComplete?.();channel.appearance=null;channel.blocked=null;this.alphas.set(channel.actor_id,1);
       }
-      if(channel.cursor>=channel.skill.timeline.length){this._finish(channel);return;}
-      const step=channel.skill.timeline[channel.cursor++];
+      const timeline=channel.skill.timeline;
+      // Skip the player entry reveal on the same tick as the next sprite.
+      while(channel.skipAppearance&&timeline[channel.cursor]?.command_raw===7){
+        channel.cursor++;
+        channel.nativeBridge?.appearanceComplete?.();
+      }
+      if(channel.cursor>=timeline.length){this._finish(channel);return;}
+      const step=timeline[channel.cursor++];
       if(step.raw_hex&&step.chr_record_index!==channel.record_visited){channel.nativeBridge?.record(step.raw_hex);channel.record_visited=step.chr_record_index;channel.record_frame=0;}
       if(step.kind==='sprite'){
         // DGP explicit frame tables can repeat/reorder physical frames. Sound
