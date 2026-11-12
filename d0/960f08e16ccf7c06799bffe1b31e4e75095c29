@@ -1,0 +1,21 @@
+remake/runtime/web/battle_menu_view.mjs
+  s_fcd80cbc415a82::t_1fcaaeabc7b40c 149-158,321-322,326
+remake/runtime/web/battle_shell.css
+  s_fcd80cbc415a82::t_1fcaaeabc7b40c 8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "d0960f08e16ccf7c06799bffe1b31e4e75095c29",
+  "prompts": {},
+  "sessions": {
+    "s_fcd80cbc415a82": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ce87-769d-7fd3-861f-c5f7863bc94e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
