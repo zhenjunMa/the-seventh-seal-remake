@@ -146,7 +146,16 @@ export class BattleMenuView{
   focusListEntry(){this.syncInfo();const button=this.listButtons[this.listIndex-this.listOffset];if(this.entries?.length)button?.focus({preventScroll:true});else if(this.stage==='skills'){this.setInfo('此分类没有招式。');this.categoryButtons[this.skillCategory].focus({preventScroll:true});}}
   refreshItems(){const previous=this.entries?.[this.listIndex];this.entries=this.battle.items().map(item=>({id:item.instance_id,name:item.name,quantity:item.quantity,description:item.description??item.name,item,available:true}));this.listIndex=Math.min(this.listIndex,Math.max(0,this.entries.length-1));this.listOffset=Math.max(0,Math.min(this.listOffset,Math.max(0,this.entries.length-6)));const selected=this.entries[this.listIndex];if(this.stage==='items'&&(previous?.id!==selected?.id||previous?.name!==selected?.name))this.syncInfo();}
   openItems(){this.refreshItems();if(!this.entries.length){this.reject('没有可用的药品。');return;}this.openList('items');}
-  openList(stage){this.setStage(stage);this.draft=null;const memory=this.getSettings?.().battleCursor==='memory'?this.memory.get(this.snapshot.player_id):null;this.listIndex=Math.min(memory?.list??0,Math.max(0,this.entries.length-1));this.listOffset=Math.max(0,this.listIndex-5);this.cue('menuOpen');this.syncWheel();this.syncList();this.focusListEntry();}
+  openList(stage){
+    this.setStage(stage);this.draft=null;
+    const memory=this.getSettings?.().battleCursor==='memory'?this.memory.get(this.snapshot.player_id):null;
+    this.listIndex=Math.min(memory?.list??0,Math.max(0,this.entries.length-1));this.listOffset=Math.max(0,this.listIndex-5);
+    this.cue('menuOpen');this.syncWheel();this.syncList();
+    if(stage==='skills'){
+      this.categoryButtons[this.skillCategory].focus({preventScroll:true});
+      this.syncInfo();
+    }else this.focusListEntry();
+  }
   syncList(){const show=['skills','items'].includes(this.stage),menu=this.menus.get(this.stage==='items'?'fight002':'fight001');this.categoryButtons?.forEach((b,index)=>{b.hidden=this.stage!=='skills';b.setAttribute('aria-pressed',String(index===this.skillCategory));b.setAttribute('aria-disabled',String(!this.available()));});this.listButtons.forEach((b,i)=>{const entry=this.entries?.[this.listOffset+i];b.hidden=!show||!entry;if(!show||!entry)return;const w=menu.widgets.find(w=>w.name.toLowerCase()==='list'+(i+1)),r=w.rect;this.place(b,467+r.left,274+r.top,r.right-r.left+1,r.bottom-r.top+1);b.dataset.entryId=entry.id;b.setAttribute('aria-label',entry.name+(entry.quantity!==undefined?` ×${entry.quantity}`:''));b.setAttribute('aria-disabled',String(!entry.available||!this.available()));});this.previous.hidden=this.next.hidden=!show;this.previous.setAttribute('aria-disabled',String(this.listOffset===0));this.next.setAttribute('aria-disabled',String(this.listOffset+6>=(this.entries?.length??0)));}
   moveList(amount){if(!this.entries?.length)return;const before=this.listIndex;this.listIndex=Math.max(0,Math.min(this.entries.length-1,this.listIndex+amount));if(before===this.listIndex)return;this.listOffset=Math.max(0,Math.min(this.listOffset,this.listIndex));if(this.listIndex>=this.listOffset+6)this.listOffset=this.listIndex-5;this.syncList();this.remember();this.syncInfo();this.listButtons[this.listIndex-this.listOffset]?.focus({preventScroll:true});this.cue('menuSelect');}
   selectEntry(index){const entry=this.entries?.[index];if(!entry?.available||!this.available()){this.reject(this.stage==='skills'&&this.battle.skillUnavailableReason?.(entry?.id)||'此项当前无法使用。');return;}this.listIndex=index;this.remember();if(this.stage==='skills')this.chooseSkill(entry.skill,'skills');else{this.prefetchCommand({actor_id:this.snapshot.player_id,item_id:entry.item.id});this.draft={kind:'item',instanceId:entry.id,actorId:this.snapshot.player_id,name:entry.name};this.openTarget('items');}}
@@ -309,11 +318,12 @@ export class BattleMenuView{
       const category=menu.widgets.find(w=>w.name===String(this.skillCategory+1).padStart(3,'0'));
       this.image(category.selected_images.at(-1)??category.active_images.at(-1),x+category.draw_point_raw.x,y+category.draw_point_raw.y);
     }
-    this.listButtons.forEach((_,i)=>{
+    const focusedRow=showSkills?this.doc.activeElement:null;
+    this.listButtons.forEach((button,i)=>{
       const entry=this.entries?.[this.listOffset+i];if(!entry)return;
       const row=menu.widgets.find(w=>w.name.toLowerCase()==='list'+(i+1));
       const {rect,draw_point_raw:drawPoint}=row;
-      const selected=this.listIndex===this.listOffset+i;
+      const selected=showSkills?button===focusedRow:this.listIndex===this.listOffset+i;
       const rowY=y+rect.top,rowHeight=rect.bottom-rect.top+1;
       if(selected)this.image(row.active_images[0],x+drawPoint.x,showSkills?rowY:y+drawPoint.y);
       const nameY=showSkills?rowY+Math.floor((rowHeight-nameFontSize)/2):rowY;
