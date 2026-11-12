@@ -1,0 +1,22 @@
+remake/runtime/web/core/resources/bitmap_residency.mjs
+  s_e9934f1e6ef994::t_8e26c36e22e824 5-11
+remake/runtime/web/phaser/rendering/texture_cache.mjs
+  s_e9934f1e6ef994::t_8e26c36e22e824 12-18,106
+  s_e9934f1e6ef994::t_c414f30635e2c4 119-126
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "7f0537f6a60fd6ffc28ab6b216253e72df5ca9a4",
+  "prompts": {},
+  "sessions": {
+    "s_e9934f1e6ef994": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1cda6-db2d-7cf1-8b66-3ec17e086bc6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
