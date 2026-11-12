@@ -101,13 +101,13 @@ def sources(catalog, battle, patterns=(), *, skip_action_effects=False):
     images = catalog['images']
     records = {}
 
-    def add(path, width, height, *, sha=None, map_sprite=False):
+    def add(path, width, height, *, sha=None, map_sprite=False, effect_group=None):
         if patterns and not any(fnmatchcase(path, pattern) for pattern in patterns):
             return
         original = images[path]
         if (sha and sha != original['sha256']) or original['width'] % width or original['height'] % height:
             raise ValueError(f'动作网格或源图指纹与原图集不一致：{path}')
-        row = (width, height, map_sprite)
+        row = (width, height, map_sprite, effect_group)
         if path in records and records[path] != row:
             raise ValueError(f'同一素材有不同的动作网格：{path}')
         records[path] = row
@@ -125,10 +125,11 @@ def sources(catalog, battle, patterns=(), *, skip_action_effects=False):
             continue
         if skip_action_effects and group.startswith('effect-') and not group.startswith('effect-status-'):
             continue
-        add(path, row['tile_width'], row['tile_height'], sha=row['sha256'])
+        add(path, row['tile_width'], row['tile_height'], sha=row['sha256'],
+            effect_group=group if group.startswith('effect-') else None)
 
     images_out, groups = {}, defaultdict(list)
-    for path, (width, height, map_sprite) in sorted(records.items()):
+    for path, (width, height, map_sprite, effect_group) in sorted(records.items()):
         original = images[path]
         columns = original['width'] // width
         frames = defaultdict(list)
@@ -144,7 +145,12 @@ def sources(catalog, battle, patterns=(), *, skip_action_effects=False):
         images_out[path] = {**{k: original[k] for k in ('width', 'height', 'sha256')},
                             'frameWidth': width, 'frameHeight': height, 'frames': {}}
         for index, regions in sorted(frames.items()):
-            groups[(map_sprite, regions[0][4])].append((path, index, regions))
+            group = regions[0][4]
+            if effect_group:
+                # The ordinary atlas gives identical frames a common home.
+                source_group = catalog['pages'][group].get('group', '')
+                group = source_group if source_group.startswith('effect-') else effect_group
+            groups[(map_sprite, group)].append((path, index, regions))
     return images_out, groups
 
 
@@ -245,6 +251,19 @@ def valid_page(path, page):
     return raw
 
 
+def pack_bitmaps(tiles, out, pages):
+    for placed, width, height in layout_pages(tiles):
+        atlas = Image.new('RGBA', (width, height))
+        for tile, x, y in placed:
+            atlas.paste(tile['image'], (x, y))
+        raw = png(atlas)
+        file = sha256(raw).hexdigest() + '.png'
+        write_bytes(out / file, raw)
+        pages[file] = dict(width=width, height=height)
+        for tile, x, y in placed:
+            yield tile, file, x, y
+
+
 def resume_frames(out, images, groups):
     path = out / 'manifest.json'
     if not path.is_file():
@@ -329,19 +348,11 @@ def build(catalog, images, groups, enhance, out, pages=None):
                 dedup[token] = parts
             for tile in dedup[token]:
                 tile['uses'].append((path, index, left, top))
-        for placed, width, height in layout_pages(tiles):
-            atlas = Image.new('RGBA', (width, height))
-            for tile, x, y in placed:
-                atlas.paste(tile['image'], (x, y))
-            raw = png(atlas)
-            file = sha256(raw).hexdigest() + '.png'
-            write_bytes(out / file, raw)
-            pages[file] = dict(width=width, height=height)
-            for tile, x, y in placed:
-                for path, index, left, top in tile['uses']:
-                    images[path]['frames'].setdefault(str(index), []).append([
-                        left+tile['x'], top+tile['y'], tile['w'], tile['h'], file, x, y
-                    ])
+        for tile, file, x, y in pack_bitmaps(tiles, out, pages):
+            for path, index, left, top in tile['uses']:
+                images[path]['frames'].setdefault(str(index), []).append([
+                    left+tile['x'], top+tile['y'], tile['w'], tile['h'], file, x, y
+                ])
         if number == len(groups) or number % 10 == 0:
             print(f'处理纹理组 {number}/{len(groups)} · 输出 {len(pages)} 页', flush=True)
         if checkpoint and monotonic() - last_checkpoint >= 60:
@@ -350,6 +361,61 @@ def build(catalog, images, groups, enhance, out, pages=None):
     images = publish()
     print(json.dumps(dict(images=len(images), frames=sum(len(r['frames']) for r in images.values()),
                           pages=len(pages)), ensure_ascii=False), flush=True)
+
+
+def repack_effects(out, images, groups):
+    """Move installed HD effect crops without running enhancement again."""
+    manifest_path = out / 'manifest.json'
+    manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
+    if (manifest['version'], manifest['scale'], manifest['model']) != (1, SCALE, MODEL):
+        raise ValueError('高清动画清单的版本、倍率或模型不符')
+    old_pages, installed = manifest['pages'], manifest['images']
+    pages = dict(old_pages)
+    effect_groups = sorted((group, frames) for group, frames in groups.items() if isinstance(group[1], str))
+    selected, relocated = [], {}
+
+    @lru_cache(maxsize=12)
+    def bitmap(name):
+        if not re.fullmatch(r'[a-f0-9]{64}\.png', name):
+            raise ValueError(f'高清纹理页文件名无效：{name}')
+        raw = valid_page(out / name, old_pages[name])
+        with Image.open(io.BytesIO(raw)) as source:
+            return source.copy()
+
+    for number, (_, frames) in enumerate(effect_groups, 1):
+        tiles = {}
+        for path, index, regions in frames:
+            row = installed.get(path)
+            key = str(index)
+            parts = row['frames'].get(key) if row else None
+            if not parts:
+                continue
+            if (any(row[k] != images[path][k] for k in ('width', 'height', 'sha256', 'frameWidth', 'frameHeight'))
+                    or not frame_fits(parts, regions, old_pages)):
+                raise ValueError(f'高清帧的原图或覆盖范围已变化：{path}#{index}')
+            selected.append((row, key, parts))
+            for part in parts:
+                crop = tuple(part[2:])
+                if crop in tiles or crop in relocated:
+                    continue
+                w, h, name, x, y = crop
+                width, height = w*SCALE, h*SCALE
+                tiles[crop] = dict(crop=crop, width=width, height=height,
+                                   image=bitmap(name).crop((x, y, x+width, y+height)))
+        for tile, file, x, y in pack_bitmaps(tiles.values(), out, pages):
+            relocated[tile['crop']] = (file, x, y)
+        if number % 25 == 0 or number == len(effect_groups):
+            print(f'重排高清特效组 {number}/{len(effect_groups)} · 已处理 {len(selected)} 帧', flush=True)
+
+    if not selected:
+        raise ValueError('没有可重排的已安装高清特效帧')
+    for row, key, parts in selected:
+        row['frames'][key] = [[*part[:4], *relocated[tuple(part[2:])]] for part in parts]
+    referenced = {part[4] for row in installed.values() for parts in row['frames'].values() for part in parts}
+    manifest['pages'] = {name: page for name, page in pages.items() if name in referenced}
+    write_json(manifest_path, manifest, compact=True)
+    print(json.dumps(dict(repacked_frames=len(selected), old_pages=len(old_pages), pages=len(referenced)),
+                     ensure_ascii=False), flush=True)
 
 
 def install(staged, out, images, groups):
@@ -411,8 +477,9 @@ def main():
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument('--plan', action='store_true', help='只统计现有素材范围')
     mode.add_argument('--install-from', type=Path, help='校验已生成的图集，然后发布到 --out')
+    mode.add_argument('--repack-effects', action='store_true', help='复用已安装的高清特效像素，按原版特效资源重排图集')
     args = parser.parse_args()
-    if not (args.plan or args.install_from) and not (args.weights and args.weights.is_file()):
+    if not (args.plan or args.install_from or args.repack_effects) and not (args.weights and args.weights.is_file()):
         parser.error('生成图集需要 --weights 指向本地模型文件')
     catalog = read('assets/image_catalog.json')
     images, groups = sources(catalog, inventory(['--plan']), args.include, skip_action_effects=args.skip_action_effects)
@@ -424,6 +491,9 @@ def main():
     with build_lock(args.out / '.build'):
         if args.install_from:
             install(args.install_from, args.out, images, groups)
+            return
+        if args.repack_effects:
+            repack_effects(args.out, images, groups)
             return
         pages = None
         if not args.include:

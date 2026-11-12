@@ -1,4 +1,4 @@
-"""Append verified tiles without moving published atlas pages or coordinates."""
+"""Append verified tiles and migrate legacy battle atlas layouts."""
 from collections import defaultdict, OrderedDict
 from pathlib import Path
 import io
@@ -29,14 +29,20 @@ def build_atlas(data, *, runtime, web, out, layout_pages, packing_family, depend
     previous = json.loads(manifest_path.read_text('utf-8')) if manifest_path.is_file() and not repack else None
     pages = list(previous['pages']) if previous else []
     previous_images = previous['images'] if previous else {}
+    # Older effect pages grouped frames from different DGPs by role.
+    repack_effects = any(page['group'].startswith('effects-') for page in pages)
+
+    def rebuild_family(family):
+        return (repack_roles and family.startswith('role-')) or (repack_effects and family == 'effects')
+
     replaced_pages = {i for i, page in enumerate(pages)
-                      if repack_roles and page['group'].startswith('role-')}
+                      if rebuild_family(packing_family(page))}
     index_path = runtime/'evidence/resource_cache/battle_tiles.json'
     index = json.loads(index_path.read_text('utf-8')) if index_path.is_file() and not repack else {}
     # Index entries are only trusted against the exact manifest they describe.
     trusted = bool(previous and index.get('manifest_sha256') == file_hash(manifest_path))
     tile_index = {family: bank for family, bank in index.get('tiles', {}).items()
-                  if not repack_roles or not family.startswith('role-')} if trusted else {}
+                  if not rebuild_family(family)} if trusted else {}
     layouts = index.get('layouts', {}) if trusted else {}
     new_layouts, groups, sources = {}, defaultdict(dict), {}
     images = dict.fromkeys(asset['path'] for asset in data['assets'])
@@ -151,7 +157,7 @@ def build_atlas(data, *, runtime, web, out, layout_pages, packing_family, depend
         old = previous_images.get(name)
         unchanged = (old and all(old[k] == asset[k] for k in ('sha256','width','height'))
                      and (not trusted or layouts.get(name) == recipe)
-                     and not (repack_roles and family.startswith('role-')))
+                     and not rebuild_family(family))
         if unchanged:
             images[name] = old
             counters['reused_images'] += 1
@@ -180,9 +186,9 @@ def build_atlas(data, *, runtime, web, out, layout_pages, packing_family, depend
                     pending = groups[family]
                     if key not in pending:
                         pending[key] = dict(image=crop, width=crop.width, height=crop.height,
-                                            references=[], owners=set(), key=key, family=family)
+                                            references=[], asset_groups=set(), key=key, family=family)
                     pending[key]['references'].append(region)
-                    pending[key]['owners'].update(asset.get('owners', []))
+                    pending[key]['asset_groups'].add(asset['group'])
                     if asset.get('entry'):
                         pending[key]['entry'] = True
     write_pending()

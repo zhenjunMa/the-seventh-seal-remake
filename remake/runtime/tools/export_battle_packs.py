@@ -36,18 +36,19 @@ def inventory(arguments=(), *, original_dir=None):
 
 
 def packing_family(asset):
-    return 'effects' if asset['group'].startswith('effect-') else asset['group']
+    group = asset['group']
+    return 'effects' if group.startswith(('effect-', 'effects-')) else group
 
 
 def dependency_groups(families):
-    """Group deduplicated tiles by when or by whom they are used."""
+    """Keep effect frames together and group role frames by entry use."""
     groups = defaultdict(dict)
     for family, tiles in families.items():
         for key, tile in tiles.items():
             name = family
             if family == 'effects':
-                users = sorted(tile['owners'])
-                name = 'effects-roles-' + '-'.join(users) if users else 'effects-unreferenced'
+                # Identical frames keep one deterministic home across DGPs.
+                name = min(tile['asset_groups'])
             elif family.startswith('role-') and tile.get('entry'):
                 name = family + '-entry'
             groups[name][key] = tile
@@ -100,9 +101,9 @@ def plan(roles=None, stage=None):
             # Old groups already deduplicated identical visible RGBA tiles.
             # Shared coordinates remain one tile within each new dependency group.
             key = (page, x, y, width, height)
-            tile = groups[packing_family(asset)].setdefault(key, dict(width=width, height=height, paths=set(), owners=set()))
+            tile = groups[packing_family(asset)].setdefault(key, dict(width=width, height=height, paths=set(), asset_groups=set()))
             tile['paths'].add(asset['path'])
-            tile['owners'].update(asset.get('owners', []))
+            tile['asset_groups'].add(asset['group'])
             if asset.get('entry'):
                 tile['entry'] = True
     groups = dependency_groups(groups)
@@ -161,7 +162,7 @@ def build(repack=False, *, original_dir=None, repack_roles=False):
         unique_tiles=unique_tiles, source_rgba_bytes=sum(a['width']*a['height']*4 for a in data['assets']),
         atlas_rgba_bytes=sum(p['width']*p['height']*4 for p in pages),
         png_bytes=sum(p['bytes'] for p in pages), pixel_reconstruction_passed=True,
-        **counters, policy='Append verified new tiles. Repack role pages with entry tiles together; reuse shared tiles across actions.')
+        **counters, policy='Group effect frames by source effect and role entry frames by role. Reuse identical tiles across effects.')
     write_json(REPORT, report)
     print(json.dumps({k: report[k] for k in ['images','pages','unique_tiles','pixel_reconstruction_passed',*counters]}), flush=True)
     return report
