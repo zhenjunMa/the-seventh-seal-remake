@@ -1,0 +1,24 @@
+remake/runtime/web/controllers/battle.mjs
+  s_29f1be23c17402::t_b2c38d9ef02561 224
+remake/runtime/web/battle_view.mjs
+  s_29f1be23c17402::t_b2c38d9ef02561 318,333-362
+  s_29f1be23c17402::t_8a9d20b83e6a15 1056,1059
+remake/runtime/tools/data_recipes/index.json
+  s_29f1be23c17402::t_75f8535edb16b5 1568,1703,1711-1712,20014
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "d6e9308c24436cd2caad7554c7594cee86e9f9f8",
+  "prompts": {},
+  "sessions": {
+    "s_29f1be23c17402": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d054-c057-7640-93e2-2841c26e48f4",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
