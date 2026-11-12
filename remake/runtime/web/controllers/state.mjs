@@ -7,7 +7,6 @@ export function createRuntimeState($) {
     keys: new Set(),
     running: false,
     resources: new ImageResources(),
-    actorResourcesByMap: new Map(),
     logs: [],
     saveKey: 'seventh-seal.runtime.save.v1',
     saveStorage: null,

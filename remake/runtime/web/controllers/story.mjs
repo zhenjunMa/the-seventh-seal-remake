@@ -176,7 +176,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       hasNpcState:Object.hasOwn(draft,'map_npc_state'),npcState:draft.map_npc_state,entryDraft:state.sceneEntryDraft},prepared=new Map();
     let lease,view,media;
     const prepare=async(id,requestSignal)=>{
-      const scene=await playbackTask(actions.prepareMap(id,{world:draft}),requestSignal);
+      const scene=await playbackTask(actions.prepareMap(id,{world:draft,program}),requestSignal);
       if(playback?.paused)await playback.ready();requestSignal?.throwIfAborted();playback?.check();
       if(state.scenes.current?.data.id===id)scene.npcRuntime?.inherit(state.scenes.current.npcRuntime);
       return scene;

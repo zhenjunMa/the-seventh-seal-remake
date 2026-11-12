@@ -10,7 +10,8 @@ import {MapNpcRuntime} from "../core/exploration/map_npcs.mjs";
 import {projectMapStage} from "../core/exploration/map_stage.mjs";
 import {MapObjectRuntime} from "../core/exploration/map_objects.mjs";
 import {chapterObjectState} from '../core/story/object_state.mjs';
-import {storyBindings,registeredRoles} from "../core/content/content_registry.mjs";
+import {storyBindings,runtimeContent} from "../core/content/content_registry.mjs";
+import {anmActorSlots} from "../core/story/anm_runtime.mjs";
 import {chapterRouteExits,nativeEmptyEventCells} from "../core/exploration/map_connections.mjs";
 import {MapLocomotion,mapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
 
@@ -18,6 +19,15 @@ import {mapPresentation} from '../core/ui/map_presentation.mjs';
 import {mapWorldPoint, mapTargetInFront, pickMapDialogueObject} from '../core/exploration/map_interaction.mjs';
 
 import {createExplorationPresentation} from './presentation_handoff.mjs';
+
+const actorImageFields = [['sheet','bitmap'], ['intrinsic_sheet','intrinsic_bitmap'], ['shadow_sheet','shadow_bitmap']];
+
+function roleImages(roleId, poses = []) {
+  const scope = `role:${roleId}`;
+  return poses.flatMap(pose => actorImageFields
+    .filter(([sheet]) => pose[sheet])
+    .map(([sheet, field]) => ({pose, path: pose[sheet], scope, field})));
+}
 
 export function createMapController({state, actions, $, canvas, ctx}) {
   const presentation=createExplorationPresentation({state,actions,$,canvas});
@@ -44,7 +54,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     const release=state.storyRepository.retainMap(id);
     try{return await prepareMapContent(id,options);}finally{release();}
   }
-  async function prepareMapContent(id,{world=state.world.value,onProgress}={}) {
+  async function prepareMapContent(id,{world=state.world.value,program,onProgress}={}) {
     const entry=state.catalog.maps.find(map=>map.id===id); if(!entry) throw new Error(`地图尚未纳入本版：${id}`);
     await state.storyRepository.ensureMap(id,{protect:[state.scenes?.current?.data.id].filter(Boolean)});
     const mapEvents=state.events.filter(event=>event.map_id===id);
@@ -69,7 +79,20 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     // The source JSON retains the original gate; this is a runtime coverage guard.
     const movement=new MovementMap({...data.movement,triggers:data.movement.triggers.map(trigger=>
       ({...trigger,path_gate:!readyCells.has(`${trigger.x},${trigger.y}`)}))});
-    const actorIds = new Set([...registeredRoles('player'), ...(data.opening_npcs ?? []).map(npc => npc.resource_id)]);
+    const npcRoleIds = new Set(data.opening_npcs.map(npc => npc.resource_id));
+    const playerIds = new Set((world.party ?? []).map(actor => actor.id));
+    const content = state.storyRepository.content ?? runtimeContent;
+    const actorSlots = anmActorSlots(program);
+    // Slots 6–9 alias the controlled actor, already in the party or named by a control command.
+    for (const [roleId, role] of Object.entries(content.roles)) {
+      if (role.side === 'player' && actorSlots.has(role.native_slot)) playerIds.add(roleId);
+    }
+    const actorIds = new Set([...playerIds, ...npcRoleIds]);
+    const actorImages = [
+      ...[...actorIds].flatMap(roleId => roleImages(roleId, state.openingResources.roles[roleId]?.actions)),
+      ...state.catalog.roles.filter(role => playerIds.has(role.id))
+        .flatMap(role => roleImages(role.id, role.actions.filter(action => action.index <= 2))),
+    ];
     const table = state.chapterStory.maps[id];
     data.native_layer=table?.map_flag_index;
     const effectMap=state.mapEffects?.maps[id],effectObjects=effectMap?.objects??[];
@@ -77,8 +100,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       table&&world.event_records[table.map_flag_index]?.[animation.object_index_zero_based]?.slice(0,2)==='03');
     const total=1+(data.objects??[]).length+state.events.filter(e=>e.map_id===id&&e.npc?.resource?.sheet).length+
       state.events.filter(e=>e.map_id===id&&e.npc?.resource?.shadow_sheet).length+
-      [...actorIds].reduce((n,roleId)=>n+(state.openingResources.roles[roleId]?.actions??[])
-        .reduce((count,action)=>count+1+Number(Boolean(action.intrinsic_sheet))+Number(Boolean(action.shadow_sheet)),0),0)+completedAnimations.length+
+      actorImages.length+completedAnimations.length+
       effectObjects.reduce((count,obj)=>count+state.mapEffects.object_banks[obj.bank].actions
         .reduce((n,action)=>n+['main','intrinsic','shadow'].filter(channel=>action[channel+'_sheet']).length,0),0);
     let completed=0;onProgress?.({completed,total});
@@ -89,11 +111,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     const npcs=await Promise.all(state.events.filter(event=>event.map_id===id&&event.npc).map(async event=>({event,...event.npc,
       bitmap:event.npc.resource?.sheet?await step(actions.image(event.npc.resource.sheet, `map:${id}`)):null,
       shadow_bitmap:event.npc.resource?.shadow_sheet?await step(actions.image(event.npc.resource.shadow_sheet, `map:${id}`)):null})));
-    state.actorResourcesByMap.set(id, actorIds);
-    await Promise.all([...actorIds].flatMap(roleId => (state.openingResources.roles[roleId]?.actions ?? [])
-      .flatMap(action => [step(state.resources.attach(action, action.sheet, `role:${roleId}`)),
-        ...(action.intrinsic_sheet?[step(state.resources.attach(action,action.intrinsic_sheet,`role:${roleId}`,'intrinsic_bitmap'))]:[]),
-        ...(action.shadow_sheet?[step(state.resources.attach(action,action.shadow_sheet,`role:${roleId}`,'shadow_bitmap'))]:[])])));
+    await Promise.all(actorImages.map(({pose, path, scope, field}) => step(state.resources.attach(pose, path, scope, field))));
     await Promise.all(completedAnimations.filter(animation=>animation.completed_last_frame<animation.frames.length)
       .map(animation=>step(actions.image(animation.frames[animation.completed_last_frame].image, `map:${id}`))));
     for(const npc of data.opening_npcs??[]){
@@ -104,7 +122,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     }
     for(const npc of npcs)npc.native_layer??=data.native_layer;
     const probes=[...(data.probes??[]),...state.events.filter(event=>event.map_id===id&&event.sample?.probe).map(event=>event.sample.probe)];
-    const scene={data,movement,bitmap,objects,npcs,probes};
+    const scene={data,movement,bitmap,objects,npcs,probes,npcRoleIds};
     scene.npcRuntime=new MapNpcRuntime({scene,table,roles:state.openingResources.roles});
     if(effectObjects.length){
       const resources=await Promise.all(effectObjects.map(async obj=>{
@@ -279,16 +297,24 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     const scene=state.scenes.current;if(scene?.data.id!==world.location.map_id)throw new Error('当前场景与存档地图不一致');
     return renderSavePreview(scene,world,{view:{...state.view},action:sheetAction()}).toDataURL('image/png');
   }
-  let retainedScene = null, retainedRevision = -1;
+  let retainedScene = null, retainedParty = null, retainedRevision = -1;
   function reconcileResources() {
-    const scene = state.scenes.current;
-    if (!scene || scene === retainedScene && retainedRevision === state.resources.revision) return;
-    retainedScene = scene;
-    const roleIds = state.actorResourcesByMap.get(scene.data.id) ?? new Set(registeredRoles('player'));
+    const scene = state.scenes.current, party = state.world.value.party;
+    if (!scene || state.storyPlayback) return;
+    if (scene === retainedScene && party === retainedParty && retainedRevision === state.resources.revision) return;
+
+    const roleIds = new Set(scene.npcRoleIds);
+    for (const actor of party) roleIds.add(actor.id);
     state.resources.retainScopes(['shared', `map:${scene.data.id}`, ...[...roleIds].map(id => `role:${id}`)]);
-    for (const [id, role] of Object.entries(state.openingResources.roles))
-      if (!roleIds.has(id)) for (const action of role.actions) {delete action.bitmap;delete action.intrinsic_bitmap;delete action.shadow_bitmap;}
-    for (const id of state.actorResourcesByMap.keys()) if (id !== scene.data.id) state.actorResourcesByMap.delete(id);
+    const roles = [...Object.entries(state.openingResources.roles), ...state.catalog.roles.map(role => [role.id, role])];
+    for (const [id, role] of roles) {
+      if (roleIds.has(id)) continue;
+      for (const action of role.actions) {
+        for (const [, field] of actorImageFields) delete action[field];
+      }
+    }
+    retainedScene = scene;
+    retainedParty = party;
     retainedRevision = state.resources.revision;
   }
   function updateExploration(now,deltaMs){

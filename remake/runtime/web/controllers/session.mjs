@@ -69,7 +69,7 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
         const prepared=new Map();
         state.openingView=new OpeningView({resources:state.openingResources,prepared,clock:state.engine?.exploration.clock,
           program:state.openingProgram,
-          prepare:(id,signal)=>state.loadingView.run(id,onProgress=>actions.prepareMap(id,{onProgress}),{signal,clock:playback.clock}),
+          prepare:(id,signal)=>state.loadingView.run(id,onProgress=>actions.prepareMap(id,{world:initial,program,onProgress}),{signal,clock:playback.clock}),
           staging:state.prologuePresentation.staging,effects:state.prologuePresentation.effects,nativeViewport:true,
           install:scene=>{loadEncounterMap(initial,scene.data.id,state.encounterData);actions.commitView(scene,initial.location);state.scenes.current=scene;state.view.follow=false;},
           camera:(x,y)=>{state.view.x=x;state.view.y=y;},say: actions.say,log: actions.log,

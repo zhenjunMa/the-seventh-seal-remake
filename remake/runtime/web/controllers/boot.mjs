@@ -258,9 +258,6 @@ export function createBootController({state, actions, $, canvas}) {
     state.menuFeedback=createMenuFeedback({playCue:(name,key)=>state.audio.playCue(name,key),getState:()=>operationFeedbackState(state.operationMenu)});
     state.menuFeedback.attach($('partyMenu'));
     state.selectedRole=state.world.value.leader_id;
-    await Promise.all(state.catalog.roles.flatMap(r=>r.actions.filter(a=>a.index<=2).flatMap(a=>[
-      actions.image(a.sheet).then(image=>{a.bitmap=image;}),
-      ...(a.shadow_sheet?[actions.image(a.shadow_sheet).then(image=>{a.shadow_bitmap=image;})]:[])])));
     state.scenes=new SceneController({world: state.world,prepare:actions.prepareMap,validateEntry: actions.validateEntry,commitView: actions.commitView,enter:actions.enterMap,onPhase:actions.busy,
       afterCommit:()=>actions.finishStoryCompletion?.(),
       captureView:()=>({view:{...state.view},name:$('mapName').textContent,probes:Array.from($('probe').children,child=>child.cloneNode(true)),nearest: state.nearest,resetHidden:$('resetEventSample').hidden}),

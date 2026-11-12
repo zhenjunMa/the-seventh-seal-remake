@@ -3,6 +3,17 @@
 import {linkPlaybackAbort,playbackTask} from './story_playback.mjs';
 
 export const COMMON_ANM_OPCODES = new Set([11,16,17,30,31,32,33,35,38,41,48,49,60,62,63,255]);
+const ACTOR_OPCODES = new Set([32,33,35,38,41,48,49]);
+
+export function anmActorSlots(program) {
+  const slots = new Set();
+  for (const command of program?.commands ?? []) {
+    const {opcode, u32_plus5: actor, u32_plus13: target} = command;
+    if (ACTOR_OPCODES.has(opcode) || opcode === 36 || opcode === 37) slots.add(actor);
+    if (opcode === 38) slots.add(target);
+  }
+  return slots;
+}
 
 export function anmFilename(command){
   const bytes=Uint8Array.from(command.raw_hex.match(/../g),value=>parseInt(value,16));
@@ -62,7 +73,7 @@ export class AnmActions {
     this.check();
     // Native473E30 resolves slots6..9 at the instant each actor command runs.
     const slot=command.u32_plus5;
-    const actor = slot>5&&slot<10&&[32,33,35,38,41,48,49].includes(command.opcode)?this.context().controlledActor??0:slot;
+    const actor = slot>5&&slot<10&&ACTOR_OPCODES.has(command.opcode)?this.context().controlledActor??0:slot;
     const position = {x:(command.u32_plus13 | 0) * 2, y:(command.u32_plus17 | 0) * 2};
     if (this.nativeMetadata) Object.assign(position, {
       nativeX:command.u32_plus13 | 0, nativeY:command.u32_plus17 | 0});
