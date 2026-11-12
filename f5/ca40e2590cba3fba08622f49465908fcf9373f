@@ -1,0 +1,43 @@
+README.md
+  s_74cda7a33b4f04::t_4197e1aef07fcd 52,62-64,72
+  s_74cda7a33b4f04::t_e84837c2e04a2e 55-57,60
+remake/runtime/web/core/resources/hd_images.mjs
+  s_74cda7a33b4f04::t_11dab998b8b2e2 4-7,9,14,16
+remake/runtime/tools/export_hd_menu.py
+  s_74cda7a33b4f04::t_c66febbfd08fd7 3,392-398,402-404,406-417,420-431,440-459
+  s_74cda7a33b4f04::t_1b792473144ee0 170-193,216,219,399,405,418-419,432-439
+  s_74cda7a33b4f04::t_5b02bd4ad4f867 1,10,12,14,20-21,34-35,44-45,47-65,67-70,129-136
+  s_74cda7a33b4f04::t_0c58db14184738 28-29,156-159,162,237-327,329-384
+  s_74cda7a33b4f04::t_9ab8a26eab0670 8,36-43,46,66,71-128
+  s_74cda7a33b4f04::t_6a4492118de845 15,205-206,209-213,217-218,220-232,328
+  s_74cda7a33b4f04::t_07d8652497617d 137-138
+remake/runtime/tools/export_hd_animations.py
+  s_74cda7a33b4f04::t_e8cd93797f0154 61-62,231-234
+  s_74cda7a33b4f04::t_cb7df74c935933 11,200,210,212,214-216,226-230,235-240,242-247
+  s_74cda7a33b4f04::t_20ba795564dd49 16,50-60,63-99,156-160,164-167
+  s_74cda7a33b4f04::t_181f42b5b38290 417-419,429,432-433,465-470,472-479
+  s_74cda7a33b4f04::t_8f854ba87aced5 257-327,340-347,351-352,354-358,361,363,391-393,395
+  s_74cda7a33b4f04::t_351c8bfd2a3015 339,390,471
+remake/runtime/web/battle_menu_view.mjs
+  s_74cda7a33b4f04::t_91d79a336e4f1b 247-254
+remake/runtime/web/core/resources/hd_animations.mjs
+  s_74cda7a33b4f04::t_2bcf534035a357 4-5
+remake/runtime/web/phaser/components/sprite_pose.mjs
+  s_74cda7a33b4f04::t_ea5bef0018516d 25
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "f5ca40e2590cba3fba08622f49465908fcf9373f",
+  "prompts": {},
+  "sessions": {
+    "s_74cda7a33b4f04": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1cda6-35e5-7a41-bf96-86c0b5018d90",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
