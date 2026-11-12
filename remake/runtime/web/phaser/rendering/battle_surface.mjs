@@ -42,15 +42,30 @@ export class BattleSurface {
   prepareImages(images){
     for(const source of imageSources(images))if(source.width<=this.textures.maxSize&&source.height<=this.textures.maxSize)this.textures.texture(source);
   }
+  imagesPrepared(images){
+    for(const image of images.values()){
+      if(image.packed&&image.regions.some(region=>!image.pool.pages.get(region[4])?.bitmap))return false;
+    }
+    return [...imageSources(images)].every(source=>source.width>this.textures.maxSize||
+      source.height>this.textures.maxSize||this.textures.sources.has(source));
+  }
   async prepareEntryImages(images,{signal,clock}={}){
-    let started=performance.now();
     for(const source of imageSources(images)){
       signal?.throwIfAborted();
-      if(source.width<=this.textures.maxSize&&source.height<=this.textures.maxSize)this.textures.texture(source);
-      if(clock&&performance.now()-started>=4){
-        await new Promise((resolve,reject)=>clock.requestFrame(resolve,{signal,onCancel:reject}));
-        signal?.throwIfAborted();started=performance.now();
+      if(source.width>this.textures.maxSize||source.height>this.textures.maxSize||this.textures.sources.has(source))continue;
+      // All background requests use the same upload time budget.
+      if(clock){
+        for(;;){
+          if(this.uploadFrame!==clock.time){this.uploadFrame=clock.time;this.uploadTime=0;}
+          if(!clock.paused&&this.uploadTime<4)break;
+          await new Promise((resolve,reject)=>clock.requestFrame(resolve,{signal,onCancel:reject}));
+          signal?.throwIfAborted();
+        }
       }
+      if(this.textures.sources.has(source))continue;
+      const started=performance.now();
+      this.textures.texture(source);
+      if(clock)this.uploadTime+=performance.now()-started;
     }
   }
   take(kind){

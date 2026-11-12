@@ -16,6 +16,7 @@ import {WorldStore} from "../core/world/world.mjs";
 import {createSkillTestSample} from "../skill_test_sample.mjs";
 import {commitSkillTestResources} from "../core/battle/skill_test_commit.mjs";
 import {battleResources} from "../core/battle/battle_resources.mjs";
+import {pendingCommands} from "../core/battle/battle_scheduler.mjs";
 import {beginScriptedBattle,commitScriptedBattle} from '../core/battle/scripted_battle.mjs';
 import {playbackTask} from '../core/story/story_playback.mjs';
 import {createBattleSessions} from './battle_sessions.mjs';
@@ -36,6 +37,18 @@ export function createBattleController({host, sessions = createBattleSessions()}
   }
   function updateBattle(snapshot){
     if(!snapshot||snapshot.phase==='closed')return;
+    const {battle,battleView}=current();
+    if(battleView?.syncQueuedPrefetches){
+      const commands=[];
+      for(const {actor_id,skill_id,command_kind,item_instance_id} of pendingCommands(snapshot.scheduler)){
+        if(command_kind)continue;
+        if(item_instance_id){
+          const item=battle.state.inventory.find(row=>row.instance_id===item_instance_id);
+          if(item)commands.push({actor_id,item_id:item.id});
+        }else commands.push({actor_id,skill_id});
+      }
+      battleView.syncQueuedPrefetches(commands,snapshot.scheduler?.active_actor_id);
+    }
     const entering=['command','charging'].includes(snapshot.phase)&&snapshot.lifecycle_events?.some(event=>event.kind==='entry');
     const phase=entering?'battle-entry':snapshot.phase==='command'?'battle-command':snapshot.phase==='charging'?'battle-charging':snapshot.phase==='action'?'battle-action':snapshot.phase==='interrupted'?'battle-interrupted':'battle-result';
     if(!current().battleEntryPending&&host.phase!==phase)host.setPhase(phase);
@@ -59,12 +72,13 @@ export function createBattleController({host, sessions = createBattleSessions()}
   function battleKey(key,repeat=false){if(current().battleEntryPending||host.phase==='battle-entry')return true;return current().battleMenu?.key(key,repeat)??false;}
   function battleKeyUp(key){current().battleMenu?.keyup(key);}
   function updateBattleFrame(now){
-    if(current().battleEntryPending||current().battlePresentationError||current().battleResourceWaits?.size)return;
+    if(current().battleEntryPending||current().battlePresentationError)return;
     try{
       now=current().battleView?.resourceTime?.()??now;
-      current().battle?.advanceClock(now);
+      const waiting=current().battleResourceWaits?.size;
+      if(!waiting)current().battle?.advanceClock(now);
       const snapshot=current().battle?.presentationSnapshot();
-      advanceBattlePresentation(now,snapshot);
+      if(!waiting&&!current().battleResourceWaits?.size)advanceBattlePresentation(now,snapshot);
       current().battleView?.draw(snapshot,now);drawBattleInterface(now);
     }catch(error){
       current().battlePresentationError=error.message;current().battleView?.stop(error.message);
@@ -143,7 +157,8 @@ export function createBattleController({host, sessions = createBattleSessions()}
     mode=`${mode}:${stagePath??''}`;
     if(!sessions.views.has(mode))sessions.views.set(mode,createView({newParty,stagePath,lifecycle}));
     const view=sessions.views.get(mode);sessions.views.delete(mode);sessions.views.set(mode,view);
-    view.onResourcesPrepared=images=>host.engine?.battle.surface.prepareImages?.(images);
+    view.onResourcesPrepared=prepareEntryImages;
+    view.areResourcesUploaded=images=>host.engine?.battle.surface.imagesPrepared?.(images)??true;
     view.onResourceError=error=>actions.log({type:'battle-resource-prefetch-failed',error:error.message});
     const cancel=()=>view.cancelPreparation?.('战斗准备已取消');signal?.throwIfAborted();signal?.addEventListener('abort',cancel,{once:true});
     try{
@@ -176,19 +191,20 @@ export function createBattleController({host, sessions = createBattleSessions()}
       }
       actions.log(event);
     };
-    const now=()=>host.engine?.battle.clock.time??performance.now()-waitTotal-(waits?performance.now()-waitStarted:0);
+    const clockTime=()=>host.engine?.battle.clock.time??performance.now();
+    const now=()=>(waits?waitStarted:clockTime())-waitTotal;
     const withResources=async(work,wait=true)=>{
       const reason=Symbol('battle-resources'),generation=view.generation,started=performance.now(),resourceWaits=current().battleResourceWaits;
-      if(wait){if(!waits++)waitStarted=performance.now();resourceWaits.add(reason);host.engine?.pause(reason);}
+      if(wait){if(!waits++)waitStarted=clockTime();resourceWaits.add(reason);}
       const signal=view.resourceController?.signal;
       try{const result=await playbackTask(work(),signal);if(current().battle!==battle||view.destroyed||view.generation!==generation){result?.release?.();throw new Error('战斗资源会话已失效');}if(wait)log({type:'battle-resource-wait-complete',elapsed_ms:performance.now()-started,cache:battleResources.snapshot()});return result;}
-      finally{if(wait){if(!--waits)waitTotal+=performance.now()-waitStarted;resourceWaits.delete(reason);host.engine?.resume(reason);}}
+      finally{if(wait){if(!--waits)waitTotal+=clockTime()-waitStarted;resourceWaits.delete(reason);}}
     };
     view.withResources=withResources;view.resourceTime=now;
     const play=async(method,result,options)=>{
       let lease;
       try{
-        if(view.prepareAction){lease=await withResources(()=>view.prepareAction(result),!view.actionResourcesReady(result));if(lease)view.onResourcesPrepared?.(lease.images);}
+        if(view.prepareAction)lease=await withResources(()=>view.prepareAction(result),!view.actionResourcesReady(result));
         const playback=view[method](result,options);
         if(view.run)view.run.resourceLease=lease;else lease?.release();
         return await playback;
@@ -219,12 +235,12 @@ export function createBattleController({host, sessions = createBattleSessions()}
       getSettings:()=>host.menu.settings(),getBindings:newParty?id=>techniqueSlots(world.value,bindingSource,id).map(slot=>({...slot,name:slot.type===1?battle.skills[battleTechniqueId(id,slot.index_one_based)]?.name:techniqueSlotName(bindingSource,id,slot)})):null,
       playCue:(...args)=>host.audio?.playCue(...args),onReturn:actions.guarded(returnFromBattle),onStage:stage=>{if(current().battle===battle)battle.setCommandStage?.(stage);},textRenderer:host.menu.textRenderer,memory:current().battleCursorMemory,resultManifest,onResultEvent:actions.log,
       now:view.resourceTime??(()=>host.engine?.battle.clock.time??performance.now()),deferResult:true,
-      prepareResources:work=>view.withResources(work),onResourcesPrepared:()=>{},
+      prepareResources:work=>view.withResources(work,false),onResourcesPrepared:()=>{},
       prefetchCommand:command=>{void view.prefetchCommand?.(command);},
       onResourceError:error=>{if(current().battle===battle){battle.interrupt(error);actions.status(error.message,true);}}});
     if(owner)owner.menu=menu;else current().battleMenu=menu;
     try{
-      await playbackTask(menu.prepare({onProgress}),signal);check();menu.onResourcesPrepared=view.onResourcesPrepared;
+      await playbackTask(menu.prepare({onProgress}),signal);check();menu.onResourcesPrepared=images=>view.onResourcesPrepared(images,view.resourceController?.signal);
       if(owner){
         owner.hudChildren=[...hud.childNodes];owner.hudDataset={...hud.dataset};hud.replaceChildren(...root.childNodes);menu.root=hud;
         menu.resizeObserver.unobserve?.(root);menu.resizeObserver.observe(hud);menu.fit();current().battleMenu=menu;

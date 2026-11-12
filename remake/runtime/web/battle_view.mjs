@@ -237,6 +237,10 @@ export function compileActionTimeline(meta, layers, roleId,skillId=null,alternat
   return steps;
 }
 
+function commandResourceKey({actor_id, skill_id, item_id}) {
+  return JSON.stringify([actor_id, skill_id, item_id]);
+}
+
 async function loadJson(path, expectedHash) {
   if (!urlAllowed(path)) throw new Error('战斗清单路径无效');
   return battleResources.json(path,expectedHash);
@@ -279,7 +283,7 @@ export class BattleView {
     this.ready = false;
     this.destroyed = false;
     this.generation = 0;
-    this.resourceScopes=new Set();this.compiledSequences=new WeakMap();this.preparedAssets=new WeakMap();this.retiredLeases=[];
+    this.resourceScopes=new Set();this.queuedPrefetches=new Map();this.compiledSequences=new WeakMap();this.preparedAssets=new WeakMap();this.retiredLeases=[];
   }
 
   get run(){return this.playbackRuntime.run;}
@@ -377,6 +381,7 @@ export class BattleView {
     if(this.destroyed)throw new Error('战斗表现已销毁');
     if(this.run||this.detachedRuns.length)throw new Error('行动播放期间不能重新准备战斗');
     this.resourceController?.abort(abortError('重新准备战斗'));this.resourceController=new AbortController();
+    this.clearCommandPrefetches();
     const generation=++this.generation,isCurrent=()=>!this.destroyed&&generation===this.generation;
     const check=()=>{if(!isCurrent())throw abortError();};
     if(!this.definition){
@@ -580,16 +585,19 @@ export class BattleView {
     previous?.release();this.images=new Map(this.entryLease.images);this.entryImageCount=this.entryLease.images.size;
   }
 
-  async _loadAssets(assets,label,{onProgress=()=>{},isCurrent=()=>true}={}){
+  async _loadAssets(assets,label,{onProgress=()=>{},isCurrent=()=>true,signal}={}){
+    signal?.throwIfAborted();
     const scope=this.resourcePool?.createScope(label);let closed=false;
     const lease={images:null,release:()=>{if(closed)return;closed=true;scope?.release();this.resourceScopes.delete(lease);}};
     this.resourceScopes.add(lease);
+    signal?.addEventListener('abort',lease.release,{once:true});
     try{
       lease.images=scope?await scope.prepare(assets,{onProgress,isCurrent}):await this._prepareImages(assets,null,onProgress,()=>!closed&&isCurrent());
       if(closed||!isCurrent())throw abortError();
       for(const [path,image]of lease.images)this.images.set(path,image);
       return lease;
     }catch(error){lease.release();throw error;}
+    finally{signal?.removeEventListener('abort',lease.release);}
   }
 
   actionAssets(result){
@@ -599,23 +607,96 @@ export class BattleView {
     if(result.plan){compiled=this.compiledSequences.get(result)??compileNativeSequence(this.meta,this.assetPlan.actors.get(result.actor_id),result.plan,[this.layers,...this.alternateLayers.values()]);this.compiledSequences.set(result,compiled);}
     const assets=this.assetPlan.assets(this.assetPlan.action(result,compiled));this.preparedAssets.set(result,assets);return assets;
   }
-  actionResourcesReady(result){return !this.assetPlan||Boolean(this.resourcePool?.has(this.actionAssets(result)));}
+  actionResourcesReady(result){
+    if(!this.assetPlan)return true;
+    const assets=this.actionAssets(result);
+    if(!this.areResourcesUploaded)return Boolean(this.resourcePool?.has(assets));
+    const images=new Map();
+    for(const {path} of assets){
+      const image=this.images.get(path);
+      if(!image)return false;
+      images.set(path,image);
+    }
+    return this.areResourcesUploaded(images);
+  }
   async prepareAction(result){
     if(!this.assetPlan)return null;
-    const generation=this.generation,lease=await this._loadAssets(this.actionAssets(result),'battle-action',
-      {isCurrent:()=>!this.destroyed&&generation===this.generation});
-    this.prefetchLease?.release();this.prefetchLease=null;return lease;
-  }
-  async prefetchCommand(command){
-    if(!this.assetPlan)return;
-    const plan=this.assetPlan,generation=this.generation,ticket={};this.prefetchTicket=ticket;
-    this.prefetchLease?.release();this.prefetchLease=null;
+    const key=commandResourceKey(result), queued=this.queuedPrefetches.get(key), focused=this.commandPrefetch;
+    const signal=this.resourceController?.signal;
+    const lease=await this._loadAssets(this.actionAssets(result),'battle-action',{signal});
     try{
+      await this.onResourcesPrepared?.(lease.images,signal);
+      signal?.throwIfAborted();
+      if(queued&&this.queuedPrefetches.get(key)===queued){
+        this.queuedPrefetches.delete(key);
+        this.cancelCommandPrefetch(queued);
+      }
+      if(focused?.key===key&&this.commandPrefetch===focused){
+        this.commandPrefetch=null;
+        this.cancelCommandPrefetch(focused);
+      }
+      return lease;
+    }catch(error){lease.release();throw error;}
+  }
+  cancelCommandPrefetch(prefetch){
+    if(!prefetch)return;
+    prefetch.controller.abort(abortError('战斗指令预取已取消'));
+    prefetch.lease?.release();
+  }
+  clearCommandPrefetches(){
+    this.cancelCommandPrefetch(this.commandPrefetch);
+    this.commandPrefetch=null;
+    for(const prefetch of this.queuedPrefetches.values())this.cancelCommandPrefetch(prefetch);
+    this.queuedPrefetches.clear();
+  }
+  prefetchCommand(command){
+    if(!this.assetPlan||this.destroyed)return;
+    const key=commandResourceKey(command);
+    if(this.commandPrefetch?.key===key||this.queuedPrefetches.has(key))return;
+    this.cancelCommandPrefetch(this.commandPrefetch);
+    this.commandPrefetch=this.startCommandPrefetch(command,key);
+  }
+  syncQueuedPrefetches(commands,activeActor){
+    if(!this.assetPlan||this.destroyed)return;
+    const keys=new Set();
+    for(const command of commands){
+      const key=commandResourceKey(command);
+      keys.add(key);
+      if(this.queuedPrefetches.has(key))continue;
+      if(this.commandPrefetch?.key===key){
+        this.queuedPrefetches.set(key,this.commandPrefetch);
+        this.commandPrefetch=null;
+      }else this.queuedPrefetches.set(key,this.startCommandPrefetch(command,key));
+    }
+    for(const [key,prefetch] of this.queuedPrefetches){
+      if(keys.has(key)||prefetch.actorId===activeActor)continue;
+      this.queuedPrefetches.delete(key);
+      this.cancelCommandPrefetch(prefetch);
+    }
+  }
+  startCommandPrefetch(command,key){
+    const prefetch={key,actorId:command.actor_id,controller:new AbortController(),lease:null};
+    void this.loadCommandPrefetch(command,prefetch);
+    return prefetch;
+  }
+  async loadCommandPrefetch(command,prefetch){
+    const plan=this.assetPlan, signal=prefetch.controller.signal;
+    try{
+      // Command input yields before resolving the asset plan or uploading textures.
+      await Promise.resolve();
+      signal.throwIfAborted();
       const paths=command.item_id!==undefined?plan.item(command.actor_id,command.item_id):plan.skill(command.actor_id,command.skill_id);
-      const lease=await this._loadAssets(plan.assets(paths),'battle-lookahead',
-        {isCurrent:()=>!this.destroyed&&generation===this.generation&&this.prefetchTicket===ticket});
-      this.prefetchLease=lease;this.onResourcesPrepared?.(lease.images);
-    }catch(error){if(error.name!=='AbortError'&&this.prefetchTicket===ticket&&generation===this.generation)this.onResourceError?.(error);}
+      const lease=await this._loadAssets(plan.assets(paths),'battle-lookahead',{signal});
+      if(signal.aborted){lease.release();return;}
+      prefetch.lease=lease;
+      await this.onResourcesPrepared?.(lease.images,signal);
+    }catch(error){
+      if(signal.aborted)return;
+      if(this.commandPrefetch===prefetch)this.commandPrefetch=null;
+      // Keep the queued key so frame updates don't retry a failed guess.
+      this.cancelCommandPrefetch(prefetch);
+      if(error.name!=='AbortError')this.onResourceError?.(error);
+    }
   }
   resourceSnapshot(){return {staged:Boolean(this.assetPlan),entry_images:this.entryImageCount??this.images.size,scopes:this.resourceScopes.size};}
   _releaseRun(run){this.playbackRuntime._releaseRun(run);}
@@ -678,7 +759,7 @@ export class BattleView {
   }
 
   cancelPreparation(reason='战斗准备已取消'){
-    this.resourceController?.abort(abortError(reason));++this.generation;this.prefetchTicket=null;this.appearanceRasters?.clear();
+    this.resourceController?.abort(abortError(reason));++this.generation;this.clearCommandPrefetches();this.appearanceRasters?.clear();
     for(const lease of [...this.resourceScopes])lease.release();
   }
 
@@ -688,7 +769,6 @@ export class BattleView {
     this.drawnSlots=null;this.presentationFrame=null;
     this.damageTexts=[];
     this.lifecycle?.reset();
-    this.prefetchTicket=null;this.prefetchLease=null;
     for(const run of [this.run,...this.detachedRuns].filter(Boolean)){if(!run.primary_resolved)run.reject(abortError(reason));this._releaseRun(run);}
     this.run=null;this.detachedRuns=[];this.playbackRuntime.currentRun=null;
     for(const lease of this.retiredLeases.splice(0))lease.release();

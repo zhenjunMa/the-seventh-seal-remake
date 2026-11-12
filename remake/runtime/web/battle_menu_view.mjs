@@ -37,7 +37,12 @@ export class BattleMenuView{
     this.wheelButtons=Array.from({length:7},(_,i)=>{
       const widget=this.menus.get('game002d')?.widgets.find(w=>w.name===String(i+1).padStart(3,'0'));
       const rect=widget?.rect??[{left:50,top:5,right:73,bottom:29},{left:9,top:30,right:32,bottom:53},{left:9,top:76,right:32,bottom:99},{left:50,top:99,right:73,bottom:122},{left:89,top:76,right:112,bottom:99},{left:89,top:30,right:112,bottom:53},{left:49,top:53,right:76,bottom:80}][i];
-      const b=this.button('battle-wheel-hit',()=>this.activateWheel(i));b.dataset.slot=String(i);this.place(b,490+rect.left,340+rect.top,rect.right-rect.left+1,rect.bottom-rect.top+1);b.onfocus=()=>{this.focusIndex=i;this.remember();this.syncInfo();};this.frame.append(b);return b;
+      const b=this.button('battle-wheel-hit',()=>this.activateWheel(i));b.dataset.slot=String(i);this.place(b,490+rect.left,340+rect.top,rect.right-rect.left+1,rect.bottom-rect.top+1);
+      b.onfocus=()=>{
+        this.focusIndex=i;this.remember();this.syncInfo();
+        if(this.stage==='wheel')this.prefetchFocusedSkill(this.commandSlots?.[i]?.skill);
+      };
+      this.frame.append(b);return b;
     });
     this.skillCategory=0;
     this.categoryButtons=TECHNIQUE_CATEGORIES.slice(0,4).map((name,index)=>{
@@ -46,7 +51,14 @@ export class BattleMenuView{
       b.setAttribute('aria-label',name);b.dataset.category=String(index);this.place(b,467+r.left,274+r.top,r.right-r.left+1,r.bottom-r.top+1);
       b.onfocus=()=>this.selectSkillCategory(index);this.frame.append(b);return b;
     });
-    this.listButtons=Array.from({length:6},(_,i)=>{const b=this.button('battle-list-hit',()=>this.selectEntry(this.listOffset+i));b.onfocus=()=>{this.listIndex=this.listOffset+i;this.remember();this.syncInfo();};this.frame.append(b);return b;});
+    this.listButtons=Array.from({length:6},(_,i)=>{
+      const b=this.button('battle-list-hit',()=>this.selectEntry(this.listOffset+i));
+      b.onfocus=()=>{
+        this.listIndex=this.listOffset+i;this.remember();this.syncInfo();
+        if(this.stage==='skills')this.prefetchFocusedSkill(this.entries?.[this.listIndex]?.skill);
+      };
+      this.frame.append(b);return b;
+    });
     this.previous=this.button('battle-scroll-hit',()=>this.moveList(-6));this.previous.setAttribute('aria-label','上一页');this.place(this.previous,467+152,274+40,12,16);this.frame.append(this.previous);
     this.next=this.button('battle-scroll-hit',()=>this.moveList(6));this.next.setAttribute('aria-label','下一页');this.place(this.next,467+152,274+186,12,16);this.frame.append(this.next);
     this.returnButton=(reuseReturnButton?this.doc.getElementById('battleReturn'):null)??this.doc.createElement('button');this.returnButton.id='battleReturn';this.returnButton.className='battle-result-return';this.returnButton.hidden=true;this.returnButton.onclick=()=>this.onReturn();this.frame.append(this.returnButton);
@@ -110,7 +122,7 @@ export class BattleMenuView{
     if(!this.deferResult||this.resultView.ready){this.resultView.open(snapshot);return;}
     if(snapshot.phase!=='victory'||!snapshot.rewards||this.resultPreparing)return;
     this.resultPreparing=true;
-    this.prepareResources(async()=>{await this.resultView.prepare();this.onResourcesPrepared(this.resultView.images);})
+    this.prepareResources(async()=>{await this.resultView.prepare();await this.onResourcesPrepared(this.resultView.images);})
       .then(()=>{if(!this.disposed){this.resultPreparing=false;this.update(this.battle.presentationSnapshot());}})
       .catch(error=>{if(!this.disposed){this.resultPreparing=false;this.onResourceError(error);}});
   }
@@ -143,7 +155,18 @@ export class BattleMenuView{
     this.skillCategory=index;this.entries=this.skillEntries();this.listIndex=0;this.listOffset=0;this.remember();this.syncList();
     this.syncInfo();this.cue('menuSelect');
   }
-  focusListEntry(){this.syncInfo();const button=this.listButtons[this.listIndex-this.listOffset];if(this.entries?.length)button?.focus({preventScroll:true});else if(this.stage==='skills'){this.setInfo('此分类没有招式。');this.categoryButtons[this.skillCategory].focus({preventScroll:true});}}
+  focusListEntry(){
+    this.syncInfo();
+    const button=this.listButtons[this.listIndex-this.listOffset];
+    if(this.entries?.length){
+      const alreadyFocused=button&&this.doc.activeElement===button;
+      button?.focus({preventScroll:true});
+      // Scrolling can assign a new skill to the same focused button.
+      if(alreadyFocused&&this.stage==='skills')this.prefetchFocusedSkill(this.entries[this.listIndex]?.skill);
+    }else if(this.stage==='skills'){
+      this.setInfo('此分类没有招式。');this.categoryButtons[this.skillCategory].focus({preventScroll:true});
+    }
+  }
   refreshItems(){const previous=this.entries?.[this.listIndex];this.entries=this.battle.items().map(item=>({id:item.instance_id,name:item.name,quantity:item.quantity,description:item.description??item.name,item,available:true}));this.listIndex=Math.min(this.listIndex,Math.max(0,this.entries.length-1));this.listOffset=Math.max(0,Math.min(this.listOffset,Math.max(0,this.entries.length-6)));const selected=this.entries[this.listIndex];if(this.stage==='items'&&(previous?.id!==selected?.id||previous?.name!==selected?.name))this.syncInfo();}
   openItems(){this.refreshItems();if(!this.entries.length){this.reject('没有可用的药品。');return;}this.openList('items');}
   openList(stage){
@@ -157,8 +180,13 @@ export class BattleMenuView{
     }else this.focusListEntry();
   }
   syncList(){const show=['skills','items'].includes(this.stage),menu=this.menus.get(this.stage==='items'?'fight002':'fight001');this.categoryButtons?.forEach((b,index)=>{b.hidden=this.stage!=='skills';b.setAttribute('aria-pressed',String(index===this.skillCategory));b.setAttribute('aria-disabled',String(!this.available()));});this.listButtons.forEach((b,i)=>{const entry=this.entries?.[this.listOffset+i];b.hidden=!show||!entry;if(!show||!entry)return;const w=menu.widgets.find(w=>w.name.toLowerCase()==='list'+(i+1)),r=w.rect;this.place(b,467+r.left,274+r.top,r.right-r.left+1,r.bottom-r.top+1);b.dataset.entryId=entry.id;b.setAttribute('aria-label',entry.name+(entry.quantity!==undefined?` ×${entry.quantity}`:''));b.setAttribute('aria-disabled',String(!entry.available||!this.available()));});this.previous.hidden=this.next.hidden=!show;this.previous.setAttribute('aria-disabled',String(this.listOffset===0));this.next.setAttribute('aria-disabled',String(this.listOffset+6>=(this.entries?.length??0)));}
-  moveList(amount){if(!this.entries?.length)return;const before=this.listIndex;this.listIndex=Math.max(0,Math.min(this.entries.length-1,this.listIndex+amount));if(before===this.listIndex)return;this.listOffset=Math.max(0,Math.min(this.listOffset,this.listIndex));if(this.listIndex>=this.listOffset+6)this.listOffset=this.listIndex-5;this.syncList();this.remember();this.syncInfo();this.listButtons[this.listIndex-this.listOffset]?.focus({preventScroll:true});this.cue('menuSelect');}
+  moveList(amount){if(!this.entries?.length)return;const before=this.listIndex;this.listIndex=Math.max(0,Math.min(this.entries.length-1,this.listIndex+amount));if(before===this.listIndex)return;this.listOffset=Math.max(0,Math.min(this.listOffset,this.listIndex));if(this.listIndex>=this.listOffset+6)this.listOffset=this.listIndex-5;this.syncList();this.remember();this.focusListEntry();this.cue('menuSelect');}
   selectEntry(index){const entry=this.entries?.[index];if(!entry?.available||!this.available()){this.reject(this.stage==='skills'&&this.battle.skillUnavailableReason?.(entry?.id)||'此项当前无法使用。');return;}this.listIndex=index;this.remember();if(this.stage==='skills')this.chooseSkill(entry.skill,'skills');else{this.prefetchCommand({actor_id:this.snapshot.player_id,item_id:entry.item.id});this.draft={kind:'item',instanceId:entry.id,actorId:this.snapshot.player_id,name:entry.name};this.openTarget('items');}}
+  prefetchFocusedSkill(skill){
+    if(skill&&this.available()&&this.battle.canChoose(skill.id)){
+      this.prefetchCommand({actor_id:this.snapshot.player_id,skill_id:skill.id});
+    }
+  }
   chooseSkill(skill,from){this.prefetchCommand({actor_id:this.snapshot.player_id,skill_id:skill.id});this.draft={kind:'skill',skillId:skill.id,actorId:this.snapshot.player_id,name:skill.name};this.openTarget(from);}
   targetActors(){if(this.draft?.kind==='item'&&this.battle.itemTargetIds){const ids=this.battle.itemTargetIds(this.draft.instanceId);return this.snapshot.actors.filter(a=>ids.includes(a.id));}if(this.draft?.kind==='skill'&&this.battle.targetIdsForSkill){const ids=this.battle.targetIdsForSkill(this.draft.skillId);return this.snapshot.actors.filter(a=>ids.includes(a.id));}const side=this.draft?.kind==='item'?'player':'enemy';return this.snapshot.actors.filter(a=>a.side===side&&a.hp.current>0&&!a.escaped&&a.state_raw!==11);}
   targetPreview(){
