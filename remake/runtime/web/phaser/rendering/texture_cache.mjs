@@ -9,7 +9,13 @@ export class TextureCache {
     Object.assign(this,{scene,idleFrames,budgetBytes,maxFrames});this.sources=new WeakMap();this.entries=new Set();this.frame=0;
     const gl=scene.game?.renderer?.gl;this.maxSize=Math.min(2048,gl?gl.getParameter(gl.MAX_TEXTURE_SIZE):2048);
     this.cuts=new WeakMap();this.cutOwners=new WeakMap();
-    this.unsubscribe=onBitmapEvicted(source=>{const entry=this.sources.get(source);if(entry)this.remove(entry);});
+    this.unsubscribe=onBitmapEvicted((source,retain)=>{
+      const entry=this.sources.get(source);
+      if(!entry||entry.releaseBitmap)return;
+      // Phaser 在场景更新结束后才绘制，暂停时还会重用上次的精灵列表。
+      if(entry.used===this.frame)entry.releaseBitmap=retain();
+      else this.remove(entry);
+    });
     this.stats={created:0,removed:0,frames_created:0,uploads:0,uploaded_bytes:0};
   }
   begin(){this.frame++;}
@@ -97,6 +103,7 @@ export class TextureCache {
     const width=Math.min(this.maxSize,source.width-x),height=Math.min(this.maxSize,source.height-y);result.push({x,y,width,height,...this.region(source,x,y,width,height)});
   }return result;}
   prune(){
+    for(const entry of this.entries)if(entry.releaseBitmap&&entry.used!==this.frame)this.remove(entry);
     // Atlas residency belongs to BattleResources. Dropping a texture merely
     // because its animation changed pages would undo that cache under WebGL.
     const unmanaged=[...this.entries].filter(entry=>bitmapResident(entry.source)===null).sort((a,b)=>a.used-b.used);
@@ -109,8 +116,14 @@ export class TextureCache {
       if(used===this.frame)continue;entry.texture.remove(name);entry.frames.delete(name);
     }
   }
-  remove(entry){this.scene.textures.remove(entry.key);this.sources.delete(entry.source);this.entries.delete(entry);const owner=this.cutOwners.get(entry.source);owner?.cuts.delete(owner.key);
-    this.stats.removed++;}
+  remove(entry){
+    this.scene.textures.remove(entry.key);
+    this.sources.delete(entry.source);
+    this.entries.delete(entry);
+    const owner=this.cutOwners.get(entry.source);owner?.cuts.delete(owner.key);
+    entry.releaseBitmap?.();
+    this.stats.removed++;
+  }
   snapshot(){return {...this.stats,resident:this.entries.size,bytes:[...this.entries].reduce((sum,e)=>sum+e.bytes,0)};}
   destroy(){this.unsubscribe();for(const entry of [...this.entries])this.remove(entry);this.sources=new WeakMap();}
 }
