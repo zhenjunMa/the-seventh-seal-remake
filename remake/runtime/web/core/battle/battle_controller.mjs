@@ -70,6 +70,7 @@ const copy = (value) => structuredClone(value);
 // effective/display HP positive. 4FFE90 and 519DD0 advance death through5/7;
 // 4FFA30 excludes the completed category7 actor, regardless of that HP bonus.
 const fallenActor = (actor) => actor.hp.current === 0 || [4, 5, 7].includes(actor.state_raw);
+const livingAttackTarget = (actor) => actor.hp.current > 0 && actor.state_raw < 4 && !actor.escaped;
 // 41B3C0 gates ordinary single-target medicines by category and immunity,
 // without testing equipment-adjusted HP. Source mode3 revival is separate.
 function requireValue(value, message) {
@@ -832,9 +833,7 @@ export class BattleController {
       .filter(
         (actor) =>
           actor.side !== caster.side &&
-          actor.hp.current > 0 &&
-          actor.state_raw < 4 &&
-          !actor.escaped &&
+          livingAttackTarget(actor) &&
           this.reactionTargetAvailability(skill, actor).available,
       )
       .map((actor) => actor.id);
@@ -1931,11 +1930,11 @@ export class BattleController {
         }
       } else if (
         !victim ||
+        (fixed[0x24] && !fixed[0x25] && !livingAttackTarget(victim)) ||
         victim.reaction_busy_raw ||
         victim.immune_raw ||
         targetFixed[0] === 19 ||
         victim.status_flags_raw & (1 << 9) ||
-        (step.effect_contact && {1: 1, 2: 2, 3: 4}[victim.class_raw] & step.action_mask_raw) ||
         new DataView(fixed.buffer).getInt32(0xcb, true) === -1
       )
         result = {
@@ -1946,6 +1945,17 @@ export class BattleController {
           mp_cost: source.mp_cost,
           skipped: 'native-contact-gate',
           after_settled_raw: victim?.settled_raw ?? 0,
+        };
+      else if (step.effect_contact && ({1: 1, 2: 2, 3: 4}[victim.class_raw] & step.action_mask_raw))
+        // 506A70 enqueues MISS for a blocked pose without running damage or reaction RNG.
+        result = {
+          hit: false,
+          damage: 0,
+          reaction: 0,
+          native_return: -1,
+          mp_cost: source.mp_cost,
+          reason: 'action-class-rejected',
+          after_settled_raw: victim.settled_raw,
         };
       else
         result = this.resolveAction({
@@ -2124,7 +2134,9 @@ export class BattleController {
       if (!fixed[0x24]) return [target.id];
       return this.state.actors
         .filter((actor) =>
-          fixed[0x25] ? actor.side_raw === attacker.side_raw : actor.side_raw !== attacker.side_raw,
+          fixed[0x25]
+            ? actor.side_raw === attacker.side_raw
+            : actor.side_raw !== attacker.side_raw && livingAttackTarget(actor),
         )
         .map((actor) => actor.id);
     };
@@ -2177,7 +2189,7 @@ export class BattleController {
                       );
                     return (
                       actor.side_raw !== caster.side_raw &&
-                      !actor.escaped &&
+                      livingAttackTarget(actor) &&
                       parseInt(actor.current_skill.fixed_raw_hex.slice(0, 2), 16) !== 19
                     );
                   })

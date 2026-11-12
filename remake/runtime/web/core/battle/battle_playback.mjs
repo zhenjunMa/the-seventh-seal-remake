@@ -280,7 +280,7 @@ export class BattlePlayback {
           const detail={...clone(step),...(channel.carrier_targets?.group?{carrier_target_ids:clone(channel.carrier_targets.target_ids)}:{}),presentation_time_ms:run.started+at,contact_key:`${carrier||child?channel.channel_id:'main'}:${step.plan_record_index}:${step.logical_frame}`,actor_id:channel.result.actor_id,target_id:channel.result.target_id,skill_id:channel.result.skill_id,
             basis:'Original logical CHR contact position; original composition and DGP frame table, preview animation clock'};
           const response=child?run.onReactionContact?.(detail,clone(channel.descriptor)):run.onContact(detail);if(!response||typeof response.then==='function')throw new Error('完整接触结算必须同步返回原结算结果');
-          channel.result={...channel.result,skipped:null,...clone(response)};channel.impact_called=true;channel.impact_done=true;channel.impact_elapsed=at-(channel.at??0);
+          channel.result={...channel.result,skipped:null,group_results:null,...clone(response)};channel.impact_called=true;channel.impact_done=true;channel.impact_elapsed=at-(channel.at??0);
           for(const hit of response.group_results??[response])this._queueDamageText({...channel,result:{...channel.result,target_id:hit.target_id??channel.result.target_id}},hit,now);
           if((response.item_effect??response.item_used)&&run.item_effect_id){const asset=this.meta.effects.find(e=>e.id===run.item_effect_id);if(!asset)throw new Error('药品恢复特效缺失');
             for(const hit of response.group_results??[response])if(hit.item_effect??hit.item_used)channel.effects.push({asset_id:asset.id,slot:'target',...(hit.target_id?{target_id:hit.target_id}:{}),unconditional:true,at:at-(channel.at??0),frame_ms:asset.interval_raw,visited_frame:-1});}
