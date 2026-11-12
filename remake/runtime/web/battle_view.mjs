@@ -265,7 +265,6 @@ export class BattleView {
     this.stageMetadataPath=stageMetadataPath;this.stageMeta=null;this.stageStarted=null;
     this.lifecycleMetadataPath=lifecycleMetadataPath;this.lifecycle=null;
     this.statusMetadataPath=statusMetadataPath;this.statusMeta=null;
-    this.preparingEntry=false;this.entryFrameSounds=[];this.entryFrameControls=[];
     this.lastActorPoses=new Map();
     this.roster=[{id:'001',resource_id:'001',side:'player',skill_id:'yantu'},{id:'012',resource_id:'012',side:'enemy',skill_id:'snow_attack'}];
     this.images = new Map();
@@ -295,12 +294,6 @@ export class BattleView {
   set nativeControlIsCurrent(value){this.playbackRuntime.nativeControlIsCurrent=value;}
   get lastActorPoses(){return this.playbackRuntime.lastActorPoses;}
   set lastActorPoses(value){this.playbackRuntime.lastActorPoses=value;}
-  get preparingEntry(){return this.playbackRuntime.preparingEntry;}
-  set preparingEntry(value){this.playbackRuntime.preparingEntry=value;}
-  get entryFrameSounds(){return this.playbackRuntime.entryFrameSounds;}
-  set entryFrameSounds(value){this.playbackRuntime.entryFrameSounds=value;}
-  get entryFrameControls(){return this.playbackRuntime.entryFrameControls;}
-  set entryFrameControls(value){this.playbackRuntime.entryFrameControls=value;}
   get cameraShake(){return this.playbackRuntime.cameraShake;}
   set cameraShake(value){this.playbackRuntime.cameraShake=value;}
   get cameraPan(){return this.playbackRuntime.cameraPan;}
@@ -633,7 +626,7 @@ export class BattleView {
     this.lastActorPoses.clear();this.cameraShake=null;this.colorFade=null;this.cameraPan=null;
     this.stageStarted=null;this.victoryPlayback=null;
     this.drawnSlots=null;this.presentationFrame=null;
-    this.lifecycle?.reset();this.entryFrameSounds=[];this.entryFrameControls=[];this.playbackRuntime.currentRun=null;
+    this.lifecycle?.reset();this.playbackRuntime.currentRun=null;
     this.defendClocks=new Map();
     this.damageTexts=[];
     if(!this.ready||this.run)throw new Error('战斗资源尚未就绪或正在行动');
@@ -693,7 +686,7 @@ export class BattleView {
     this.lastActorPoses.clear();this.cameraShake=null;this.colorFade=null;this.cameraPan=null;
     this.drawnSlots=null;this.presentationFrame=null;
     this.damageTexts=[];
-    this.lifecycle?.reset();this.entryFrameSounds=[];this.entryFrameControls=[];
+    this.lifecycle?.reset();
     this.prefetchTicket=null;this.prefetchLease=null;
     for(const run of [this.run,...this.detachedRuns].filter(Boolean)){if(!run.primary_resolved)run.reject(abortError(reason));this._releaseRun(run);}
     this.run=null;this.detachedRuns=[];this.playbackRuntime.currentRun=null;
@@ -903,28 +896,6 @@ export class BattleView {
 
   drainLifecycleCompleted(){return this.lifecycle?.drainCompleted()??[];}
   lifecycleSnapshot(){return this.lifecycle?.snapshot()??null;}
-  prepareEntry(snapshot,now){
-    if(!this.lifecycle||this.lifecycle.entryPrepared)return;
-    const current=this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())?this.nativeControl.state:null;
-    this.preparingEntry=true;
-    const visible=(id,pose)=>{
-      if(!pose)return false;
-      const role=this._role(id),bounds=this._appearanceBounds(role.id,pose),scan=pose.appearance_scan;
-      if(bounds.empty)return false;
-      if(scan){
-        const initial=scan.mode===5?scan.min_x-bounds.min_y:0;
-        if(initial+8*(scan.render_calls-1)<=0)return false;
-      }
-      if(pose.offset_x===undefined)return true;
-      const scale=this.meta.policy.sprite_scale,x=this._slots(null)[id][0]+pose.offset_x*(this.stageMeta?1.125:scale)-role.anchor.x*scale;
-      // A running entry can be opaque while its occupied pixels are still
-      // outside the viewport. Prepare those hidden frames before capture.
-      return x+bounds.max_x>(this.stageMeta?120:0)&&x+bounds.min_x<(this.stageMeta?840:960);
-    };
-    try{return this.lifecycle.prepareEntry(current?.lifecycle_events?{...snapshot,actors:current.actors,lifecycle_events:current.lifecycle_events}:snapshot,this.roster,now,visible);}
-    finally{this.preparingEntry=false;}
-  }
-
   _particleEffect(actorId,roleId,mode,event,appearance=false){
     if(!globalThis.document?.createElement)return null; // headless timing adapter
     const role=this.meta.roles.find(r=>r.id===roleId),pose=this.lastActorPoses.get(actorId);
@@ -946,7 +917,6 @@ export class BattleView {
     if(this.lifecycleBounds.has(key))return this.lifecycleBounds.get(key);
     const scale=this.meta.policy.sprite_scale;
     // Scan the verified source sprite, never the composed battle background.
-    // Retain occupied-pixel bounds for scan appearance and viewport entry.
     const sourcePose={action_index:action.index,action_frame:frame,source_frame:action.first_frame+frame};
     if(!globalThis.document?.createElement)return {min_x:0,min_y:0,max_x:Math.floor((role.frame_width-1)*scale),max_y:Math.floor((role.frame_height-1)*scale),empty:false,pose:sourcePose};
     const pair=this.lifecyclePairs.get(`${roleId}:${action.first_frame+frame}`),image=this.images.get(pair?'/'+pair.main.path:action.sheet);
@@ -982,7 +952,7 @@ export class BattleView {
     queue.sort((a,b)=>a.depth_y-b.depth_y);
     const entries=[];
     for (const {id} of queue) {
-      if(entryPreview&&!this.lifecycle?.entryPrepared&&snapshot?.lifecycle_events?.some(event=>event.actor_id===id&&event.kind==='entry'))continue;
+      if(entryPreview&&snapshot?.lifecycle_events?.some(event=>event.actor_id===id&&event.kind==='entry'))continue;
       const role = this._role(id), actor = actors.get(id), slot = slots[id];
       const nativeZ=this.nativeControl&&(!this.nativeControlIsCurrent||this.nativeControlIsCurrent())?this.nativeControl.actor(id)?.native_z_raw:actor?.native_z_raw;
       if(Number.isFinite(nativeZ))slot[1]+=nativeZ*(this.stageMeta?1.125:this.meta.policy.sprite_scale);

@@ -5,7 +5,7 @@
  * ev_e7ebc40b1eb0efaa9d96ff7f3e6fc290955d8807dff0dc831ad32c06ceb45a70.
  */
 import {freezeDefinitionMap} from '../content/immutable_definition.mjs';
-import {DeathParticlePlayback,DEATH_PARTICLE_TIMING} from '../../death_particles.mjs';
+import {DeathParticlePlayback} from '../../death_particles.mjs';
 import {nativeEntryPath,advanceNativeEntryPath,nativeEntryOffset} from './battle_entry.mjs';
 const need=(ok,message)=>{if(!ok)throw new TypeError(message);};
 const copy=value=>structuredClone(value);
@@ -60,7 +60,7 @@ export class BattleLifecyclePlayback {
     }
     this.reset();
   }
-  reset(){this.channels=new Map();this.held=new Map();this.hiddenActors=new Set();this.alphas=new Map();this.epochs=new Map();this.finished=new Set();this.retired=new Set();this.completed=[];this.battleId=null;this.lastNow=null;this.entryPrepared=false;this.preparingEntries=null;}
+  reset(){this.channels=new Map();this.held=new Map();this.hiddenActors=new Set();this.alphas=new Map();this.epochs=new Map();this.finished=new Set();this.retired=new Set();this.completed=[];this.battleId=null;this.lastNow=null;}
   _key(event){return `${event.actor_id}\0${event.life_epoch}\0${event.token}`;}
   _cancel(actorId){
     const channel=this.channels.get(actorId);if(channel)this.retired.add(this._key(channel.event));
@@ -73,7 +73,7 @@ export class BattleLifecyclePlayback {
     const skill=index===null||index===undefined?null:role.skills.get(index);
     need(index===null||index===undefined||skill,'Exact selected lifecycle source skill missing');
     if(skill&&event.source_id_raw!==null&&event.source_id_raw!==undefined)need(skill.id===event.source_id_raw,'Lifecycle selected source ID differs');
-    const channel={event:copy(event),actor_id:actor.id,resource_id:roleId,role,side:roster?.side??actor.side??role.side,skill,cursor:0,pose:null,deadline:now,started:now,appearance:null,blocked:null,mode:'sequence',nativeBridge:this.nativeBridge?.(actor.id)??null,vertical_wait:false,record_visited:-1,entry_origin_x:actor.native_x_raw};
+    const channel={event:copy(event),actor_id:actor.id,resource_id:roleId,role,side:roster?.side??actor.side??role.side,skill,cursor:0,pose:null,deadline:now,appearance:null,blocked:null,mode:'sequence',nativeBridge:this.nativeBridge?.(actor.id)??null,vertical_wait:false,record_visited:-1,entry_origin_x:actor.native_x_raw};
     if(event.kind==='escape'){
       // 50E4B0 reverses the 51D960 eight-pixel path with cursor step -10.
       // The fixed 640px battle plane retains the existing camera adapter.
@@ -227,7 +227,6 @@ export class BattleLifecyclePlayback {
       }else if([0,6,11].includes(step.command_raw)){
         //5130D0 starts background subtraction, a camera snap or the shared
         //511C30 return without a source wait. The owning view executes them.
-        channel.last_control={command_raw:step.command_raw,mode_raw:step.mode_raw_0x47,at:channel.deadline};
         this.onControl?.({...copy(step),actor_id:channel.actor_id,at:channel.deadline});
       }else if(step.command_raw===3){
         need(channel.nativeBridge&&step.raw_hex,'Lifecycle source vertical command missing');
@@ -275,50 +274,9 @@ export class BattleLifecyclePlayback {
       if(this.finished.has(this._key(event))||this.retired.has(this._key(event)))continue;
       let channel=this.channels.get(id);
       if(!channel){this._cancel(id);channel=this._start(event,actors.get(id),members.get(id),time);}
-      if(!this.preparingEntries?.has(id))this._advanceChannel(channel,time);
+      this._advanceChannel(channel,time);
     }
     return this.snapshot();
-  }
-  prepareEntry(snapshot,roster,now,isVisible=()=>true){
-    if(this.entryPrepared&&this.battleId===snapshot.id)return this.snapshot();
-    if(this.battleId!==null&&snapshot.id!==undefined&&snapshot.id!==this.battleId)this.reset();
-    const entries=(snapshot.lifecycle_events??[]).filter(event=>event.kind==='entry');
-    if(!entries.length)return this.snapshot();
-    need(!this.channels.size,'Entry preparation must precede live lifecycle playback');
-    const input={...snapshot,lifecycle_events:entries},ready=new Map();let time=now;
-    try{
-      // Visit hidden records in their shared source-time order, including
-      // controller-owned appearance RNG. Stop each actor at its first visible
-      // frame; running entries keep their initial movement frame intact.
-      this.preparingEntries=new Set();
-      while(ready.size<entries.length){
-        this.advance(input,roster,time);let next=Infinity;
-        for(const event of entries){
-          if(ready.has(event.actor_id))continue;
-          const channel=this.channels.get(event.actor_id);
-          need(!channel?.blocked,`Entry preparation blocked: ${channel?.blocked}`);
-          if(!channel||this.alpha(event.actor_id)>0&&isVisible(event.actor_id,this.pose(event.actor_id))){
-            ready.set(event.actor_id,time);this.preparingEntries.add(event.actor_id);continue;
-          }
-          const appearance=channel.appearance;
-          const at=appearance?.particles?appearance.particles.started+(appearance.particles.tick+1)*DEATH_PARTICLE_TIMING.render_ms
-            :appearance&&(appearance.mode===5||appearance.mode===6)&&this.appearanceRenderMs>0
-              ?appearance.started+(Math.floor((time-appearance.started)/this.appearanceRenderMs+1e-7)+1)*this.appearanceRenderMs
-              :appearance?appearance.started+(Math.floor((time-appearance.started)/APPEARANCE_ALPHA_ADAPTER.source_clock_ms+1e-7)+1)*APPEARANCE_ALPHA_ADAPTER.source_clock_ms:channel.deadline;
-          need(at>=time,'Entry preparation has no next hidden frame');next=Math.min(next,at);
-        }
-        if(ready.size<entries.length){need(Number.isFinite(next),'Entry preparation cannot reach a visible frame');time=next;}
-      }
-      // Only presentation timestamps move. The owning battle clock, charging,
-      // status ticks and lifecycle acknowledgements have not advanced.
-      for(const [id,at]of ready){
-        const channel=this.channels.get(id);if(!channel)continue;const shift=now-at;
-        channel.started+=shift;channel.deadline+=shift;
-        for(const value of [channel.appearance,channel.appearance?.particles])if(value)value.started+=shift;
-        for(const value of [channel.entry,channel.escape,channel.last_control])if(value)value.at+=shift;
-      }
-      this.lastNow=now;this.entryPrepared=true;return this.snapshot();
-    }finally{this.preparingEntries=null;}
   }
   alpha(actorId){return this.alphas.get(actorId)??1;}
   pose(actorId){const channel=this.channels.get(actorId),pose=channel?.pose??this.held.get(actorId)?.pose,path=channel?.escape??channel?.entry,appearance=channel?.appearance;

@@ -113,22 +113,25 @@ export async function checkWebglRendering(runtime,record){
   record(`菜单入战：图片、GPU字形与保留绘制列表完整捕获，覆盖后隐藏菜单、首帧后准备及快照释放通过（示意菜单，首帧 ${menuTiming[firstFrame].elapsed_ms.toFixed(1)}ms）`);
   const lifecycleManifest=await (await fetch('/data/battle_lifecycle.json')).json();
   const roster=[{id:'entry-player',resource_id:'001',side:'player'},{id:'entry-enemy',resource_id:'012',side:'enemy'}];
-  const entryState={id:'webgl-entry-preparation',actors:roster.map(actor=>({...actor,life_epoch:0})),
+  const entryState={id:'webgl-entry',actors:roster.map(actor=>({...actor,life_epoch:0})),
     lifecycle_events:roster.map(actor=>({actor_id:actor.id,token:actor.id,life_epoch:0,kind:'entry',source_skill_index:11,source_id_raw:11}))};
   const lifecycle=new BattleLifecyclePlayback(lifecycleManifest,{appearanceBounds:()=>({min_x:200,max_y:200,empty:false})});
   runtime.setPhase('battle-loading');const entryTime=runtime.battle.clock.time;
-  lifecycle.prepareEntry(entryState,roster,entryTime);
   const paintEntry=()=>{
     paint([20,40,60]);surface.globalAlpha=lifecycle.alpha('entry-player');surface.fillStyle='#ff0000';surface.fillRect(100,280,80,80);
     surface.globalAlpha=lifecycle.alpha('entry-enemy');surface.fillStyle='#00ff00';surface.fillRect(380,280,80,80);surface.globalAlpha=1;surface.endFrame();
   };
-  await runtime.transitions.run(runtime.captureTexture('battle'),()=>{paintEntry();return runtime.captureTexture('battle');},{kind:4});
+  await runtime.transitions.run(runtime.captureTexture('battle'),()=>{paint([20,40,60]);return runtime.captureTexture('battle');},{kind:4});
   runtime.flush();
-  assert(pixel(runtime.game.renderer,140,300)[0]>20&&pixel(runtime.game.renderer,420,300)[1]>40,'转场结束首帧仍为空战场');
-  assert(runtime.battle.clock.time===entryTime&&!lifecycle.drainCompleted().length,'转场准备提前推进了战斗时钟或完成了入场');
-  const entryAlpha=lifecycle.alpha('entry-enemy');lifecycle.advance(entryState,roster,entryTime+60);paintEntry();runtime.flush();
-  assert(lifecycle.alpha('entry-enemy')>entryAlpha,'可见入场动作没有从准备帧继续播放');runtime.setPhase('battle-active');
-  record('入场衔接：原动作隐藏前段在转场内准备，结束首帧已有可见单位、后续显现继续且战斗时钟未推进（示意人物）');
+  assert(near(pixel(runtime.game.renderer,140,300),[20,40,60,255]),'转场底图提前绘制了入场人物');
+  assert(runtime.battle.clock.time===entryTime&&!lifecycle.snapshot().active.length,'转场提前启动了战斗时钟或入场动作');
+  lifecycle.advance(entryState,roster,entryTime);
+  assert(lifecycle.pose('entry-player').source_frame===170&&lifecycle.pose('entry-enemy').source_frame===0,'入场未从各角色第一帧开始');
+  for(const elapsed of [120,180])lifecycle.advance(entryState,roster,entryTime+elapsed);
+  paintEntry();runtime.flush();
+  assert(pixel(runtime.game.renderer,140,300)[0]>20&&pixel(runtime.game.renderer,420,300)[1]>40,'转场后的显形没有绘制');
+  runtime.setPhase('battle-active');
+  record('入场衔接：转场完成后从各角色第一帧播放，显形按原顺序绘制（示意人物）');
   const cancellation=new AbortController();paint();const before=runtime.captureTexture('battle');
   const interrupted=runtime.transitions.run(before,()=>runtime.captureTexture('battle'),{kind:6,signal:cancellation.signal});cancellation.abort(new Error('验收取消'));
   let cancelled=false;try{await interrupted;}catch(error){cancelled=error.message==='验收取消';}

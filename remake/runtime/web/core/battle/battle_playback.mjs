@@ -13,8 +13,7 @@ export class BattlePlayback {
     this.ports=ports;
     this.run=null;this.detachedRuns=[];this.lifecycle=null;
     this.nativeControl=null;this.nativeControlIsCurrent=null;
-    this.lastActorPoses=new Map();this.preparingEntry=false;
-    this.entryFrameSounds=[];this.entryFrameControls=[];
+    this.lastActorPoses=new Map();
     this.cameraShake=null;this.cameraPan=null;this.colorFade=null;
     this.sourceVisitTime=null;this.sourceVisits=new Set();
     this.currentRun=null;this.time=null;
@@ -23,18 +22,14 @@ export class BattlePlayback {
   configureLifecycle(manifest,geometry) {
     this.lifecycle=manifest?new BattleLifecyclePlayback(manifest,{
       ...geometry,
-      onControl:step=>{if(this.preparingEntry)this.entryFrameControls.push(step);
-        else this.ports.sourceControl(step,step.actor_id,undefined,step.at);},
+      onControl:step=>this.ports.sourceControl(step,step.actor_id,undefined,step.at),
       nativeBridge:actorId=>this._nativeBridge(actorId),
-      onFrame:step=>{if(this.preparingEntry)this.entryFrameSounds.push({...step,sound_inhibited:Boolean(this.nativeControl?.actor(step.actor_id)?.immune_raw)});
-        else this.ports.lifecycleFrame(step);},
+      onFrame:step=>this.ports.lifecycleFrame(step),
     }):null;
   }
   advance(snapshot,now) {
     if(!Number.isFinite(now))throw new Error('战斗表现时钟无效');
     this.time=now;
-    for(const step of this.entryFrameControls.splice(0))this.ports.sourceControl(step,step.actor_id,undefined,now);
-    for(const step of this.entryFrameSounds.splice(0))this.ports.lifecycleFrame(step);
     if(snapshot?.lifecycle_events)for(const active of this._sequenceRuns()){
       active.external_interrupts??=new Set();
       for(const event of snapshot.lifecycle_events){
@@ -71,9 +66,9 @@ export class BattlePlayback {
       record:raw=>{check();control.nativeSourceRecord(actorId,raw);},
       spriteEnd:pose=>{check();if(!control.finishNativeSpriteRecord(actorId))return false;
         this.lastActorPoses.set(actorId,{action_index:pose.action_index,action_frame:pose.action_frame});return true;},
-      advance:at=>{check();if(!this.preparingEntry){
+      advance:at=>{check();
         if(this.sourceVisitTime!==at){this.sourceVisitTime=at;this.sourceVisits=new Set();}
-        if(this.sourceVisits.has(actorId))return false;this.sourceVisits.add(actorId);}
+        if(this.sourceVisits.has(actorId))return false;this.sourceVisits.add(actorId);
         control.advanceNativeVerticals(at,actorId);return true;}};
   }
 

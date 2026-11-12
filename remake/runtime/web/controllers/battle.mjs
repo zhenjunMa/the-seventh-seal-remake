@@ -257,16 +257,19 @@ export function createBattleController({host, sessions = createBattleSessions()}
         await start(signal);signal?.throwIfAborted();
         if(!isCurrent())throw new Error('剧情战斗入场会话已失效');
         showBattle();const snapshot=current().battle.presentationSnapshot(),now=current().battleView.resourceTime?.()??0;
-        current().battleView.prepareEntry?.(snapshot,now);
         current().battleView.draw(snapshot,now,{entryPreview:true});
         current().battleMenu.draw(now,current().battleView.actorPositions());current().battleMenu.paintTo(host.engine?.battle.surface.canvas??$('battleCanvas'));
         host.engine?.battle.surface.endFrame();
-        // Capture prepared entry poses; source motion and queued audio resume
-        // once the covering transition releases the battlefield.
         return captureTransition('battle');
       };
       if(host.battleTransition&&before)await host.battleTransition.run(before,paintBattle,transitionOptions);
-      else{transitionOptions.signal?.throwIfAborted();if(!isCurrent())throw new Error('战斗入场会话已失效');transitionOptions.onCovered?.();await start(transitionOptions.signal);if(isCurrent()){showBattle();current().battleView.prepareEntry?.(current().battle.presentationSnapshot(),current().battleView.resourceTime?.()??0);}}
+      else{
+        transitionOptions.signal?.throwIfAborted();
+        if(!isCurrent())throw new Error('战斗入场会话已失效');
+        transitionOptions.onCovered?.();
+        await start(transitionOptions.signal);
+        if(isCurrent())showBattle();
+      }
     }finally{if(isCurrent())current().battleEntryPending=false;}
     if(isCurrent())updateBattle(current().battle.presentationSnapshot());
   }

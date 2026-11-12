@@ -13,9 +13,12 @@ import {selectNativeNormalReaction} from '../web/core/battle/battle_reactions.mj
 const base=new URL('../web/',import.meta.url),read=async p=>JSON.parse(await readFile(new URL(p.replace(/^\//,''),base),'utf8'));
 const meta=await read('/data/party_battle_view.json'),life=await read('/data/battle_lifecycle.json');
 function canvas(){const calls=[],c={globalAlpha:1,save(){},restore(){},setTransform(){},translate(){},clearRect(){},fillRect(){},beginPath(){},rect(){},clip(){},ellipse(){},fill(){},moveTo(){},lineTo(){},stroke(){},createLinearGradient(){return {addColorStop(){}};},drawImage(img,...args){calls.push({path:img.path,args});},fillText(){},strokeText(){}};return {width:960,height:540,getContext:()=>c,calls};}
-async function fixture(enemyRole='012'){
+async function fixture(enemyRole='012',allyRole='002'){
  const target=canvas(),view=new BattleView({canvas:target,metadataPath:'/data/party_battle_view.json',lifecycleMetadataPath:'/data/battle_lifecycle.json',jsonLoader:read,assetLoader:async a=>({image:{width:a.width,height:a.height,path:a.path},sha256:a.sha256})});
- await view.prepare();view.setRoster([{id:'001',side:'player'},{id:'002',side:'player'},{id:'enemy',resource_id:enemyRole,side:'enemy'}],{'yantu':{id:'yantu',actor_id:'001'},'001_43':{id:'001_43',actor_id:'001'},'kai_mieyan':{id:'kai_mieyan',actor_id:'002'},'enemy':{id:'enemy',actor_id:'enemy'}});
+ await view.prepare();
+ const allySkill=meta.roles.find(role=>role.id===allyRole).skill.runtime_skill_id;
+ view.setRoster([{id:'001',side:'player'},{id:allyRole,side:'player'},{id:'enemy',resource_id:enemyRole,side:'enemy'}],
+   {yantu:{id:'yantu',actor_id:'001'},'001_43':{id:'001_43',actor_id:'001'},[allySkill]:{id:allySkill,actor_id:allyRole},enemy:{id:'enemy',actor_id:'enemy'}});
  // This Canvas fixture owns source-record writes through the same controller
  // bridge as the browser. HP submission / lifecycle acknowledgements remain
  // explicit test inputs; no numeric battle is synthesized by these pixels.
@@ -40,27 +43,28 @@ test('transition preview leaves entry hidden and does not execute its records or
  drawn.length=0;view.present(state,5120);view.present(state,5121);const alpha=drawn.findLast(row=>row.id==='001').alpha;
  assert.ok(alpha>0&&alpha<1);assert.equal(sounds.length,1);assert.equal(view.lifecycleSnapshot().active[0].appearance.mode,5);
 });
-test('transition prepares visible entry poses once, defers cues and resumes their remaining animation without an empty lead',async()=>{
- for(const now of [5000,123.456]){
- const {view}=await fixture(),drawn=[],sounds=[];
- view._sprite=(role,action,frame,x,y,alpha)=>drawn.push({id:role.id,alpha});view.onLifecycleFrame=step=>sounds.push(step);
- const events=['001','enemy'].map(actor_id=>({token:'entry-'+actor_id,actor_id,life_epoch:0,kind:'entry',source_skill_index:11,source_id_raw:11})),state=snapshot(events);
- view.prepareEntry(state,now);const prepared=view.lifecycleSnapshot();
- assert.equal(prepared.active.length,2);assert.ok(prepared.active.every(row=>row.alpha>0&&row.alpha<1));
- assert.equal(view.lifecycle.pose('001').source_frame,170);assert.equal(view.lifecycle.alpha('enemy'),1/7);
- assert.deepEqual(view.drainLifecycleCompleted(),[]);assert.equal(sounds.length,0);assert.equal(view.lastActorPoses.size,0);
- view.prepareEntry(state,now);assert.deepEqual(view.lifecycleSnapshot(),prepared);
- view.present(state,now,{entryPreview:true});assert.deepEqual(view.lifecycleSnapshot(),prepared);assert.equal(sounds.length,0);
- assert.ok(drawn.find(row=>row.id==='001').alpha>0);assert.ok(drawn.find(row=>row.id==='012').alpha>0);
- drawn.length=0;view.present(state,now);assert.equal(sounds.length,2);assert.equal(view.lifecycle.alpha('enemy'),1/7);
- assert.ok(drawn.find(row=>row.id==='001').alpha>0);assert.deepEqual(view.drainLifecycleCompleted(),[]);
- view.present(state,now+60);assert.equal(view.lifecycle.alpha('enemy'),2/7);assert.equal(sounds.length,2);
- view.stop();assert.deepEqual(view.entryFrameSounds,[]);assert.equal(view.lifecycle.entryPrepared,false);
- }
+test('all entry sequences begin at the first source record when the transition ends',async()=>{
+ const {view}=await fixture('012','003'),sounds=[];
+ const state=snapshot(['001','003','enemy'].map(actor_id=>({token:'entry-'+actor_id,actor_id,life_epoch:0,kind:'entry',source_skill_index:11,source_id_raw:11})));
+ state.actors[1]={id:'003',hp:{current:900},life_epoch:0};
+ view.onLifecycleFrame=step=>sounds.push([step.actor_id,step.source_frame]);
+ const bounds=view._appearanceBounds.bind(view);
+ view._appearanceBounds=(roleId,pose)=>roleId==='003'&&pose?.source_frame===191?{empty:true}:bounds(roleId,pose);
+
+ view.present(state,5000,{entryPreview:true});
+ assert.deepEqual(view.lifecycleSnapshot().active,[]);assert.deepEqual(sounds,[]);
+ view.present(state,6000);
+ assert.deepEqual(sounds,[['001',170],['003',191],['enemy',0]]);
+ assert.ok(view.lifecycleSnapshot().active.every(row=>row.cursor===1&&row.alpha===0));
+ view.present(state,6099);assert.equal(view.lifecycle.pose('003').source_frame,191);
+ view.present(state,6100);view.present(state,6117);
+ assert.deepEqual(sounds.at(-1),['003',192]);
+ assert.equal(view.lifecycle.pose('001').source_frame,170);
+ assert.deepEqual(view.drainLifecycleCompleted(),[]);
+ view.destroy();
 });
 
 test('077 original entry executes both background fades, camera snap and return only after activation, then restores both channels',async()=>{
- for(const prepared of [false,true]){
  const {view,control}=await fixture('077'),visited=[];
  const source=life.roles.find(role=>role.id==='077').skills.find(skill=>skill.chr_skill_index===5);
  assert.deepEqual(source.timeline.filter(step=>step.kind==='command').map(step=>[step.chr_record_index,step.command_raw]),[[0,0],[1,6],[3,7],[5,0],[7,11]]);
@@ -70,13 +74,9 @@ test('077 original entry executes both background fades, camera snap and return 
      fade:view.colorFade&&structuredClone(view.colorFade),camera:view.cameraPan&&structuredClone(view.cameraPan)});
  };
  const event={token:'077-entry',actor_id:'enemy',life_epoch:0,kind:'entry',source_skill_index:5,source_id_raw:11},state=snapshot([event]),started=5000;
- if(prepared){
-   view.prepareEntry(state,started);assert.deepEqual(view.entryFrameControls.map(step=>step.command_raw),[0,6]);
-   assert.equal(view.colorFade,null);assert.equal(view.cameraPan,null);assert.deepEqual(visited,[]);
-   const before=view.lifecycleSnapshot();view.present(state,500000,{entryPreview:true});
-   assert.deepEqual(view.lifecycleSnapshot(),before);assert.equal(view.colorFade,null);assert.equal(view.cameraPan,null);
- }
- view.present(state,started);assert.equal(visited[0].at,started);assert.equal(view.colorFade.value,50,'no hidden preparation time is charged to the first color update');
+ view.present(state,started-1000,{entryPreview:true});
+ assert.equal(view.colorFade,null);assert.equal(view.cameraPan,null);assert.deepEqual(visited,[]);
+ view.present(state,started);assert.equal(visited[0].at,started);assert.equal(view.colorFade.value,50);
  let now=started;for(;view.lifecycleSnapshot().active.length&&now<started+15000;){now+=20;view.present(state,now);}
  assert.ok(now<started+15000);assert.deepEqual(visited.map(row=>row.command),[0,6,0,11]);
  assert.deepEqual(visited[0].control,{mode_raw:0,step_i32_raw:100,amount_i32_raw:50,color_mask_raw:7});
@@ -86,7 +86,6 @@ test('077 original entry executes both background fades, camera snap and return 
  assert.deepEqual(view.drainLifecycleCompleted(),[{token:event.token,actor_id:'enemy',life_epoch:0}]);
  view.present(state,now+1000);assert.equal(view.colorFade.value,0);assert.equal(view.colorFade.active,false);
  assert.equal(view.cameraPan.x,0);assert.equal(view.cameraPan.active,false);view.destroy();
- }
 });
 
 test('real lifecycle layers load separately and a completed player death stays drawn after its event is acknowledged',async()=>{
