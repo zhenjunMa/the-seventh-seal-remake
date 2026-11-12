@@ -33,15 +33,6 @@ const poseFrame=(segment,elapsed,loop=false)=>{
 };
 
 const victoriousActor=actor=>actor?.side==='player'&&actor.state_raw===9&&actor.hp.current>0&&!actor.escaped;
-function victoryPoseAt(segments,elapsed){
-  for(const segment of segments){
-    const duration=segment.frames.length*segment.interval_raw;
-    if(elapsed<duration)return {segment,frame:poseFrame(segment,elapsed)};
-    elapsed-=duration;
-  }
-  const segment=segments.at(-1);
-  return {segment,frame:segment.frames.at(-1)};
-}
 
 function effectOwners(meta, itemMeta, lifecycleMeta) {
   const owners = new Map(meta.effects.map(effect => [effect.id, new Set()]));
@@ -324,22 +315,7 @@ export class BattleView {
     try{
       const run=this.playbackRuntime.advance(snapshot,now);
       this.lastDrawAt=now;
-      if(this.ready&&snapshot?.phase==='victory'){
-        const sequences=this.victoryPlayback??=new Map();
-        for(const actor of snapshot.actors){
-          if(!victoriousActor(actor))continue;
-          const current=sequences.get(actor.id);
-          if(current&&now-current.started<current.duration)continue;
-          const variants=this._role(actor.id)?.victory_sequences;
-          if(!variants?.length)continue;
-          // 510CDD returns an exhausted sequence to idle, then 51A9EA
-          // selects ID13 again while state9 persists. Keep each actor's
-          // complete CHR sequence and use only presentation RNG.
-          const segments=variants.length===1?variants[0]:variants[Math.floor(Math.random()*variants.length)];
-          const duration=segments.reduce((total,segment)=>total+segment.frames.length*segment.interval_raw,0);
-          sequences.set(actor.id,{segments,started:now,duration});
-        }
-      }
+      if(this.ready&&snapshot?.phase==='victory')this._advanceVictory(snapshot,now);
       if(this.stageMeta)this.stageStarted??=now;
       for(const actor of snapshot?.actors??[]){
         if(actor.defending){if(!this.defendClocks.has(actor.id))this.defendClocks.set(actor.id,now);}
@@ -353,6 +329,36 @@ export class BattleView {
       }
       return run;
     }finally{this.advancing=false;}
+  }
+  _advanceVictory(snapshot,now){
+    const sequences=this.victoryPlayback??=new Map();
+    for(const actor of snapshot.actors){
+      if(!victoriousActor(actor))continue;
+      const current=sequences.get(actor.id);
+      if(current){
+        this._visitVictoryFrames(current,snapshot.id,actor.id,now);
+        if(current.segmentIndex<current.segments.length||now<current.nextFrameAt)continue;
+      }
+      const role=this._role(actor.id),variants=role?.victory_sequences;
+      if(!variants?.length)continue;
+      // 510CDD finishes the source sequence; 51A9EA selects ID13 again in state9.
+      const segments=variants.length===1?variants[0]:variants[Math.floor(Math.random()*variants.length)];
+      const playback={segments,resourceId:role.id,cycle:(current?.cycle??0)+1,segmentIndex:0,frameIndex:0,nextFrameAt:now};
+      sequences.set(actor.id,playback);
+      this._visitVictoryFrames(playback,snapshot.id,actor.id,now);
+    }
+  }
+  _visitVictoryFrames(playback,battleId,actorId,now){
+    while(playback.segmentIndex<playback.segments.length&&playback.nextFrameAt<=now){
+      const segment=playback.segments[playback.segmentIndex],index=playback.frameIndex;
+      playback.segment=segment;playback.frame=segment.frames[index];
+      // DGP and CHR sound markers use the logical cursor (50F377/50F41F).
+      this.onVictoryFrame?.({battle_id:battleId,actor_id:actorId,resource_id:playback.resourceId,cycle:playback.cycle,
+        action_index:segment.action_index,raw_hex:segment.raw_hex,plan_record_index:segment.chr_record_index,
+        logical_frame:segment.reverse_raw?segment.end_exclusive-1-index:segment.start+index});
+      playback.nextFrameAt+=segment.interval_raw;
+      if(++playback.frameIndex===segment.frames.length){playback.segmentIndex++;playback.frameIndex=0;}
+    }
   }
   present(snapshot,now=performance.now(),options={}){
     if(!options.entryPreview)this.advance(snapshot,now);
@@ -1047,10 +1053,10 @@ export class BattleView {
       if(idlePose){segment={action_index:idlePose.action_index};frame=idlePose.action_frame;}
       const acting=run?.sequence?roots.flatMap(root=>[...root.children,...(!root.main_done?[root]:[])]).reverse().find(c=>!c.done&&c.result.actor_id===id):run?.result.actor_id===id?run:null;
       const impacting=run?.sequence?roots.flatMap(root=>this._sequenceChannels(root).map(channel=>({channel,at:root.started+(channel.at??0)+(channel.impact_elapsed??0)}))).filter(({channel:c})=>c.result.target_id===id&&c.impact_called&&this._damaging(c.result)).sort((a,b)=>b.at-a.at)[0]?.channel:run?.result.target_id===id&&run.impact_called&&this._damaging(run.result)?run:null;
-      const victorySequence=victory?.get(id);
+      const victorySequence=victory&&victoriousActor(actor)?victory.get(id):null;
       const appearanceScan=victorySequence?null:lifePose?.appearance_scan??null;
       if(victorySequence){
-        ({segment,frame}=victoryPoseAt(victorySequence.segments,now-victorySequence.started));
+        ({segment,frame}=victorySequence);
         const action=role.actions.find(row=>row.index===segment.action_index);
         pair=this.lifecyclePairs.get(`${role.id}:${action.first_frame+frame}`)??null;
       } else if(lifePose){segment={action_index:lifePose.action_index};frame=lifePose.action_frame;alpha=appearanceScan&&(this.context.supportsNativeAppearance||globalThis.document?.createElement)?1:lifePose.alpha??1;

@@ -221,6 +221,7 @@ export function createBattleController({host, sessions = createBattleSessions()}
     view.nativeControl=battle;
     view.nativeControlIsCurrent=()=>current().battle===battle;
     view.onLifecycleFrame=step=>{if(current().battle===battle)actionSound({action_id:`${step.battle_id}:${step.lifecycle_token}`},{...step,channel_id:'lifecycle'});};
+    view.onVictoryFrame=step=>{if(current().battle===battle)actionSound({action_id:step.battle_id},{...step,channel_id:`victory:${step.actor_id}:${step.cycle}`});};
     return battle;
   }
   async function prepareHud(newParty,{returnLabel=null,onProgress,world=host.world,battle=current().battle,owner=null,signal}={}){

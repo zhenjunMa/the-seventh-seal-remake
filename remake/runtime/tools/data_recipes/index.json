@@ -1565,6 +1565,7 @@
     "sound/os05-04.wav": "5864f71ac0c79fa3220754849e8942be4a7a36bf2d2d0076cd813af13aab9870",
     "sound/os05-05.wav": "b6e47e966a7891cb154ca1e06a9ed907bd052232d43f2b8a97dfe0a93155cb68",
     "sound/os05-07.wav": "7e20888e17bac22e164899c83b491564b1a6e9aed0410e00e046855b29b41dbf",
+    "sound/os05-08.wav": "bd6b07c1920ecdca1f9c53910a7ae5b946f5fac124d868c2d1ef4e53ec1935d8",
     "sound/os05-09.wav": "f092f67ed16f4790e2febcbccb015d928083a444120064073de5efa96c1b7e55",
     "sound/os05-10.wav": "72d50560186bbe5d78c56c64fd71eb62a7574e40dd85f2af7d4e173c58c98fa1",
     "sound/os05-11.wav": "a96328f9a7d64b4d94bc7c9072daa52ca329bb719a4d58c767eeffd06f51fdd0",
@@ -1699,7 +1700,7 @@
   "documents": {
     "audio.json": {
       "root": [
-        14998
+        908712
       ],
       "format": {
         "indent": 2,
@@ -1707,8 +1708,8 @@
         "crlf": true,
         "newline": true
       },
-      "sha256": "f6f2e2e4e358c8ff98415bd0b801307d0a16c003753be01de456ef266cb92817",
-      "bytes": 3070725
+      "sha256": "4135146f5b0bf7c59dcfeb50aeb73f6fe798d379f7a8785953c02fa05e684a8b",
+      "bytes": 3080599
     },
     "battle_lifecycle.json": {
       "root": [
@@ -20010,6 +20011,6 @@
     "0107": "da5d41c105b95bc972e9d14a801145d8e5b4d07d28b7cee225aab8ce46953787",
     "0108": "19b14cab6ef1be1f31f8d7e31a2bb736b9f4eb09dd27952f3effa0ecf4d0b168",
     "0109": "e9743843e69704602a22f2c609d48e8c0179f8a967b59795fda94a96c63d44e2",
-    "0110": "4f179664549ea6a8f1e744799b7a4f381fe0b54acc173457217c2b367828a741"
+    "0110": "bd8da4c85c077d6e4eca8d8a07b033d1e5d9fb0fd5882c911f361c72b8efbbe8"
   }
 }
