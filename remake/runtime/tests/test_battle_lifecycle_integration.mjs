@@ -302,19 +302,33 @@ test('a new hit interrupts the current return and releases its queued teammate w
  }finally{f.dispose();}
 });
 
-test('warm healing retains the source effect waits and restores idle immediately after their last frame',async()=>{
+test('warm healing animates the caster idle during both source effect waits',async()=>{
  const f=await liveFixture('013',await read('/data/forest_status.json')),{battle,view,drawn,logs}=f,attacker=battle.actor('001'),target=attacker;
  const skill=f.commands.skills.yannuan,task=battle.performSequence(attacker,target,skill,directSequence(skill));
- // Walk every source body/effect frame; a late draw must not skip their waits.
- let now=0;for(;now<=2200;now+=10)await f.draw(now);
- const held=structuredClone(drawn.get('001'));
- for(;now<=5040;now+=10)await f.draw(now);
- assert.equal(attacker.native_active,true);assert.deepEqual(drawn.get('001'),held);
+ const idleFrames=new Map();
+ let castDrawn=false,now=0;
+ for(;now<6000;now+=10){
+   await f.draw(now);
+   const pose=drawn.get('001'),step=view.run?.steps[view.run.cursor];
+   castDrawn||=pose.action===24;
+   if(step?.carrier_asset_id){
+     assert.equal(attacker.native_active,true);
+     assert.equal(pose.action,0);
+     if(!idleFrames.has(step.carrier_asset_id))idleFrames.set(step.carrier_asset_id,[]);
+     idleFrames.get(step.carrier_asset_id).push(pose.frame);
+   }
+   if(!attacker.native_active)break;
+ }
+ assert.equal(castDrawn,true);
+ assert.deepEqual([...idleFrames.keys()],['m01Rwz01','_iReSTfr']);
+ for(const frames of idleFrames.values()){
+   assert.equal(frames[0],0);
+   assert.ok(new Set(frames).size>1,'the caster keeps animating while the effect plays');
+ }
  assert.equal(battle.state.history.at(-1).contacts.length,1);
- for(;attacker.native_active&&now<6000;now+=10)await f.draw(now);
  assert.equal(attacker.native_active,false);
  assert.ok(logs.some(e=>e.type==='battle-source-completed'&&e.actor_id==='001'&&e.at>=5050));
- await f.draw(now);assert.equal(drawn.get('001').action,0);assert.equal(view.run,null);await task;
+ await f.draw(now+10);assert.equal(drawn.get('001').action,0);assert.equal(view.run,null);await task;
 });
 
 test('successful escape remains visible while its source action moves out, then acknowledges before battle exit',async()=>{

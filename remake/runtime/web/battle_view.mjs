@@ -1004,6 +1004,12 @@ export class BattleView {
         pair=this.lifecyclePairs.get(`${role.id}:${action.first_frame+frame}`)??null;
       } else if(lifePose){segment={action_index:lifePose.action_index};frame=lifePose.action_frame;alpha=appearanceScan&&(this.context.supportsNativeAppearance||globalThis.document?.createElement)?1:lifePose.alpha??1;
         pair=this.lifecyclePairs.get(`${role.id}:${lifePose.source_frame}`)??null;
+      } else if (acting?.effect_wait_started_at!=null) {
+        const elapsed=now-acting.effect_wait_started_at;
+        if(role.idle_sequence){
+          const pose=idlePoseAt(role.idle_sequence.segments,elapsed);
+          segment={action_index:pose.action_index};frame=pose.action_frame;
+        }else{segment=role.idle;frame=poseFrame(segment,elapsed,true);}
       } else if (acting) {
         const step = acting.steps[acting.cursor],visual=step.command_raw!==undefined?step.visual:step;
         if(visual){segment = {action_index: visual.action_index}; frame = visual.action_frame; pair = visual.pair;}

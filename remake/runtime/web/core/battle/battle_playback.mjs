@@ -240,9 +240,12 @@ export class BattlePlayback {
           if(child)run.onReactionRecord?.({...clone(step),presentation_time_ms:run.started+at},clone(channel.descriptor));else run.onRecord({...clone(step),presentation_time_ms:run.started+at});
           channel.carrier_targets=step.command_raw===4?run.onCarrierTargets?.(clone(step),channel.descriptor?clone(channel.descriptor):null):null;
           channel.record_visited=step.plan_record_index;
+          channel.effect_wait_started_at=null;
           this._nativeSourceControl(step,channel.result.actor_id,channel.result.target_id,run.started+at,run.native_control);
         }
         if(!carrier&&step.command_raw===4&&channel.carrier_targets?.target_ids.length===0){channel.visited=i;channel.next_at=at;continue;}
+        // 507930 advances the caster's idle cursor while a blocking effect runs.
+        if(!carrier&&step.command_raw===4&&step.carrier_asset_id)channel.effect_wait_started_at??=now;
         let entryVisited=i;
         if(step.entry_raw_hex){
           const bridge=this._nativeBridge(channel.result.actor_id,run.native_control,run.native_guard);
