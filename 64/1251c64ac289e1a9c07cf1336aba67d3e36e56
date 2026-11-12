@@ -1,0 +1,19 @@
+remake/runtime/web/phaser/rendering/texture_cache.mjs
+  s_e9934f1e6ef994::t_1c276b34c0b5e4 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "641251c64ac289e1a9c07cf1336aba67d3e36e56",
+  "prompts": {},
+  "sessions": {
+    "s_e9934f1e6ef994": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1cda6-db2d-7cf1-8b66-3ec17e086bc6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
