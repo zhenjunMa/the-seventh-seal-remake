@@ -105,6 +105,9 @@
 # Versioned, generated glyph atlases are built-in remake resources.
 !/remake/runtime/builtin/fonts/**/*.png
 
+# Gameplay screenshots used in the root README.
+!/remake/docs/screenshots/*.webp
+
 # Windows batch launchers are user-local wrappers.
 *.[cC][mM][dD]
 *.[bB][aA][tT]

@@ -2,6 +2,16 @@
 
 《第七封印：魔神苏醒》的个人非官方浏览器重制，重现地图探索、剧情演出、即时战斗、队伍成长、装备合成和存读档。主线已接通至结局，支线和游戏系统已接入，仍待按正常成长路线完整试玩。
 
+## 版本对比
+
+两列均为浏览器重制版的实机截图，分别关闭和开启「高清素材」。点击图片可查看大图。
+
+| 场景与说明 | 原版素材 | 高清素材 |
+| --- | --- | --- |
+| **白木森林 · 战斗**<br>英格妮迎战雪泥怪与森林狩猎者，可对照角色轮廓、战斗背景和界面。 | [![白木森林战斗：原版素材](remake/docs/screenshots/battle-original.webp)](remake/docs/screenshots/battle-original.webp) | [![白木森林战斗：高清素材](remake/docs/screenshots/battle-hd.webp)](remake/docs/screenshots/battle-hd.webp) |
+| **火之谷 · 对话**<br>英格妮在火之谷入口与爱西琳交谈，可对照立绘和对白文字。 | [![火之谷对话：原版素材](remake/docs/screenshots/fire-valley-original.webp)](remake/docs/screenshots/fire-valley-original.webp) | [![火之谷对话：高清素材](remake/docs/screenshots/fire-valley-hd.webp)](remake/docs/screenshots/fire-valley-hd.webp) |
+| **炎城三 · 焰坛连回道**<br>可对照石板路、砖墙和街道上的人物。 | [![炎城三街景：原版素材](remake/docs/screenshots/ember-city-original.webp)](remake/docs/screenshots/ember-city-original.webp) | [![炎城三街景：高清素材](remake/docs/screenshots/ember-city-hd.webp)](remake/docs/screenshots/ember-city-hd.webp) |
+
 ## 快速开始
 
 需要 Python 3.12+、Node.js、FFmpeg（含 FFprobe）和保留目录结构的完整原版安装。请在仓库根目录执行命令。首次运行前，创建虚拟环境并安装依赖。
@@ -141,6 +151,6 @@ python -B remake/runtime/tools/export_hd_animations.py --weights "/path/to/RealE
 
 本项目新增且有权授权的代码、工具和文档采用 [MIT License](LICENSE)。
 
-原版《第七封印：魔神苏醒》的程序、素材、剧情及相关商标归各自权利人所有，不在上述授权范围内。仓库不分发原版程序和提取媒体。
+原版《第七封印：魔神苏醒》的程序、素材、剧情及相关商标归各自权利人所有，不在上述授权范围内。对比截图用于展示重制效果。仓库不分发原版程序或可供游戏加载的提取素材包。
 
 Phaser 采用 [MIT 许可证](remake/runtime/web/vendor/phaser/LICENSE.md)。默认 Noto 位图字库源自 Noto Serif CJK SC 和 Noto Sans CJK SC，采用 [SIL Open Font License 1.1](remake/runtime/builtin/fonts/LICENSE.txt)。独立的 Windows 对照字库不适用该许可证；随游戏分发逐字位图字库需要相应字体授权，参见 [微软字体许可 FAQ](https://learn.microsoft.com/en-us/typography/fonts/font-faq#document-embedding)。
