@@ -1,6 +1,7 @@
 import {bitmapResident,onBitmapEvicted} from '../../core/resources/bitmap_residency.mjs';
 import {imageRegions} from '../../core/resources/image_regions.mjs';
 let serial=0;
+const cutKey=(left,top,width,height)=>`${left},${top},${width},${height}`;
 
 // ImageResources and BattleResources keep ownership of decoded pixels and hashes.
 // This cache only owns Phaser textures / frames referencing those same pixels.
@@ -85,7 +86,7 @@ export class TextureCache {
       const left=Math.floor(x),top=Math.floor(y),w=Math.ceil(x+width)-left,h=Math.ceil(y+height)-top;
       if(w>this.maxSize||h>this.maxSize)throw new Error('单个显示区域超过 GPU 纹理分页上限');
       let cuts=this.cuts.get(source);if(!cuts){cuts=new Map();this.cuts.set(source,cuts);}
-      const key=`${left},${top},${w},${h}`;let bitmap=cuts.get(key);
+      const key=cutKey(left,top,w,h);let bitmap=cuts.get(key);
       if(!bitmap){bitmap=document.createElement('canvas');bitmap.width=w;bitmap.height=h;
         bitmap.getContext('2d').drawImage(source,left,top,w,h,0,0,w,h);cuts.set(key,bitmap);this.cutOwners.set(bitmap,{cuts,key});}
       return this.region(bitmap,x-left,y-top,width,height,name);
@@ -96,12 +97,33 @@ export class TextureCache {
     entry.frames.set(name,this.frame);
     return {key:entry.key,frame:name};
   }
-  tiles(source){
-    if(source.packed)return imageRegions(source).map(p=>({x:p.x,y:p.y,width:p.width,height:p.height,
-      ...this.region(p.bitmap,p.sx,p.sy,p.width*p.pixelScale,p.height*p.pixelScale)}));
-    const result=[];for(let y=0;y<source.height;y+=this.maxSize)for(let x=0;x<source.width;x+=this.maxSize){
-    const width=Math.min(this.maxSize,source.width-x),height=Math.min(this.maxSize,source.height-y);result.push({x,y,width,height,...this.region(source,x,y,width,height)});
-  }return result;}
+  tileRegions(source){
+    if(source.packed)return imageRegions(source);
+    const tiles=[];
+    for(let y=0;y<source.height;y+=this.maxSize)for(let x=0;x<source.width;x+=this.maxSize){
+      const width=Math.min(this.maxSize,source.width-x),height=Math.min(this.maxSize,source.height-y);
+      tiles.push({bitmap:source,x,y,width,height,sx:x,sy:y,pixelScale:1});
+    }
+    return tiles;
+  }
+  tileFrame({bitmap,sx,sy,width,height,pixelScale}){
+    return this.region(bitmap,sx,sy,width*pixelScale,height*pixelScale);
+  }
+  regionSource({bitmap,sx,sy,width,height,pixelScale}){
+    const w=width*pixelScale,h=height*pixelScale;
+    if(bitmap.width>this.maxSize||bitmap.height>this.maxSize){
+      const left=Math.floor(sx),top=Math.floor(sy);
+      const key=cutKey(left,top,Math.ceil(sx+w)-left,Math.ceil(sy+h)-top);
+      return this.cuts.get(bitmap)?.get(key)??null;
+    }
+    return bitmap;
+  }
+  uploadRegion(region){
+    const source=this.regionSource(region);
+    if(source)return this.texture(source);
+    const {bitmap,sx,sy,width,height,pixelScale}=region;
+    return this.region(bitmap,sx,sy,width*pixelScale,height*pixelScale);
+  }
   prune(){
     for(const entry of this.entries)if(entry.releaseBitmap&&entry.used!==this.frame)this.remove(entry);
     // Atlas residency belongs to BattleResources. Dropping a texture merely

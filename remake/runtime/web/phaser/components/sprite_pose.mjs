@@ -1,7 +1,17 @@
 // Frames are selected by the existing native action timeline. Phaser displays
 // them without a second animation clock changing contact or completion times.
 import {shadowRectangle} from '../../map_sprite.mjs';
+import {imageRegions} from '../../core/resources/image_regions.mjs';
 import {pixelSprite} from '../rendering/pixel_sprite.mjs';
+
+export function* poseRegions({image,light,shadow,shadow_geometry,sx=0,sy=0,width=image.width,height=image.height}){
+  if(shadow){
+    const rect=shadowRectangle(sx,sy,width,height,shadow_geometry);
+    yield* imageRegions(shadow,rect.sx,rect.sy,rect.width,rect.height);
+  }
+  if(!image.pixels)yield* imageRegions(image,sx,sy,width,height);
+  if(light)yield* imageRegions(light,sx,sy,width,height);
+}
 
 function place(sprite,frame,x,y,width,height,displayWidth,displayHeight){
   const scaleX=displayWidth/width,scaleY=displayHeight/height;

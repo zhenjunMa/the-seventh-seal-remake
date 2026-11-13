@@ -1,5 +1,6 @@
 const preferenceKey = 'seal:hd-images';
 const directory = '/assets/hd/';
+const mapBackground = /^\/assets\/maps\/[a-z\d_-]+\/background\.png$/i;
 const supported = [
   /^dialogue_ui\/(?:faces_\d+|(?:board|think|map_name|reward)_000|wait[12]_\d+)\.png$/i,
   /^world_map\/locate_\d+\/image_\d+\.png$/i,
@@ -58,11 +59,41 @@ function describe(bitmap, path, width, height, pixelScale, rect) {
   return {packed: true, path, width, height, pixelScale, hdUrl: bitmap.src, hdRect: rect, regions, pool: {pages: new Map([[0, {bitmap}]])}};
 }
 
+function loadImage(url, width, height, createImage) {
+  return new Promise(resolve => {
+    const bitmap = createImage();
+    const finish = image => {
+      bitmap.onload = bitmap.onerror = null;
+      resolve(image);
+    };
+    bitmap.onload = () => finish(bitmap.width === width && bitmap.height === height ? bitmap : null);
+    bitmap.onerror = () => finish(null);
+    bitmap.src = url;
+  });
+}
+
+async function loadMapTiles(key, {width, height, scale, tiles}, createImage) {
+  const {sourceSha256, size} = tiles;
+  if (!/^[a-f0-9]{64}$/.test(sourceSha256) || size !== Math.floor(1024 / scale)) return null;
+  const base = directory + `map_tiles/${sourceSha256}-${size}`;
+  const regions = [], pages = new Map(), loads = [];
+  for (let y = 0; y < height; y += size) for (let x = 0; x < width; x += size) {
+    const w = Math.min(size, width - x), h = Math.min(size, height - y), page = regions.length;
+    regions.push([x, y, w, h, page, 0, 0]);
+    loads.push(loadImage(`${base}/${x}-${y}.png`, w * scale, h * scale, createImage).then(bitmap => {
+      if (bitmap) pages.set(page, {bitmap});
+    }));
+  }
+  await Promise.all(loads);
+  if (pages.size !== regions.length) return null;
+  return {packed: true, path: key, width, height, pixelScale: scale, regions, pool: {pages}};
+}
+
 export function loadHdImage(path, original, createImage = () => new Image()) {
   if (!enabled || typeof path !== 'string') return null;
   const key = '/' + path.replace(/^\/+/, '');
   if (!key.startsWith('/assets/') || !supported.some(pattern => pattern.test(key.slice(8)))) return null;
-  return readManifest().then(pack => {
+  return readManifest().then(async pack => {
     const entry = pack?.images?.[key];
     if (!entry) return null;
     const {width, height, scale, rect, sourceSha256} = entry;
@@ -73,17 +104,12 @@ export function loadHdImage(path, original, createImage = () => new Image()) {
     if (rect !== undefined && (!Array.isArray(rect) || rect.length !== 4 || !rect.every(Number.isSafeInteger))) return null;
     const [x, y, w, h] = rect ?? [0, 0, width, height];
     if (x < 0 || y < 0 || w <= 0 || h <= 0 || x + w > width || y + h > height) return null;
-    return new Promise(resolve => {
-      const bitmap = createImage();
-      const finish = image => {
-        bitmap.onload = bitmap.onerror = null;
-        resolve(image);
-      };
-      bitmap.onload = () => finish(bitmap.width === w * scale && bitmap.height === h * scale
-        ? describe(bitmap, path, width, height, scale, rect) : null);
-      bitmap.onerror = () => finish(null);
-      bitmap.src = directory + key.slice('/assets/'.length);
-    });
+    if (entry.tiles && rect === undefined && mapBackground.test(key)) {
+      const tiled = await loadMapTiles(key, entry, createImage);
+      if (tiled) return tiled;
+    }
+    const bitmap = await loadImage(directory + key.slice('/assets/'.length), w * scale, h * scale, createImage);
+    return bitmap ? describe(bitmap, path, width, height, scale, rect) : null;
   }).catch(() => null);
 }
 

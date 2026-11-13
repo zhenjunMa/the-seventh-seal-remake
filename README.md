@@ -50,6 +50,7 @@ python -B remake/runtime/tools/export_hd_animations.py --weights "/path/to/RealE
 | --- | --- | --- |
 | `--weights <文件>` | 两个脚本 | 指定本地 Real-ESRGAN 模型权重。 |
 | `--font-dir <目录>` | `export_hd_menu.py` | 指定字体轮廓目录，可重复传入。 |
+| `--repack-maps` | `export_hd_menu.py` | 将已安装的高清大地图切成纹理页，无需模型或字库。保留已有的整图 PNG。 |
 | `--skip-action-effects` | `export_hd_animations.py` | 让招式和道具的施放特效沿用原版帧，缩小新生成的高清动画包。 |
 | `--repack-effects` | `export_hd_animations.py` | 按原版特效资源重排已安装的高清特效图集，直接复用现有高清像素。 |
 | `--plan` | 两个脚本 | 只检查导出范围和数量。 |

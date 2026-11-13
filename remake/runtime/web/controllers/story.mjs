@@ -302,6 +302,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       const scene=await playbackTask(actions.prepareMap(destination.map_id,{world:targetWorld}),signal);
       if(playback?.paused)await playback.ready();check();
       const location=worldMapEntry(scene,destination,state.chapterStory);actions.validateEntry(scene,location);check();
+      await actions.prepareMapView?.(scene,{...targetWorld,location},{signal});check();
       loadEncounterMap(draft,destination.map_id,state.encounterData);
       await initializeMapSequence({mapId:destination.map_id,world:draft,story:state.chapterStory,content:repository.content??runtimeContent});
       state.sceneEntryDraft=draft;installed=true;state.scenes.current=scene;

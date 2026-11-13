@@ -144,6 +144,14 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     return scene;
   }
   function validateEntry(scene,at) { if(!scene.movement.validEntry(at.x,at.y)) throw new Error(`目标位置不在可通行格：${at.map_id} ${at.x},${at.y}`); }
+  function prepareMapView(scene,world,options){
+    if(!state.engine)return;
+    const role=state.catalog.roles.find(role=>role.id===world.leader_id);
+    const action=role.actions.find(action=>action.index===0);
+    const view={...openingCamera(world.location,scene.bitmap.width,scene.bitmap.height),zoom:1,frame:0};
+    return state.engine.exploration.prepareViewport({scene,world,role,action,view,
+      objectBitmap:(scene,obj)=>objectBitmap(scene,obj,world,false)},options);
+  }
   function commitView(scene,at,reason) {
     if(scene!==gaitScene&&reason!=='boot')state.mapNameNoticeView?.show(scene.data.name||scene.data.id);
     motionState.reset();state.view.collisionFeedback=null;gaitScene=scene;gaitRole=state.selectedRole;
@@ -374,5 +382,5 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     }else {motionState.reset();state.view.collisionFeedback=null;}
     paint();
   }
-  return {explorationPresentation:presentation,role, sheetAction, buildHud, prepareMap, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, mapPointerDown, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, updateExploration,captureScene,captureSavePreview};
+  return {explorationPresentation:presentation,role, sheetAction, buildHud, prepareMap, prepareMapView, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, mapPointerDown, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, updateExploration,captureScene,captureSavePreview};
 }

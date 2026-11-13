@@ -1,8 +1,8 @@
 // Load and validate a destination before replacing the current world or scene.
 import {validateWorld} from '../world/world.mjs';
 export class SceneController {
-  constructor({world, prepare, validateEntry, commitView, enter = null, captureView = () => null, rollbackView = () => {}, onPhase = () => {},afterCommit=null}) {
-    Object.assign(this, {world, prepare, validateEntry, commitView, enter, captureView, rollbackView, onPhase,afterCommit});
+  constructor({world, prepare, validateEntry, prepareView, commitView, enter = null, captureView = () => null, rollbackView = () => {}, onPhase = () => {},afterCommit=null}) {
+    Object.assign(this, {world, prepare, validateEntry, prepareView, commitView, enter, captureView, rollbackView, onPhase,afterCommit});
     this.current = null; this.phase = 'boot'; this.request = 0;
   }
   setPhase(phase) { this.phase = phase; this.onPhase(phase); }
@@ -26,6 +26,7 @@ export class SceneController {
       if(nativeSortCode!==undefined)next.native_map_sort_code=nativeSortCode;
       if (!restoredWorld) next.revision = (next.revision + 1) >>> 0;
       validateWorld(next, this.world.mapIds);
+      if(this.prepareView){await this.prepareView(prepared,next,{isCurrent:()=>request===this.request});checkCurrent();}
       // commitView must be synchronous and must not mutate persistent data.
       viewAttempted = true;
       this.commitView(prepared, location, reason);

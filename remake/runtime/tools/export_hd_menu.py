@@ -19,6 +19,8 @@ MENU = '/assets/menu/'
 BATTLE_RESULT = '/assets/battle_result/'
 FONT_GROUPS = ('menu', 'dialogue', 'prologue')
 WINDOWS_FONTS = {'宋体': ('simsun.ttc', 'SimSun'), 'Arial': ('arial.ttf', 'Arial')}
+MAP_TILE_PIXELS = 1024
+MAP_BACKGROUND = re.compile(r'/assets/maps/[a-z\d_-]+/background\.png', re.IGNORECASE)
 
 
 def read_pack(path):
@@ -165,6 +167,43 @@ def valid_png(path, size):
     except (OSError, SyntaxError):
         return False
     return True
+
+
+def repack_maps(out, pack, originals):
+    changed = 0
+    verified = set()
+    for name, entry in pack['images'].items():
+        if not MAP_BACKGROUND.fullmatch(name) or entry.get('rect') is not None:
+            continue
+        original = originals.get(name)
+        source = out / name.removeprefix('/assets/')
+        if (not original or entry.get('scale') not in (2, 3, 4)
+                or max(original['width'], original['height']) * entry['scale'] <= 2048
+                or not valid_image(source, original, entry)):
+            continue
+        width, height, scale = (entry[key] for key in ('width', 'height', 'scale'))
+        digest = sha256(source.read_bytes()).hexdigest()
+        size = MAP_TILE_PIXELS // scale
+        coordinates = [(x, y, min(size, width-x), min(size, height-y))
+                       for y in range(0, height, size) for x in range(0, width, size)]
+        tiles = dict(sourceSha256=digest, size=size)
+        folder = out / 'map_tiles' / f'{digest}-{size}'
+        missing = [(x, y, w, h) for x, y, w, h in coordinates
+                   if folder not in verified and not valid_png(folder / f'{x}-{y}.png', (w*scale, h*scale))]
+        if missing:
+            with Image.open(source) as image:
+                image = image.convert('RGBA')
+                for x, y, w, h in missing:
+                    page = image.crop((x*scale, y*scale, (x+w)*scale, (y+h)*scale))
+                    target = folder / f'{x}-{y}.png'
+                    save_png(page, target)
+                    if not valid_png(target, page.size):
+                        raise ValueError(f'高清地图分页无效：{target}')
+        verified.add(folder)
+        if missing or entry.get('tiles') != tiles:
+            entry['tiles'] = tiles
+            changed += 1
+    return changed
 
 
 def image_signature(row):
@@ -392,13 +431,22 @@ def main():
     parser.add_argument('--font-dir', type=Path, action='append', default=[], help='字体轮廓目录，可重复指定')
     parser.add_argument('--plan', action='store_true', help='只核对缺少的图片和字库数量')
     parser.add_argument('--reuse-only', action='store_true', help='只发布同源高清图，无需运行模型')
+    parser.add_argument('--repack-maps', action='store_true', help='从已安装的高清大地图生成纹理页，无需模型或字体')
     args = parser.parse_args()
+    if args.repack_maps and (args.plan or args.reuse_only):
+        parser.error('--repack-maps 请单独使用')
 
     with nullcontext() if args.plan else build_lock(args.out / '.build'):
         manifest = args.out / 'manifest.json'
         pack = read_pack(manifest)
         catalog = read('assets/image_catalog.json')
         originals = catalog['images']
+        if args.repack_maps:
+            changed = repack_maps(args.out, pack, originals)
+            if changed:
+                write_json(manifest, pack)
+            print(f'已分页 {changed} 张高清大地图', flush=True)
+            return
         paths = {path for path in originals if path.startswith(MENU) and path.endswith('.png')}
         paths.update(map(canonical, static_images()))
         paths.update(map(canonical, result_images()))
@@ -414,7 +462,7 @@ def main():
             if not valid_font(args.out / path.removeprefix('/assets/'), row, registered.get(path)):
                 fonts[path] = row
         print(f'需补齐 {len(fonts)} 份高清字库', flush=True)
-        if args.plan or not (missing or fonts):
+        if args.plan:
             return
 
         for name, (source, entry) in reusable.items():
@@ -445,6 +493,10 @@ def main():
             write_json(manifest, pack)
         if fonts:
             print(f'已发布 {len(fonts)} 份高清字库', flush=True)
+        changed = repack_maps(args.out, pack, originals)
+        if changed:
+            write_json(manifest, pack)
+            print(f'已分页 {changed} 张高清大地图', flush=True)
 
 
 if __name__ == '__main__':

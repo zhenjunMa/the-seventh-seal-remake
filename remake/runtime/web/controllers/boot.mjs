@@ -268,7 +268,8 @@ export function createBootController({state, actions, $, canvas}) {
     state.menuFeedback=createMenuFeedback({playCue:(name,key)=>state.audio.playCue(name,key),getState:()=>operationFeedbackState(state.operationMenu)});
     state.menuFeedback.attach($('partyMenu'));
     state.selectedRole=state.world.value.leader_id;
-    state.scenes=new SceneController({world: state.world,prepare:actions.prepareMap,validateEntry: actions.validateEntry,commitView: actions.commitView,enter:actions.enterMap,onPhase:actions.busy,
+    state.scenes=new SceneController({world: state.world,prepare:actions.prepareMap,validateEntry:actions.validateEntry,
+      prepareView:actions.prepareMapView,commitView:actions.commitView,enter:actions.enterMap,onPhase:actions.busy,
       afterCommit:()=>actions.finishStoryCompletion?.(),
       captureView:()=>({view:{...state.view},name:$('mapName').textContent,probes:Array.from($('probe').children,child=>child.cloneNode(true)),nearest: state.nearest,resetHidden:$('resetEventSample').hidden}),
       rollbackView:checkpoint=>{state.mapNameNoticeView.close();Object.assign(state.view,checkpoint.view);$('mapName').textContent=checkpoint.name;$('probe').replaceChildren(...checkpoint.probes);$('resetEventSample').hidden=checkpoint.resetHidden;state.nearest=checkpoint.nearest;state.audio?.setScene({mapId:state.world.location.map_id,battle:false});}});
@@ -280,7 +281,7 @@ export function createBootController({state, actions, $, canvas}) {
       animate:actions.animateChapter,transfer:actions.transferChapter,battle:actions.startScriptedBattle,objectInteraction:actions.animateObjectInteraction,objectAnimation:actions.animateChapterObject,log: actions.log,setPhase:phase=>state.scenes.setPhase(phase)});
     state.worldMap=new WorldMapController({world: state.world,data:worldMapData,
       prepare:async destination=>{const draft=state.world.snapshot();delete draft.map_npc_state;const scene=await actions.prepareMap(destination.map_id,{world:draft}),location=worldMapEntry(scene,destination,state.chapterStory);
-        actions.validateEntry(scene,location);return {scene,location};},
+        actions.validateEntry(scene,location);await actions.prepareMapView(scene,{...draft,location});return {scene,location};},
       load:(prepared,location)=>{actions.commitView(prepared.scene,location);state.scenes.current=prepared.scene;},
       enter:async(prepared,draft,reason)=>{const played=await actions.enterMap(prepared.scene,draft,reason);if(played)prepared.scene=state.scenes.current;return played;},
       captureView:()=>({scene:state.scenes.current,view:state.scenes.captureView()}),rollbackView:checkpoint=>{state.scenes.current=checkpoint.scene;state.scenes.rollbackView(checkpoint.view);},
