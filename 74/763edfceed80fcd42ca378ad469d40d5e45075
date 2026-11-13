@@ -1,0 +1,33 @@
+remake/runtime/web/core/exploration/map_locomotion.mjs
+  s_48425d24fedfe0::t_26d47136228ca2 115-116,132-136
+  s_48425d24fedfe0::t_9e55ee6ddf889b 3-9,34-38,121
+  s_48425d24fedfe0::t_77e4b632fca541 39
+remake/runtime/web/data/config/movement.json
+  s_48425d24fedfe0::t_4aede146b217fb 1-5
+remake/runtime/tests/test_map_locomotion.mjs
+  s_48425d24fedfe0::t_9e55ee6ddf889b 32,63,106,125,153
+  s_48425d24fedfe0::t_26d47136228ca2 68-88
+  s_48425d24fedfe0::t_64eab2c17f0fe0 11,64
+remake/runtime/web/controllers/map.mjs
+  s_48425d24fedfe0::t_9e55ee6ddf889b 16,435,451
+remake/runtime/web/phaser/preview.mjs
+  s_48425d24fedfe0::t_9e55ee6ddf889b 9,12-13,142,149,152
+remake/runtime/web/controllers/boot.mjs
+  s_48425d24fedfe0::t_9e55ee6ddf889b 24,165-169
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "74763edfceed80fcd42ca378ad469d40d5e45075",
+  "prompts": {},
+  "sessions": {
+    "s_48425d24fedfe0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d532-6eaa-7c72-a30d-a2f24e6374f5",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
