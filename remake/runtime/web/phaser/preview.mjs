@@ -6,11 +6,11 @@ import {WorldStore} from '../core/world/world.mjs';
 import {resolveAction,applyNativeDamage,createNativeRng} from '../core/battle/combat_rules.mjs';
 import {createBattleSample,resourcesForWorld,consumeBattleMp} from '../combat_sample.mjs';
 import {MovementMap,MAP_FOOTPRINT,mapActorPosition} from '../core/exploration/movement.mjs';
-import {MapLocomotion,mapMotionProfile} from '../core/exploration/map_locomotion.mjs';
+import {MapLocomotion,loadPlayerRunSpeed,playerMapMotionProfile} from '../core/exploration/map_locomotion.mjs';
 import {MapNpcRuntime} from '../core/exploration/map_npcs.mjs';
 
-const $=id=>document.getElementById(id),keys=new Set(),json=async path=>{
-  const response=await fetch(path);if(!response.ok)throw new Error(`定义读取失败：${path}`);return response.json();
+const $=id=>document.getElementById(id),keys=new Set(),json=async (path,options)=>{
+  const response=await fetch(path,options);if(!response.ok)throw new Error(`定义读取失败：${path}`);return response.json();
 };
 const canvas=(width,height,paint)=>{const image=document.createElement('canvas');image.width=width;image.height=height;
   paint?.(image.getContext('2d'));return image;};
@@ -139,16 +139,17 @@ window.addEventListener('keydown',event=>{if(['ArrowUp','ArrowDown','ArrowLeft',
   event.preventDefault();if(!runtime.paused)keys.add(event.key);}},inputOptions);
 window.addEventListener('keyup',event=>keys.delete(event.key),inputOptions);window.addEventListener('blur',()=>keys.clear(),inputOptions);
 $('focus').addEventListener('wheel',event=>{event.preventDefault();if(!runtime.paused)viewState.zoom=Math.max(.4,Math.min(3,viewState.zoom*(event.deltaY<0?1.1:1/1.1)));},{...inputOptions,passive:false});
+const runSpeed=await loadPlayerRunSpeed(json);
 runtime.start({phase:'map',suspend:()=>keys.clear(),exploration:(now,delta)=>{
     const dt=Math.min(delta/1000,.08);
     const dx=Number(keys.has('ArrowRight')||keys.has('d'))-Number(keys.has('ArrowLeft')||keys.has('a'));
     const dy=Number(keys.has('ArrowDown')||keys.has('s'))-Number(keys.has('ArrowUp')||keys.has('w'));
     scene.npcRuntime.update(now,{player:world.location});
     const from={...world.location},running=keys.has('Shift');
-    const profile=mapMotionProfile(mapRole.actions[running?2:1],movement);
+    const profile=playerMapMotionProfile(mapRole.actions[running?2:1],movement,'',runSpeed);
     const moved=dx||dy?mapMotion.movement.advance(scene.movement,from,{dx,dy,profile,elapsedMs:dt*1000,
       obstacles:scene.movement.actorObstacles(scene.npcs)}):null;
-    const pose=mapMotion.advance(moved,{from,dx,dy,running,elapsedMs:dt*1000,role:mapRole,movement});
+    const pose=mapMotion.advance(moved,{from,dx,dy,running,elapsedMs:dt*1000,role:mapRole,profile});
     if(moved)Object.assign(world.location,{x:moved.x,y:moved.y,direction:pose.direction??from.direction});
     Object.assign(viewState,{action:pose.action,frame:pose.frame,collisionFeedback:pose.feedback});
     input={dx,dy};lastTravel={dx:world.location.x-from.x,dy:world.location.y-from.y};blocked=pose.blocked;

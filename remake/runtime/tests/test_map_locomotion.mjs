@@ -8,6 +8,7 @@ import {initialEncounterState} from '../web/core/exploration/encounters.mjs';
 const {createMapController}=await import('../web/controllers/map.mjs');
 const read=name=>JSON.parse(readFileSync(new URL('../web/data/'+name+'.json',import.meta.url),'utf8'));
 const catalog=read('catalog');
+const {run_speed_pixels_per_second:runSpeed}=read('config/movement').parameters;
 const encounterData=read('encounters');
 const geometry={cell_size:16,native_coordinate_shift:3,native_to_pixel_scale:2,native_step_shift:1};
 const actions=[{index:0,interval_raw:180,frames_per_direction:10},
@@ -28,7 +29,7 @@ function fixture({wall=false,sealed=false,encounters=false,roleId='001'}={}) {
   const nodes=new Map(),$=id=>{if(!nodes.has(id))nodes.set(id,{dataset:{}});return nodes.get(id);};
   const state={world,scenes:{phase:'map',current:scene},resources:{revision:0,retainScopes(){}},
     actorResourcesByMap:new Map(),openingResources:{roles:{}},keys:new Set(),running:false,selectedRole:roleId,
-    catalog:{roles:[role]},mapVitals:new Map(),view:{action:0,frame:0,follow:false,zoom:1},
+    catalog:{roles:[role]},playerRunSpeed:runSpeed,mapVitals:new Map(),view:{action:0,frame:0,follow:false,zoom:1},
     clock:0,chapterStory:{maps:{}},engine:{presentMap(){}},battleUnavailable:'',encounterData};
   value.encounters=initialEncounterState(value.party,294);
   const controller=createMapController({state,actions:{currentPlayTime:()=>now,guarded:fn=>fn,startBattle(group,encounters){
@@ -59,17 +60,32 @@ test('actual controller travel and gait agree across 30/60/120Hz and all three p
       assert.equal(f.state.view.action,running?2:1);assert.ok(Number.isInteger(f.state.view.frame));
     }
     for(const result of results){assert.ok(Math.abs(result.distance-results[0].distance)<1e-8);assert.equal(result.frame,results[0].frame);}
-    assert.ok(Math.abs(results[0].distance-(running?250:1000*4/31))<1e-8);
+    assert.ok(Math.abs(results[0].distance-(running?runSpeed:1000*4/31))<1e-8);
+    if(running)assert.equal(results[0].frame,Math.floor(runSpeed/12)%12);
   }
 });
 
-test('diagonal travel has no speed boost and animation measures accepted per-axis stride',()=>{
-  const straight=fixture(),diagonal=fixture();straight.state.keys.add('ArrowRight');
-  diagonal.state.keys.add('ArrowRight');diagonal.state.keys.add('ArrowDown');
-  for(let n=0;n<60;n++){straight.step(1000/60);diagonal.step(1000/60);}
-  const at=diagonal.state.world.location;
-  assert.ok(Math.abs(Math.hypot(at.x-300,at.y-300)-(straight.state.world.location.x-300))<1e-8);
-  assert.equal(at.direction,0);assert.equal(diagonal.state.view.frame,1);
+test('diagonal movement matches straight speed and running matches straight gait',()=>{
+  for(const running of [false,true]){
+    const straight=fixture(),downRight=fixture(),upLeft=fixture();
+    straight.state.keys.add('ArrowRight');
+    downRight.state.keys=new Set(['ArrowRight','ArrowDown']);
+    upLeft.state.keys=new Set(['ArrowLeft','ArrowUp']);
+    for(const f of [straight,downRight,upLeft])f.state.running=running;
+    for(let n=0;n<60;n++){
+      for(const f of [straight,downRight,upLeft])f.step(1000/60);
+      if(running){
+        assert.equal(downRight.state.view.frame,straight.state.view.frame);
+        assert.equal(upLeft.state.view.frame,straight.state.view.frame);
+      }
+    }
+    for(const [f,direction] of [[downRight,0],[upLeft,4]]){
+      const at=f.state.world.location;
+      assert.ok(Math.abs(Math.hypot(at.x-300,at.y-300)-(straight.state.world.location.x-300))<1e-8);
+      assert.equal(at.direction,direction);
+      if(!running)assert.equal(f.state.view.frame,1);
+    }
+  }
 });
 
 test('held wall microsteps preserve walk/run cadence, encounter distance and followed camera at every render Hz',()=>{
@@ -87,7 +103,7 @@ test('held wall microsteps preserve walk/run cadence, encounter distance and fol
         assert.ok(Math.abs(f.state.view.x-(at.x-16))<1e-8,'camera follows the actual microstep');
       }
       assert.ok(Math.max(...positions)-Math.min(...positions)>1);assert.ok(frames.size>3);
-      const encounters=f.state.world.value.encounters,distance=(running?250:1000*4/31)*2;
+      const encounters=f.state.world.value.encounters,distance=(running?runSpeed:1000*4/31)*2;
       const accepted=encounters.counters['001']*4+encounters.remainders['001']/4;
       assert.ok(Math.abs(accepted-distance)<1e-4,'only contact skin may trim the accepted distance');
       results.push({...f.state.world.location,frame:f.state.view.frame});
@@ -106,7 +122,7 @@ test('diagonal wall contact preserves accepted tangent travel without stopping o
     const f=fixture({wall:true});f.state.keys=new Set(['ArrowRight','ArrowDown']);f.state.running=true;
     for(let n=0;n<hz;n++)f.step(1000/hz);
     const at=f.state.world.location;
-    assert.ok(Math.abs(at.x-396)<1e-4);assert.ok(Math.abs(at.y-(300+250/Math.SQRT2))<1e-4);
+    assert.ok(Math.abs(at.x-396)<1e-4);assert.ok(Math.abs(at.y-(300+runSpeed/Math.SQRT2))<1e-4);
     assert.equal(at.direction,7);assert.equal(f.state.view.action,2);
     results.push({x:at.x,y:at.y,frame:f.state.view.frame});
   }
@@ -134,7 +150,7 @@ test('the real forest entry stairs remain open uphill and downhill in walk/run a
     const f=fixture(),scene=f.state.scenes.current;f.state.running=running;
     scene.data={...scene.data,movement:data.movement};scene.movement=new MovementMap(data.movement);
     f.state.world.value.location={...f.state.world.location,x:424,y:584};
-    const speed=mapMotionProfile(f.state.catalog.roles[0].actions[running?2:1],data.movement).speed;
+    const speed=running?runSpeed:mapMotionProfile(f.state.catalog.roles[0].actions[1],data.movement).speed;
     for(const [keys,distance]of [[['ArrowRight','ArrowUp'],40],[['ArrowUp'],48],[['ArrowDown'],48],[['ArrowLeft','ArrowDown'],40]]){
       f.state.keys=new Set(keys);let remaining=distance/speed*1000;
       while(remaining>1e-8){const dt=Math.min(1000/hz,remaining);f.step(dt);remaining-=dt;

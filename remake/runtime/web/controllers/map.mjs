@@ -13,7 +13,7 @@ import {chapterObjectState} from '../core/story/object_state.mjs';
 import {storyBindings,runtimeContent} from "../core/content/content_registry.mjs";
 import {anmActorSlots} from "../core/story/anm_runtime.mjs";
 import {chapterRouteExits,nativeEmptyEventCells} from "../core/exploration/map_connections.mjs";
-import {MapLocomotion,mapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
+import {MapLocomotion,playerMapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
 
 import {mapPresentation,mapViewport} from '../core/ui/map_presentation.mjs';
 import {mapWorldPoint, mapTargetInFront, pickMapDialogueObject} from '../core/exploration/map_interaction.mjs';
@@ -432,7 +432,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       const active=state.world.value.party.find(actor=>actor.id===state.selectedRole),effectivePlayer=state.mapVitals.get(state.selectedRole)??active;
       if((dx||dy)&&effectivePlayer.hp.current>0){const running=state.running;
         const headerRawHex=state.chapterStory.maps[at.map_id]?.header_raw_hex;
-        const motion=mapMotionProfile(sheetAction(running?2:1),state.scenes.current.data.movement,headerRawHex);
+        const motion=playerMapMotionProfile(sheetAction(running?2:1),state.scenes.current.data.movement,headerRawHex,state.playerRunSpeed);
         const movement=state.scenes.current.movement;
         let encounter=null,encounterState=state.world.value.encounters??initialEncounterState(state.world.value.party),encounterAdvanced=false;
         const moved=motionState.movement.advance(movement,at,{dx,dy,profile:motion,elapsedMs:delta*1000,
@@ -448,7 +448,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
             return !encounter&&!stop;
           }});
         pose=motionState.advance(moved,{from:at,dx,dy,running,elapsedMs:delta*1000,
-          role:role(),movement:state.scenes.current.data.movement,headerRawHex});
+          role:role(),profile:motion});
         state.world.setPosition(moved.x,moved.y,pose.direction??at.direction);state.view.follow=true;
         if(encounterAdvanced&&!encounter)state.world.setEncounterState(encounterState);
         const reached=state.scenes.current.movement.at(moved.x,moved.y),exit=reached.trigger?transitionFor(reached):null;

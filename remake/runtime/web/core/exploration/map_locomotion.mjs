@@ -1,5 +1,12 @@
 import {locomotion,KeyboardMovement} from './movement.mjs';
 
+export async function loadPlayerRunSpeed(readJson) {
+  const config=await readJson('data/config/movement.json',{cache:'no-store'});
+  const speed=config?.parameters?.run_speed_pixels_per_second;
+  if(!Number.isFinite(speed)||speed<=0)throw new Error('地图跑速必须为正数');
+  return speed;
+}
+
 // Native 46CED0 scales the movement visit interval, not the final atlas frame
 // period. Keyboard motion stays continuous; gait phase follows accepted travel.
 export function mapStepGeometry(movement={},headerRawHex='') {
@@ -22,6 +29,12 @@ export function mapMotionProfile(action,movement,headerRawHex='',speedBias=0) {
   // visits; the running channel uses three. Keep distance across cell turns.
   const gaitVisits=action.index===2?3:2;
   return {...geometry,tickMs,speed:geometry.stepSize*1000/tickMs,stride:geometry.stepSize*gaitVisits};
+}
+
+export function playerMapMotionProfile(action,movement,headerRawHex,runSpeed) {
+  const profile=mapMotionProfile(action,movement,headerRawHex);
+  if(action.index!==2||runSpeed===undefined)return profile;
+  return {...profile,speed:runSpeed,tickMs:profile.stepSize*1000/runSpeed};
 }
 
 // Native movement visits advance both axes together. Axis-staged routes have
@@ -99,13 +112,13 @@ export class CollisionFeedback {
 }
 
 // Shared exploration presentation for the formal controller and asset-free
-// preview. KeyboardMovement supplies actual travelled distance even when wall
-// microsteps cancel within a render frame; gait never uses only net movement.
+// preview. Use accepted segments so wall microsteps count even when they
+// cancel within a render frame.
 export class MapLocomotion {
   constructor(){this.movement=new KeyboardMovement();this.gait=new DistanceGait();this.feedback=new CollisionFeedback();}
   get action(){return this.gait.action;}
   reset(){this.movement.reset();this.gait.reset();this.feedback.reset();}
-  advance(result,{from,dx=0,dy=0,running=false,elapsedMs=0,role,movement,headerRawHex=''}={}){
+  advance(result,{from,dx=0,dy=0,running=false,elapsedMs=0,role,profile}={}){
     const travelX=result?result.x-from.x:0,travelY=result?result.y-from.y:0;
     if(!(dx||dy))this.movement.reset();
     const moving=(result?.travel??Math.hypot(travelX,travelY))>1e-4,blocked=Boolean((dx||dy)&&result?.blocked&&!moving);
@@ -116,8 +129,11 @@ export class MapLocomotion {
     const choice=locomotion({dx:moving?(Math.abs(heading.dx)>1e-4?heading.dx:0):dx,
       dy:moving?(Math.abs(heading.dy)>1e-4?heading.dy:0):dy,running},moving||blocked&&!result?.stopped);
     const action=role.actions.find(action=>action.index===choice.action);
-    const profile=choice.action?mapMotionProfile(action,movement,headerRawHex):null;
-    const frame=this.gait.advance(action,{dx:travelX,dy:travelY,distance:result?.travel,elapsedMs,stride:profile?.stride,
+    // Running uses path length so normalized diagonal motion keeps the same cadence.
+    const distance=running
+      ?result?.segments.reduce((sum,segment)=>sum+Math.hypot(segment.dx,segment.dy),0)
+      :result?.travel;
+    const frame=this.gait.advance(action,{dx:travelX,dy:travelY,distance,elapsedMs,stride:profile?.stride,
       inPlaceSpeed:blocked&&!result?.stopped?profile.speed:0});
     return {...choice,frame,blocked,elapsed:this.gait.elapsed,
       feedback:this.feedback.advance(result,{dx,dy,running,elapsedMs})};
