@@ -1,0 +1,71 @@
+remake/runtime/web/core/ui/map_presentation.mjs
+  s_5ff0270cc60f56::t_af8616446e2ab7 3-8
+remake/runtime/web/controllers/session.mjs
+  s_5ff0270cc60f56::t_045938285a73ec 55-57,76,79,81,122
+  s_5ff0270cc60f56::t_bc4376e26330bb 53-54
+  s_5ff0270cc60f56::t_7cc63d16c30630 80,125
+  s_5ff0270cc60f56::t_671518b57eeeb4 118
+remake/runtime/tools/image_atlas.py
+  s_5ff0270cc60f56::t_a706791dd40466 61-63
+  s_5ff0270cc60f56::t_331066f02d1157 70-71
+remake/runtime/tests/test_battle_controller.mjs
+  s_5ff0270cc60f56::t_db699922a1a9b0 75-76
+remake/runtime/web/core/resources/hd_images.mjs
+  s_5ff0270cc60f56::t_3ee82a9d3114ea 75,82,84,93,108-109,111-112,114
+remake/runtime/web/controllers/services.mjs
+  s_5ff0270cc60f56::t_badc31d313f448 43
+  s_5ff0270cc60f56::t_555609b97e49e4 118-122,128
+  s_5ff0270cc60f56::t_29b9049d4ac8ff 64,72,75
+remake/runtime/web/controllers/boot.mjs
+  s_5ff0270cc60f56::t_e83a0c50e4631c 293
+  s_5ff0270cc60f56::t_dfab67b1eb2b8f 30,125-130
+  s_5ff0270cc60f56::t_e50586048434e1 124,131-134,290
+remake/runtime/web/app.js
+  s_5ff0270cc60f56::t_2471c687d64ea6 38
+remake/runtime/web/phaser/scenes/exploration_scene.mjs
+  s_5ff0270cc60f56::t_bac8be11456509 1,10,45,47,55-56,62,67-68
+remake/runtime/tools/export_prologue_presentation.py
+  s_5ff0270cc60f56::t_9d5b8190c87e8e 98
+remake/runtime/web/core/exploration/world_map.mjs
+  s_5ff0270cc60f56::t_dd1b74710707f1 91,102,118
+remake/runtime/web/controllers/story.mjs
+  s_5ff0270cc60f56::t_c44438152bcda9 323
+  s_5ff0270cc60f56::t_42098bd1eb40f0 316
+remake/runtime/web/core/exploration/scene_controller.mjs
+  s_5ff0270cc60f56::t_7ef7fc23b712a2 9,21
+remake/runtime/web/controllers/input.mjs
+  s_5ff0270cc60f56::t_4c75676c2466ad 122-126
+README.md
+  s_5ff0270cc60f56::t_5643087c987e26 76
+  s_5ff0270cc60f56::t_373d004d84a60e 77
+remake/runtime/web/controllers/map.mjs
+  s_5ff0270cc60f56::t_94f03308466cf2 18,24-25,37-38,58-59,61-85,87-88,91-113,115-116,119-120,122-126,128,134-135,178,195,389-392,400-401,404-406
+  s_5ff0270cc60f56::t_bd0bd9732343c0 90,469
+  s_5ff0270cc60f56::t_c949aff3f63b95 57,60,89
+  s_5ff0270cc60f56::t_993fe7fe224624 321-322,324
+  s_5ff0270cc60f56::t_98a3cafbf85ccf 86,117,121,393-396,402-403
+  s_5ff0270cc60f56::t_914250ed8b8284 320
+  s_5ff0270cc60f56::t_d5d9c01749ecdd 323,369-372,476
+remake/runtime/web/loading_view.mjs
+  s_5ff0270cc60f56::t_191dd1839cf1fd 12,27
+  s_5ff0270cc60f56::t_efca43628dc88a 10-11,24-26,28-39,41-46,48-51
+remake/runtime/web/core/resources/image_resources.mjs
+  s_5ff0270cc60f56::t_0171c3e9c6b48b 17-19,59,136
+  s_5ff0270cc60f56::t_27821db1d41f27 16,20,26,29-37,40,43,48,51-52,54-58,60-62,65-69,77,91,94-95,137
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "d44d0f6a2f8a5db11f4291effedf9315e6c98e8d",
+  "prompts": {},
+  "sessions": {
+    "s_5ff0270cc60f56": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d3d9-ebfb-75d0-8400-c907f9a5562f",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
