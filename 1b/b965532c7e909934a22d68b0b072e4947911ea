@@ -1,0 +1,19 @@
+remake/AGENTS.md
+  s_92b823906766ee::t_b296f59fefafb4 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "1bb965532c7e909934a22d68b0b072e4947911ea",
+  "prompts": {},
+  "sessions": {
+    "s_92b823906766ee": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d394-2694-76e2-aa13-c11dd392ab24",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
