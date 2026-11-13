@@ -6,6 +6,24 @@ import {allPartyRoles} from '../party/party_roster.mjs';
 import {createNativeRng} from '../battle/combat_rules.mjs';
 import {initialEncounterState} from '../exploration/encounters.mjs';
 
+// Boss_Buy_01 (0x435640) and Boss_Buy_02 (0x436FD0), in icon order.
+export const nativeShopFilters={
+  items:[
+    {type:5,subtype:1,label:'回复道具'},
+    {type:5,subtype:4,label:'辅助道具'},
+    {type:5,subtype:3,label:'战斗道具'},
+    {type:3,subtype:2,label:'合成原料'},
+  ],
+  equipment:[
+    {type:2,subtype:1,label:'头饰'},
+    {type:2,subtype:2,label:'颈饰'},
+    {type:2,subtype:3,label:'手饰'},
+    {type:2,subtype:4,label:'佩饰'},
+    {type:2,subtype:5,label:'宝器'},
+    {type:3,subtype:1,label:'水晶石'},
+  ],
+};
+
 export function readNativeService(record,table){
   if(record.native_service)return record.native_service;
   if(record.kind!==8||typeof record.raw_hex!=='string')throw new Error('城镇服务缺少原TLK记录');
@@ -39,10 +57,14 @@ export function nativeOwnedQuantity(world,id){
   return total;
 }
 
-export function nativeServiceRows(service,world,catalog,{mode,category='items'}){
+export function nativeServiceRows(service,world,catalog,{mode,category='items',filterIndex}){
   const equipment=category==='equipment';
-  const categoryMatches=item=>equipment?item.type===2:
-    item.type===5&&[1,3,4].includes(item.subtype)||item.type===3&&item.subtype===2;
+  const filter=nativeShopFilters[category]?.[filterIndex];
+  const categoryMatches=item=>{
+    if(filterIndex!==undefined)return Boolean(filter&&item.type===filter.type&&item.subtype===filter.subtype);
+    return equipment?item.type===2:
+      item.type===5&&[1,3,4].includes(item.subtype)||item.type===3&&item.subtype===2;
+  };
   if(mode==='sell')return world.inventory.filter(row=>catalog[row.id].price!==0&&categoryMatches(catalog[row.id]))
     .map(row=>({id:row.instance_id,item_id:row.id,name:row.name,quantity:row.quantity,
       price:catalog[row.id].price>>1,enabled:true}));
@@ -59,14 +81,16 @@ export function nativeServiceRows(service,world,catalog,{mode,category='items'})
   });
 }
 
-export function applyNativeServiceAction(draft,service,catalog,{mode,id,quantity=1,category='items',mapId,recordId}){
-  const row=nativeServiceRows(service,draft,catalog,{mode,category}).find(row=>row.id===id);
+export function applyNativeServiceAction(draft,service,catalog,{mode,id,quantity=1,category='items',filterIndex,mapId,recordId}){
+  const row=nativeServiceRows(service,draft,catalog,{mode,category,filterIndex}).find(row=>row.id===id);
   if(!row||!service.allowedModes.includes(mode)||!Number.isInteger(quantity)||quantity<1||quantity>99)
     return {changed:false,message:'请选择有效的物品及数量。'};
   const item=catalog[row.item_id];
   if(mode==='sell'){
     if(quantity>row.quantity)return {changed:false,message:'持有数量不足。'};
-    for(let i=0;i<quantity;i++)removeNativeStoryItem(draft,row.item_id);
+    const index=draft.inventory.findIndex(entry=>entry.instance_id===row.id);
+    if(quantity===row.quantity)draft.inventory.splice(index,1);
+    else draft.inventory[index]=withItemQuantity(draft.inventory[index],row.quantity-quantity);
     draft.money=(draft.money+row.price*quantity)>>>0;
     return {changed:true,message:`卖出${item.name} ×${quantity}。`};
   }

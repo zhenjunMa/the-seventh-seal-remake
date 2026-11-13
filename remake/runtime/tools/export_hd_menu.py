@@ -110,8 +110,8 @@ def battle_hud_images():
 
 def native_service_images():
     services = read('data/native_services.json')
-    controls = {'boss_main': r'0[1-4]', 'boss_buy_01': r'list\d+|up|dn',
-                'boss_buy_02': r'list\d+|up|dn', 'boss_buy_03a': r'OK|CANCEL'}
+    controls = {'boss_main': r'0[1-4]', 'boss_buy_01': r'0[1-4]|list\d+|up|dn',
+                'boss_buy_02': r'0[1-6]|list\d+|up|dn', 'boss_buy_03a': r'OK|CANCEL'}
     for menu in services['menus']:
         name = menu['id']
         if name == 'boss_buy_03':

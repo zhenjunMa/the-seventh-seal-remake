@@ -5,9 +5,9 @@ import {NativeStatueView,nativeStatueState,moveStatueSlot,rotateStatue,releaseSt
 
 function service(){
   const view=Object.create(NativeServiceView.prototype),events=[];
-  view.root={hidden:false};view.index=0;view.quantity=1;view.isSuspended=()=>false;
-  view.state={mode:'buy',allowedModes:['buy','sell'],selected:'a',rows:[{id:'a',name:'a',enabled:true},{id:'b',name:'b',enabled:false}]};
-  view.onAction=event=>{events.push(event);if(event.type==='select'){view.state.selected=event.id;view.index=view.state.rows.findIndex(row=>row.id===event.id);}if(event.type==='quantity')view.quantity=event.quantity;};
+  view.root={hidden:false};view.index=0;view.quantity=1;view.isSuspended=()=>false;view.tradeFocus='list';
+  view.state={mode:'buy',category:'items',filterIndex:0,allowedModes:['buy','sell'],selected:'a',rows:[{id:'a',name:'a',enabled:true},{id:'b',name:'b',enabled:false}]};
+  view.onAction=event=>{events.push(event);if(event.type==='select'){view.state.selected=event.id;view.index=view.state.rows.findIndex(row=>row.id===event.id);}};
   view.onClose=()=>events.push({type:'close'});view.paint=()=>{};
   return {view,events};
 }
@@ -16,14 +16,18 @@ test('buy confirmation requires two presses, cancellation spends nothing and rep
   const {view,events}=service();view.key('Enter',true);assert.equal(view.confirming,undefined);
   view.key('Enter');assert.equal(view.confirming,true);assert.deepEqual(events,[]);
   view.key('ArrowRight');assert.equal(view.quantity,2);
-  view.key('Escape');assert.equal(view.confirming,false);assert.deepEqual(events,[{type:'quantity',quantity:2}]);
-  view.key('Enter');view.key('Enter');assert.deepEqual(events.at(-1),{type:'confirm',id:'a',quantity:2});
+  view.key('Escape');assert.equal(view.confirming,false);assert.deepEqual(events,[]);
+  view.key('Enter');view.key('Enter');assert.deepEqual(events.at(-1),{type:'confirm',id:'a',quantity:1});
 });
 
-test('disabled products can show details while refusing a transaction and mode navigation uses allowed modes',()=>{
+test('disabled products refuse a transaction and horizontal navigation follows the active shop panel',()=>{
   const {view,events}=service();view.key('ArrowDown');assert.deepEqual(events.at(-1),{type:'select',id:'b'});
   view.key('Enter');assert.equal(view.confirming,undefined);
-  view.key('ArrowRight');assert.deepEqual(events.at(-1),{type:'mode',mode:'sell'});
+  view.key('ArrowLeft');assert.deepEqual(events.at(-1),{type:'filter',index:3});
+  view.key('Escape');assert.equal(view.tradeFocus,'header');
+  view.key('ArrowRight');assert.equal(view.tradeCommand,'sell');
+  view.key('Enter');assert.deepEqual(events.at(-1),{type:'mode',mode:'sell'});
+  view.key('Escape');view.key('Escape');assert.equal(view.tradeFocus,'category');
   view.key('Escape');assert.equal(view.active,false);assert.deepEqual(events.at(-1),{type:'close'});
 });
 

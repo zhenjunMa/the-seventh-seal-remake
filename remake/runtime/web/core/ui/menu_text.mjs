@@ -96,9 +96,10 @@ export async function createMenuTextRenderer(manifest, options = {}) {
   }
   function paint(canvas,text,options={}) {
     const {font:key='simsun18',foreground='#ffffff',shadow:baseShadow='#222222',hdShadow=baseShadow,
-      maxWidth=null,maxLines=Infinity,lineHeight=null,align='left',advanceOverride=null,boxHeight=null,verticalAlign='top',layout='textout',shadowOffsets=[[-1,-1],[1,1]]}=options;
+      maxWidth=null,maxLines=Infinity,lineHeight=null,align='left',advanceOverride=null,boxHeight=null,verticalAlign='top',layout='textout',shadowOffsets=[[-1,-1],[1,1]],
+      composite=true}=options;
     const hd=hdAtlas(key),shadow=hd?hdShadow:baseShadow;
-    text=String(text);const signature=JSON.stringify([revision,text,key,foreground,shadow,maxWidth,maxLines,lineHeight,align,advanceOverride,boxHeight,verticalAlign,layout,shadowOffsets]);
+    text=String(text);const signature=JSON.stringify([revision,text,key,foreground,shadow,maxWidth,maxLines,lineHeight,align,advanceOverride,boxHeight,verticalAlign,layout,shadowOffsets,composite]);
     canvas.menuTextRenderer=renderer;canvas.menuTextRequest=[text,options];
     const font=manifest.fonts[key];
     if(!font)throw new Error('菜单字形来源不存在');
@@ -186,7 +187,8 @@ export async function createMenuTextRenderer(manifest, options = {}) {
       pass(foreground,0,0);
     }
     canvas.menuTextSignature=signature;canvas.menuTextBounds={width:logicalWidth,height:logicalHeight,offsetX,offsetY,lineCount:visible.length,truncated:rows.length>visible.length};
-    registerGlyph(canvas);return canvas.menuTextBounds;
+    if(composite)registerGlyph(canvas);
+    return canvas.menuTextBounds;
   }
   const renderer={paint,measure,supports,selectFonts,prepareHdFonts,hasHdFont:key=>Boolean(hdAtlas(key)),
     get revision(){return revision;},get fonts(){return manifest.fonts;}};

@@ -3,10 +3,17 @@
 .native-service-frame{position:absolute;left:50%;top:50%;width:640px;height:480px;transform-origin:center;overflow:hidden;color:#eee;font-family:SimSun,'宋体',serif;font-size:15px;outline:none;user-select:none}
 .native-service-frame img,.native-service-text,.native-service-control{position:absolute;box-sizing:border-box}
 .native-service-frame img{pointer-events:none;max-width:none}
+.native-service-card{image-rendering:pixelated}
 .native-service-frame canvas{display:block;max-width:none;image-rendering:pixelated}
 .native-service-text{display:block;white-space:pre-wrap;overflow:hidden;text-shadow:1px 1px #000;pointer-events:none}
 .native-service-control{appearance:none;border:0;padding:0;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;outline:none}
 .native-service-control img{z-index:0}
+.native-service-control:hover{background:transparent}
+.native-service-highlight{visibility:hidden}
+.native-service-control.has-highlight:is(.is-selected,:focus-visible) img,
+.native-service-frame:not(.keyboard-navigation) .native-service-control.has-highlight:hover img{visibility:hidden}
+.native-service-control.has-highlight:is(.is-selected,:focus-visible) .native-service-highlight,
+.native-service-frame:not(.keyboard-navigation) .native-service-control.has-highlight:hover .native-service-highlight{visibility:visible}
 .native-service-control .native-service-text{z-index:1}
 .native-service-control:focus-visible{outline:1px solid #d7b36e;outline-offset:1px}
 .native-service-unavailable{background:rgba(0,0,0,.7)}
