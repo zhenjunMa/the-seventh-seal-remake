@@ -4,6 +4,7 @@
 - 项目说明统一维护在[根 README](../README.md)，以当前实现和实际试玩结果为准。
 - 正式游戏、工具和检查在 `runtime`；`prototype` 复用正式模块，正式运行及构建不依赖实验目录。
 - 原版程序、资源和存档只读；观察原版使用隔离副本。玩家存档不得被检查或实验覆盖。
+- 改动影响游戏画面、操作或流程时，启动 `runtime/serve.py`，优先用 Codex 内置浏览器在本地试玩受影响的流程，检查实际画面和操作反馈。需要验证存读档时，用 `--save-dir` 指向独立的临时目录。
 - `web/app.js` 负责装配，流程在 `web/controllers/`，规则与事务在 `web/core/`，显示在视图和 `web/phaser/`；画面对象不持有可保存进度。
 - 内容登记统一在 `runtime/web/data/runtime_content.json`；调参统一在 `web/data/config/`，只修改 `parameters`，按原编号绑定。
 - 原版剧情与独立事件统一使用 StoryFlow；任务读取既有世界状态，奖励在剧情事务中提交。
