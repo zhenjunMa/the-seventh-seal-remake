@@ -1,0 +1,64 @@
+remake/runtime/web/controllers/boot.mjs
+  s_1287c853f4a5b3::t_f1b2cbbd0e465e 127
+  s_1287c853f4a5b3::t_b20571fe22d31f 99-103,132-134
+  s_1287c853f4a5b3::t_ec7bc91ab59011 128-129
+  s_1287c853f4a5b3::t_2bd37a154874b3 130-131
+remake/runtime/web/battle_view.mjs
+  s_1287c853f4a5b3::t_e9de340680ad2a 68-70,212,217,371,373-383,392,399,406-411,423,443,452-457,464,476,503-504,556-557,563
+  s_1287c853f4a5b3::t_124ec07c9d90cb 239
+remake/runtime/web/phaser/rendering/texture_cache.mjs
+  s_1287c853f4a5b3::t_b718b030582421 128-135
+remake/runtime/tools/export_media.py
+  s_1287c853f4a5b3::t_147eb5258d3da2 26,572
+remake/runtime/web/controllers/battle.mjs
+  s_1287c853f4a5b3::t_cc1c1555bc5e2f 166
+  s_1287c853f4a5b3::t_e37b476caba09a 146
+  s_1287c853f4a5b3::t_cf9e4e45de0503 121,163
+  s_1287c853f4a5b3::t_17b38a70b19593 30,120,124-125,138,462
+  s_1287c853f4a5b3::t_3642a52e13de7a 139,196
+  s_1287c853f4a5b3::t_9d248364be98ea 131
+  s_1287c853f4a5b3::t_f9948db77da7cd 134-135,137,507
+  s_1287c853f4a5b3::t_0c5a0edbdb35ea 119,251
+  s_1287c853f4a5b3::t_21da09eda96f5b 29,122,130,132-133,136,140,143-144,149,152,155-158,164-165,182-185,195,197,374,428,534
+  s_1287c853f4a5b3::t_ed4d510142ad1a 160-161
+remake/runtime/web/core/resources/image_catalog.mjs
+  s_1287c853f4a5b3::t_b20571fe22d31f 4,6,8,17-18,22-23,27-28
+  s_1287c853f4a5b3::t_f907b83cb72153 24-26
+remake/runtime/web/core/battle/skill_sequence.mjs
+  s_1287c853f4a5b3::t_e9de340680ad2a 44
+remake/runtime/web/core/battle/battle_definition_cache.mjs
+  s_1287c853f4a5b3::t_bc4b449d705c98 6,11-16,20-25
+remake/runtime/web/phaser/rendering/battle_surface.mjs
+  s_1287c853f4a5b3::t_b718b030582421 42-46,57-58,62-63,76
+remake/runtime/tools/image_atlas.py
+  s_1287c853f4a5b3::t_91bfca4156a770 61,84
+  s_1287c853f4a5b3::t_147eb5258d3da2 42-58,62-73,76,78-81,83,85-90
+  s_1287c853f4a5b3::t_f907b83cb72153 59-60
+  s_1287c853f4a5b3::t_e018206a833b2b 74-75,77,82
+remake/runtime/web/core/battle/battle_resources.mjs
+  s_1287c853f4a5b3::t_0d96d5b7c2ace5 5
+  s_1287c853f4a5b3::t_91bfca4156a770 74,80
+  s_1287c853f4a5b3::t_cf9e4e45de0503 102
+  s_1287c853f4a5b3::t_074c6bac49f142 119
+  s_1287c853f4a5b3::t_124ec07c9d90cb 57,59-60,62
+  s_1287c853f4a5b3::t_0c5a0edbdb35ea 56,58,61,63
+  s_1287c853f4a5b3::t_ba752d3b639f78 4,23-24,26,43-44,46-55,64-73,75-79,81
+remake/runtime/tools/verify_phaser.mjs
+  s_1287c853f4a5b3::t_6f973982645e0d 98
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "a471cfc70e6d631510f8730b2d53981aa61e6e6e",
+  "prompts": {},
+  "sessions": {
+    "s_1287c853f4a5b3": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d2be-565f-7622-8155-3b8fb3331a77",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
