@@ -1187,7 +1187,12 @@ export class BattleView {
       }
       ctx.restore();
       if(!this.lifecycle?.drawParticles(id,ctx,slot[0],slot[1]))this._sprite(role,segment.action_index,frame,slot[0],slot[1],alpha,pair,appearanceScan,geometry);
-      if(!entryPreview&&this.statusMeta)drawBattleStatuses(ctx,this.images,this.statusMeta,[{actor,role,slot,alpha}],this.meta.policy.sprite_scale);
+      if(!entryPreview&&this.statusMeta){
+        // 509330 draws statuses at source size using the projected actor slot.
+        const statusScale=this.stageMeta?1.125:this.meta.policy.sprite_scale;
+        const headOffset=this.stageMeta?(this.statusMeta.native_display?.head_offset??32):0;
+        drawBattleStatuses(ctx,this.images,this.statusMeta,[{actor,role,slot,alpha}],statusScale,headOffset);
+      }
       if(acting&&pair?.intrinsic.active&&!run.observations.intrinsic_source_frames.includes(pair.source_frame))run.observations.intrinsic_source_frames.push(pair.source_frame);
     }
     if (run) {
