@@ -125,5 +125,12 @@ export class TextureCache {
     this.stats.removed++;
   }
   snapshot(){return {...this.stats,resident:this.entries.size,bytes:[...this.entries].reduce((sum,e)=>sum+e.bytes,0)};}
-  destroy(){this.unsubscribe();for(const entry of [...this.entries])this.remove(entry);this.sources=new WeakMap();}
+  trimTo(bytes){
+    let total=this.snapshot().bytes;
+    for(const entry of [...this.entries].sort((a,b)=>a.used-b.used)){
+      if(total<=bytes)break;
+      this.remove(entry);total-=entry.bytes;
+    }
+  }
+  destroy(){this.unsubscribe();this.trimTo(0);}
 }

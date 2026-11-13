@@ -1,6 +1,8 @@
 import {ownBitmap,bitmapResident,onBitmapEvicted,evictBitmap} from '../resources/bitmap_residency.mjs';
 import {loadHdImage} from '../resources/hd_images.mjs';
 import {hdAnimation,knownHdAnimation,selectAnimationRegions} from '../resources/hd_animations.mjs';
+import {imageDefinitionJson} from '../resources/image_catalog.mjs';
+import {freezeDefinition} from '../content/immutable_definition.mjs';
 export {drawImageRegion as drawBattleImage} from '../resources/image_regions.mjs';
 
 // Shared, verified battle atlases. Views retain geometry, never private bitmap copies.
@@ -18,9 +20,10 @@ export class BattleResources {
   }
   async catalog(){
     if(!this.catalogPromise)this.catalogPromise=(async()=>{
-      const response=await this.read('/data/battle_packs.json',{cache:'no-cache'});
+      let response=await this.read('/assets/battle_index.json',{cache:'no-cache'});
+      if(response.status===404)response=await this.read('/data/battle_packs.json',{cache:'no-cache'});
       need(response.ok,'图集清单读取失败');const data=await response.json();
-      need(data.schema==='seventh-seal-battle-packs'&&data.version===1&&Array.isArray(data.pages)&&data.images&&data.manifests,'图集清单无效');
+      need(data.schema==='seventh-seal-battle-packs'&&[1,2].includes(data.version)&&Array.isArray(data.pages)&&data.images&&data.manifests,'图集清单无效');
       for(const page of data.pages)need(safe(page.path)&&/^[a-f0-9]{64}$/.test(page.sha256)&&Number.isInteger(page.width)&&page.width>0&&page.width<=2048&&Number.isInteger(page.height)&&page.height>0&&page.height<=2048,'图集描述无效');
       let checked=0,started=performance.now();
       for(const image of Object.values(data.images)){
@@ -37,9 +40,45 @@ export class BattleResources {
     return this.catalogPromise;
   }
   async json(path,expectedHash){
-    const data=await this.catalog(),entry=data.manifests[canonical(path)];
+    path=canonical(path);
+    const data=await this.catalog(),entry=data.manifests[path];
     need(entry&&(!expectedHash||expectedHash===entry.sha256),'来源清单与图集不一致，请重新导出');
-    return structuredClone(entry.value);
+    if(data.version===1)return structuredClone(entry.value);
+    need(/^\/data\/[a-z0-9_/-]+\.json$/i.test(path),'来源清单路径无效');
+    return this.readDefinition(path,entry.sha256,'no-cache');
+  }
+  async readDefinition(path,digest,cache){
+    need(/^[a-f0-9]{64}$/.test(digest),'来源清单指纹无效');
+    const response=await this.read(path,{cache});
+    need(response.ok,'无法读取表现定义：'+path);
+    return imageDefinitionJson(path,response,{[path]:digest});
+  }
+  manifest(path){
+    const key=canonical(path);
+    this.sharedManifests??=new Map();
+    if(!this.sharedManifests.has(key))this.sharedManifests.set(key,this.json(path).then(freezeDefinition).catch(error=>{
+      this.sharedManifests.delete(key);throw error;
+    }));
+    return this.sharedManifests.get(key);
+  }
+  async rosterDefinition(roleIds){
+    const {definitions}=await this.catalog();
+    if(!definitions)return null;
+    const read=ref=>{
+      need(ref&&ref.path==='/assets/battle_definitions/'+ref.sha256+'.json','角色定义引用无效');
+      return this.readDefinition(ref.path,ref.sha256,'force-cache');
+    };
+    this.sharedDefinition??=read(definitions.shared).catch(error=>{this.sharedDefinition=null;throw error;});
+    this.roleDefinitions??=new Map();
+    const roles=roleIds.map(id=>{
+      if(!this.roleDefinitions.has(id))this.roleDefinitions.set(id,Promise.resolve().then(()=>read(definitions.roles[id])).catch(error=>{
+        this.roleDefinitions.delete(id);throw error;
+      }));
+      return this.roleDefinitions.get(id);
+    });
+    const [shared,...selected]=await Promise.all([this.sharedDefinition,...roles]);
+    need(selected.every((row,index)=>row?.party?.id===roleIds[index]&&row.lifecycle?.id===roleIds[index]),'角色定义与名单不符');
+    return {shared,selected};
   }
   async page(index,hdPage){
     if(this.pages.has(index)){const entry=this.pages.get(index);entry.used=++this.clock;this.stats.page_hits++;return entry.bitmap;}
@@ -60,7 +99,7 @@ export class BattleResources {
     this.pending.set(index,promise);
     try{return await promise;}finally{if(this.pending.get(index)===promise){this.pending.delete(index);this.requests.delete(index);}this.prune();}
   }
-  async preparePaths(paths,{scope='battle',onProgress=()=>{},isCurrent=()=>true}={}){
+  async preparePaths(paths,{scope='battle',onProgress=()=>{},isCurrent=()=>true,upgradeStatic=true}={}){
     const data=await this.catalog(),required=new Set(),leased=new Set(),entries=new Map();
     need(isCurrent(),'资源准备已取消');
     for(const path of new Set(paths)){
@@ -77,7 +116,7 @@ export class BattleResources {
     try{
       const upgrades=[];
       for(const path of entries.keys()){
-        const hd=loadHdImage(path,data.images[canonical(path)]);
+        const hd=upgradeStatic?loadHdImage(path,data.images[canonical(path)]):null;
         if(hd)upgrades.push(hd.then(image=>{if(image)entries.set(path,image);}));
       }
       if(upgrades.length)await Promise.all(upgrades);

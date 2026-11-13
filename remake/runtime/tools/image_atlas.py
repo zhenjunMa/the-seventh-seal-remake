@@ -39,6 +39,55 @@ def references_images(value):
     return False
 
 
+def publish_runtime_indexes(builder, catalog):
+    def publish(path, value):
+        target = builder.local(path)
+        write_json(target, value, compact=True)
+        builder.outputs[path] = sha(target.read_bytes())
+
+    def definition(value):
+        raw = json.dumps(value, ensure_ascii=False, separators=(',', ':')).encode('utf-8')
+        digest = sha(raw)
+        path = f'/assets/battle_definitions/{digest}.json'
+        write_bytes(builder.local(path), raw)
+        builder.outputs[path] = digest
+        return dict(path=path, sha256=digest)
+
+    documents = builder.plan.documents
+    hashes = builder.plan.definition_hashes
+    startup = documents['data/startup_menu.json']
+    names = {'/' + frame['path'].lstrip('/')
+             for asset in startup['assets'].values() for frame in asset['frames']}
+    images = {name: catalog['images'][name] for name in sorted(names) if name in catalog['images']}
+    used = {region[4] for image in images.values() for region in image['regions']}
+    # Keep the full index's page numbers so startup images can stay alive.
+    pages = [page if i in used else None for i, page in enumerate(catalog['pages']) if i <= max(used, default=-1)]
+    publish('/assets/startup_image_catalog.json', dict(
+        schema=catalog['schema'], version=1, pages=pages, images=images,
+        manifests={'/data/startup_menu.json': hashes['data/startup_menu.json']}))
+
+    packs = documents['data/battle_packs.json']
+    manifests = {path: {'sha256': row['sha256']} for path, row in packs['manifests'].items()}
+    for path, row in manifests.items():
+        if hashes.get(path.lstrip('/')) != row['sha256']:
+            raise ValueError('战斗图集定义已变化：' + path)
+    party = documents['data/party_battle_view.json']
+    lifecycle = documents['data/battle_lifecycle.json']
+    lifecycle_roles = {row['id']: row for row in lifecycle['roles']}
+    banks = {row['path']: documents[row['path'].lstrip('/')]['role_id']
+             for row in party.get('extra_layer_banks', [])}
+    shared = definition(dict(
+        party={key: value for key, value in party.items() if key != 'roles'},
+        lifecycle={key: value for key, value in lifecycle.items() if key != 'roles'},
+        layer_role=documents[party['layers']['path'].lstrip('/')]['role_id'],
+        bank_owners=banks))
+    roles = {row['id']: definition(dict(party=row, lifecycle=lifecycle_roles[row['id']]))
+             for row in party['roles']}
+    publish('/assets/battle_index.json', dict(
+        schema=packs['schema'], version=2, pages=packs['pages'], images=packs['images'],
+        manifests=manifests, definitions=dict(shared=shared, roles=roles)))
+
+
 def build_image_catalog(builder):
     from PIL import Image
     battle = builder.plan.documents['data/battle_packs.json']

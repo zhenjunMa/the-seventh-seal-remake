@@ -96,7 +96,11 @@ export function createBootController({state, actions, $, canvas}) {
     let interacted=false;
     const rememberGesture=event=>{if(event.isTrusted)interacted=true;};
     for(const type of ['pointerdown','keydown'])document.addEventListener(type,rememberGesture,{capture:true,signal:earlyAudio.signal});
-    const pictures=afterIntro.then(()=>loadImageCatalog());
+    let fullCatalog;
+    const pictures=afterIntro.then(async()=>{
+      if(!await loadImageCatalog(undefined,{startup:true}))fullCatalog=loadImageCatalog();
+      await fullCatalog;
+    });
     const audioReady=Promise.all([
       actions.json('data/audio.json'),pictures.then(()=>actions.json('data/startup_menu.json')),
     ]).then(([audioManifest,startupManifest])=>{
@@ -120,8 +124,14 @@ export function createBootController({state, actions, $, canvas}) {
     const menuReady=Promise.all([engineReady,audioReady]).then(([,audio])=>view.prepareMenu(audio.startupManifest));
     void actions.refreshSaveSlots({quiet:true});
 
-    const catalogReady=pictures.then(async imageCatalog=>{
-      const catalog=await actions.json('data/catalog.json');
+    const catalogReady=menuReady.then(async()=>{
+      // The opening rotation also blocks menu input. Give it time to finish
+      // before processing the exploration index when the intro was skipped.
+      const introRotation=view.rotation;
+      while(introRotation&&view.rotation===introRotation&&!signal.aborted)await new Promise(resolve=>requestAnimationFrame(resolve));
+      await new Promise(resolve=>requestAnimationFrame(()=>setTimeout(resolve,0)));
+      signal.throwIfAborted();
+      const [imageCatalog,catalog]=await Promise.all([fullCatalog??=loadImageCatalog(),actions.json('data/catalog.json')]);
       if(catalog.schema!=='seventh-seal-runtime-catalog'||catalog.version!==1)throw new Error('运行清单版本不兼容');
       return {catalog,manifests:imageCatalog?.manifests};
     });

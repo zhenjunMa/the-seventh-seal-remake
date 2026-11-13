@@ -41,7 +41,7 @@ export function compileNativeSequence(meta,roleId,plan,layers=[]){
  const role=meta.roles.find(r=>r.id===roleId);fail(role&&Array.isArray(plan.records),'原组合表现资源缺失');
  const independent=plan.records.some(record=>{const b=recordBytes(record.raw_hex),v=view(b);return b[0]===1&&v.getUint32(1,true)===4&&!b[0x1d];});
  const verticalClock=plan.records.some(record=>{const b=recordBytes(record.raw_hex);return b[0]===1&&[3,10].includes(view(b).getUint32(1,true));});
- const pairs=new Map(layers.filter(l=>l.role_id===roleId).flatMap(l=>l.frames).map(p=>[p.source_frame,p])),steps=[],segments=[];
+ const pairs=new Map(layers.filter(l=>l?.role_id===roleId).flatMap(l=>l.frames).map(p=>[p.source_frame,p])),steps=[],segments=[];
  for(let ri=0;ri<plan.records.length;ri++){
   const record=plan.records[ri],b=recordBytes(record.raw_hex),v=view(b),group=v.getUint32(1,true);
   if(b[0]!==0){

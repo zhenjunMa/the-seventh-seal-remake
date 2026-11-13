@@ -39,6 +39,11 @@ export class BattleSurface {
     this.textures.begin();
   }
   endFrame(){this.textures.prune();}
+  clearFrame(textureBudget){
+    this.beginFrame();
+    this.endFrame();
+    this.textures.trimTo(textureBudget);
+  }
   prepareImages(images){
     for(const source of imageSources(images))if(source.width<=this.textures.maxSize&&source.height<=this.textures.maxSize)this.textures.texture(source);
   }
@@ -49,10 +54,13 @@ export class BattleSurface {
     return [...imageSources(images)].every(source=>source.width>this.textures.maxSize||
       source.height>this.textures.maxSize||this.textures.sources.has(source));
   }
-  async prepareEntryImages(images,{signal,clock}={}){
+  async prepareEntryImages(images,{signal,clock,textureBudget=Infinity}={}){
+    let remaining=Number.isFinite(textureBudget)?textureBudget-this.textures.snapshot().bytes:Infinity;
     for(const source of imageSources(images)){
       signal?.throwIfAborted();
       if(source.width>this.textures.maxSize||source.height>this.textures.maxSize||this.textures.sources.has(source))continue;
+      const bytes=source.width*source.height*4;
+      if(bytes>remaining)continue;
       // All background requests use the same upload time budget.
       if(clock){
         for(;;){
@@ -65,6 +73,7 @@ export class BattleSurface {
       if(this.textures.sources.has(source))continue;
       const started=performance.now();
       this.textures.texture(source);
+      remaining-=bytes;
       if(clock)this.uploadTime+=performance.now()-started;
     }
   }

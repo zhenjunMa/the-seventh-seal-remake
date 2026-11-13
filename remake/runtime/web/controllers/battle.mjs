@@ -26,6 +26,8 @@ export function createBattleController({host, sessions = createBattleSessions()}
   const current = () => sessions.current;
   const captureTransition = kind => host.presentation.capture(kind);
   let sharedView,sharedWarm,lookahead,skillTestRules;
+  const warmTextureBudget=64*1024*1024;
+  const warmHudBudget=battleResources.budgetBytes/4;
   const rulesForTest=()=>skillTestRules??=actions.json('data/skill_test.json').catch(error=>{skillTestRules=null;throw error;});
   function disposeMenu(menu){
     if(menu?.root===$('battleHud')&&current().battleMenu!==menu){
@@ -114,39 +116,54 @@ export function createBattleController({host, sessions = createBattleSessions()}
     if(sharedWarm)return sharedWarm.ready;
     const signal=new AbortController(),scope=battleResources.createScope('battle-hud-warm');
     const warm=sharedWarm={signal,scope,ready:null};
-    const view=sharedView??=createView({newParty:true,lifecycle:true});
-    const hud=battleResources.json('data/battle_ui.json').then(async manifest=>{
-      const images=await scope.preparePaths(battleHudPaths(manifest));
-      await prepareEntryImages(images,signal.signal);
+    const hud=battleResources.manifest('data/battle_ui.json').then(async manifest=>{
+      const paths=await battleResources.pathsWithinBudget(battleHudPaths(manifest),warmHudBudget);
+      const images=await scope.preparePaths(paths,{upgradeStatic:false});
+      await prepareEntryImages(images,signal.signal,{textureBudget:warmTextureBudget});
     });
-    warm.ready=Promise.all([view.loadDefinition(),hud,rulesForTest()]).catch(error=>{
-      signal.abort(error);scope.release();
+    warm.ready=hud.finally(()=>scope.release()).catch(error=>{
+      signal.abort(error);
       if(sharedWarm===warm){sharedWarm=null;actions.log({type:'battle-resource-prefetch-failed',error:error.message});}
     });
     return warm.ready;
   }
+  function releaseBattleWarm(){
+    lookahead?.controller?.abort();lookahead?.scope?.release();lookahead=null;
+    sharedWarm?.signal.abort();sharedWarm?.scope.release();sharedWarm=null;
+  }
+  function trimBattleCache({keepLookahead=false}={}){
+    const previous=lookahead?.stage?{key:lookahead.key,stage:lookahead.stage,roles:lookahead.roles}:null;
+    releaseBattleWarm();
+    if(keepLookahead&&previous)lookahead={...previous,ready:Promise.resolve()};
+    battleResources.prune();
+    host.engine?.battle?.surface?.clearFrame?.(warmTextureBudget);
+  }
   function warmBattleEntry({pool=null,testing=false}={}){
     const roles=host.world.value.party.map(role=>role.id);
-    const key=JSON.stringify([testing,pool?.stage,roles,pool?.members.map(member=>member.id)]);
+    const enemies=[...new Set(pool?.members.map(member=>member.id))];
+    const key=JSON.stringify([testing,pool?.stage,roles,enemies]);
     if(lookahead?.key===key)return lookahead.ready;
-    lookahead?.controller.abort();lookahead?.scope.release();lookahead=null;
+    lookahead?.controller?.abort();lookahead?.scope?.release();lookahead=null;
     if(!testing&&!pool)return;
     const controller=new AbortController(),scope=battleResources.createScope('battle-entry-warm');
-    const signal=controller.signal,warm=lookahead={key,controller,scope,ready:null};
+    const signal=controller.signal,warm=lookahead={key,controller,scope,ready:null,stage:null,roles:null};
     warm.ready=(async()=>{
       await waitForEntryFrame(signal);
-      void warmBattleShared();
+      const hud=warmBattleShared();
       const rules=testing?await rulesForTest():null;
       const stagePath=rules?.stage.path??'/'+battleStage(pool.stage).path;
-      const enemyIds=rules?.enemy_resources??pool.members.map(member=>member.id);
-      const paths=await sharedView.entryPaths([...new Set([...roles,...enemyIds])],stagePath);
+      const enemyIds=rules?.enemy_resources??(enemies.length<=4?enemies:[]);
+      warm.stage=stagePath;warm.roles=[...new Set([...roles,...enemyIds])];
+      const view=sharedView??=createView({newParty:true,lifecycle:true});
+      const paths=await view.entryPaths(warm.roles,stagePath);
       signal.throwIfAborted();
-      const selected=await battleResources.pathsWithinBudget(paths,battleResources.budgetBytes*0.75);
+      const pageBudget=battleResources.budgetBytes-warmHudBudget;
+      const selected=await battleResources.pathsWithinBudget(paths,pageBudget);
       signal.throwIfAborted();
-      const images=await scope.preparePaths(selected);
-      await prepareEntryImages(images,signal);
-    })().catch(error=>{
-      scope.release();
+      const images=await scope.preparePaths(selected,{upgradeStatic:false});
+      await hud;
+      await prepareEntryImages(images,signal,{textureBudget:warmTextureBudget});
+    })().finally(()=>scope.release()).catch(error=>{
       if(lookahead===warm){lookahead=null;actions.log({type:'battle-resource-prefetch-failed',error:error.message});}
     });
     return warm.ready;
@@ -162,7 +179,10 @@ export function createBattleController({host, sessions = createBattleSessions()}
     view.onResourceError=error=>actions.log({type:'battle-resource-prefetch-failed',error:error.message});
     const cancel=()=>view.cancelPreparation?.('战斗准备已取消');signal?.throwIfAborted();signal?.addEventListener('abort',cancel,{once:true});
     try{
-      await view.prepare({actors,skills,inventory,staged:true,onProgress});
+      const actualRoles=actors.map(actor=>actor.resource_id??actor.id);
+      const definitionRoles=lookahead?.stage===stagePath&&actualRoles.every(id=>lookahead.roles?.includes(id))
+        ?lookahead.roles:actualRoles;
+      await view.prepare({actors,skills,inventory,staged:true,onProgress,definitionRoles});
       // The first draw uploads the pages it uses. Offscreen poses and effects
       // stay decoded until needed, or are uploaded by exploration lookahead.
       signal?.throwIfAborted();return view;
@@ -172,9 +192,9 @@ export function createBattleController({host, sessions = createBattleSessions()}
     const clock=host.engine?.clock;
     return clock&&new Promise((resolve,reject)=>clock.requestFrame(resolve,{signal,onCancel:reject}));
   }
-  async function prepareEntryImages(images,signal){
-    const surface=host.engine?.battle.surface;
-    if(surface?.prepareEntryImages)await surface.prepareEntryImages(images,{signal,clock:host.engine.clock});
+  async function prepareEntryImages(images,signal,options={}){
+    const surface=host.engine?.battle?.surface;
+    if(surface?.prepareEntryImages)await surface.prepareEntryImages(images,{signal,clock:host.engine.clock,...options});
     else surface?.prepareImages?.(images);
     signal?.throwIfAborted();
   }
@@ -228,7 +248,7 @@ export function createBattleController({host, sessions = createBattleSessions()}
     const frame=current();
     const check=()=>{signal?.throwIfAborted();if(current()!==frame||owner&&!sessions.owns(owner))throw new Error('战斗界面会话已失效');};
     if(!owner)current().battleMenu?.dispose();
-    const [uiManifest,resultManifest]=await playbackTask(Promise.all([battleResources.json('data/battle_ui.json'),returnLabel?null:battleResources.json('data/battle_result.json')]),signal);check();
+    const [uiManifest,resultManifest]=await playbackTask(Promise.all([battleResources.manifest('data/battle_ui.json'),returnLabel?null:battleResources.manifest('data/battle_result.json')]),signal);check();
     const bindingSource=newParty?effectiveBattleSkillRoles(host.partySkills,world.value):null;
     const hud=$('battleHud'),root=owner?hud.ownerDocument.createElement('div'):hud,view=current().battleView;
     const menu=new BattleMenuView({root,manifest:uiManifest,battle,returnLabel,autoReturnOnDefeat:Boolean(owner)||!current().skillTestSession&&!current().battleSampleMode,reuseReturnButton:!owner,
@@ -351,6 +371,7 @@ export function createBattleController({host, sessions = createBattleSessions()}
       before?.destroy?.();
       if(sessions.owns(session)){
         current().battleView?.stop('战斗启动失败');current().battleMenu?.dispose();
+        trimBattleCache();
         host.presentation.hide();sessions.leave(session);session.returnView.restore();
       }
       throw error;
@@ -404,6 +425,7 @@ export function createBattleController({host, sessions = createBattleSessions()}
       if(ownsState||current().battleView!==session.view)session.view?.stop('已返回剧情');
       disposeMenu(session.menu);
       if(ownsState){
+        trimBattleCache();
         host.presentation.hide();
         sessions.leave(session);
         host.sidePriority=session.committed&&session.sidePriority!==undefined?session.sidePriority:session.previousPriority;
@@ -437,6 +459,7 @@ export function createBattleController({host, sessions = createBattleSessions()}
     if(current().skillTestSession!==session)return;
     if(session.view)session.view.stop(reason);
     if(current().battleMenu!==session.previous.battleMenu)current().battleMenu?.dispose();
+    trimBattleCache();
     host.presentation.hide();sessions.leave(session);session.returnView.restore();
     host.menu.resume(session.ticket);
   }
@@ -481,6 +504,7 @@ export function createBattleController({host, sessions = createBattleSessions()}
       host.world.setEncounterState(encounterState);
     }
     host.lastBattle={result,battle:snapshot};current().battleView.stop('已返回地图');current().battleMenu?.dispose();current().battleMenu=null;
+    trimBattleCache({keepLookahead:true});
     host.presentation.hide();
     current().returnView.restore({refresh:true});
     if(defeatPolicy){await actions.presentGameOver(defeatPolicy);return;}
@@ -507,8 +531,7 @@ export function createBattleController({host, sessions = createBattleSessions()}
     sessions.reset();host.battleTransition?.cancel();
     for(const view of sessions.views.values())view.destroy();
     sessions.views.clear();
-    lookahead?.controller.abort();lookahead?.scope.release();lookahead=null;
-    sharedWarm?.signal.abort();sharedWarm?.scope.release();sharedWarm=null;
+    trimBattleCache();
     sharedView?.destroy();sharedView=null;skillTestRules=null;
   }
   return {warmBattleShared,warmBattleEntry,updateBattle,startBattle,startScriptedBattle,startTechniqueTest,returnFromBattle,battleKey,battleKeyUp,drawBattleInterface,advanceBattlePresentation,updateBattleFrame,disposeBattles,battleMenuState,chooseBattleItem,focusBattleMenu};

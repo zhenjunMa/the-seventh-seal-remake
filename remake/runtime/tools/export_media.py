@@ -23,7 +23,7 @@ from uuid import uuid4
 
 from media_definitions import MediaDefinitions, OriginalFiles, checksum, url
 from media_fingerprints import SourceFingerprints, source_key, write_reference
-from image_atlas import build_image_catalog, independent
+from image_atlas import build_image_catalog, independent, publish_runtime_indexes
 
 RUNTIME = Path(__file__).resolve().parents[1]
 
@@ -569,6 +569,7 @@ class MediaBuilder:
                 for name, expected in self.plan.definition_hashes.items():
                     if checksum(self.web / name) != expected:
                         raise ValueError('构建期间游戏定义发生变化：' + name)
+                publish_runtime_indexes(self, catalog)
                 report.update(passed=True, definitions_unchanged=True, counts=self.stats,
                               files=len(self.outputs), missing_assets=sorted(name for name in self.selected() if name not in resolved),
                               report=str(directory / 'run.json'))

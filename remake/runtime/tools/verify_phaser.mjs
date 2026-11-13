@@ -95,7 +95,7 @@ try{
     report.assets.build_complete=media.complete===true;
     report.assets.source_variants=Object.keys(media.source_variants??{}).length;
     if(!media.complete)report.assets.invalid.push({path:'/assets/media_manifest.json',reason:'未完成完整素材构建'});
-    collect(Object.keys(media.files));
+    for(const name of Object.keys(media.files))if(!assets.has(name))assets.set(name,{});
   }
   report.assets.required=assets.size;
   for(const [url,descriptor]of assets){

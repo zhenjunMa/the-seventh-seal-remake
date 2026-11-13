@@ -65,7 +65,9 @@ export function validateBattleViewMetadata(meta,content=runtimeContent) {
   if (meta?.schema !== 'seventh-seal-battle-view' || meta.version !== 1 ||
       !Array.isArray(meta.roles) || !Array.isArray(meta.effects) ||
       !urlAllowed(meta.layers?.path)) throw new Error('战斗表现清单无效');
-  requireRegisteredRoles(meta.roles.map(role=>role.id),{roster:meta.policy?.roster??'sample'},content);
+  const ids=meta.roles.map(role=>role.id),roster=meta.policy?.roster??'sample';
+  requireRegisteredRoles(ids,{roster:meta.roster_subset?null:roster},content);
+  if(meta.roster_subset&&!ids.every(id=>content.battle_rosters[roster]?.includes(id)))throw new Error('角色不属于战斗登记名单');
   for (const role of meta.roles) {
     if (!integer(role.frame_width, 1) || !integer(role.frame_height, 1) ||
         !Number.isFinite(role.anchor?.x) || !Number.isFinite(role.anchor?.y) ||
@@ -207,12 +209,12 @@ function validateLayers(layers, meta, skillId = 'yantu') {
 
 export function compileActionTimeline(meta, layers, roleId,skillId=null,alternateLayers=null,content=runtimeContent) {
   validateBattleViewMetadata(meta,content);
-  validateLayers(layers, meta);
+  if(layers)validateLayers(layers, meta);
   const role = meta.roles.find(item => item.id === roleId);
   if (!role) throw new Error('首版动作角色无效');
   const skill=skillId?(role.alternate_skills??[]).find(s=>s.runtime_skill_id===skillId):role.skill;
   if(!skill)throw new Error('追加技能时间线缺失');
-  const pairs = skillId ? (skill.layers ? validateLayers(alternateLayers,meta,skillId).frames : null) : layers.role_id===role.id?layers.frames:null;
+  const pairs = skillId ? (skill.layers ? validateLayers(alternateLayers,meta,skillId).frames : null) : layers?.role_id===role.id?layers.frames:null;
   const steps = [];
   skill.segments.forEach((segment, segmentIndex) => segment.frames.forEach((frame, cursor) => {
     const action = role.actions.find(item => item.index === segment.action_index);
@@ -234,6 +236,7 @@ function commandResourceKey({actor_id, skill_id, item_id}) {
 
 async function loadJson(path, expectedHash) {
   if (!urlAllowed(path)) throw new Error('战斗清单路径无效');
+  if(path==='/data/battle_ui.json'&&!expectedHash)return battleResources.manifest(path.slice(1));
   return battleResources.json(path,expectedHash);
 }
 
@@ -365,9 +368,19 @@ export class BattleView {
     return this.draw(snapshot,now,options);
   }
 
-  loadDefinition(){
+  loadDefinition(roleIds=null){
     const identity=JSON.stringify([this.metadataPath,this.itemMetadataPath,this.lifecycleMetadataPath,this.statusMetadataPath]);
-    return this.definitionCache.load(this.jsonLoader,this.content,identity,()=>this._readDefinition());
+    if(!roleIds||this.jsonLoader!==loadJson||this.metadataPath!=='/data/party_battle_view.json'||!this.lifecycleMetadataPath)
+      return this.definitionCache.load(this.jsonLoader,this.content,identity,()=>this._readDefinition());
+    const ids=[...new Set(roleIds)].sort();
+    const prepared=async()=>{
+      const bundle=await this.resourcePool.rosterDefinition(ids);
+      if(!bundle)return this.loadDefinition();
+      return this._readDefinition(bundle);
+    };
+    // The selected role files are shared across rosters. Bound the derived
+    // combinations as the player encounters new groups over a long session.
+    return this.definitionCache.load(this.jsonLoader,this.content,JSON.stringify([identity,ids]),prepared,{limit:8});
   }
 
   loadStage(path){
@@ -376,23 +389,26 @@ export class BattleView {
   }
 
   async entryPaths(roleIds,stagePath){
-    const [definition,stage]=await Promise.all([this.loadDefinition(),this.loadStage(stagePath)]);
+    const [definition,stage]=await Promise.all([this.loadDefinition(roleIds),this.loadStage(stagePath)]);
     const {meta,itemMeta,lifecycleMeta,assetDescriptors,lifecyclePairs}=definition;
     const plan=new BattleAssetPlan({meta,itemMeta,lifecycleMeta,descriptors:assetDescriptors,pairs:lifecyclePairs,
       actors:roleIds.map(id=>({id})),inventory:[]});
     return [...(stage?forestStageAssets(stage).map(asset=>asset.path):[]),...plan.base];
   }
 
-  async prepare({actors=null,skills=null,inventory=null,staged=false,onProgress=()=>{}}={}) {
+  async prepare({actors=null,skills=null,inventory=null,staged=false,definitionRoles=null,onProgress=()=>{}}={}) {
     if(this.destroyed)throw new Error('战斗表现已销毁');
     if(this.run||this.detachedRuns.length)throw new Error('行动播放期间不能重新准备战斗');
     this.resourceController?.abort(abortError('重新准备战斗'));this.resourceController=new AbortController();
     this.clearCommandPrefetches();
     const generation=++this.generation,isCurrent=()=>!this.destroyed&&generation===this.generation;
     const check=()=>{if(!isCurrent())throw abortError();};
-    if(!this.definition){
-      const [definition,stageMeta]=await Promise.all([this.loadDefinition(),this.loadStage(this.stageMetadataPath)]);
-      check();
+    const [definition,stageMeta]=await Promise.all([
+      this.loadDefinition(staged?(definitionRoles??actors?.map(actor=>actor.resource_id??actor.id)):null),
+      this.loadStage(this.stageMetadataPath),
+    ]);
+    check();
+    if(this.definition!==definition){
       this.definition=definition;
       Object.assign(this,{meta:definition.meta,itemMeta:definition.itemMeta,lifecycleMeta:definition.lifecycleMeta,statusMeta:definition.statusMeta,
         layers:definition.layers,alternateLayers:definition.alternateLayers,lifecyclePairs:definition.lifecyclePairs,
@@ -404,6 +420,7 @@ export class BattleView {
       }
       this.assetDescriptors=[...descriptors.values()];
       this.groundFootprints=new Map();this.lifecycleBounds=new Map();
+      this.timelines.clear();this.compiledSequences=new WeakMap();
       this._configurePlayback();
       this.playbackRuntime.configureLifecycle(this.lifecycleMeta,{
         appearanceBounds:(roleId,pose,actorId)=>this._appearanceBounds(roleId,pose,actorId),
@@ -423,7 +440,7 @@ export class BattleView {
     return staged?this.resourceSnapshot():clone(this.meta);
   }
 
-  async _readDefinition(){
+  async _readDefinition(bundle=null){
     // The shared definition is built once, but a cold encounter can build it
     // while the outgoing scene is still animating.
     let sliceStarted=performance.now();
@@ -432,13 +449,19 @@ export class BattleView {
       await new Promise(resolve=>requestAnimationFrame(()=>setTimeout(resolve,0)));
       sliceStarted=performance.now();
     };
-    const meta = validateBattleViewMetadata(await this.jsonLoader(this.metadataPath),this.content);
+    const {shared,selected}=bundle??{};
+    const roleIds=selected&&new Set(selected.map(row=>row.party.id));
+    const meta = validateBattleViewMetadata(bundle?{
+      ...clone(shared.party),roles:selected.map(row=>clone(row.party)),roster_subset:true,
+      extra_layer_banks:(shared.party.extra_layer_banks??[]).filter(row=>roleIds.has(shared.bank_owners[row.path])),
+    }:await this.jsonLoader(this.metadataPath),this.content);
     await yieldForRender();
     const statusMeta=this.statusMetadataPath?validateBattleStatusView(await this.jsonLoader(this.statusMetadataPath)):null;
     let itemMeta=null;
     if(this.itemMetadataPath){
       itemMeta=await this.jsonLoader(this.itemMetadataPath);
       if(itemMeta?.schema!=='seventh-seal-item-presentation'||itemMeta.version!==1||!Array.isArray(itemMeta.roles)||!Array.isArray(itemMeta.effects))throw new Error('道具表现清单无效');
+      if(roleIds)itemMeta.roles=itemMeta.roles.filter(row=>roleIds.has(row.id));
       for(const row of itemMeta.roles){const role=meta.roles.find(r=>r.id===row.id);
         if(!role||role.frame_width!==row.frame_width||role.frame_height!==row.frame_height||role.actions.some(a=>row.actions.some(b=>a.index===b.index)))throw new Error('道具动作角色或编号冲突');
         role.actions.push(...clone(row.actions));
@@ -450,7 +473,7 @@ export class BattleView {
     let lifecycleMeta=null;
     const lifecycleFrames=new Map();
     if(this.lifecycleMetadataPath){
-      lifecycleMeta=await this.jsonLoader(this.lifecycleMetadataPath);
+      lifecycleMeta=bundle?{...clone(shared.lifecycle),roles:selected.map(row=>clone(row.lifecycle)).filter(Boolean)}:await this.jsonLoader(this.lifecycleMetadataPath);
       if(lifecycleMeta?.schema!=='seventh-seal-battle-lifecycle'||![1,2].includes(lifecycleMeta.version)||!Array.isArray(lifecycleMeta.roles))throw new Error('战斗入场死亡清单无效');
       await yieldForRender();
       for(const row of lifecycleMeta.roles){
@@ -477,7 +500,8 @@ export class BattleView {
     }
     validateBattleViewMetadata(meta,this.content);
     await yieldForRender();
-    const layers = validateLayers(await this.jsonLoader(meta.layers.path, meta.layers.sha256), meta);
+    const layers = !roleIds||roleIds.has(shared.layer_role)
+      ?validateLayers(await this.jsonLoader(meta.layers.path, meta.layers.sha256), meta):null;
     const alternateLayers = new Map(),physicalLayers=new Map();
     for(const descriptor of [meta.extra_layers,...(meta.extra_layer_banks??[])].filter(Boolean)){
       const bank=await this.jsonLoader(descriptor.path,descriptor.sha256),role=meta.roles.find(r=>r.id===bank.role_id),lifecycle=lifecycleFrames.get(descriptor.path);
@@ -529,13 +553,14 @@ export class BattleView {
       if(effect.layer_order)for(const layer of effect.layer_order)add(effect[`${layer}_sheet`],effect[`${layer}_sha256`],effect.frame_width*effect.frame_count,effect.frame_height,owners);
       else add(effect.sheet,effect.sha256,effect.frame_width*effect.frame_count,effect.frame_height,owners);
     }
-    for (const source of [layers,...alternateLayers.values()]) for (const pair of source.frames) for (const layer of [pair.main, pair.intrinsic]) {
+    const banks=[layers,...alternateLayers.values()].filter(Boolean);
+    for (const source of banks) for (const pair of source.frames) for (const layer of [pair.main, pair.intrinsic]) {
       add('/' + layer.path, layer.sha256, source.frame_width, source.frame_height,source.role_id);
     }
     await yieldForRender();
     const definition={meta,itemMeta,lifecycleMeta,layers,damageTextAssets,
       statusMeta,assetDescriptors:[...descriptors.values(),...battleStatusAssets(statusMeta)],alternateLayers:freezeDefinitionMap(alternateLayers),
-      lifecyclePairs:freezeDefinitionMap([layers,...alternateLayers.values()].flatMap(bank=>bank.frames.map(pair=>[`${bank.role_id}:${pair.source_frame}`,pair])))};
+      lifecyclePairs:freezeDefinitionMap(banks.flatMap(bank=>bank.frames.map(pair=>[`${bank.role_id}:${pair.source_frame}`,pair])))};
     for(const bank of alternateLayers.values())freezeDefinition(bank);
     return freezeDefinition(definition);
   }
