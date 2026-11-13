@@ -1,4 +1,4 @@
-import {mapPresentation} from '../../core/ui/map_presentation.mjs';
+import {mapPresentation,mapViewport} from '../../core/ui/map_presentation.mjs';
 import {TextureCache} from '../rendering/texture_cache.mjs';
 import {MapActor} from '../actors/map_actor.mjs';
 import {ActionClock} from '../components/action_clock.mjs';
@@ -7,10 +7,7 @@ import {poseRegions} from '../components/sprite_pose.mjs';
 const uploadBudgetMs=4;
 const viewportMargin=96;
 function viewport({view,nativeViewport},margin=0){
-  const zoom=nativeViewport?1:view.zoom;
-  const left=view.x-320/zoom-margin,right=view.x+320/zoom+margin;
-  const top=view.y-240/zoom-margin,bottom=view.y+240/zoom+margin;
-  return ({x,y,width,height})=>x<right&&y<bottom&&x+width>left&&y+height>top;
+  return mapViewport(nativeViewport?{...view,zoom:1}:view,margin);
 }
 function poseBounds({x,y,image,width=image.width,height=image.height,displayWidth=width,displayHeight=height,body_offset,shadow_geometry}){
   // Include virtual xBR padding and wall-contact offsets at the viewport edge.
@@ -45,8 +42,9 @@ export function explorationScene(Phaser,runtime){
     }
     update(_now,delta){runtime.updateScene('exploration',this,delta);}
     clearActors(){for(const actor of this.actors.values())actor.destroy();this.actors.clear();}
-    async prepareViewport(options,{signal,isCurrent=()=>true}={}){
+    async prepareViewport(options,{signal,isCurrent=()=>true,preload=false}={}){
       const textures=this.texturesAdapter;
+      if(preload&&this.viewportPreparation)return false;
       const prepared=this.viewportPreparation=new Set();
       try{
         const visible=viewport(options);
@@ -54,16 +52,20 @@ export function explorationScene(Phaser,runtime){
         signal?.throwIfAborted();
         const poses=mapPresentation(options).filter(({pose})=>visible(poseBounds(pose)));
         const regions=[...background,...poses.flatMap(({pose})=>[...poseRegions(pose)])];
+        if(preload)await new Promise((resolve,reject)=>runtime.clock.requestFrame(resolve,{signal,onCancel:reject}));
+        const budget=preload?2:uploadBudgetMs;
         let started=performance.now();
         for(const region of regions){
           if(!isCurrent()||this.viewportPreparation!==prepared)return false;
           let source=textures.regionSource(region);
           if(!textures.sources.has(source)){
-            if(performance.now()-started>=uploadBudgetMs){
+            if(performance.now()-started>=budget){
               await new Promise((resolve,reject)=>runtime.clock.requestFrame(resolve,{signal,onCancel:reject}));
               if(!isCurrent()||this.viewportPreparation!==prepared)return false;
               started=performance.now();
             }
+            // Legacy oversized PNGs need a synchronous canvas copy before upload.
+            if(preload&&!source)continue;
             textures.uploadRegion(region);source=textures.regionSource(region);
           }
           prepared.add(source);

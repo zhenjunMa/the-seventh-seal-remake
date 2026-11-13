@@ -119,7 +119,11 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     $('save').onclick=actions.guarded(()=>actions.openSaveMenu({mode:'save'}));
     $('load').onclick=actions.guarded(()=>actions.openSaveMenu({mode:'load'}));
     $('exportSave').onclick=actions.guarded(async()=>actions.download(await state.saveStorage.encodeFile(await actions.saveEnvelope()),'SaveGame0.Dat'));
-    $('importSave').onclick=()=>$('saveFile').click();$('saveFile').onchange=actions.guarded(async()=>{const file=$('saveFile').files[0];$('saveFile').value='';if(!file)return;if(file.size>8_000_000)throw new Error('存档文件超过当前版本上限');await actions.restore(await state.saveStorage.decodeFile(file));});
+    $('importSave').onclick=()=>$('saveFile').click();$('saveFile').onchange=actions.guarded(async()=>{
+      const file=$('saveFile').files[0];$('saveFile').value='';if(!file)return;
+      if(file.size>8_000_000)throw new Error('存档文件超过当前版本上限');
+      await actions.withSaveOperation('load',async operation=>actions.restore(await state.saveStorage.decodeFile(file),{operation}));
+    });
     $('exportLog').onclick=actions.exportRuntimeLog;
     $('layerOpen').onclick=actions.guarded(actions.showLayers);$('layerClose').onclick=()=>{$('layerPanel').hidden=true;state.scenes.setPhase('map');canvas.focus();};
     $('layerPrevious').onclick=actions.guarded(async()=>{state.layerIndex=Math.max(0,state.layerIndex-1);await actions.drawLayer();});$('layerNext').onclick=actions.guarded(async()=>{state.layerIndex=Math.min(state.layerData.frames.length-1,state.layerIndex+1);await actions.drawLayer();});$('mainLayer').onchange=actions.guarded(actions.drawLayer);$('intrinsicLayer').onchange=actions.guarded(actions.drawLayer);

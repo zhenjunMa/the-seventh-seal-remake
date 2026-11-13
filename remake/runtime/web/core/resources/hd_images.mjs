@@ -72,15 +72,16 @@ function loadImage(url, width, height, createImage) {
   });
 }
 
-async function loadMapTiles(key, {width, height, scale, tiles}, createImage) {
+async function loadMapTiles(key, {width, height, scale, tiles}, read, visible) {
   const {sourceSha256, size} = tiles;
   if (!/^[a-f0-9]{64}$/.test(sourceSha256) || size !== Math.floor(1024 / scale)) return null;
   const base = directory + `map_tiles/${sourceSha256}-${size}`;
   const regions = [], pages = new Map(), loads = [];
   for (let y = 0; y < height; y += size) for (let x = 0; x < width; x += size) {
     const w = Math.min(size, width - x), h = Math.min(size, height - y), page = regions.length;
+    if (visible && !visible({x, y, width:w, height:h})) continue;
     regions.push([x, y, w, h, page, 0, 0]);
-    loads.push(loadImage(`${base}/${x}-${y}.png`, w * scale, h * scale, createImage).then(bitmap => {
+    loads.push(read(`${base}/${x}-${y}.png`, w * scale, h * scale).then(bitmap => {
       if (bitmap) pages.set(page, {bitmap});
     }));
   }
@@ -89,7 +90,7 @@ async function loadMapTiles(key, {width, height, scale, tiles}, createImage) {
   return {packed: true, path: key, width, height, pixelScale: scale, regions, pool: {pages}};
 }
 
-export function loadHdImage(path, original, createImage = () => new Image()) {
+export function loadHdImage(path, original, createImage = () => new Image(), {readMapPage, visible} = {}) {
   if (!enabled || typeof path !== 'string') return null;
   const key = '/' + path.replace(/^\/+/, '');
   if (!key.startsWith('/assets/') || !supported.some(pattern => pattern.test(key.slice(8)))) return null;
@@ -104,11 +105,13 @@ export function loadHdImage(path, original, createImage = () => new Image()) {
     if (rect !== undefined && (!Array.isArray(rect) || rect.length !== 4 || !rect.every(Number.isSafeInteger))) return null;
     const [x, y, w, h] = rect ?? [0, 0, width, height];
     if (x < 0 || y < 0 || w <= 0 || h <= 0 || x + w > width || y + h > height) return null;
+    const read = mapBackground.test(key) && readMapPage
+      ? readMapPage : (url, w, h) => loadImage(url, w, h, createImage);
     if (entry.tiles && rect === undefined && mapBackground.test(key)) {
-      const tiled = await loadMapTiles(key, entry, createImage);
-      if (tiled) return tiled;
+      const tiled = await loadMapTiles(key, entry, read, visible);
+      if (tiled || visible) return tiled;
     }
-    const bitmap = await loadImage(directory + key.slice('/assets/'.length), w * scale, h * scale, createImage);
+    const bitmap = await read(directory + key.slice('/assets/'.length), w * scale, h * scale);
     return bitmap ? describe(bitmap, path, width, height, scale, rect) : null;
   }).catch(() => null);
 }

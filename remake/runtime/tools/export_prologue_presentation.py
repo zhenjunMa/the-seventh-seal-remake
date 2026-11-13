@@ -82,7 +82,6 @@ def main():
         'frame':'/'+loading_menu['images'][0]['image'],
         'fill':'/'+loading_menu['images'][1]['image'],
         'fill_rect':loading_menu['widgets'][1]['rect'],
-        'minimum_display_ms':600,
         'authority':'GAME.exe 4B77F0/4B7A40; Progress01 action origin and Progress.mnu control104. Progress counts browser preparation tasks.'}
     manifest={'schema':'seventh-seal-prologue-presentation','version':3,'resources':resources,'loading':loading,
         'font_manifest':'data/prologue_fonts.json','style':3,'font_height':19,'character_step':21,
@@ -96,7 +95,7 @@ def main():
         'limitations':['Original screenshots supplied by user; no new original GAME.exe runtime capture.',
             'Browser clock, deterministic particle seed and 8-bit compositing approximate native render ticks, RNG and RGB565 blending.',
             'The four followers use a direct visual arrival per user request; intermediate source moves still execute in the VM. The lead actor retains its separate approach.',
-            'Loading progress counts actual browser asset preparation tasks; cached transitions keep the page visible for 600ms.']}
+            'Loading progress counts actual browser asset preparation tasks and closes at scene readiness.']}
     write(WEB/'data/prologue_presentation.json',manifest)
     assert sources=={name:sha(ROOT/name) for name in sources}
     outputs={p.relative_to(ROOT).as_posix():sha(p) for p in OUT.glob('*.png')}

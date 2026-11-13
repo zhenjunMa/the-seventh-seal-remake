@@ -313,13 +313,14 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       return {location,release};
     }catch(error){release({failed:true});throw error;}
   }
-  async function enterMap(scene,draft,reason){
+  async function enterMap(scene,draft,reason,onReady){
     loadEncounterMap(draft,scene.data.id,state.encounterData);
     await initializeMapSequence({mapId:scene.data.id,world:draft,story:state.chapterStory,content:state.storyRepository?.content??runtimeContent,restore:reason==='restore'||reason==='boot'});
     const recordId=storyBindings(scene.data.id).entry_record;
     if(!recordId||!['exit','world-map'].includes(reason))return false;
     state.sceneEntryDraft=draft;
     state.scenes.setPhase('event');$('worldMapPanel').hidden=true;
+    if(onReady){actions.presentLoadedMap();onReady();}
     try{return await playStory(async playback=>{
       await state.chapterRunner.runTlk({mapId:scene.data.id,recordId,draft,playback});
       if(playback.paused)await playback.ready();playback.check();

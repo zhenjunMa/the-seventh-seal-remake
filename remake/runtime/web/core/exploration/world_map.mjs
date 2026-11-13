@@ -88,7 +88,7 @@ export class WorldMapController {
     if (mode === 0) return this.open(area);
     this.publish(); return this.snapshot();
   }
-  async select(index) {
+  async select(index,{onProgress,onReady}={}) {
     requireValue(this.phase === 'open', '大地图尚未打开或目的地正在加载');
     requireValue(Number.isInteger(index), '大地图目的地编号无效');
     const destination = this.snapshot().destinations.find(item => item.index === index);
@@ -99,7 +99,7 @@ export class WorldMapController {
     const checkWorld = () => requireValue(this.world.value.revision === before.revision, '大地图加载期间世界状态已变化，不能覆盖新进度');
     this.setPhase('loading');
     try {
-      const prepared = await this.prepare(copy(destination));
+      const prepared = await this.prepare(copy(destination),{onProgress});
       checkWorld();
       const location = prepared?.location;
       requireValue(object(location) && location.map_id === destination.map_id && Object.keys(location).length === 4 && Object.keys(location).every(key => ['map_id','x','y','direction'].includes(key)), '大地图目的地进入位置无效');
@@ -115,7 +115,7 @@ export class WorldMapController {
       const result = this.load(prepared, {...location});
       requireValue(!result || typeof result.then !== 'function', '大地图视图提交必须同步');
       checkWorld();
-      if (this.enter && await this.enter(prepared, next, 'world-map')) {
+      if (this.enter && await this.enter(prepared, next, 'world-map',onReady)) {
         checkWorld();
         const finished = this.load(prepared, {...next.location});
         requireValue(!finished || typeof finished.then !== 'function', '大地图视图提交必须同步');

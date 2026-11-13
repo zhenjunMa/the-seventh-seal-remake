@@ -35,6 +35,7 @@ const failed=error=>{
 window.addEventListener('pagehide',event=>{
   if(event.persisted)return;
   lifetime.abort();
+  actions.stopMapPreload();
   void actions.cancelStoryPlayback();state.battleTransition?.cancel();
   actions.disposeBattles();actions.disposeInput();state.engine?.destroy();
 });

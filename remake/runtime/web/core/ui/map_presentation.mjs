@@ -1,5 +1,11 @@
 import {mapActorPosition} from '../exploration/movement.mjs';
 
+export function mapViewport({x,y,zoom=1},margin=0){
+  const left=x-320/zoom-margin,right=x+320/zoom+margin;
+  const top=y-240/zoom-margin,bottom=y+240/zoom+margin;
+  return ({x,y,width,height})=>x<right&&y<bottom&&x+width>left&&y+height>top;
+}
+
 // Ground contact in full sprite-frame pixels, measured from each playable
 // role's idle frames. A single point per role keeps the pose stable as gait
 // and facing change. Exploration collision already uses this world position.

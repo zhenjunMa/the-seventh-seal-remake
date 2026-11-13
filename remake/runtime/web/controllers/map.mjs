@@ -15,12 +15,14 @@ import {anmActorSlots} from "../core/story/anm_runtime.mjs";
 import {chapterRouteExits,nativeEmptyEventCells} from "../core/exploration/map_connections.mjs";
 import {MapLocomotion,mapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
 
-import {mapPresentation} from '../core/ui/map_presentation.mjs';
+import {mapPresentation,mapViewport} from '../core/ui/map_presentation.mjs';
 import {mapWorldPoint, mapTargetInFront, pickMapDialogueObject} from '../core/exploration/map_interaction.mjs';
 
 import {createExplorationPresentation} from './presentation_handoff.mjs';
 
 const actorImageFields = [['sheet','bitmap'], ['intrinsic_sheet','intrinsic_bitmap'], ['shadow_sheet','shadow_bitmap']];
+const returnCacheMs = 15000;
+const exitPreloadDistance = 144;
 
 function roleImages(roleId, poses = []) {
   const scope = `role:${roleId}`;
@@ -32,6 +34,8 @@ function roleImages(roleId, poses = []) {
 export function createMapController({state, actions, $, canvas, ctx}) {
   const presentation=createExplorationPresentation({state,actions,$,canvas});
   const motionState=new MapLocomotion();let gaitScene=null,gaitRole=null;
+  let retainedScene=null,retainedParty=null,retainedRevision=-1,previousMap=null;
+  let preload=null,preloadSerial=0;
   function role() { return state.catalog.roles.find(role=>role.id===state.selectedRole); }
   function sheetAction(index=state.view.action) { return role().actions.find(action=>action.index===index); }
   function buildHud({resourcesOnly=false,actors=null}={}) {
@@ -50,19 +54,85 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     $('itemCount').textContent=`${snapshot.inventory.length} 项`;
     $('money').textContent=`金钱 ${snapshot.money??state.rewardData?.initial_money??'—'}`;
   }
-  async function prepareMap(id,options={}) {
-    const release=state.storyRepository.retainMap(id);
-    try{return await prepareMapContent(id,options);}finally{release();}
+  async function readMapDefinition(id,signal) {
+    const entry=state.catalog.maps.find(map=>map.id===id);
+    if(!entry)throw new Error(`地图尚未纳入本版：${id}`);
+    const data=await actions.json(entry.path,{signal});
+    if(data.schema!=='seventh-seal-runtime-map'||data.version!==1||data.id!==id)throw new Error('地图数据版本或标识不匹配');
+    return data;
   }
-  async function prepareMapContent(id,{world=state.world.value,program,onProgress}={}) {
-    const entry=state.catalog.maps.find(map=>map.id===id); if(!entry) throw new Error(`地图尚未纳入本版：${id}`);
+  function stopMapPreload() {
+    if(!preload)return;
+    const {controller,scope}=preload;
+    preload=null;
+    controller.abort();
+    state.resources.release(scope);
+  }
+  function preloadExit(dx,dy,at) {
+    const scene=state.scenes.current;
+    const size=scene.movement.cellSize;
+    let target=null,nearest=exitPreloadDistance;
+    for(const exit of scene.data.exits??[]){
+      if(exit.state!=='ready'||!exit.entry||!exit.target_map||exit.target_map===at.map_id)continue;
+      for(const cell of exit.cells){
+        const x=(cell.x+.5)*size-at.x,y=(cell.y+.5)*size-at.y;
+        if(x*dx+y*dy<=0)continue;
+        const distance=Math.hypot(x,y);
+        if(distance<nearest){nearest=distance;target=exit;}
+      }
+    }
+    if(preload?.exit===target)return;
+    stopMapPreload();
+    if(!target||target.target_map===previousMap?.id)return;
+    const controller=new AbortController(),{signal}=controller;
+    const id=target.target_map,scope=`map-preload:${++preloadSerial}`;
+    const definition=readMapDefinition(id,signal);
+    preload={exit:target,controller,scope,definition};
+    void definition.then(async data=>{
+      signal.throwIfAborted();
+      const {background}=data;
+      const path=typeof background==='string'?background:background.image;
+      const width=background.width??data.movement.width*size;
+      const height=background.height??data.movement.height*size;
+      const view=openingCamera(target.entry,width,height),visible=mapViewport(view,2);
+      const world=state.world.value;
+      const [bitmap,objects]=await Promise.all([
+        state.resources.load(path,scope,{visible,mapBackground:true,signal}),
+        Promise.all((data.objects??[]).filter(obj=>world.object_states[`${id}:${obj.index}`]?.visible!==false
+          &&visible({x:obj.draw_x,y:obj.draw_y,width:obj.frame_width,height:obj.frame_height}))
+          .map(async obj=>({...obj,bitmap:await actions.image(obj.image,scope)}))),
+      ]);
+      signal.throwIfAborted();
+      if(state.scenes.phase!=='map')return;
+      await state.engine?.exploration.prepareViewport({scene:{data,bitmap,objects},world,view,openingQueue:[]},
+        {signal,preload:true,isCurrent:()=>state.scenes.phase==='map'&&state.scenes.current===scene});
+    }).catch(error=>{
+      if(signal.aborted)return;
+      actions.log?.({type:'map-preload-failed',map_id:id,error:error.message});
+    });
+  }
+  async function prepareMap(id,options={}) {
+    if(preload&&preload.exit.target_map!==id)stopMapPreload();
+    const warm=preload;
+    const previous=previousMap?.until>performance.now()?previousMap:null;
+    const release=state.storyRepository.retainMap(id);
+    try{
+      const definition=warm?.definition.catch(()=>readMapDefinition(id))
+        ??(previous?.id===id?previous.definition:undefined);
+      return await prepareMapContent(id,options,definition);
+    }finally{
+      release();
+      if(warm&&preload===warm)stopMapPreload();
+    }
+  }
+  async function prepareMapContent(id,{world=state.world.value,program,onProgress}={},definition) {
     await state.storyRepository.ensureMap(id,{protect:[state.scenes?.current?.data.id].filter(Boolean)});
     const mapEvents=state.events.filter(event=>event.map_id===id);
     for(const event of mapEvents){const resource=event.npc?.resource;
       if(resource){const roleId=resource.source?.match(/(?:^|\/)([^/]+)\.dgp$/i)?.[1],action=state.mapShadows?.roles[roleId]?.actions.find(action=>action.index===0);
         if(action){resource.shadow_sheet=action.shadow_sheet;resource.shadow_geometry=action.shadow_geometry;}}}
-    const data=await actions.json(entry.path);
-    if(data.schema!=='seventh-seal-runtime-map'||data.version!==1||data.id!==id) throw new Error('地图数据版本或标识不匹配');
+    const source=await (definition??readMapDefinition(id));
+    const data={...source};
     data.movement=nativeMapMovement(data.movement,state.chapterStory.maps[id],state.chapterStory.programs);
     const extraExits=[...(state.chapterResources.exits_by_map[id]??[]),...chapterRouteExits(id,state.chapterStory,state.chapterResources)];
     data.exits=[...(data.exits??[]).filter(exit=>!extraExits.some(extra=>extra.id===exit.id)),...extraExits];
@@ -105,7 +175,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
         .reduce((n,action)=>n+['main','intrinsic','shadow'].filter(channel=>action[channel+'_sheet']).length,0),0);
     let completed=0;onProgress?.({completed,total});
     const step=async promise=>{const value=await promise;onProgress?.({completed:++completed,total});return value;};
-    const bitmap=await step(actions.image(typeof data.background==='string'?data.background:data.background.image, `map:${id}`));
+    const bitmap=await step(actions.image(typeof data.background==='string'?data.background:data.background.image,`map:${id}`,{mapBackground:true}));
     if(bitmap.width!==movement.width*16||bitmap.height!==movement.height*16) throw new Error('背景尺寸与逻辑地图不匹配');
     const objects=await Promise.all((data.objects??[]).map(async obj=>({...obj,bitmap:await step(actions.image(obj.image, `map:${id}`))})));
     const npcs=await Promise.all(state.events.filter(event=>event.map_id===id&&event.npc).map(async event=>({event,...event.npc,
@@ -122,7 +192,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     }
     for(const npc of npcs)npc.native_layer??=data.native_layer;
     const probes=[...(data.probes??[]),...state.events.filter(event=>event.map_id===id&&event.sample?.probe).map(event=>event.sample.probe)];
-    const scene={data,movement,bitmap,objects,npcs,probes,npcRoleIds};
+    const scene={data,definition:source,movement,bitmap,objects,npcs,probes,npcRoleIds};
     scene.npcRuntime=new MapNpcRuntime({scene,table,roles:state.openingResources.roles});
     if(effectObjects.length){
       const resources=await Promise.all(effectObjects.map(async obj=>{
@@ -247,7 +317,11 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     state.worldMapView?.show(snapshot);
   }
   function selectWorldMapDestination(index){return actions.guarded(async()=>{
-    const from=state.world.location.map_id;await state.worldMap.select(index);buildHud();updateNearest();
+    const from=state.world.location.map_id;
+    await state.loadingView.run('world-map',async(onProgress,onReady)=>{
+      await state.worldMap.select(index,{onProgress,onReady});
+      buildHud();updateNearest();presentLoadedMap();
+    });
     actions.log({type:'scene-enter',from,...state.world.location,reason:'world-map',destination:index});actions.status('已进入场景。');canvas.focus();
   })();}
   function closeWorldMap(){
@@ -292,6 +366,10 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     if(state.engine){if(kind==='exploration')paint();state.engine.capture(kind,target);}
     return target;
   }
+  function presentLoadedMap(){
+    paint();
+    state.engine?.flush();
+  }
   function renderSavePreview(scene,world,{view=null,action=null}={}){
     const r=state.catalog.roles.find(role=>role.id===world.leader_id),a=action??r?.actions.find(action=>action.index===0);
     if(!r||!a?.bitmap)throw new Error('存档人物图像未准备');
@@ -305,15 +383,27 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     const scene=state.scenes.current;if(scene?.data.id!==world.location.map_id)throw new Error('当前场景与存档地图不一致');
     return renderSavePreview(scene,world,{view:{...state.view},action:sheetAction()}).toDataURL('image/png');
   }
-  let retainedScene = null, retainedParty = null, retainedRevision = -1;
   function reconcileResources() {
     const scene = state.scenes.current, party = state.world.value.party;
     if (!scene || state.storyPlayback) return;
-    if (scene === retainedScene && party === retainedParty && retainedRevision === state.resources.revision) return;
+    const now=performance.now();
+    const expired=previousMap&&now>=previousMap.until;
+    if(expired)previousMap=null;
+    if (scene === retainedScene && party === retainedParty && retainedRevision === state.resources.revision&&!expired) return;
+    if(retainedScene&&scene.data.id!==retainedScene.data.id){
+      previousMap={id:retainedScene.data.id,definition:retainedScene.definition,
+        npcRoleIds:retainedScene.npcRoleIds,until:now+returnCacheMs};
+    }
 
     const roleIds = new Set(scene.npcRoleIds);
     for (const actor of party) roleIds.add(actor.id);
-    state.resources.retainScopes(['shared', `map:${scene.data.id}`, ...[...roleIds].map(id => `role:${id}`)]);
+    const scopes=['shared',`map:${scene.data.id}`];
+    if(previousMap){
+      scopes.push(`map:${previousMap.id}`);
+      for(const id of previousMap.npcRoleIds)roleIds.add(id);
+    }
+    if(preload)scopes.push(preload.scope);
+    state.resources.retainScopes([...scopes,...[...roleIds].map(id=>`role:${id}`)]);
     const roles = [...Object.entries(state.openingResources.roles), ...state.catalog.roles.map(role => [role.id, role])];
     for (const [id, role] of roles) {
       if (roleIds.has(id)) continue;
@@ -376,11 +466,12 @@ export function createMapController({state, actions, $, canvas, ctx}) {
         if(encounter&&state.scenes.phase==='map')actions.guarded(()=>actions.startBattle(encounter,encounterState))();
       }
       pose??=motionState.advance(null,{from:at,role:role(),elapsedMs:delta*1000});
+      if((dx||dy)&&state.scenes.phase==='map'&&state.engine)preloadExit(dx,dy,state.world.location);
       state.view.action=pose.action;state.view.frame=pose.frame;
       state.view.collisionFeedback=pose.feedback;state.clock=pose.elapsed;
       if(state.view.follow)follow();updateNearest();
     }else {motionState.reset();state.view.collisionFeedback=null;}
     paint();
   }
-  return {explorationPresentation:presentation,role, sheetAction, buildHud, prepareMap, prepareMapView, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, mapPointerDown, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, updateExploration,captureScene,captureSavePreview};
+  return {explorationPresentation:presentation,role, sheetAction, buildHud, prepareMap, prepareMapView, stopMapPreload, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, mapPointerDown, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, presentLoadedMap, updateExploration,captureScene,captureSavePreview};
 }

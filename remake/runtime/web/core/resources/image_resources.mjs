@@ -13,36 +13,60 @@ export class ImageResources {
     this.clock = 0;
     this.revision = 0;
   }
-  load(path, scope = 'shared') {
-    let entry = this.entries.get(path);
+  load(path, scope = 'shared', {visible, mapBackground=false, signal} = {}) {
+    // A viewport image may only reference some of the complete image's pages.
+    // The two entries share the page cache, including pending reads.
+    const key=visible?`${scope}\0${path}`:path;
+    let entry = this.entries.get(key);
     if (entry) {
       if (!entry.scopes.has(scope)) { entry.scopes.add(scope); this.revision++; }
       return entry.promise;
     }
     entry = {scopes:new Set([scope]), bitmap:null, promise:null};
-    this.entries.set(path, entry);
+    this.entries.set(key, entry);
     this.revision++;
     const descriptor=imageDescriptor(path);
-    const hd=loadHdImage(path,descriptor,this.createImage);
-    const original=()=>this.loadOriginal(path,entry,descriptor);
+    const readMapPage=mapBackground?(url,width,height)=>{
+      signal?.throwIfAborted();
+      return this.mapPage(entry,url,width,height).catch(()=>null);
+    }:undefined;
+    const hd=loadHdImage(path,descriptor,this.createImage,{readMapPage,visible});
+    const original=()=>{
+      signal?.throwIfAborted();
+      return this.loadOriginal(path,entry,descriptor,{visible,mapBackground});
+    };
     entry.promise=(hd?hd.then(image=>image??original()):original()).then(image=>{
       entry.bitmap=image;
-      if(this.entries.get(path)!==entry)this.prunePages();
+      if(this.entries.get(key)!==entry)this.prunePages();
       return image;
     }).catch(error=>{
-      if(this.entries.get(path)===entry){this.entries.delete(path);this.revision++;}
+      if(this.entries.get(key)===entry){this.entries.delete(key);this.revision++;}
       this.prunePages();throw error;
     });
     return entry.promise;
   }
-  loadOriginal(path,entry,descriptor){
+  loadOriginal(path,entry,descriptor,{visible,mapBackground}){
     if(descriptor){
       const plan=hdAnimation(path,descriptor);
-      return plan?plan.then(animation=>this.loadPacked(path,entry,descriptor,animation)):this.loadPacked(path,entry,descriptor);
+      const regions=visible?descriptor.regions.filter(([x,y,width,height])=>visible({x,y,width,height})):descriptor.regions;
+      return plan?plan.then(animation=>this.loadPacked(path,entry,descriptor,animation,regions)):this.loadPacked(path,entry,descriptor,null,regions);
     }
+    if(mapBackground)return this.mapPage(entry,path);
+    return this.readImage(path);
+  }
+  mapPage(entry,path,width,height){
+    (entry.pages??=new Set()).add(path);
+    entry.usesMapPages=true;
+    return this.page(path,null,()=>this.readImage(path,width,height));
+  }
+  readImage(path,width,height){
     return new Promise((resolve, reject) => {
       const bitmap = this.createImage();
-      bitmap.onload = () => { bitmap.onload = bitmap.onerror = null; resolve(bitmap); };
+      bitmap.onload = () => {
+        bitmap.onload = bitmap.onerror = null;
+        if(width!==undefined&&(bitmap.width!==width||bitmap.height!==height))reject(new Error(`图像尺寸不符：${path}`));
+        else resolve(bitmap);
+      };
       bitmap.onerror = () => {
         bitmap.onload = bitmap.onerror = null;
         reject(new Error(`图像加载失败：${path}`));
@@ -50,8 +74,7 @@ export class ImageResources {
       bitmap.src = path;
     });
   }
-  async loadPacked(path,entry,descriptor,animation){
-    let regions=descriptor.regions;
+  async loadPacked(path,entry,descriptor,animation,regions=descriptor.regions){
     if(animation){
       entry.pages=new Set(animation.pages.keys());
       const ready=new Set();
@@ -65,18 +88,11 @@ export class ImageResources {
     if(animation)this.prunePages();
     return {packed:true,path,width:descriptor.width,height:descriptor.height,regions,pool:this};
   }
-  page(index,hdPage){
+  page(index,hdPage,readPage){
     let entry=this.pages.get(index);if(entry)return entry.promise;
-    const page=hdPage??imageCatalog().pages[index];
     entry={bitmap:null,promise:null,used:++this.clock};this.pages.set(index,entry);
-    const read=hdPage?readAnimationBitmap(page):new Promise((resolve,reject)=>{
-      const bitmap=this.createImage();
-      bitmap.onload=()=>{bitmap.onload=bitmap.onerror=null;
-        if(bitmap.width!==page.width||bitmap.height!==page.height){reject(new Error('图片纹理页尺寸不符：'+page.path));return;}
-        resolve(bitmap);};
-      bitmap.onerror=()=>{bitmap.onload=bitmap.onerror=null;reject(new Error('图片纹理页加载失败：'+page.path));};
-      bitmap.src=page.path;
-    });
+    const page=hdPage??imageCatalog()?.pages[index];
+    const read=readPage?readPage():hdPage?readAnimationBitmap(page):this.readImage(page.path,page.width,page.height);
     entry.promise=read.then(bitmap=>{entry.bitmap=bitmap;ownBitmap(bitmap,this,index);return bitmap;})
       .catch(error=>{if(this.pages.get(index)===entry)this.pages.delete(index);throw error;});
     return entry.promise;
@@ -117,7 +133,8 @@ export class ImageResources {
       if (entry.bitmap) {
         ready++;
         const {packed,pixelScale,width,height,hdRect}=entry.bitmap;
-        if(!packed||pixelScale)decodedBytes+=(hdRect?.[2]??width)*(hdRect?.[3]??height)*(pixelScale??1)**2*4;
+        if((!packed||pixelScale)&&!entry.usesMapPages)
+          decodedBytes+=(hdRect?.[2]??width)*(hdRect?.[3]??height)*(pixelScale??1)**2*4;
       }
     }
     for(const entry of this.pages.values())if(entry.bitmap)decodedBytes+=entry.bitmap.width*entry.bitmap.height*4;

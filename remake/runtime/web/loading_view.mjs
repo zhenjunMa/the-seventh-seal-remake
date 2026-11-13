@@ -1,16 +1,15 @@
 import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 // Original Progress01 + Progress.mnu in a fixed 640x480 viewport.
-import {playbackFrame,playbackDelay,playbackTask} from './core/story/story_playback.mjs';
 export class LoadingView {
   static async create({manifest,image,...options}) {
     const [backgrounds,frame,fill]=await Promise.all([
       Promise.all(manifest.backgrounds.map(item=>image(item.image))),image(manifest.frame),image(manifest.fill)]);
     return new LoadingView({...options,manifest,backgrounds,frame,fill});
   }
-  constructor({root,manifest,backgrounds,frame,fill,log,clock=null}) {
-    Object.assign(this,{root,manifest,backgrounds,frame,fill,log,clock});
-    this.canvas=root.querySelector('canvas');this.context=drawingContext(this.canvas);this.nextBackground=0;
+  constructor({root,manifest,backgrounds,frame,fill,log}) {
+    Object.assign(this,{root,manifest,backgrounds,frame,fill,log});
+    this.canvas=root.querySelector('canvas');this.context=drawingContext(this.canvas);
     this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(root.parentElement);
   }
   resize(){const box=this.root.parentElement.getBoundingClientRect();
@@ -22,28 +21,33 @@ export class LoadingView {
     const width=Math.floor(this.fill.width*progress);
     if(width)drawImageRegion(c,this.fill,0,0,width,this.fill.height,o.x+r.left,o.y+r.top,width,this.fill.height);
   }
-  async run(mapId,work,{signal,kind='opening',minimumDisplayMs=this.manifest.minimum_display_ms,clock=this.clock}={}) {
-    signal?.throwIfAborted();
-    const now=()=>clock?.time??performance.now(),started=now();this.backgroundIndex=this.nextBackground++%this.backgrounds.length;
-    this.root.hidden=false;this.root.dataset.map=mapId;this.root.dataset.kind=kind;this.root.dataset.progress='0';this.resize();this.draw(0);
-    this.log?.({type:`${kind}-loading-start`,map_id:mapId,background:this.backgroundIndex});
+  async run(kind,work) {
+    if(!this.root.hidden)throw new Error('场景正在加载，请稍候');
+    const started=performance.now();
+    this.backgroundIndex=Math.floor(Math.random()*this.backgrounds.length);
+    this.root.hidden=false;this.root.dataset.kind=kind;this.root.dataset.progress='0';
+    let active=true,progress=0;
+    const close=()=>{
+      if(!active)return;
+      active=false;this.root.hidden=true;
+      delete this.root.dataset.kind;delete this.root.dataset.progress;
+    };
+    const finish=()=>{
+      if(!active)return;
+      close();
+      this.log?.({type:`${kind}-loading-complete`,elapsed_ms:performance.now()-started});
+    };
     try{
-      // Paint before beginning preparation, including a memory-cache hit.
-      await playbackFrame(clock,signal);await playbackFrame(clock,signal);
-      signal?.throwIfAborted();
-      let progress=0;
-      const scene=await playbackTask(work(({completed,total})=>{
-        signal?.throwIfAborted();
-        progress=Math.max(progress,Math.min(1,Math.max(0,completed/Math.max(1,total))));
+      this.resize();this.draw(0);
+      this.log?.({type:`${kind}-loading-start`,background:this.backgroundIndex});
+      const result=await work(({completed,total})=>{
+        if(!active)return;
+        // Leave the end of the bar for validation and first-frame preparation.
+        progress=Math.max(progress,.95*Math.min(1,Math.max(0,completed/Math.max(1,total))));
         this.root.dataset.progress=String(progress);this.draw(progress);
-      }),signal);
-      signal?.throwIfAborted();
-      this.root.dataset.progress='1';this.draw(1);
-      const remaining=minimumDisplayMs-(now()-started);
-      if(remaining>0)await playbackDelay(remaining,{clock,signal});
-      signal?.throwIfAborted();
-      this.log?.({type:`${kind}-loading-complete`,map_id:mapId,elapsed_ms:now()-started});
-      return scene;
-    }finally{this.root.hidden=true;delete this.root.dataset.map;delete this.root.dataset.kind;delete this.root.dataset.progress;}
+      },finish);
+      finish();
+      return result;
+    }finally{close();}
   }
 }

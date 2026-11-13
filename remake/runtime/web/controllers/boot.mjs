@@ -27,7 +27,7 @@ import {StoryRepository} from "../core/story/story_repository.mjs";
 import {worldMapEntry} from "../core/exploration/map_connections.mjs";
 import {createSaveStorage} from "../core/world/save_storage.mjs";
 import {SaveMenuView} from "../save_menu_view.mjs";
-import {loadImageCatalog} from '../core/resources/image_catalog.mjs';
+import {imageDescriptor,loadImageCatalog} from '../core/resources/image_catalog.mjs';
 import {configureHdImages,hdImagesPreference} from '../core/resources/hd_images.mjs';
 
 function loadConfiguration(catalog,manifests,signal){
@@ -121,7 +121,17 @@ export function createBootController({state, actions, $, canvas}) {
         suspend:actions.releaseInput,setPageHidden:actions.setPlayTimeHidden});
       actions.wire();actions.resize();
     });
-    const menuReady=Promise.all([engineReady,audioReady]).then(([,audio])=>view.prepareMenu(audio.startupManifest));
+    const loadingReady=pictures.then(async()=>{
+      const path='data/prologue_presentation.json';
+      let presentation=await actions.json(path);
+      if(!imageDescriptor(presentation.loading.frame)){
+        if(await (fullCatalog??=loadImageCatalog()))presentation=await actions.json(path);
+      }
+      state.prologuePresentation=presentation;
+      state.loadingView=await LoadingView.create({manifest:state.prologuePresentation.loading,
+        image:actions.image,root:$('sceneLoading'),log:actions.log});
+    });
+    const menuReady=Promise.all([engineReady,audioReady,loadingReady]).then(([,audio])=>view.prepareMenu(audio.startupManifest));
     void actions.refreshSaveSlots({quiet:true});
 
     const catalogReady=menuReady.then(async()=>{
@@ -196,12 +206,9 @@ export function createBootController({state, actions, $, canvas}) {
       'menu_fonts','menu_fonts_windows','dialogue_fonts_windows','prologue_fonts_windows'
     ].map(name=>actions.json(`data/${name}.json`)));
     const textRenderer=await createMenuTextRenderer(menuFonts,{windowsFonts:windowsMenuFonts});
-    state.prologuePresentation=await actions.json('data/prologue_presentation.json');
     state.captionView=await CaptionView.create({manifest:state.prologuePresentation,
       fonts:await actions.json(state.prologuePresentation.font_manifest),windowsFonts:windowsPrologueFonts,image:actions.image,
       root:$('storyCaption'),clock:state.engine?.exploration.clock,onAdvance:()=>actions.advanceDialogue(),log:actions.log});
-    state.loadingView=await LoadingView.create({manifest:state.prologuePresentation.loading,
-      image:actions.image,root:$('sceneLoading'),clock:state.engine?.clock,log:actions.log});
     state.battleTransition=new BattleTransitionView({renderer:state.engine.transitions,log:actions.log});
     const dialogueManifest=await actions.json('data/dialogue_ui.json');state.dialogueManifest=dialogueManifest;
     state.dialogueView=await DialogueView.create({manifest:dialogueManifest,fonts:await actions.json(dialogueManifest.font_manifest),windowsFonts:windowsDialogueFonts,
@@ -280,10 +287,10 @@ export function createBootController({state, actions, $, canvas}) {
       say:({mapId,record,signal})=>actions.say(actions.chapterSpeaker(mapId,record),record.text_raw,record.style,{mapId,record,signal}),
       animate:actions.animateChapter,transfer:actions.transferChapter,battle:actions.startScriptedBattle,objectInteraction:actions.animateObjectInteraction,objectAnimation:actions.animateChapterObject,log: actions.log,setPhase:phase=>state.scenes.setPhase(phase)});
     state.worldMap=new WorldMapController({world: state.world,data:worldMapData,
-      prepare:async destination=>{const draft=state.world.snapshot();delete draft.map_npc_state;const scene=await actions.prepareMap(destination.map_id,{world:draft}),location=worldMapEntry(scene,destination,state.chapterStory);
+      prepare:async (destination,{onProgress}={})=>{const draft=state.world.snapshot();delete draft.map_npc_state;const scene=await actions.prepareMap(destination.map_id,{world:draft,onProgress}),location=worldMapEntry(scene,destination,state.chapterStory);
         actions.validateEntry(scene,location);await actions.prepareMapView(scene,{...draft,location});return {scene,location};},
       load:(prepared,location)=>{actions.commitView(prepared.scene,location);state.scenes.current=prepared.scene;},
-      enter:async(prepared,draft,reason)=>{const played=await actions.enterMap(prepared.scene,draft,reason);if(played)prepared.scene=state.scenes.current;return played;},
+      enter:async(prepared,draft,reason,onReady)=>{const played=await actions.enterMap(prepared.scene,draft,reason,onReady);if(played)prepared.scene=state.scenes.current;return played;},
       captureView:()=>({scene:state.scenes.current,view:state.scenes.captureView()}),rollbackView:checkpoint=>{state.scenes.current=checkpoint.scene;state.scenes.rollbackView(checkpoint.view);},
       onPhase:phase=>state.scenes.setPhase(phase==='open'?'world-map':phase==='loading'?'loading':'map'),notify:actions.renderWorldMap});
     state.worldMapView=await WorldMapView.create({manifest:await actions.json('data/world_map_ui.json'),

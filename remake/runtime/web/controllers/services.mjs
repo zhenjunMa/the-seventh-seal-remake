@@ -40,7 +40,7 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
       : event.error ?? `${event.type} ${event.event??''} ${event.op??''}`;
     $('eventLog').append(item); while($('eventLog').children.length>50) $('eventLog').firstChild.remove();
   }
-  async function json(path,{cache='no-cache'}={}) { const response=await fetch(path,{cache}); if(!response.ok) throw new Error(`资源加载失败：${path}（${response.status}）`); return imageDefinitionJson(path,response); }
+  async function json(path,{cache='no-cache',signal}={}) { const response=await fetch(path,{cache,signal}); if(!response.ok) throw new Error(`资源加载失败：${path}（${response.status}）`); return imageDefinitionJson(path,response); }
   async function initializeRuntimeConfiguration(options,prepare){
     // Coalesce startup calls, including a failed startup. Refreshing the page
     // creates a new owner; menu/battle/save operations never reload this input.
@@ -61,7 +61,7 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
     if(!configurationReady)throw new Error('运行配置尚未初始化，请刷新游戏页面');
     return (await configurationReady).menu();
   }
-  function image(path, scope = 'shared') { return state.resources.load(path, scope); }
+  function image(path, scope = 'shared', options) { return state.resources.load(path, scope, options); }
   function busy(phase) {
     // Save menus and I/O inherit the previous phase's timing policy.
     if(!['save-menu','save-io'].includes(phase))playTimeEnabled=!untimedPhases.includes(phase);
@@ -69,9 +69,10 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
     if(!['map','event'].includes(phase))state.rewardNoticeView?.close();
     if(!['map','event','opening'].includes(phase))state.mapNameNoticeView?.close();
     state.engine?.setPhase(phase);
+    if(!['map','loading'].includes(phase))actions.stopMapPreload?.();
     state.keys.clear(); state.clock=0;state.view.action=0;state.view.frame=0;state.lastTime=performance.now();
     $('scenePhase').textContent=state.phaseNames[phase]??phase;
-    $('loading').hidden=!['loading','boot'].includes(phase);
+    $('loading').hidden=phase!=='boot';
     $('partyMenuOpen').disabled=phase!=='map';
     $('interactionHint').hidden=phase!=='map'||!state.nearest;
     for(const id of ['save','load','role','jumpProbe','resetEventSample','exportSave','importSave','layerOpen','battleOpen','zoomOut','zoomIn','fit','follow','collision','probe','routeSample','citySample','contentSample','partySkillSampleA','partySkillSampleB']) $(id).disabled=phase!=='map';
@@ -114,12 +115,17 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
     const preview=actions.captureSavePreview(world);return attachSavePreview(await encodeSave(world),preview);
   }
   async function withSaveOperation(kind,work,{fromMenu=false}={}){
+    if(kind==='load'&&state.loadingView)return state.loadingView.run('restore',
+      (onProgress,onReady)=>performSaveOperation(kind,work,{fromMenu,onProgress,onReady}));
+    return performSaveOperation(kind,work,{fromMenu});
+  }
+  async function performSaveOperation(kind,work,{fromMenu,onProgress,onReady}){
     if(kind==='load'&&actions.ensureGameReady)await actions.ensureGameReady();
     if(state.saveOperation)throw new Error('正在存取进度，请稍候');
     const phase=state.scenes?.phase;
     const menuAllowed=fromMenu&&phase==='save-menu'&&state.saveMenuContext?.mode===kind;
     if(!menuAllowed&&(kind==='save'?!state.scenes?.canSave():!['map','menu'].includes(phase)))throw new Error(kind==='save'?'请在地图探索状态保存':'当前操作完成后才能载入');
-    const operation={kind,phase};state.saveOperation=operation;state.scenes.setPhase('save-io');
+    const operation={kind,phase,onProgress,onReady};state.saveOperation=operation;state.scenes.setPhase('save-io');
     state.startupView?.updateButtons?.();state.startupView?.updateOptionPositions?.();
     try{return await work(operation);}
     finally{state.saveOperation=null;if((fromMenu&&state.saveMenuContext&&state.scenes.phase!=='opening')||state.scenes.phase==='save-io')state.scenes.setPhase(phase);state.startupView?.updateButtons?.();state.startupView?.updateOptionPositions?.();canvas.focus({preventScroll:true});}

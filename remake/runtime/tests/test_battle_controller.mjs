@@ -72,7 +72,8 @@ test('encounters start their transition before resource preparation, block reent
   }};
   const controller=createBattleController({state,actions,$,canvas});
   // Other scene loads still use the generic loading overlay.
-  for(const phase of ['boot','loading']){services.busy(phase);assert.equal($('loading').hidden,false);}
+  services.busy('boot');assert.equal($('loading').hidden,false);
+  services.busy('loading');assert.equal($('loading').hidden,true);
   state.scenes.setPhase('map');
   const pending=controller.startBattle({stage:'stage13.scn'});
   assert.equal(state.scenes.phase,'battle-loading');assert.equal(canvas.hidden,false);

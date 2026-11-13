@@ -58,13 +58,17 @@ def publish_runtime_indexes(builder, catalog):
     startup = documents['data/startup_menu.json']
     names = {'/' + frame['path'].lstrip('/')
              for asset in startup['assets'].values() for frame in asset['frames']}
+    loading = documents['data/prologue_presentation.json']['loading']
+    names.update(row['image'] for row in loading['backgrounds'])
+    names.update((loading['frame'], loading['fill']))
     images = {name: catalog['images'][name] for name in sorted(names) if name in catalog['images']}
     used = {region[4] for image in images.values() for region in image['regions']}
     # Keep the full index's page numbers so startup images can stay alive.
     pages = [page if i in used else None for i, page in enumerate(catalog['pages']) if i <= max(used, default=-1)]
     publish('/assets/startup_image_catalog.json', dict(
         schema=catalog['schema'], version=1, pages=pages, images=images,
-        manifests={'/data/startup_menu.json': hashes['data/startup_menu.json']}))
+        manifests={f'/data/{name}': hashes[f'data/{name}']
+                   for name in ('startup_menu.json', 'prologue_presentation.json')}))
 
     packs = documents['data/battle_packs.json']
     manifests = {path: {'sha256': row['sha256']} for path, row in packs['manifests'].items()}

@@ -73,6 +73,8 @@ python -B remake/runtime/tools/export_hd_animations.py --weights "/path/to/RealE
 
 方向键或 `WASD` 移动，`Shift` 切换跑走，`Tab` 切换队员，`Esc` 打开菜单或返回，空格交互，空格或 `Enter` 确认，`F4` 快速保存，`F5` 快速读取。
 
+靠近普通出口时会预载目标落点首屏的背景和静态物件。走出口时保留当前画面，准备好后直接切换。上一张地图的素材在探索中保留 15 秒，方便立即折返。确认大地图目的地、读档或开始新游戏时会显示原版插画和进度条，场景就绪后立即收起。
+
 `remake/saves/` 中的 `SaveGame0.Dat` 至 `SaveGame19.Dat` 为普通档，`Game.SAV` 为快速档。
 
 ## 游戏事件索引

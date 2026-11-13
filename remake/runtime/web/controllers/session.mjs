@@ -50,7 +50,11 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
     state.startupView.hide();$('menuResume').hidden=true;state.scenes.setPhase('map');
     state.audio?.setScene({mapId:state.world.location.map_id,battle:false});actions.buildHud();actions.updateNearest();canvas.focus({preventScroll:true});actions.status('已返回当前游戏。');
   }
-  async function beginOpening(seed=null){
+  function beginOpening(seed=null){
+    if(state.loadingView)return state.loadingView.run('new-game',(onProgress,onReady)=>playOpening(seed,{onProgress,onReady}));
+    return playOpening(seed);
+  }
+  async function playOpening(seed,{onProgress,onReady}={}){
     if(actions.ensureGameReady)await actions.ensureGameReady();
     if(state.saveOperation&&state.saveOperation.kind!=='restore-opening')throw new Error('正在存取进度，请稍候');
     if(!['map','menu'].includes(state.scenes.phase))return;
@@ -69,10 +73,12 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
         const prepared=new Map();
         state.openingView=new OpeningView({resources:state.openingResources,prepared,clock:state.engine?.exploration.clock,
           program:state.openingProgram,
-          prepare:(id,signal)=>state.loadingView.run(id,onProgress=>actions.prepareMap(id,{world:initial,program,onProgress}),{signal,clock:playback.clock}),
+          prepare:(id,signal)=>playbackTask(actions.prepareMap(id,{world:initial,program,onProgress}),signal),
           staging:state.prologuePresentation.staging,effects:state.prologuePresentation.effects,nativeViewport:true,
           install:scene=>{loadEncounterMap(initial,scene.data.id,state.encounterData);actions.commitView(scene,initial.location);state.scenes.current=scene;state.view.follow=false;},
-          camera:(x,y)=>{state.view.x=x;state.view.y=y;},say: actions.say,log: actions.log,
+          camera:(x,y)=>{state.view.x=x;state.view.y=y;
+            if(onReady){actions.presentLoadedMap();onReady();onReady=null;onProgress=null;}
+          },say: actions.say,log: actions.log,
           shade:alpha=>{$('openingShade').style.opacity=String(alpha);}});
         $('openingShade').hidden=false;$('openingShade').style.opacity='1';
         actions.status('序章正在演出；Enter／空格或点击画面推进字幕，文字未显示完时先补全。');
@@ -109,13 +115,14 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
       // A legacy pending prologue must release the picker before it takes input.
       const picker=state.saveMenuContext;
       if(picker){state.saveMenu.hide();state.saveMenuContext=null;picker.resolve();operation.phase=picker.originPhase;}
-      operation.kind='restore-opening';state.scenes.setPhase(operation.phase);await beginOpening(restored);return;
+      operation.kind='restore-opening';state.scenes.setPhase(operation.phase);await playOpening(restored,operation);return;
     }
     try{
       state.scenes.setPhase('map');
-      await state.scenes.loadLocation(restored.location,{reason:'restore',restoredWorld:restored});
+      await state.scenes.loadLocation(restored.location,{reason:'restore',restoredWorld:restored,onProgress:operation.onProgress});
       actions.resetPlayTime?.(restored.play_time_ms??0);applyGameSettings(restored.game_settings);
       state.startupView.hide();actions.buildHud();actions.updateNearest();canvas.focus();actions.status('进度已载入，可以继续探索。');
+      if(operation.onProgress)actions.presentLoadedMap();
       actions.log({type:'restore',map_id:restored.location.map_id,opening:restored.opening?.status??'legacy-v1'});
     }catch(error){if(previousPhase==='menu')showTitle();throw error;}
   }

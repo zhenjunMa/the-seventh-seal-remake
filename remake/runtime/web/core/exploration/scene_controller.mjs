@@ -6,7 +6,7 @@ export class SceneController {
     this.current = null; this.phase = 'boot'; this.request = 0;
   }
   setPhase(phase) { this.phase = phase; this.onPhase(phase); }
-  async loadLocation(location, {restoredWorld = null, reason = 'exit',nativeSortCode} = {}) {
+  async loadLocation(location, {restoredWorld = null, reason = 'exit',nativeSortCode,onProgress} = {}) {
     if (!['boot','map'].includes(this.phase)) throw new Error('当前操作尚未完成');
     const request = ++this.request, previous = this.current, checkpoint = this.captureView(), before = this.world.snapshot();
     const checkCurrent = () => {
@@ -18,7 +18,7 @@ export class SceneController {
     if(!restoredWorld)delete before.map_npc_state;
     this.setPhase('loading');
     try {
-      prepared = await this.prepare(location.map_id,{world:restoredWorld??before});
+      prepared = await this.prepare(location.map_id,{world:restoredWorld??before,onProgress});
       checkCurrent();
       this.validateEntry(prepared, location);
       const next = structuredClone(restoredWorld ?? before);
