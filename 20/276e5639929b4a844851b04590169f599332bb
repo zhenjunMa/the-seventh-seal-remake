@@ -1,0 +1,23 @@
+remake/runtime/web/core/exploration/movement.mjs
+  s_64668b04e9f51d::t_f7f253295d8684 33
+  s_64668b04e9f51d::t_255a0a0f0ab894 47-50
+  s_64668b04e9f51d::t_49a5c207160af2 255,261,265-268,270
+  s_64668b04e9f51d::t_25d2ada607cfde 15-17,198,228-231
+  s_64668b04e9f51d::t_d5c36928dd074d 32,34-37
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "20276e5639929b4a844851b04590169f599332bb",
+  "prompts": {},
+  "sessions": {
+    "s_64668b04e9f51d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d23a-580f-7051-8f10-ab7035757344",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
