@@ -1,0 +1,58 @@
+remake/runtime/web/core/exploration/scene_controller.mjs
+  s_935c7ad72684d4::t_a68e2d9e35876d 4-5,29
+remake/runtime/web/controllers/boot.mjs
+  s_935c7ad72684d4::t_4bbab499590614 271-272,284
+remake/runtime/web/phaser/rendering/texture_cache.mjs
+  s_935c7ad72684d4::t_d439989492f8c2 100-111
+  s_935c7ad72684d4::t_257d2736a10746 113-114
+  s_935c7ad72684d4::t_17db11dd362e83 118-121,123-124
+  s_935c7ad72684d4::t_f496bace9a3b56 112,122
+  s_935c7ad72684d4::t_653ec960c725cb 125
+  s_935c7ad72684d4::t_b8f1dd64ef47d3 126
+  s_935c7ad72684d4::t_7a0bc331a548fd 4,89,116
+  s_935c7ad72684d4::t_9fca0ef0fa74d5 115,117
+remake/runtime/web/phaser/scenes/exploration_scene.mjs
+  s_935c7ad72684d4::t_75f72722b6394d 15,19-24,78
+  s_935c7ad72684d4::t_14f3917a782c48 52
+  s_935c7ad72684d4::t_b12c929250dc61 49,102-106
+  s_935c7ad72684d4::t_0cdd70507740c0 136-138
+  s_935c7ad72684d4::t_fa1c3fc762fb9c 54,57,80-81,127
+  s_935c7ad72684d4::t_bbb5d4e457c041 121-125
+  s_935c7ad72684d4::t_94e75ec236be11 55-56,58
+  s_935c7ad72684d4::t_e01ae851a12526 5-14,16-18,25,48,50-51,59-75,82-89,91-93,100-101,107-108,126,128-135,139-140
+  s_935c7ad72684d4::t_20cb6e42def63a 53
+remake/runtime/tools/export_hd_menu.py
+  s_935c7ad72684d4::t_a58a552f6d027f 176,180-182
+  s_935c7ad72684d4::t_773ee035905129 174,191-198,200-205
+  s_935c7ad72684d4::t_7830e79de071d2 190,199
+  s_935c7ad72684d4::t_992fa15e10667f 22-23,172-173,175,177-179,183-189,206-208,434,436-437,444-449,465,496-499
+remake/runtime/web/core/resources/hd_images.mjs
+  s_935c7ad72684d4::t_cd0b7fedd67ca5 75,79,83-85,87-88,108
+  s_935c7ad72684d4::t_78bb50392e7f5b 78
+  s_935c7ad72684d4::t_587086933a8291 3,62-74,76-77,80-82,86,89-91,96,107,109-112
+README.md
+  s_935c7ad72684d4::t_ae48c4fa10d5d6 53
+remake/runtime/web/controllers/map.mjs
+  s_935c7ad72684d4::t_1953cf048c4797 147-154,385
+remake/runtime/web/phaser/components/sprite_pose.mjs
+  s_935c7ad72684d4::t_9d7a74ce873de3 4,7-14
+  s_935c7ad72684d4::t_37c28accacf167 15
+remake/runtime/web/controllers/story.mjs
+  s_935c7ad72684d4::t_2c40950a3ea1e2 305
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "c03a234c88a50fe4e50f3b93535be75b1aa5b47e",
+  "prompts": {},
+  "sessions": {
+    "s_935c7ad72684d4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d305-7453-7d41-b17b-c83be1bf0dcd",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
