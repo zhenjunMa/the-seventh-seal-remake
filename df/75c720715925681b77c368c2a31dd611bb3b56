@@ -1,0 +1,21 @@
+remake/runtime/web/battle_status_view.mjs
+  s_ae6ee7c4dc3400::t_70440589cd7c12 54,60
+remake/runtime/web/battle_view.mjs
+  s_ae6ee7c4dc3400::t_70440589cd7c12 1190-1195
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "df75c720715925681b77c368c2a31dd611bb3b56",
+  "prompts": {},
+  "sessions": {
+    "s_ae6ee7c4dc3400": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d254-b3b8-76a0-b754-e8201b843e68",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
