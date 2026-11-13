@@ -9,7 +9,8 @@ export function menuImage(node,path){
 export function menuText(node,value,renderer,options={},className=''){
   value=String(value??'');
   if(!value||!renderer||renderer.supports&&!renderer.supports(value,options.font)){
-    if(node.textContent!==value)node.textContent=value;
+    // A bitmap label has empty textContent even when its canvas still shows text.
+    if(node.textContent!==value||node._menuCanvas?.parentNode===node)node.textContent=value;
     return;
   }
   const canvas=node._menuCanvas??=node.querySelector('canvas')??document.createElement('canvas');
