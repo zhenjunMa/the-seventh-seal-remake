@@ -1,0 +1,22 @@
+.gitignore
+  s_708fe5e36b6f05::t_c3033388402818 108-110
+README.md
+  s_708fe5e36b6f05::t_c3033388402818 5-14
+  s_708fe5e36b6f05::t_8f9d60289111ed 154
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "85e647337e737df945a274c677ef0b56c39546e1",
+  "prompts": {},
+  "sessions": {
+    "s_708fe5e36b6f05": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d3bf-ce92-7aa3-b3ed-4379fc60ec5c",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
