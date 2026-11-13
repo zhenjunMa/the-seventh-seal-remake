@@ -1,0 +1,43 @@
+remake/runtime/web/native_service_view.css
+  s_6ab83acb6f1748::t_bbcf6f03241946 13-16
+  s_6ab83acb6f1748::t_3fb592ef7584e2 6,11-12
+remake/runtime/web/controllers/native_services.mjs
+  s_6ab83acb6f1748::t_3fb592ef7584e2 9,20,31,35
+  s_6ab83acb6f1748::t_bbcf6f03241946 48,54,56-57
+  s_6ab83acb6f1748::t_88242c66f4aa8a 50-53
+  s_6ab83acb6f1748::t_234f19da34421d 44,46-47,49,55
+  s_6ab83acb6f1748::t_047f7166cae732 18,39-42,60-61
+remake/runtime/tests/test_native_service_view.mjs
+  s_6ab83acb6f1748::t_e60f0709da5f36 10,19-20
+  s_6ab83acb6f1748::t_88242c66f4aa8a 8-9,23,26-30
+remake/runtime/web/core/ui/menu_text.mjs
+  s_6ab83acb6f1748::t_3831ff32a7bb22 99-100,102,190-191
+remake/runtime/tools/export_hd_menu.py
+  s_6ab83acb6f1748::t_88242c66f4aa8a 113-114
+remake/runtime/web/native_service_view.mjs
+  s_6ab83acb6f1748::t_047f7166cae732 146,179-184
+  s_6ab83acb6f1748::t_3fb592ef7584e2 41-49,79-80,88,91,96,120,134-145,147
+  s_6ab83acb6f1748::t_a1feaa5d69e50f 3,16,55-58,60-61,75,87,89,98,103-104,106-111,115,117,127-133,187-188,190,220,222-255,258,261
+  s_6ab83acb6f1748::t_3831ff32a7bb22 8-10,35,38,116,118-119,160-161,172
+  s_6ab83acb6f1748::t_bbcf6f03241946 19-20,59,69,86,90,105,170-171,191-217,221
+  s_6ab83acb6f1748::t_88242c66f4aa8a 62-66,77-78,178,185-186
+remake/runtime/web/core/items/native_economy.mjs
+  s_6ab83acb6f1748::t_3831ff32a7bb22 91-93
+  s_6ab83acb6f1748::t_234f19da34421d 9-26,60,62-67,84-85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "5576e6c298f9be1f98d2d53a67c3738d768cc429",
+  "prompts": {},
+  "sessions": {
+    "s_6ab83acb6f1748": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d52f-12e0-7232-9b5f-4130db9eb5a9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
