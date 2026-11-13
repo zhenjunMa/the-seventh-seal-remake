@@ -12,8 +12,9 @@ function sweepBox(x, y, dx, dy, box, footprint) {
   // Old saves and source entrances can start touching/inside a footprint.
   // Permit escape and tangent travel, never push the persistent position out.
   if (x > left + EPS && x < right - EPS && y > top + EPS && y < bottom - EPS) {
-    const nx = x >= box.right - EPS ? 1 : x <= box.left + EPS ? -1 : 0;
-    const ny = y >= box.bottom - EPS ? 1 : y <= box.top + EPS ? -1 : 0;
+    // Grid cells own their left and top edges, including at a corner.
+    const nx = x >= box.right ? 1 : x < box.left ? -1 : 0;
+    const ny = y >= box.bottom ? 1 : y < box.top ? -1 : 0;
     if (nx || ny) {
       const blockX = nx && dx * nx < -EPS ? nx : 0,
         blockY = !nx && dy * ny < -EPS ? ny : 0;
@@ -28,7 +29,12 @@ function sweepBox(x, y, dx, dy, box, footprint) {
     const nearest = edges.sort((a, b) => a.depth - b.depth)[0];
     return dx * nearest.nx + dy * nearest.ny < -EPS ? {t: 0, ...nearest, hit: box.hit} : null;
   }
-  if ((!dx && (x <= left + EPS || x >= right - EPS)) || (!dy && (y <= top + EPS || y >= bottom - EPS)))
+  const point = footprint.halfWidth === 0 && footprint.halfHeight === 0;
+  // A logical centre on the left or top edge is inside the tile.
+  if (
+    (!dx && (point ? x < left || x >= right : x <= left + EPS || x >= right - EPS)) ||
+    (!dy && (point ? y < top || y >= bottom : y <= top + EPS || y >= bottom - EPS))
+  )
     return null;
   const tx0 = dx ? (left - x) / dx : -Infinity,
     tx1 = dx ? (right - x) / dx : Infinity;
@@ -38,7 +44,10 @@ function sweepBox(x, y, dx, dy, box, footprint) {
     enterY = Math.min(ty0, ty1);
   const enter = Math.max(enterX, enterY),
     leave = Math.min(Math.max(tx0, tx1), Math.max(ty0, ty1));
-  if (enter < -EPS || enter > 1 + EPS || leave <= Math.max(0, enter) + EPS) return null;
+  if (enter < -EPS || enter > 1 + EPS) return null;
+  // A diagonal can graze a corner, but cannot end on a blocked tile's corner.
+  const endsInside = point && x + dx >= left && x + dx < right && y + dy >= top && y + dy < bottom;
+  if (leave <= Math.max(0, enter) + EPS && !endsInside) return null;
   return {
     t: Math.max(0, enter),
     nx: enterX >= enterY - EPS ? -Math.sign(dx) : 0,
@@ -186,7 +195,7 @@ export class MovementMap {
     const entry = this.at(x, y);
     const escape = entry.reason === 'terrain' && (allowTerrainStart || this.entryCells.has(`${entry.x},${entry.y}`))
       ? entry : null;
-    if (entry.blocked && !escape) return {x, y, moved: false, blocked: true, hit: entry, contacts: []};
+    if (entry.blocked && !escape) return {x, y, moved: false, blocked: true, hit: entry, contacts: [], segments: []};
     const start = {x, y},
       contacts = [],
       segments = [];
@@ -216,10 +225,10 @@ export class MovementMap {
           bottom = top + size;
         if (x + hw <= left + EPS || x - hw >= right - EPS || y + hh <= top + EPS || y - hh >= bottom - EPS)
           continue;
-        if (x >= right - EPS) escapeFaces.push({edge: right, sign: 1, axis: 'x'});
-        else if (x <= left + EPS) escapeFaces.push({edge: left, sign: -1, axis: 'x'});
-        else if (y >= bottom - EPS) escapeFaces.push({edge: bottom, sign: 1, axis: 'y'});
-        else if (y <= top + EPS) escapeFaces.push({edge: top, sign: -1, axis: 'y'});
+        if (x >= right) escapeFaces.push({edge: right, sign: 1, axis: 'x'});
+        else if (x < left) escapeFaces.push({edge: left, sign: -1, axis: 'x'});
+        else if (y >= bottom) escapeFaces.push({edge: bottom, sign: 1, axis: 'y'});
+        else if (y < top) escapeFaces.push({edge: top, sign: -1, axis: 'y'});
       }
     for (let iteration = 0; iteration < 4 && (Math.abs(rx) > EPS || Math.abs(ry) > EPS); iteration++) {
       let first = 1,
@@ -243,35 +252,22 @@ export class MovementMap {
         for (let cx = x0; cx <= x1; cx++) {
           const hit = this.cell(cx, cy);
           if (!hit.blocked || (escape && cx === escape.x && cy === escape.y)) continue;
-          if (
+          const escapesFace =
             hit.reason === 'terrain' &&
             escapeFaces.some((face) =>
               face.axis === 'x'
                 ? face.edge === (face.sign > 0 ? cx + 1 : cx) * size && rx * face.sign >= 0
                 : face.edge === (face.sign > 0 ? cy + 1 : cy) * size && ry * face.sign >= 0,
-            )
-          )
-            continue;
+            );
           // Gates use the logical centre so a covered exit can actually be
           // reached; terrain alone has physical thickness around the feet.
           const box = {left: cx * size, right: (cx + 1) * size, top: cy * size, bottom: (cy + 1) * size, hit};
-          const diagonal = hit.reason === 'terrain' ? diagonalTerrainBoxes(this, cx, cy, footprint) : null;
-          if (diagonal) {
-            for (const part of diagonal) consider(sweepBox(x, y, rx, ry, {...part, hit}, footprint));
-            // The bevel grants body clearance only. Logical terrain and unknown
-            // transition gates continue to constrain the player's centre.
+          const diagonal = hit.reason === 'terrain' && !escapesFace ? diagonalTerrainBoxes(this, cx, cy, footprint) : null;
+          if (escapesFace || diagonal || hit.reason === 'transition') {
+            for (const part of diagonal ?? []) consider(sweepBox(x, y, rx, ry, {...part, hit}, footprint));
+            // Bevels and wall-face escapes grant clearance only to the feet.
             consider(sweepBox(x, y, rx, ry, box, {halfWidth: 0, halfHeight: 0}));
-          } else
-            consider(
-              sweepBox(
-                x,
-                y,
-                rx,
-                ry,
-                box,
-                hit.reason === 'transition' ? {halfWidth: 0, halfHeight: 0} : footprint,
-              ),
-            );
+          } else consider(sweepBox(x, y, rx, ry, box, footprint));
         }
       for (const obstacle of obstacles) consider(sweepBox(x, y, rx, ry, obstacle, footprint));
       const bound = (value, delta, low, high, axis) => {
