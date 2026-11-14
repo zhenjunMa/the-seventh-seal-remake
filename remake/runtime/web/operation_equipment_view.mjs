@@ -59,6 +59,7 @@ export class OperationEquipmentView{
   constructor({manifest,root,onSlot,onSelect,onConfirm,onUnequip,onInfo,onFocus,onDetails,textRenderer=null}){
     this.manifest=manifest;this.root=root;this.onSlot=onSlot;this.onSelect=onSelect;this.onConfirm=onConfirm;this.onUnequip=onUnequip;this.onInfo=onInfo;this.onFocus=onFocus;this.onDetails=onDetails;this.textRenderer=textRenderer;
     this.menus=new Map(manifest.menus.map(row=>[row.id,row]));this.section=root.querySelector('#menuEquipmentSection');
+    this.pageBody=root.querySelector('#menuPageBody');
     if(!this.section)throw new Error('装备视图区缺失');
     this.slotButtons=new Map();this.candidateButtons=new Map();this.slots=[];this.rows=[];this.candidates=[];this.definitions={};this.offset=0;this.selectedIndex=0;this.detailsIndex=0;this.slotFocused=false;
     this.list=this.section.querySelector('#menuEquipped')??this.section.appendChild(document.createElement('div'));this.list.id='menuEquipped';absolute(this.list,0,0,469,180);this.list.replaceChildren();
@@ -102,7 +103,24 @@ export class OperationEquipmentView{
     for(const [id,button]of this.slotButtons)if(!slots.some(slot=>slot.id===id)){button.remove();this.slotButtons.delete(id);}
     this.paintSlots();this.ensureVisible();if(this.pickerOpen){this.paintCandidates();this.paintDetails();}
   }
-  paintSlots(){for(const [id,button] of this.slotButtons){const selected=this.slotFocused&&id===this.slotId&&!this.pickerOpen;button.classList.toggle('selected',selected);button._icon.hidden=!selected;this.text(button._name,button._text??'','simsun22_text',button.disabled?'#ff8000':selected?'#ffff00':'#ffffff',selected?'#222200':'#222222');button.setAttribute('aria-pressed',String(selected));}}
+  paintSlots(){
+    const selectedSlot=this.slotFocused&&!this.pickerOpen?this.slotButtons.get(this.slotId):null;
+    for(const button of this.slotButtons.values()){
+      const selected=button===selectedSlot;
+      button.classList.toggle('selected',selected);
+      button._icon.hidden=!selected;
+      this.text(button._name,button._text??'','simsun22_text',button.disabled?'#ff8000':selected?'#ffff00':'#ffffff',selected?'#222200':'#222222');
+      button.setAttribute('aria-pressed',String(selected));
+    }
+    if(this.pageBody){
+      // The panel bitmap includes the unselected slot labels. Cut out the
+      // selected row so its shifted label can draw over plain panel shading.
+      const mask=selectedSlot
+        ? `linear-gradient(#000 0 0) exclude, linear-gradient(#000 0 0) 0 ${parseFloat(selectedSlot.style.top)-3}px / var(--equipment-label-width) var(--equipment-label-height) no-repeat`
+        : '';
+      menuStyle(this.pageBody,{mask});
+    }
+  }
   controls(){return this.pickerOpen?this.rowButtons.filter(button=>!button.hidden):[...this.slotButtons.values()].filter(button=>!button.disabled);}
   ensureVisible(){this.offset=Math.min(this.offset,Math.max(0,this.candidates.length-8));if(this.selectedIndex<this.offset)this.offset=this.selectedIndex;if(this.selectedIndex>=this.offset+8)this.offset=this.selectedIndex-7;}
   paintCandidates(indices=null){

@@ -35,10 +35,12 @@
 .standing-actor{left:340px;top:246px;z-index:1}
 .party-menu .weapon-content{left:10px;top:50px;width:453px;height:365px}.weapon-content #menuWeaponActor,.weapon-content #menuWeaponName{position:absolute;left:7px;top:6px;width:153px;text-align:center;font:24px SimSun,serif;line-height:30px;color:#eee}.weapon-content #menuWeaponName{top:44px}.weapon-content #menuWeaponStats{margin:0}.weapon-content #menuWeaponStats div{position:absolute;left:0}.weapon-content #menuWeaponStats dd{position:absolute;left:413px;margin:0;font:24px Arial,serif;line-height:28px}.weapon-content #menuWeaponCard{left:228px;top:91px;width:175px;height:265px}
 .party-menu .equipment-content{left:20px;top:135px}
+.party-menu[data-menu-page=equipment]{--equipment-label-width:52px;--equipment-label-height:30px}
 .equipment-content>label:first-child,.equipment-content #menuWorn{display:none}
 .equipment-content #menuEquipped{position:absolute;left:50px;top:0;width:255px;height:180px}
 .party-menu #menuEquipped button{position:absolute;left:0;display:block;border:0;background:transparent;height:30px;width:100%;padding:0;text-align:left;font:22px SimSun,serif;color:#e7e7dc;outline:none;white-space:nowrap}
 .party-menu #menuEquipped button.selected{color:#d58b03;background:none}
+.equipment-source-slot.selected::before{content:"";position:absolute;left:-50px;top:-3px;width:var(--equipment-label-width);height:var(--equipment-label-height);background:rgb(0 0 0 / 50%);pointer-events:none}
 .equipment-content #menuEquipmentStats{position:absolute;left:50px;top:183px;margin:0;width:230px;font:24px Arial,serif}.equipment-content #menuEquipmentStats div{position:absolute;height:30px}.equipment-content #menuEquipmentStats dd{margin:0;line-height:30px;color:#eee}
 .equipment-picker{position:absolute;left:160px;top:3px;width:294px;height:280px;z-index:4}.equipment-picker>.menu-source{left:0;top:0}
 .equipment-picker>label{position:absolute;left:10px;top:29px;width:274px;font-size:0!important}.equipment-picker #menuEquipment{width:274px;height:220px;font-size:20px}.equipment-picker .operation-actions{position:absolute;left:8px;top:280px;display:flex;gap:8px}.equipment-picker .operation-actions button{padding:2px 10px;font-size:16px;background:#261a16;border:1px solid #8d693f}
