@@ -1,0 +1,42 @@
+remake/runtime/web/controllers/map.mjs
+  s_f987654c2b0ea9::t_d21621f36e2515 398,400-404,406,408-409
+  s_f987654c2b0ea9::t_8333d8e2272875 151,399,405,407
+remake/runtime/web/controllers/boot.mjs
+  s_f987654c2b0ea9::t_47f9c1049a1436 24,165,167,169
+  s_f987654c2b0ea9::t_8333d8e2272875 170
+remake/runtime/web/phaser/preview.mjs
+  s_f987654c2b0ea9::t_2e5f17f8c9669d 9,142
+remake/runtime/web/core/exploration/movement.mjs
+  s_f987654c2b0ea9::t_1104f3094cba4e 34-35
+  s_f987654c2b0ea9::t_8ee44b249d3a55 7-8,14,41-51
+  s_f987654c2b0ea9::t_66d86b8e91e4e6 9,19,22,28,31,38-40,52,185,322,343-345,515
+  s_f987654c2b0ea9::t_bc1df0840fdd0e 10-13,15-18,20-21,23-27,29-30,32-33,36-37,53-54,346-348,354,372-378,514
+remake/runtime/web/core/exploration/map_locomotion.mjs
+  s_f987654c2b0ea9::t_8333d8e2272875 7
+  s_f987654c2b0ea9::t_d3fdc96dc06d2d 3
+remake/runtime/web/data/config/movement.json
+  s_f987654c2b0ea9::t_752db0f9392058 16-17
+  s_f987654c2b0ea9::t_904d8174885a18 4,7-15
+  s_f987654c2b0ea9::t_59fdc73b7dad9c 18
+  s_f987654c2b0ea9::t_420a0b21482580 6
+  s_f987654c2b0ea9::t_660ab3c6fe7c24 3,5,19-20
+remake/runtime/web/phaser/scenes/exploration_scene.mjs
+  s_f987654c2b0ea9::t_786625ec767f4b 117,119-123
+  s_f987654c2b0ea9::t_8333d8e2272875 118,124
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "1fc3ee8c352a982a7f1996dcda435f8550bfaeb5",
+  "prompts": {},
+  "sessions": {
+    "s_f987654c2b0ea9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d7b2-4dbe-72f2-b2a4-0cd336a55df1",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
