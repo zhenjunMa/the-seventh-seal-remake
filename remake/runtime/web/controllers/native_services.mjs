@@ -34,6 +34,7 @@ export function createNativeServicesController({state,actions,$,canvas}){
       };
       view=new NativeServiceView({root,manifest,textRenderer:operationMenu?.textRenderer,
         isSuspended:()=>Boolean(state.engine?.paused||playback?.paused),
+        onSelect:()=>state.audio?.playCue('menuSelect'),
         onClose:()=>{finish();resolve();},
         onAction:event=>{
           if(['mode','category','filter','select'].includes(event.type)){

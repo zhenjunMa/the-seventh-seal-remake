@@ -16,14 +16,22 @@ const regularFont='simsun19_text',compactFont='simsun12_text';
 const textStyle={shadowOffsets:[[1,1]],composite:false};
 const place=(node,x,y,w,h)=>Object.assign(node.style,{left:`${x}px`,top:`${y}px`,...(w===undefined?{}:{width:`${w}px`,height:`${h}px`})});
 export class NativeServiceView{
-  constructor({root,manifest,textRenderer,onAction,onClose,isSuspended=()=>false}){
+  constructor({root,manifest,textRenderer,onAction,onClose,onSelect,isSuspended=()=>false}){
     if(manifest?.schema!=='seventh-seal-native-services'||manifest.version!==1)throw new Error('城镇服务素材版本无效');
-    Object.assign(this,{root,manifest,textRenderer,onAction,onClose,isSuspended});
+    Object.assign(this,{root,manifest,textRenderer,onAction,onClose,onSelect,isSuspended});
     this.tradeFocus='category';
     this.menus=new Map(manifest.menus.map(menu=>[menu.id,menu]));
     root.classList.add('native-service-panel');root.hidden=true;
     this.frame=document.createElement('div');this.frame.className='native-service-frame keyboard-navigation';this.frame.tabIndex=-1;
-    this.frame.addEventListener('pointermove',()=>this.frame.classList.remove('keyboard-navigation'));
+    this.frame.addEventListener('pointermove',event=>{
+      this.frame.classList.remove('keyboard-navigation');
+      if(event.pointerType==='touch'||this.isSuspended())return;
+      // Keep the selection across repaints, which recreate the buttons.
+      const selection=event.target.closest('[data-menu-selection]')?.dataset.menuSelection;
+      if(selection&&selection!==this.pointerSelection)this.onSelect?.();
+      this.pointerSelection=selection;
+    });
+    this.frame.addEventListener('pointerleave',()=>{this.pointerSelection=null;});
     this.frame.setAttribute('role','dialog');this.frame.setAttribute('aria-label','城镇服务');root.append(this.frame);
     this.resize=new ResizeObserver(()=>this.fit());this.resize.observe(root);
   }
@@ -41,7 +49,7 @@ export class NativeServiceView{
       maxWidth:width,maxLines:Math.max(1,Math.floor(height/lineHeight)),boxHeight:height,...textStyle,shadow});
     parent.append(node);
   }
-  control(menu,widget,label,action,{x=0,y=0,selected=false,disabled=false}={},parent=this.frame){
+  control(menu,widget,label,action,{x=0,y=0,selected=false,disabled=false,menuSelection=false}={},parent=this.frame){
     const r=widget.rect,button=document.createElement('button');button.type='button';button.className='native-service-control';button.setAttribute('aria-label',label);
     button.disabled=disabled;
     place(button,x+r.left,y+r.top,r.right-r.left+1,r.bottom-r.top+1);parent.append(button);
@@ -54,7 +62,15 @@ export class NativeServiceView{
       this.image(highlight,drawX-r.left,drawY-r.top,button).className='native-service-highlight';
     }
     button.classList.toggle('is-selected',selected);
-    if(!disabled)button.onclick=()=>{if(!this.isSuspended())action();};
+    if(!disabled){
+      const selection=menuSelection?`${menu.id}:${widget.name}`:null;
+      if(selection)button.dataset.menuSelection=selection;
+      button.onclick=event=>{
+        if(this.isSuspended())return;
+        if(selection&&(event.detail===0||this.pointerSelection!==selection))this.onSelect?.();
+        action();
+      };
+    }
     return button;
   }
   show(state){
@@ -84,6 +100,7 @@ export class NativeServiceView{
       const current=enabled.findIndex(option=>this.currentSidebarOption(option)),step=key==='ArrowUp'?-1:1;
       const next=enabled[(current+step+enabled.length)%enabled.length];
       if(next&&next!==enabled[current]){
+        this.onSelect?.();
         if(next.category)this.changeCategory(next.category);
         else this.changeMode(next.modes[0]);
       }
@@ -104,7 +121,7 @@ export class NativeServiceView{
       const button=this.control(main,this.widget(main,option.widget),option.label,()=>{
         if(option.category)this.switchTradeCategory(option.category);
         else{this.tradeFocus='list';this.changeMode(option.modes[0]);}
-      },{selected:current,disabled:!enabled});
+      },{selected:current,disabled:!enabled,menuSelection:true});
       button.setAttribute('aria-pressed',String(current));
     }
     const area=this.widget(main,'AREA'),gold=this.widget(main,'GOLD');
@@ -116,14 +133,15 @@ export class NativeServiceView{
     const command=this.tradeFocus==='category'?null:this.tradeFocus==='header'?this.tradeCommand:mode;
     if(this.trading){
       for(const [index,value]of ['buy','sell'].entries())if(allowed.includes(value)){
-        const button=this.control(header,this.widget(header,String(index+1).padStart(2,'0')),labels[value],()=>this.enterTrade(value),{selected:command===value});
+        const button=this.control(header,this.widget(header,String(index+1).padStart(2,'0')),labels[value],()=>this.enterTrade(value),
+          {selected:command===value,menuSelection:true});
         button.setAttribute('aria-pressed',String(command===value));
       }
     }else{
       const categories=mode==='forge'?['weapon','crystal']:['material','all'];
       for(const [index,category]of categories.entries())this.control(header,this.widget(header,String(index+1).padStart(2,'0')),category==='weapon'?'锻造武器':category==='crystal'?'强化水晶':category==='material'?'合成材料':'配方列表',()=>{
         this.confirming=false;this.offset=0;this.onAction({type:'category',category});
-      },{selected:category===state.category});
+      },{selected:category===state.category,menuSelection:true});
     }
     this.control(header,this.widget(header,'03'),'离开',()=>this.close(),{selected:command==='exit'});
     const listing=this.menus.get(state.category==='equipment'||mode==='forge'||mode==='synthesize'?'boss_buy_02':'boss_buy_01');this.image(listing.images[0].image,o.x,o.y);
@@ -134,7 +152,7 @@ export class NativeServiceView{
       for(const [index,filter] of nativeShopFilters[state.category??'items'].entries()){
         const current=this.tradeFocus==='list'&&index===(state.filterIndex??0);
         const widget=this.widget(listing,String(index+1).padStart(2,'0'));
-        const button=this.control(listing,widget,filter.label,()=>this.changeFilter(index),{...o,selected:current});
+        const button=this.control(listing,widget,filter.label,()=>this.changeFilter(index),{...o,selected:current,menuSelection:true});
         button.setAttribute('aria-pressed',String(current));
         button.title=filter.label;
       }
@@ -275,6 +293,7 @@ export class NativeServiceView{
       if(horizontal){
         const commands=this.tradeCommands(),index=commands.indexOf(this.tradeCommand);
         this.tradeCommand=commands[(index+step+commands.length)%commands.length];
+        this.onSelect?.();
         this.paint();
       }
       if(confirm&&!repeat){
@@ -285,6 +304,7 @@ export class NativeServiceView{
     }else{
       if(horizontal){
         const count=nativeShopFilters[this.state.category??'items'].length,index=this.state.filterIndex??0;
+        this.onSelect?.();
         this.changeFilter((index+step+count)%count);
       }
       if(vertical)this.moveRow(step);
@@ -296,6 +316,7 @@ export class NativeServiceView{
   }
   key(key,repeat=false){
     if(!this.active||this.isSuspended())return false;
+    this.pointerSelection=null;
     const mixedService=this.allowedModes.includes('buy')&&this.allowedModes.some(mode=>mode==='forge'||mode==='synthesize');
     if(!this.confirming&&['Escape','Enter',' ','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','PageUp','PageDown','Tab'].includes(key)){
       if(this.tradeFocus==='category'&&(this.trading||mixedService)){
@@ -320,7 +341,9 @@ export class NativeServiceView{
     if(['ArrowLeft','ArrowRight'].includes(key)){
       if(!this.confirming&&!mixedService){
         const modes=this.allowedModes,index=modes.indexOf(this.state.mode);
-        this.changeMode(modes[(index+(key==='ArrowLeft'?-1:1)+modes.length)%modes.length]);
+        const next=modes[(index+(key==='ArrowLeft'?-1:1)+modes.length)%modes.length];
+        if(next!==this.state.mode)this.onSelect?.();
+        this.changeMode(next);
       }
       return true;
     }
