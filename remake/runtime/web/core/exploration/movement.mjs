@@ -462,28 +462,11 @@ export class KeyboardMovement {
     this.dx = 0;
     this.dy = 0;
     this.heading = null;
-    this.detour = null;
-  }
-  actorDetour(map, at, dx, dy, contact, options, step) {
-    const box = options.obstacles.find(box => box.hit === contact.hit);
-    if (!box) return null;
-    const alongY = Boolean(contact.nx);
-    const axis = alongY ? 'y' : 'x';
-    const half = alongY ? MAP_FOOTPRINT.halfHeight : MAP_FOOTPRINT.halfWidth;
-    const edges = alongY ? [box.top, box.bottom] : [box.left, box.right];
-    const clear = edges.map((edge, i) => ({...at, [axis]: edge + (i ? 1 : -1) * (half + SKIN * 2)}))
-      .filter(point => {
-        const side = map.moveAndSlide(at.x, at.y, point.x - at.x, point.y - at.y, options);
-        if (Math.hypot(side.x - point.x, side.y - point.y) > SKIN) return false;
-        const onward = map.moveAndSlide(point.x, point.y, dx * step, dy * step, options);
-        return (onward.x - point.x) * dx + (onward.y - point.y) * dy > SKIN;
-      });
-    return clear.sort((a, b) => Math.abs(a[axis] - at[axis]) - Math.abs(b[axis] - at[axis]))[0] ?? null;
+    this.avoidingTerrain = false;
   }
   advance(map, at, {dx, dy, profile, elapsedMs, obstacles = [], onTravel = null}) {
     if (dx !== this.dx || dy !== this.dy) {
       this.remaining = 0;
-      this.detour = null;
       this.dx = dx;
       this.dy = dy;
     }
@@ -505,33 +488,20 @@ export class KeyboardMovement {
           target = map.cell(cell.x + dx * lookahead, cell.y + dy * lookahead);
         let vx = dx,
           vy = dy;
-        const direct = map.moveAndSlide(x, y, dx * step, dy * step, options);
+        // 496F90 tests terrain for the requested keyboard step. Actor occupancy
+        // is consulted by 48EB70 only when that step needs a fallback.
+        const direct = map.moveAndSlide(x, y, dx * step, dy * step);
         // The native grid target remains the scoring goal, not a second
         // collider 32px ahead of the continuous player's actual feet. Keep
         // accepted approach/slide travel before selecting a different vector.
-        if (!this.detour && direct.blocked && !direct.moved) {
+        this.avoidingTerrain = direct.blocked && !direct.moved;
+        if (this.avoidingTerrain) {
           contacts.push(...direct.contacts);
           if (direct.hit?.reason === 'bounds' || direct.hit?.reason === 'transition' ||
               direct.contacts.some(contact => contact.hit.reason === 'rail')) {
             stopped = true;
             break;
           }
-          const actor = direct.contacts.find(contact => contact.hit.reason === 'actor');
-          if (actor) {
-            // Finish sliding past the chosen side before retrying the input.
-            // Rescoring neighbours every visit can bounce between an actor
-            // and the wall beside it without ever clearing the actor's feet.
-            this.detour = this.actorDetour(map, {x, y}, dx, dy, actor, options, step);
-            if (!this.detour) { stopped = true; break; }
-          }
-        }
-        if (this.detour) {
-          vx = (this.detour.x - x) / step;
-          vy = (this.detour.y - y) / step;
-          const length = Math.hypot(vx, vy);
-          if (length > 1) { vx /= length; vy /= length; }
-          redirected = true;
-        } else if (direct.blocked && !direct.moved) {
           let best = null,
             score = Infinity;
           // 48EB70 enumeration and strict-less scoring preserve native ties.
@@ -598,12 +568,12 @@ export class KeyboardMovement {
         y,
         complete ? this.endX - x : (this.heading.dx / length) * amount,
         complete ? this.endY - y : (this.heading.dy / length) * amount,
-        options,
+        this.avoidingTerrain ? options : undefined,
       );
       contacts.push(...moved.contacts);
       this.remaining -= amount;
       budget -= amount;
-      if (moved.blocked) { this.remaining = 0; this.detour = null; }
+      if (moved.blocked) this.remaining = 0;
       const distance = moved.segments.reduce((sum, s) => sum + Math.max(Math.abs(s.dx), Math.abs(s.dy)), 0);
       if (distance <= EPS) {
         this.remaining = 0;
@@ -617,7 +587,6 @@ export class KeyboardMovement {
       const from = {x, y};
       x = moved.x;
       y = moved.y;
-      if (this.detour && Math.hypot(x - this.detour.x, y - this.detour.y) <= EPS) this.detour = null;
       if (onTravel?.({x, y, dx: x - from.x, dy: y - from.y, distance}) === false) {
         this.remaining = 0;
         break;

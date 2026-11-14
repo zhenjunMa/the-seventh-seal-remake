@@ -129,16 +129,30 @@ test('diagonal wall contact preserves accepted tangent travel without stopping o
   for(const r of results){assert.ok(Math.abs(r.y-results[0].y)<1e-4);assert.equal(r.frame,results[0].frame);}
 });
 
-test('visible NPCs remain solid during direction reselection, hidden actors do not block',()=>{
+test('direct keyboard travel can cross a visible NPC on open terrain',()=>{
   for(const hidden of [false,true]){
     const f=fixture();f.state.scenes.current.npcs.push({id:'guard',x:320,y:300,hidden,event:{conditions:[]}});
+    let crossed=false;
     f.state.keys.add('ArrowRight');for(let i=0;i<20;i++){
       f.step(16);const at=f.state.world.location;
-      if(!hidden)assert.ok(Math.abs(at.x-320)>=8-1e-4||Math.abs(at.y-300)>=6-1e-4,'NPC feet cannot overlap');
+      if(Math.abs(at.x-320)<4)crossed=true;
+      assert.equal(at.y,300);
     }
-    assert.ok(f.state.world.location.x>320,'reselection can continue past the NPC');
-    assert.equal(f.state.world.location.y===300,hidden);
-    if(!hidden){assert.equal(f.state.view.action,1);assert.equal(f.state.nearest,null,'passing the guard puts it behind the player');}
+    assert.ok(crossed&&f.state.world.location.x>320);
+    assert.equal(f.state.view.action,1);
+    assert.equal(f.state.nearest,null);
+  }
+});
+
+test('direction reselection at a wall skips a visible NPC cell',()=>{
+  for(const hidden of [false,true]){
+    const f=fixture({wall:true});
+    f.state.world.setPosition(396,300,1);
+    f.state.scenes.current.npcs.push({id:'guard',x:352,y:350,motion:{x:388,y:296,direction:5},hidden,event:{conditions:[]}});
+    f.state.keys.add('ArrowRight');f.step(16);
+    const {x,y}=f.state.world.location;
+    if(hidden){assert.ok(x<396);assert.equal(y,300);}
+    else {assert.equal(x,396);assert.ok(y<300);}
   }
 });
 
@@ -230,13 +244,13 @@ test('a story entry stops within the render frame and suppresses the otherwise s
   assert.equal(f.state.battle,undefined);assert.equal(f.state.event.triggerId,'entry');
 });
 
-test('NPC collision and interaction distance use its displayed feet during reselection',()=>{
+test('interaction distance uses the displayed NPC position after walking past',()=>{
   const f=fixture(),npc={id:'guard',x:340,y:300,motion:{x:320,y:300,direction:5},event:{conditions:[]}};
   f.state.scenes.current.npcs.push(npc);f.state.keys.add('ArrowRight');
   for(let i=0;i<20;i++)f.step(16);
-  assert.ok(f.state.world.location.x>320&&f.state.world.location.y<294);
+  assert.ok(f.state.world.location.x>320);
   const {x,y}=f.state.world.location;
-  f.state.world.setPosition(x,y,6);
+  f.state.world.setPosition(x,y,5);
   f.controller.updateNearest();
   assert.equal(f.state.nearest.x,320);assert.ok(Math.abs(f.state.nearest.distance-Math.hypot(320-x,300-y))<1e-8);
   assert.equal(npc.x,340);
