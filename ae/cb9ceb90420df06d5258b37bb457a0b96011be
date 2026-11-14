@@ -1,0 +1,39 @@
+remake/runtime/web/core/exploration/map_npcs.mjs
+  s_77da254d9474c2::t_2884c5fd046063 43-58,166,170,186,209,211-213,218,222,238-241,251-278,280-289,293-300,308,342-346,348-349,358-361,376-377
+  s_77da254d9474c2::t_1f4484b1edb2f0 242-250,347
+  s_77da254d9474c2::t_d4080be9aa9035 279,326-327
+remake/runtime/native_save.py
+  s_77da254d9474c2::t_6c018f0367a97b 352-354,527-530
+remake/runtime/web/controllers/map.mjs
+  s_77da254d9474c2::t_64618f410d73e8 128,143,245
+remake/runtime/web/controllers/session.mjs
+  s_77da254d9474c2::t_64618f410d73e8 76
+remake/runtime/web/core/ui/map_presentation.mjs
+  s_77da254d9474c2::t_6c018f0367a97b 42
+remake/runtime/web/controllers/story.mjs
+  s_77da254d9474c2::t_64618f410d73e8 178-183,185,223-229
+remake/runtime/web/core/story/anm_runtime.mjs
+  s_77da254d9474c2::t_ddef6a694022b6 123-126,128-130
+remake/runtime/web/core/exploration/map_npc_state.mjs
+  s_77da254d9474c2::t_6c018f0367a97b 11,17-19,27-29,39-40
+remake/runtime/web/core/exploration/map_stage.mjs
+  s_77da254d9474c2::t_ddef6a694022b6 14,16,40-44,49
+remake/runtime/web/opening_view.mjs
+  s_77da254d9474c2::t_ddef6a694022b6 149-155,161,320
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "aecb9ceb90420df06d5258b37bb457a0b96011be",
+  "prompts": {},
+  "sessions": {
+    "s_77da254d9474c2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d77d-8332-7c42-baa5-d644a1b38dbc",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
