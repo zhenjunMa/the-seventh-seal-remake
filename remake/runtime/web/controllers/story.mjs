@@ -326,6 +326,8 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     await initializeMapSequence({mapId:scene.data.id,world:draft,story:state.chapterStory,content:state.storyRepository?.content??runtimeContent,restore:reason==='restore'||reason==='boot'});
     const recordId=storyBindings(scene.data.id).entry_record;
     if(!recordId||!['exit','world-map'].includes(reason))return false;
+    const flags=state.chapterRunner.planFlagChanges(scene.data.id,recordId,draft);
+    if(flags?.size===0)return false;
     state.sceneEntryDraft=draft;
     state.scenes.setPhase('event');$('worldMapPanel').hidden=true;
     if(onReady){actions.presentLoadedMap();onReady();}

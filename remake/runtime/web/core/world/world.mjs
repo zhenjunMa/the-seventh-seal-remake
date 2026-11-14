@@ -160,6 +160,16 @@ export class WorldStore {
     return this.snapshot();
   }
   replace(next) { this.value = validateWorld(next, this.mapIds); return this.snapshot(); }
+  applyStoryFlagChanges(changes) {
+    const flags = this.value.flags.slice();
+    for (const [index, value] of changes) {
+      requireValue(Number.isInteger(index) && index >= 0 && index < flags.length, '剧情旗标索引无效');
+      uint(value, '剧情旗标');
+      flags[index] = value;
+    }
+    this.value.flags = flags;
+    this.value.revision = (this.value.revision + 1) >>> 0;
+  }
   setEncounterState(next) {
     this.value.encounters=validateEncounterState(next,this.value.party);
     this.value.revision=(this.value.revision+1)>>>0;

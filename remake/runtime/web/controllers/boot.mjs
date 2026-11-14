@@ -284,8 +284,8 @@ export function createBootController({state, actions, $, canvas}) {
     state.scenes=new SceneController({world: state.world,prepare:actions.prepareMap,validateEntry:actions.validateEntry,
       prepareView:actions.prepareMapView,commitView:actions.commitView,enter:actions.enterMap,onPhase:actions.busy,
       afterCommit:()=>actions.finishStoryCompletion?.(),
-      captureView:()=>({view:{...state.view},name:$('mapName').textContent,probes:Array.from($('probe').children,child=>child.cloneNode(true)),nearest: state.nearest,resetHidden:$('resetEventSample').hidden}),
-      rollbackView:checkpoint=>{state.mapNameNoticeView.close();Object.assign(state.view,checkpoint.view);$('mapName').textContent=checkpoint.name;$('probe').replaceChildren(...checkpoint.probes);$('resetEventSample').hidden=checkpoint.resetHidden;state.nearest=checkpoint.nearest;state.audio?.setScene({mapId:state.world.location.map_id,battle:false});}});
+      captureView:()=>({view:{...state.view},name:$('mapName').textContent,probes:Array.from($('probe').children,child=>child.cloneNode(true)),nearest: state.nearest,lastExit:state.lastExit,resetHidden:$('resetEventSample').hidden}),
+      rollbackView:checkpoint=>{state.mapNameNoticeView.close();Object.assign(state.view,checkpoint.view);$('mapName').textContent=checkpoint.name;$('probe').replaceChildren(...checkpoint.probes);$('resetEventSample').hidden=checkpoint.resetHidden;state.nearest=checkpoint.nearest;state.lastExit=checkpoint.lastExit;state.audio?.setScene({mapId:state.world.location.map_id,battle:false});}});
     state.chapterRunner=new ChapterRunner({world: state.world,data:state.chapterStory,objectData:state.chapterResources.interactive_objects,
       worldMapState:()=>state.worldMap.initialState(),
       choose:actions.chooseChapter,service:actions.openNativeService,

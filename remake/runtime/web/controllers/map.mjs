@@ -146,8 +146,11 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     // Some legacy map exports also list a registered StoryFlow trigger as a world-map exit.
     const storyTriggerIds=new Set(data.story_triggers.map(trigger=>trigger.id));
     data.exits=data.exits.filter(exit=>exit.kind!=='world-map-event'||!storyTriggerIds.has(exit.id));
+    const restCells=storyBindings(id).rests.flatMap(binding=>
+      state.chapterStory.maps[id]?.descriptors.find(row=>row.id===binding.descriptor_id)?.cells??[]);
     const readyCells=new Set([...(data.exits??[]).filter(exit=>exit.state==='ready').flatMap(exit=>exit.cells.map(cell=>`${cell.x},${cell.y}`)),
       ...data.story_triggers.flatMap(trigger=>trigger.cells.map(cell=>`${cell.x},${cell.y}`)),
+      ...restCells.map(cell=>`${cell.x},${cell.y}`),
       ...nativeEmptyEventCells(data.movement,state.chapterStory.maps[id])]);
     // Unknown trigger handlers must be visible failures, not silent pass-through.
     // The source JSON retains the original gate; this is a runtime coverage guard.
@@ -231,7 +234,11 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     motionState.reset();state.view.collisionFeedback=null;gaitScene=scene;gaitRole=state.selectedRole;
     state.view.action=0;state.view.frame=0;state.view.follow=true;state.view.zoom=1;
     Object.assign(state.view,openingCamera(at,scene.bitmap.width,scene.bitmap.height));
-    state.clock=0;state.nearest=null;state.lastExit='';
+    state.clock=0;state.nearest=null;
+    // A native landing can be inside its return exit. Arm it after the player leaves.
+    const landing=scene.movement?.at(at.x,at.y);
+    const exit=landing&&transitionFor(landing,scene);
+    state.lastExit=exit?.target_map?`${scene.data.id}:${exit.id}`:'';
     $('mapName').textContent=scene.data.name||scene.data.id;
     state.audio?.setScene({mapId:scene.data.id,battle:false});
     $('probe').replaceChildren(...scene.probes.map((p,i)=>{const opt=document.createElement('option');opt.value=i;opt.textContent=p.name;return opt;}));
@@ -366,7 +373,10 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     }
     return obj.bitmap;
   }
-  function transitionFor(hit){return state.scenes.current.data.exits?.find(exit=>exit.state==='ready'&&exit.cells.some(cell=>cell.x===hit.x&&cell.y===hit.y));}
+  function transitionFor(hit,scene=state.scenes.current){
+    return hit.trigger&&scene.data.exits?.find(exit=>exit.state==='ready'&&exit.id===hit.trigger.id
+      &&exit.cells.some(cell=>cell.x===hit.x&&cell.y===hit.y));
+  }
   function renderWorldMap(snapshot){
     state.audio?.setScene({mapId:state.world.location.map_id,worldMap:snapshot.phase!=='closed'});
     state.worldMapView?.show(snapshot);
@@ -499,15 +509,34 @@ export function createMapController({state, actions, $, canvas, ctx}) {
         const headerRawHex=state.chapterStory.maps[at.map_id]?.header_raw_hex;
         const motion=playerMapMotionProfile(sheetAction(running?2:1),state.scenes.current.data.movement,headerRawHex,state.playerRunSpeed);
         const {movement,data}=state.scenes.current;
-        const storyAt=cell=>data.story_triggers.find(trigger=>trigger.cells.some(c=>c.x===cell.x&&c.y===cell.y));
-        const storyTag=trigger=>`${at.map_id}:${trigger.id}`;
-        const shouldStartStory=trigger=>Boolean(trigger&&state.lastStoryTrigger!==storyTag(trigger)
-          &&state.chapterRunner.triggerHasEffect(at.map_id,trigger.id));
+        let checkedStoryTag='', pendingStory=null, storyFlagsChanged=false;
+        function visitStoryTrigger(cell) {
+          const trigger=data.story_triggers.find(row=>row.cells.some(c=>c.x===cell.x&&c.y===cell.y));
+          const tag=trigger?`${at.map_id}:${trigger.id}`:'';
+          if(state.lastStoryTrigger!==tag)state.lastStoryTrigger='';
+          if(!trigger||tag===checkedStoryTag||tag===state.lastStoryTrigger){
+            checkedStoryTag=tag;
+            return;
+          }
+          checkedStoryTag=tag;
+          const result=state.chapterRunner.applyWalkingTrigger(at.map_id,trigger.id);
+          if(result==='ignored')return;
+          state.lastStoryTrigger=tag;
+          if(result==='blocking')pendingStory=trigger;
+          if(result==='updated')storyFlagsChanged=true;
+        }
+        function enteredExit(cell) {
+          const exit=transitionFor(cell);
+          if(exit&&state.lastExit===`${at.map_id}:${exit.id}`)return null;
+          state.lastExit='';
+          return exit;
+        }
         let encounter=null,encounterState=state.world.value.encounters??initialEncounterState(state.world.value.party),encounterAdvanced=false;
         const moved=motionState.movement.advance(movement,at,{dx,dy,profile:motion,elapsedMs:delta*1000,
           obstacles:movement.actorObstacles(state.scenes.current.npcs.filter(npcAvailable)),onTravel:segment=>{
-            const cell=movement.at(segment.x,segment.y),exit=cell.trigger?transitionFor(cell):null;
-            const stop=Boolean(exit||shouldStartStory(storyAt(cell)));
+            const cell=movement.at(segment.x,segment.y),exit=enteredExit(cell);
+            if(!exit)visitStoryTrigger(cell);
+            const stop=Boolean(exit||pendingStory);
             if(state.encounterData&&!state.battleUnavailable){
               const preview=previewMovement(encounterState,{party:state.world.value.party,leader_id:state.selectedRole,map_id:at.map_id,
                 dx:segment.dx,dy:segment.dy,distance:segment.distance,step_pixels:motion.keyboardStepSize,transition:stop,phase:'map',play_time_ms:actions.currentPlayTime(),world:state.world.value,itemData:state.itemData},state.encounterData);
@@ -519,18 +548,16 @@ export function createMapController({state, actions, $, canvas, ctx}) {
           role:role(),profile:motion});
         state.world.setPosition(moved.x,moved.y,pose.direction??at.direction);state.view.follow=true;
         if(encounterAdvanced&&!encounter)state.world.setEncounterState(encounterState);
-        const reached=movement.at(moved.x,moved.y),exit=reached.trigger?transitionFor(reached):null;
-        const storyTrigger=storyAt(reached);
-        if(shouldStartStory(storyTrigger)){
-          state.lastStoryTrigger=storyTag(storyTrigger);
-          actions.runChapter({mapId:at.map_id,triggerId:storyTrigger.id});
-        }else if(!storyTrigger||state.lastStoryTrigger!==storyTag(storyTrigger))state.lastStoryTrigger='';
+        const reached=movement.at(moved.x,moved.y),exit=enteredExit(reached);
+        if(!exit&&!moved.moved)visitStoryTrigger(reached);
+        if(storyFlagsChanged)state.questProgress=state.storyRepository?.journal(state.world.value)??[];
+        if(pendingStory)actions.runChapter({mapId:at.map_id,triggerId:pendingStory.id});
         if(exit){
           const tag=`${at.map_id}:${exit.id}`;
           if(tag!==state.lastExit){state.lastExit=tag;if(exit.kind==='world-map-event')routeExit(exit);else changeMap({map_id:exit.target_map,...exit.entry},'exit',null,exit.source?.entry_sort_code);}
         }
         else if(moved.blocked&&moved.hit?.trigger){if(state.lastBoundary!==`${at.map_id}:${moved.hit.trigger.id}`){state.lastBoundary=`${at.map_id}:${moved.hit.trigger.id}`;actions.status('这条出口的执行规则尚未纳入当前片段。');}}
-        else {state.lastBoundary='';state.lastExit='';}
+        else state.lastBoundary='';
         if(encounter&&state.scenes.phase==='map')actions.guarded(()=>actions.startBattle(encounter,encounterState))();
       }
       pose??=motionState.advance(null,{from:at,role:role(),elapsedMs:delta*1000});

@@ -183,36 +183,61 @@ function branchTarget(command, draft, next) {
 }
 
 const previewPositions = new WeakMap();
-export function isEmptyStoryFlowPath(flow, entry, world, evaluateCondition) {
-  if (!flow || !entry) return false;
+export function planStoryFlagChanges(flow, entry, world, evaluateCondition) {
+  if (!flow || !entry) return null;
   let positions = previewPositions.get(flow);
   if (!positions) {
     positions = new Map(flow.commands.map((command, index) => [command.id, index]));
     previewPositions.set(flow, positions);
   }
   const visited = new Set();
+  const changes = new Map();
+  let draft = world;
+  let records = 0;
   let pc = positions.get(entry);
-  while (pc !== undefined && pc < flow.commands.length && !visited.has(pc)) {
+  while (pc !== undefined && pc < flow.commands.length && !visited.has(pc) && visited.size < 10000) {
     visited.add(pc);
     const command = flow.commands[pc];
-    if (command.op === 'end') return true;
+    if (command.op === 'end') return changes;
+    if (command.op === 'record' && ++records > 1000) return null;
     if (command.op === 'record' || command.op === 'native_noop') {
+      pc++;
+      continue;
+    }
+    const {index} = command;
+    const nextFlag = flagAfter(command, draft.flags[index]);
+    if (nextFlag !== undefined) {
+      if (nextFlag !== draft.flags[index]) {
+        if (draft === world) draft = {...world, flags: world.flags.slice()};
+        draft.flags[index] = nextFlag;
+        if (nextFlag === world.flags[index]) changes.delete(index);
+        else changes.set(index, nextFlag);
+      }
       pc++;
       continue;
     }
     let target;
     if (command.op === 'test_native_condition' || command.op === 'test_native_combination') {
-      const passed = evaluateCondition?.(command);
-      if (passed === undefined) return false;
+      const passed = evaluateCondition(command, draft);
+      if (passed === undefined) return null;
       target = passed ? command.if_true : command.if_false;
     } else {
-      target = branchTarget(command, world, flow.commands[pc + 1]?.id);
+      target = branchTarget(command, draft, flow.commands[pc + 1]?.id);
     }
-    // Mutations, random draws and presentation must use normal execution.
-    if (target === undefined) return false;
+    // Other mutations, random draws and presentation need the story transaction.
+    if (target === undefined) return null;
     pc = positions.get(target);
   }
-  return false;
+  return null;
+}
+
+function flagAfter(command, current) {
+  switch (command.op) {
+    case 'set_flag': return command.value;
+    case 'add_flag': return (current + command.value) >>> 0;
+    case 'set_flag_bit': return (current | (1 << (command.bit - 1))) >>> 0;
+    case 'clear_flag_bit': return (current & ~(1 << (command.bit - 1))) >>> 0;
+  }
 }
 
 export class StoryFlowRunner {
@@ -293,23 +318,11 @@ export class StoryFlowRunner {
           pc = positions.get((await call(command.op, command)) ? command.if_true : command.if_false);
           continue;
         case 'set_flag':
-          mutate((next) => {
-            next.flags[command.index] = command.value;
-          });
-          break;
         case 'add_flag':
-          mutate((next) => {
-            next.flags[command.index] = (next.flags[command.index] + command.value) >>> 0;
-          });
-          break;
         case 'set_flag_bit':
-          mutate((next) => {
-            next.flags[command.index] = (next.flags[command.index] | (1 << (command.bit - 1))) >>> 0;
-          });
-          break;
         case 'clear_flag_bit':
           mutate((next) => {
-            next.flags[command.index] = (next.flags[command.index] & ~(1 << (command.bit - 1))) >>> 0;
+            next.flags[command.index] = flagAfter(command, next.flags[command.index]);
           });
           break;
         case 'set_object':

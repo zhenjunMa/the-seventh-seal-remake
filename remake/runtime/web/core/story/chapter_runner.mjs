@@ -6,7 +6,7 @@ import {admitPartyMember, deactivatePartyMember, controlPartyActor} from '../par
 import {applyNativeAnmFlagCommand, nativeAnmObjectTarget} from './native_anm_commands.mjs';
 export {chapterRoleFromDefinition} from '../party/party_members.mjs';
 import {runtimeContent, storyBindings} from '../content/content_registry.mjs';
-import {isEmptyStoryFlowPath, StoryFlowRunner} from './story_flow.mjs';
+import {planStoryFlagChanges, StoryFlowRunner} from './story_flow.mjs';
 import {evaluateNativeStoryCondition, NATIVE_SEQUENCE_MATCH_CONDITION} from './native_story_conditions.mjs';
 import {applyNativeStoryMutation} from './native_story_mutations.mjs';
 import {removeNativeStoryItem, giveNativeStoryItem} from './native_story_inventory.mjs';
@@ -147,22 +147,31 @@ export class ChapterRunner {
     );
     this.running = false;
   }
-  triggerHasEffect(mapId, triggerId) {
+  planFlagChanges(mapId, recordId, world) {
     const table = this.data.maps[mapId];
-    const descriptor = table?.descriptors?.find((row) => row.id === triggerId);
-    if (descriptor?.state_raw !== 2) return true;
     const flow = this.data.flows?.[nativeFlowId(mapId)];
-    const world = this.world.value;
-    return !isEmptyStoryFlowPath(flow, flow?.entries?.[descriptor.field_26_raw], world, (command) => {
+    return planStoryFlagChanges(flow, flow?.entries?.[recordId], world, (command, draft) => {
       const record = table.records.find((row) => row.id === command.record_id);
       if (!record) return undefined;
       // An incorrect sequence resets its input count as part of execution.
       if (command.op === 'test_native_condition' && record.condition_type === NATIVE_SEQUENCE_MATCH_CONDITION)
         return undefined;
       return command.op === 'test_native_condition'
-        ? evaluateNativeStoryCondition(record, world, table)
-        : evaluateNativeStoryCombination(record, world, table);
+        ? evaluateNativeStoryCondition(record, draft, table)
+        : evaluateNativeStoryCombination(record, draft, table);
     });
+  }
+  applyWalkingTrigger(mapId, triggerId) {
+    const descriptor = this.data.maps[mapId]?.descriptors?.find((row) => row.id === triggerId);
+    if (descriptor?.state_raw !== 2) return 'blocking';
+    const recordId = descriptor.field_26_raw;
+    const changes = this.planFlagChanges(mapId, recordId, this.world.value);
+    if (!changes) return 'blocking';
+    if (!changes.size) return 'ignored';
+    this.world.applyStoryFlagChanges(changes);
+    this.log({type: 'chapter-commit', mapId, recordId, revision: this.world.value.revision,
+      commit_policy: 'remake-atomic-success', native_mutation_timing: 'record-entry'});
+    return 'updated';
   }
   async runTrigger({mapId, triggerId, playback} = {}) {
     const table = this.data.maps[mapId],

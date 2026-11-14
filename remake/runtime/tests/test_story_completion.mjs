@@ -116,7 +116,7 @@ test('enterMap emits a terminal entry outcome only after its completed ANM has r
   const f=fixture(),draft=f.world.snapshot();
   // Synthetic entry callback isolates the entry adapter. Its nested ANM and
   // finalTLK47 still use the actual animation controller and source mutation.
-  f.state.chapterRunner={runTlk:async({draft,playback})=>f.execute(draft,playback)};
+  f.state.chapterRunner={planFlagChanges:()=>null,runTlk:async({draft,playback})=>f.execute(draft,playback)};
   const outcome=await f.controller.enterMap({data:{id:'M17010'}},draft,'exit');
   assert.deepEqual(outcome,{resume_exploration:false});assert.equal(draft.flags[1999]&1,1);
   assert.equal(f.events.some(event=>event.type==='title'),false);assert.equal(f.writes.length,0);
