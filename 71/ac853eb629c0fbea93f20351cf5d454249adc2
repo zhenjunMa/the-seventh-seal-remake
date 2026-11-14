@@ -1,0 +1,19 @@
+remake/runtime/web/battle_menu_view.mjs
+  s_2834ce2a17aca8::t_717cbbd90805ff 206-235,271
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "71ac853eb629c0fbea93f20351cf5d454249adc2",
+  "prompts": {},
+  "sessions": {
+    "s_2834ce2a17aca8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1da27-b1fa-7113-8ecf-2ba3854255bf",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
