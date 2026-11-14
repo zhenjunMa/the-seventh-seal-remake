@@ -29,6 +29,51 @@ export function mapInteractionDirection(actor, target) {
   return nativeConversationDirection(actor, target);
 }
 
+// GAME.exe 483D40/486410 opens the talk when both grid axes are within two
+// cells. Find a reachable point on that ring using the remake's swept feet.
+export function mapConversationRoute(map, from, target, obstacles, storyTriggers = []) {
+  const start = map.at(from.x, from.y), goal = map.at(target.x, target.y);
+  const nearby = (x, y) => Math.max(Math.abs(x - goal.x), Math.abs(y - goal.y)) <= 2;
+  if (nearby(start.x, start.y)) return [];
+  const avoid = new Set(storyTriggers.flatMap(trigger => trigger.cells.map(cell => cell.y * map.width + cell.x)));
+  const allowed = cell => !cell.blocked && !cell.trigger && !avoid.has(cell.y * map.width + cell.x);
+  const center = (x, y) => ({x: (x + .5) * map.cellSize, y: (y + .5) * map.cellSize});
+  const clear = (a, b) => {
+    const swept = map.moveAndSlide(a.x, a.y, b.x - a.x, b.y - a.y, {obstacles});
+    // Inspect the direct segment, so a clear endpoint cannot conceal crossing a trigger.
+    for (const segment of swept.segments) {
+      const length = Math.ceil(Math.max(Math.abs(segment.dx), Math.abs(segment.dy)) / (map.cellSize / 4));
+      for (let i = 1; i <= length; i++) {
+        const cell = map.at(segment.x + segment.dx * i / length, segment.y + segment.dy * i / length);
+        if (!allowed(cell) && (cell.x !== start.x || cell.y !== start.y)) return false;
+      }
+    }
+    return !swept.blocked && Math.hypot(swept.x - b.x, swept.y - b.y) < 1e-6;
+  };
+  const origin = {x: start.x, y: start.y, point: from};
+  const queue = [origin], visited = new Set();
+  const directions = [[0,0],[-1,0],[-1,-1],[-1,1],[0,-1],[0,1],[1,0],[1,-1],[1,1]];
+  for (let head = 0; head < queue.length; head++) {
+    const current = queue[head];
+    if (nearby(current.x, current.y)) {
+      const points = [];
+      for (let node = current; node !== origin; node = node.previous) points.push(node.point);
+      points.reverse();
+      return points;
+    }
+    for (const [dx, dy] of directions) {
+      const x = current.x + dx, y = current.y + dy, cell = map.cell(x, y);
+      const index = y * map.width + x;
+      if (visited.has(index) || !allowed(cell)) continue;
+      const point = center(x, y);
+      if (!clear(current.point, point)) continue;
+      visited.add(index);
+      queue.push({x, y, point, previous: current});
+    }
+  }
+  return null;
+}
+
 // GAME.exe 43CE30/410850 selects explicit CF1 targets; 412640 checks reach.
 // Coordinates use the initialized DGP footprint and the original DAT header.
 export function nativeObjectInteractionNearby(object, at, header) {
@@ -58,6 +103,10 @@ export function nativeObjectInteractionNearby(object, at, header) {
 const contains = (point, rect) => point.x >= rect.x && point.x <= rect.x + rect.width
   && point.y >= rect.y && point.y <= rect.y + rect.height;
 
+export function pickMapNpc(queue, point) {
+  return queue.findLast(entry => entry.key.startsWith('npc:') && contains(point, entry.pose))?.key.slice(4);
+}
+
 export function mapWorldPoint(event, rect, view) {
   const scale = Math.min(rect.width / 640, rect.height / 480);
   if (!(scale > 0) || !(view.zoom > 0)) return null;
@@ -69,7 +118,7 @@ export function mapWorldPoint(event, rect, view) {
 
 export function pickMapDialogueObject({scene, world, bindings, header, queue, point}) {
   // The native mouse dispatcher checks visible NPC rectangles before objects.
-  if (queue.some(entry => entry.key.startsWith('npc:') && contains(point, entry.pose))) return null;
+  if (pickMapNpc(queue, point) !== undefined) return null;
   const visible = new Set(queue.map(entry => entry.key));
   const admitted = new Set(bindings.filter(row => ['tlk-object', 'mechanism'].includes(row.handler)).map(row => row.index));
   // 410850 builds the selection queue in source index order, not drawing order.

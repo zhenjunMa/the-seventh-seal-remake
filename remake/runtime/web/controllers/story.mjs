@@ -9,6 +9,7 @@ import {hasNativeStoryCompletion} from '../core/story/story_completion.mjs';
 import {nativeChestAnimation} from '../core/exploration/native_map_chests.mjs';
 import {captureMapNpcState} from '../core/exploration/map_npc_state.mjs';
 import {mapInteractionDirection} from '../core/exploration/map_interaction.mjs';
+import {mapActorPosition} from '../core/exploration/movement.mjs';
 import {loadEncounterMap} from '../core/exploration/encounters.mjs';
 import {initializeMapSequence} from '../core/exploration/map_stage.mjs';
 
@@ -134,7 +135,10 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     }
     if(!actor){
       if(record.speaker===1)actor=state.sceneEntryDraft?.location??state.world.location;
-      else actor=state.scenes.current?.npcs.find(npc=>npc.speaker_slot_one_based===record.speaker);
+      else {
+        const npc=state.scenes.current?.npcs.find(npc=>npc.speaker_slot_one_based===record.speaker);
+        if(npc)actor=mapActorPosition(npc);
+      }
     }
     if(!actor)return {x:320,y:240};
     const native=state.openingView?.active&&state.openingView.nativeViewport;
@@ -144,8 +148,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     const headOffset=actor.role?.anchor.y??actor.resource?.anchor_y??0;
     return {x:320+(actor.x+16-state.view.x)*zoom,y:240+(actor.y-headOffset-state.view.y)*zoom};
   }
-  async function interact(){
-    const selected=state.nearest;
+  async function interact(selected=state.nearest){
     if(state.scenes.phase!=='map'||!selected)return;
     const mapId=state.world.location.map_id;
     if(selected.kind==='rest'){await runChapter({rest:true,descriptorId:selected.descriptorId});return;}
@@ -157,10 +160,10 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       if(!selected.event){
         const slot=selected.slot_zero_based;
         const entry=state.chapterStory.maps[mapId]?.index_nonzero.find(row=>row.slot===slot);
-        if(entry){await runChapter({mapId,recordId:entry.record,context:{steps:0,explicitInteraction:true,npcMapId:mapId,npcSlot:slot}},selected);return;}
+        if(entry){await runChapter({mapId,recordId:entry.record,context:{steps:0,explicitInteraction:true,npcMapId:mapId,npcSlot:slot}},target);return;}
         actions.status('这里暂时没有可执行的对白。');return;
       }
-      await runChapter({event:selected.event},selected);
+      await runChapter({event:selected.event},target);
     }finally{release?.();}
   }
   function chapterSpeaker(mapId,record){
@@ -258,16 +261,14 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
   async function runChapter(args,npc=null){
     if(state.scenes.phase!=='map')return;
     const previous={scene:state.scenes.current,view:state.scenes.captureView()};
-    const at=state.world.location;
-    const direction=mapInteractionDirection(at,npc);
-    const turn=direction!==at.direction?{scene:previous.scene,direction}:null;
+    const conversation=npc&&actions.approachConversation;
     try{
-      if(args.objectIndex!==undefined)state.scenes.setPhase('event');
+      if(conversation||args.objectIndex!==undefined)state.scenes.setPhase('event');
       const result=await playStory(async playback=>{
         try{
-          if(turn){
-            state.scenes.setPhase('event');
-            state.npcConversationFacing=turn;
+          if(conversation){
+            if(!await conversation(npc,playback))return null;
+            previous.view=state.scenes.captureView();
             if(playback.clock)await playbackFrame(playback.clock,playback.signal);
           }
           const result=args.event?await state.chapterRunner.runEvent(args.event,{playback}):args.rest?await state.chapterRunner.runRest({explicitInteraction:true,descriptorId:args.descriptorId??null,playback}):args.triggerId!==undefined&&args.recordId===undefined?await state.chapterRunner.runTrigger({...args,playback}):args.objectIndex===undefined?await state.chapterRunner.runTlk({...args,playback}):await state.chapterRunner.runObject({...args,playback});
@@ -275,6 +276,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
           return result;
         }catch(error){state.scenes.current=previous.scene;state.scenes.rollbackView(previous.view);throw error;}
       });
+      if(!result){actions.status('请从可通行的一侧靠近再交谈。');return;}
       if(result.story_completed)return result;
       if(result.rewards?.length)state.rewardNoticeView.show(result.rewards.map(reward=>state.itemData.definitions[reward.id].name));
       const requiredItem=state.itemData?.definitions?.[result.key_id]?.name;
@@ -285,8 +287,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       if(result.world_map_requested)state.worldMap.open(result.world_map_requested.area);
     }catch(error){if(error.gameOverPolicy)await actions.presentGameOver(error.gameOverPolicy);else actions.status(error.message,true);}
     finally{
-      if(turn&&state.npcConversationFacing===turn)state.npcConversationFacing=null;
-      if((turn||args.objectIndex!==undefined)&&state.scenes.phase==='event')state.scenes.setPhase('map');
+      if((conversation||args.objectIndex!==undefined)&&state.scenes.phase==='event')state.scenes.setPhase('map');
       canvas.focus({preventScroll:true});
     }
   }

@@ -364,9 +364,25 @@ export class MapNpcRuntime {
   }
   hold(id){
     const a=this.actors.get(id);if(!a)return ()=>{};
-    this.held.add(id);a.path=[];a.step=null;a.goal={x:a.npc.x,y:a.npc.y};a.elapsed=0;
+    const direction=a.visual.direction;
+    this.held.add(id);
+    Object.assign(a.npc,{x:a.visual.x,y:a.visual.y,direction});
+    a.path=[];a.step=null;a.goal={x:a.npc.x,y:a.npc.y};a.elapsed=0;a.contactBlocked=false;
     this.setAction(a,0);this.project(a);
-    return ()=>{this.held.delete(id);a.elapsed=0;};
+    return ()=>{
+      this.held.delete(id);a.elapsed=0;
+      if(a.source.fixed){a.npc.direction=direction;this.project(a);}
+    };
+  }
+  face(id,direction){
+    const a=this.actors.get(id);
+    if(!a)return false;
+    // 460790 keeps the original stance for a fixed=2 actor.
+    if(a.npc.behavior_state_raw_f5!==2&&this.action(a,0).directions===8){
+      a.npc.direction=direction;
+      this.project(a);
+    }
+    return true;
   }
   inherit(other){
     if(!other)return;

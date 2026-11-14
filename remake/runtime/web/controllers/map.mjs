@@ -1,5 +1,5 @@
 // map adapters. Persistent state belongs to the shared runtime context.
-import {MovementMap,mapActorPosition} from "../core/exploration/movement.mjs";
+import {MovementMap,locomotion,mapActorPosition} from "../core/exploration/movement.mjs";
 import {planRouteExit} from "../core/exploration/route.mjs";
 import {initialEncounterState, previewMovement} from "../core/exploration/encounters.mjs";
 import {createPartyActors} from "../core/party/party_attributes.mjs";
@@ -13,10 +13,11 @@ import {chapterObjectState} from '../core/story/object_state.mjs';
 import {storyBindings,runtimeContent} from "../core/content/content_registry.mjs";
 import {anmActorSlots} from "../core/story/anm_runtime.mjs";
 import {chapterRouteExits,nativeEmptyEventCells} from "../core/exploration/map_connections.mjs";
-import {MapLocomotion,playerMapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
+import {DistanceGait,MapLocomotion,mapTravelDistance,playerMapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
 
 import {mapPresentation,mapViewport} from '../core/ui/map_presentation.mjs';
-import {mapWorldPoint, mapTargetInFront, pickMapDialogueObject} from '../core/exploration/map_interaction.mjs';
+import {mapWorldPoint,mapTargetInFront,pickMapDialogueObject,pickMapNpc,mapConversationRoute,mapInteractionDirection} from '../core/exploration/map_interaction.mjs';
+import {playbackFrame} from '../core/story/story_playback.mjs';
 
 import {createExplorationPresentation} from './presentation_handoff.mjs';
 
@@ -246,6 +247,9 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     const conditions=npc.event?.conditions??[];
     return conditions.every(condition=>state.world.value.flags[condition.index]===condition.value);
   }
+  function npcCanTalk(npc,bindings=storyBindings(state.world.location.map_id)){
+    return npcAvailable(npc)&&(npc.event||!bindings.npcs||bindings.npcs.includes(npc.slot_zero_based));
+  }
   function mapPointerDown(event){
     if(event.button!==0||state.engine?.paused||state.scenes.phase!=='map')return false;
     const scene=state.scenes.current;
@@ -254,6 +258,14 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     if(!point)return false;
     const queue=mapPresentation({scene,world:state.world.value,role:role(),action:sheetAction(),
       view:state.view,objectBitmap});
+    const npcId=pickMapNpc(queue,point);
+    if(npcId!==undefined){
+      const npc=scene.npcs.find(row=>row.id===npcId);
+      if(!npc||!npcCanTalk(npc))return false;
+      event.preventDefault();
+      actions.interact(npc);
+      return true;
+    }
     const selected=pickMapDialogueObject({scene,world:state.world.value,
       bindings:storyBindings(scene.data.id).objects,
       header:state.chapterStory.maps[scene.data.id]?.header_raw_hex,queue,point});
@@ -267,8 +279,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     state.nearest=null;if(!state.scenes.current)return;const at=state.world.location;
     const bindings=storyBindings(at.map_id);
     for(const npc of state.scenes.current.npcs){
-      if(!npcAvailable(npc))continue;
-      if(!npc.event&&bindings.npcs&&!bindings.npcs.includes(npc.slot_zero_based))continue;
+      if(!npcCanTalk(npc,bindings))continue;
       const position=mapActorPosition(npc);
       if(!mapTargetInFront(at,position))continue;
       const distance=Math.hypot(position.x-at.x,position.y-at.y);
@@ -299,6 +310,47 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     }
     $('interactionHint').hidden=!state.nearest||state.scenes.phase!=='map';
     if(state.nearest)$('interactionHint').textContent=state.nearest.kind==='rest'?'空格 · 休息':state.nearest.kind==='object'?`空格 · 查看${state.nearest.name}`:`空格 · 与${state.nearest.name??'人物'}交谈`;
+  }
+  async function approachConversation(npc,playback){
+    const scene=state.scenes.current,map=scene.movement,world=state.world;
+    state.keys.clear();$('interactionHint').hidden=true;
+    state.view.collisionFeedback=null;
+    const obstacles=()=>map.actorObstacles(scene.npcs.filter(npcAvailable));
+    const route=mapConversationRoute(map,world.location,mapActorPosition(npc),obstacles(),scene.data.story_triggers);
+    if(!route)return false;
+    const walk=sheetAction(1),gait=new DistanceGait();
+    const motion=playerMapMotionProfile(walk,scene.data.movement,state.chapterStory.maps[scene.data.id]?.header_raw_hex);
+    const current=()=>state.scenes.current===scene&&state.world===world&&npcAvailable(npc);
+    try{
+      let last=playback.clock?.time??performance.now();
+      for(const point of route){
+        let start=world.location;
+        while(mapTravelDistance(start,point)>1e-6){
+          const now=await playbackFrame(playback.clock,playback.signal);
+          playback.check();
+          if(!current())return false;
+          const elapsed=Math.min(80,Math.max(0,now-last));last=now;
+          const part=Math.min(1,motion.speed*elapsed/1000/mapTravelDistance(start,point));
+          if(!part)continue;
+          const dx=(point.x-start.x)*part,dy=(point.y-start.y)*part;
+          const next=map.moveAndSlide(start.x,start.y,dx,dy,{obstacles:obstacles()});
+          if(next.blocked)return false;
+          world.setPosition(next.x,next.y,locomotion({dx,dy},true).direction);
+          state.view.action=1;state.view.frame=gait.advance(walk,{dx,dy,stride:motion.stride});
+          state.view.follow=true;follow();
+          start=world.location;
+        }
+      }
+      const at=world.location,target=mapActorPosition(npc);
+      world.setPosition(at.x,at.y,mapInteractionDirection(at,target));
+      const direction=mapInteractionDirection(target,at);
+      if(Number.isInteger(direction)&&!scene.npcRuntime?.face(npc.id,direction))npc.direction=direction;
+      return true;
+    }finally{
+      if(state.scenes.current===scene&&state.world===world){
+        state.view.action=0;state.view.frame=0;state.clock=0;
+      }
+    }
   }
   function objectBitmap(scene,obj,world=state.world.value,live=true){
     if(live&&state.objectPreview?.mapId===scene.data.id&&state.objectPreview.objectIndex===obj.index)return state.objectPreview.bitmap;
@@ -347,8 +399,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   function paint(){
     const scene=state.scenes?.current;
     const sourceWorld=state.sceneEntryDraft??state.world.value,actor=state.objectActorPreview;
-    const conversation=state.npcConversationFacing;
-    const direction=actor?.direction??(!state.sceneEntryDraft&&conversation?.scene===scene?conversation?.direction:undefined);
+    const direction=actor?.direction;
     const world=direction===undefined?sourceWorld:{...sourceWorld,location:{...sourceWorld.location,direction}};
     const draw=state.openingView?.active&&state.openingView.nativeViewport?drawOpeningScene:drawGameScene;
     const options={scene,world,role:actor?.role??role(),action:actor?.action??sheetAction(),view:actor?{...state.view,frame:actor.frame,collisionFeedback:null}:state.view,width:state.cssWidth,height:state.cssHeight,objectBitmap:(scene,obj)=>objectBitmap(scene,obj,world),
@@ -473,5 +524,5 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     }else {motionState.reset();state.view.collisionFeedback=null;}
     paint();
   }
-  return {explorationPresentation:presentation,role, sheetAction, buildHud, prepareMap, prepareMapView, stopMapPreload, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, mapPointerDown, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, presentLoadedMap, updateExploration,captureScene,captureSavePreview};
+  return {explorationPresentation:presentation,role, sheetAction, buildHud, prepareMap, prepareMapView, stopMapPreload, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, mapPointerDown, approachConversation, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, presentLoadedMap, updateExploration,captureScene,captureSavePreview};
 }
