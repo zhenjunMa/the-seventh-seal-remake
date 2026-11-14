@@ -11,8 +11,9 @@ import {applyNativeStoryMutation} from '../story/native_story_mutations.mjs';
 const need=(ok,message)=>{if(!ok)throw new Error(`地图布置：${message}`);};
 const STAGE_COMMANDS=new Set(['record','test_flag_bit','jump','end','animation','set_native_sequence']);
 
-export async function projectMapStage({mapId,world,story,npcs,roles,content=runtimeContent}){
+export async function projectMapStage({mapId,world,story,npcs,roles,content=runtimeContent,duringAnimation=false}){
   const result=structuredClone(npcs),binding=storyBindings(mapId,content);
+  if(duringAnimation)return result;
   if(!binding.setup_record)return restoreMapNpcState(result,world,mapId);
   const table=story.maps[mapId],flow=story.flows?.[nativeFlowId(mapId)];
   need(table?.header_setup_tlk_raw===binding.setup_record&&flow?.entries?.[binding.setup_record],`${mapId} 缺少原加载入口`);
@@ -36,11 +37,16 @@ export async function projectMapStage({mapId,world,story,npcs,roles,content=runt
         if(c.u32_plus5<10)continue;
         const npc=bySlot.get(c.u32_plus5);need(npc,`布局人物槽 ${c.u32_plus5} 缺失`);
         if(c.u32_plus1){npc.hidden=true;continue;}
+        npc.hidden=false;
+        if(c.u32_plus13!==0xffffffff&&c.u32_plus17!==0xffffffff){
+          npc.x=(c.u32_plus13|0)*2;npc.y=(c.u32_plus17|0)*2;
+        }
+        if(!c.u32_plus25){npc.stage_action=0;npc.stage_frame=0;continue;}
         const role=roles[npc.resource_id],flat=Math.max(0,c.u32_plus25-1);
         const action=role?.actions.find(a=>flat>=a.first_frame&&flat<a.first_frame+a.frame_count*a.directions);
         need(action,`布局人物槽 ${c.u32_plus5} 姿态 ${c.u32_plus25} 未恢复`);
         const relative=flat-action.first_frame;
-        Object.assign(npc,{hidden:false,x:(c.u32_plus13|0)*2,y:(c.u32_plus17|0)*2,
+        Object.assign(npc,{
           direction:Math.floor(relative/action.frame_count),stage_action:action.index,stage_frame:relative%action.frame_count});
       }
     }

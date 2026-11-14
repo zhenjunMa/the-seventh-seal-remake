@@ -120,11 +120,14 @@ export class AnmActions {
         this.launch('move', command, {actor, ...position, arrivalFacingRaw:command.u32_plus25&255,
           motionModeRaw:command.u32_plus1, actionRaw:command.byte_plus29,
           directionRaw:command.byte_plus30}, recordPosition); break;
-      case 35:
-        await this.call('actor', command, {kind:command.u32_plus1 ? 'hide':'place', actor,
-          ...position, poseRaw:command.u32_plus25,
+      case 35: {
+        const keepPosition=command.u32_plus13===0xffffffff||command.u32_plus17===0xffffffff;
+        const result=await this.call('actor', command, {kind:command.u32_plus1 ? 'hide':'place', actor,
+          ...position, poseRaw:command.u32_plus25, ...(keepPosition?{keepPosition}:{}),
           ...(this.nativeMetadata ? {placementModeRaw:command.u32_plus1}: {})});
-        if (!command.u32_plus1) recordPosition(); break;
+        if(!command.u32_plus1&&(!keepPosition||result?.position))recordPosition(result);
+        break;
+      }
       case 38: {
         // 4757EA calls 460790 with two actor slots. It turns both actors
         // toward each other; +13 is an actor identity, never an x coordinate.

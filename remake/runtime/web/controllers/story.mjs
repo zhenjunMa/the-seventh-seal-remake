@@ -175,10 +175,14 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     const previous={scene:state.scenes.current,view:state.scenes.captureView?.(),shadeHidden:$('openingShade').hidden,shadeOpacity:$('openingShade').style.opacity,
       hasNpcState:Object.hasOwn(draft,'map_npc_state'),npcState:draft.map_npc_state,entryDraft:state.sceneEntryDraft},prepared=new Map();
     let lease,view,media;
-    const prepare=async(id,requestSignal)=>{
-      const scene=await playbackTask(actions.prepareMap(id,{world:draft,program}),requestSignal);
+    const prepare=async(id,requestSignal,{duringAnimation=false}={})=>{
+      let world=draft;
+      if(duringAnimation&&draft.map_npc_state?.map_id===id){
+        world={...draft};delete world.map_npc_state;
+      }
+      const scene=await playbackTask(actions.prepareMap(id,{world,program,duringAnimation}),requestSignal);
       if(playback?.paused)await playback.ready();requestSignal?.throwIfAborted();playback?.check();
-      if(state.scenes.current?.data.id===id)scene.npcRuntime?.inherit(state.scenes.current.npcRuntime);
+      if(!duringAnimation&&state.scenes.current?.data.id===id)scene.npcRuntime?.inherit(state.scenes.current.npcRuntime);
       return scene;
     };
     try{
@@ -216,10 +220,13 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
         return state.scenes.current.objectRuntime.animate({objectIndex,state:objectState,signal});
       };
       for(const name of ['map','actor','move']){const invoke=hooks[name];hooks[name]=async payload=>{
-        const result=await invoke(payload);if(name==='map'){
-          loadEncounterMap(draft,payload.mapId,state.encounterData);
-          if(!payload.bootstrap)await initializeMapSequence({mapId:payload.mapId,world:draft,story:state.chapterStory,content});
-        }captureActors();
+        if(name==='map'&&!payload.bootstrap&&payload.mapId!==(view.mapId??previous.scene?.data.id)){
+          // 466EC0 skips the map setup TLK while the ANM is running.
+          prepared.set(payload.mapId,await prepare(payload.mapId,payload.signal,{duringAnimation:true}));
+        }
+        const result=await invoke(payload);
+        if(name==='map')loadEncounterMap(draft,payload.mapId,state.encounterData);
+        captureActors();
         return result;
       };}
       const animation=new ChapterAnimationRunner({program,hooks:{...hooks,...media?.hooks()},runTlk:nestedTlk,joinActor,leaveActor,flagCommand,objectCommand,initialActor,initialLocation:draft.location,playback,

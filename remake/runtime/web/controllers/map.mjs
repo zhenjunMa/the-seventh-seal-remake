@@ -125,7 +125,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(warm&&preload===warm)stopMapPreload();
     }
   }
-  async function prepareMapContent(id,{world=state.world.value,program,onProgress}={},definition) {
+  async function prepareMapContent(id,{world=state.world.value,program,onProgress,duringAnimation=false}={},definition) {
     await state.storyRepository.ensureMap(id,{protect:[state.scenes?.current?.data.id].filter(Boolean)});
     const mapEvents=state.events.filter(event=>event.map_id===id);
     for(const event of mapEvents){const resource=event.npc?.resource;
@@ -140,7 +140,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     data.opening_npcs=(nativeNpcs?.length?nativeNpcs:data.opening_npcs??[]).filter(npc=>!mapEvents.some(event=>event.npc
       &&(event.npc.id===npc.id||event.npc.slot_zero_based!==undefined&&event.npc.slot_zero_based===npc.slot_zero_based)));
     data.opening_npcs=await projectMapStage({mapId:id,world,story:state.chapterStory,npcs:data.opening_npcs,
-      roles:state.openingResources.roles});
+      roles:state.openingResources.roles,duringAnimation});
     data.story_triggers=(state.chapterResources.trigger_regions[id]??[]).filter(trigger=>storyBindings(id).triggers.includes(trigger.id));
     const readyCells=new Set([...(data.exits??[]).filter(exit=>exit.state==='ready').flatMap(exit=>exit.cells.map(cell=>`${cell.x},${cell.y}`)),
       ...data.story_triggers.flatMap(trigger=>trigger.cells.map(cell=>`${cell.x},${cell.y}`)),
@@ -242,7 +242,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   function fit(){if(!state.scenes?.current)return;const im=state.scenes.current.bitmap;state.view.zoom=Math.min(640/im.width,480/im.height)*.97;state.view.x=im.width/2;state.view.y=im.height/2;state.view.follow=false;}
   function resize(){const rect=$('screen').getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);state.cssWidth=rect.width;state.cssHeight=rect.height;for(const target of [canvas,$('battleCanvas')]){target.width=Math.round(rect.width*dpr);target.height=Math.round(rect.height*dpr);}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.imageSmoothingEnabled=false;state.engine?.resize();}
   function npcAvailable(npc) {
-    if(npc.hidden||npc.native_layer!==undefined&&state.scenes.current.data.native_layer!==undefined&&npc.native_layer!==state.scenes.current.data.native_layer)return false;
+    if(npc.hidden||npc.route_hidden_ticks>0||npc.native_layer!==undefined&&state.scenes.current.data.native_layer!==undefined&&npc.native_layer!==state.scenes.current.data.native_layer)return false;
     const conditions=npc.event?.conditions??[];
     return conditions.every(condition=>state.world.value.flags[condition.index]===condition.value);
   }

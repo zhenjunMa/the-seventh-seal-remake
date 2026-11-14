@@ -146,13 +146,19 @@ export class OpeningView {
         // coordinates do not relocate or rotate an already loaded actor.
         if(kind==='hide'){actor.visible=false;return;}
         if (kind === 'place') {
-          actor.x = payload.x; actor.y = payload.y; actor.visible = !actor.awaitingAppearance;
+          if(!payload.keepPosition){actor.x=payload.x;actor.y=payload.y;}
+          actor.visible = !actor.awaitingAppearance;
+          // 473E30 resets the action and frame; a positive pose can also turn the actor.
+          if(!payload.poseRaw){
+            actor.action=0;actor.frame=0;this.updateCamera();
+            return {position:{x:actor.x,y:actor.y}};
+          }
           const flat = Math.max(0, payload.poseRaw - 1), action = actor.role.actions.find(a =>
             flat >= a.first_frame && flat < a.first_frame + a.frame_count * a.directions);
           if (!action) throw new Error(`角色 ${payload.actor} 的姿态帧未恢复：${payload.poseRaw}`);
           const relative = flat - action.first_frame;
           actor.action = action.index; actor.direction = Math.floor(relative / action.frame_count); actor.frame = relative % action.frame_count;
-          this.updateCamera(); return;
+          this.updateCamera();return {position:{x:actor.x,y:actor.y}};
         }
         if (kind === 'animation') {
           const action = actor.role.actions.find(a => a.index === payload.actionId);
@@ -311,7 +317,7 @@ export class OpeningView {
     };
   }
   drawQueue(layer = 2) {
-    return [...this.actors.entries()].filter(([,a]) => a.visible).flatMap(([slot,actor]) => {
+    return [...this.actors.entries()].filter(([,a]) => a.visible&&!(a.route_hidden_ticks>0)).flatMap(([slot,actor]) => {
       const r=actor.role,a=r.actions.find(a=>a.index===actor.action);
       const entry={key:`opening:${slot}`,character:!actor.effect,layer,sort_y:actor.y+32,alpha:actor.alpha,
       blend:actor.blendEffect?.blend??(actor.effect&&['rise','scatter','rise-trail'].includes(actor.effect.kind)?'lighter':'source-over'),

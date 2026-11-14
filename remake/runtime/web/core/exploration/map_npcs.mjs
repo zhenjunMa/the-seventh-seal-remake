@@ -40,7 +40,22 @@ export function decodeNpcBehavior(record) {
   const raw=bytes(record.raw_hex),view=new DataView(raw.buffer),int=offset=>view.getInt32(offset,true);
   return {slot:record.slot_zero_based,type:raw[0x2c],locked:raw[0x2e]!==0,fixed:raw[0xf5]!==0,
     turnMask:raw[0xf6],bindings:Array.from(raw.slice(0x46,0x5a),x=>x===255?-1:x),raw_hex:record.raw_hex,
-    speedBias:int(0x4b5),routeCount:int(0x14b),wait:raw[0xdf],waitLatch:raw[0xe0]!==0};
+    speedBias:int(0x4b5),routeCount:int(0x14b),randomRouteStart:raw[0x14a]!==0,
+    wait:raw[0xdf],waitLatch:raw[0xe0]!==0};
+}
+
+function npcRoute(source, geometry) {
+  if (!source.routeCount) return [];
+  const raw = bytes(source.raw_hex), view = new DataView(raw.buffer);
+  if (source.routeCount < 0 || 0x14f + source.routeCount * 0x15 > raw.length)
+    throw new Error('人物原巡逻路线越界');
+  // 4B4A80 converts DAT coordinates before 483550/47F780 use grid cells.
+  const cell = offset => ((view.getInt32(offset, true) << (geometry.coordinateShift + 2)) >> 5) >> geometry.coordinateShift;
+  return Array.from({length: source.routeCount}, (_, index) => {
+    const at = 0x14f + index * 0x15;
+    return {x: cell(at), y: cell(at + 4), mode: raw[at + 16],
+      wait: raw[at + 9], waitAction: raw[at + 8], travelAction: raw[at + 10], randomWait: raw[at + 15] === 0};
+  });
 }
 
 // 490DA0/491F10 flood distances and 48C070 backtrace. NPC expansion tests
@@ -148,9 +163,11 @@ export class MapNpcRuntime {
       const idle=role.actions.find(action=>action.index===(npc.stage_action??source.bindings[0]));
       if(!idle)throw new Error('人物缺少源初始化待机动作');
       const a={npc,source,role,home:{x:npc.x,y:npc.y},goal:{x:npc.x,y:npc.y},path:[],step:null,
+        route:npcRoute(source,geometry),
         wait:source.wait,waitLatch:source.waitLatch,logicalFrame:idle.uses_sequence?Math.max(0,idle.sequence_raw.indexOf(npc.stage_frame??0)):npc.stage_frame??0,action:idle.index,interval:80,
         elapsed:0,animationCountdown:0,contactBlocked:false,
         visual:{x:npc.x,y:npc.y,direction:npc.direction},gait:new DistanceGait()};
+      if (a.route.length) this.initializeRoute(a);
       const walk=this.action(a,1);
       if(a.action===walk?.index)Object.assign(a.gait,{action:a.action,phase:a.logicalFrame/this.logicalCount(walk)});
       this.actors.set(npc.id,a);this.project(a);
@@ -166,7 +183,7 @@ export class MapNpcRuntime {
   project(a,delta=0,player=null){
     const action=a.role.actions.find(action=>action.index===a.action),count=this.logicalCount(action);
     a.logicalFrame=((a.logicalFrame%count)+count)%count;
-    const walk=this.action(a,1),motion=walk?mapMotionProfile(walk,this.movement,'',a.source.speedBias):null;
+    const walk=this.travelAction(a),motion=walk?mapMotionProfile(walk,this.movement,'',a.source.speedBias):null;
     const dx=a.npc.x-a.visual.x,dy=a.npc.y-a.visual.y;
     // Smooth only accepted logical travel, at the source per-axis speed.
     // The accepted visual ground path is swept against the player for solid
@@ -189,18 +206,20 @@ export class MapNpcRuntime {
     if(!walking){a.gait.reset();a.visual.direction=a.npc.direction;}
     a.npc.motion={role:a.role,action:display.index,frame,...a.visual};
   }
-  idle(a){const action=this.setAction(a,0);a.interval=Math.max(1,action.interval_raw);
+  idle(a,action=this.setAction(a,0)){a.interval=Math.max(1,action.interval_raw);
     a.logicalFrame=(a.logicalFrame+1)%this.logicalCount(action);}
-  animateWalk(a){const action=this.setAction(a,1);
+  travelAction(a){return a.role.actions.find(action=>action.index===a.routeTravelAction)??this.action(a,1);}
+  animateWalk(a){const action=this.travelAction(a);
+    if(a.action!==action.index){a.action=action.index;a.logicalFrame=0;}
     // 46B690 sets action cadence; 46CED0 scales it for movement/cell size.
     a.interval=mapMotionProfile(action,{native_coordinate_shift:this.coordinateShift},'',a.source.speedBias).tickMs;
     a.logicalFrame=(a.logicalFrame+1)%this.logicalCount(action);a.animationCountdown=2;}
   canWander(a){return a.source.slot>=10&&!a.source.fixed&&!a.source.locked&&a.source.type<=1
-    &&a.source.routeCount===0&&Boolean(this.action(a,1));}
+    &&Boolean(this.action(a,1));}
   occupied(x,y,except,player){
     if(player&&Math.floor(player.x/this.cellSize)===x&&Math.floor(player.y/this.cellSize)===y)return true;
     for(const a of this.actors.values()){
-      if(a===except||a.npc.passThroughActors||a.npc.hidden||!this.visible(a.npc))continue;
+      if(a===except||a.npc.passThroughActors||a.npc.hidden||a.npc.route_hidden_ticks>0||!this.visible(a.npc))continue;
       if(Math.floor(a.npc.x/this.cellSize)===x&&Math.floor(a.npc.y/this.cellSize)===y)return true;
       if(a.step&&a.step.cell.x===x&&a.step.cell.y===y)return true;
     }
@@ -216,10 +235,69 @@ export class MapNpcRuntime {
     a.goal={x:clamp(x,0,this.scene.movement.width-1)*this.cellSize,
       y:clamp(y,0,this.scene.movement.height-1)*this.cellSize};return true;
   }
+  initializeRoute(a){
+    const {npc, route}=a;
+    npc.route_next=(npc.route_next??0)%route.length;
+    npc.route_hidden_ticks??=0;
+    if(npc.stage_action!==undefined||npc.hidden)return;
+    if(!a.source.randomRouteStart){
+      // 483550 begins with the arrival latch set. An actor already at its
+      // first point leaves for the next one before applying any point effect.
+      const first=route[npc.route_next];
+      if(distance(Math.floor(npc.x/this.cellSize),Math.floor(npc.y/this.cellSize),first.x,first.y)<3)
+        npc.route_next=(npc.route_next+1)%route.length;
+      return;
+    }
+    const start=this.random()%route.length, point=route[start];
+    const movement=this.scene.movement;
+    const candidates=[point];
+    for(let radius=1;radius<=3;radius++)for(let y=-radius;y<=radius;y++)for(let x=-radius;x<=radius;x++){
+      if(Math.max(Math.abs(x),Math.abs(y))===radius)candidates.push({x:point.x+x,y:point.y+y});
+    }
+    const spawn=candidates.find(cell=>!movement.cell(cell.x,cell.y).blocked);
+    if(spawn){
+      npc.x=spawn.x*this.cellSize;npc.y=spawn.y*this.cellSize;
+      Object.assign(a.home,{x:npc.x,y:npc.y});Object.assign(a.goal,a.home);Object.assign(a.visual,a.home);
+    }
+    this.reachRoutePoint(a,point);
+    npc.route_next=(start+1)%route.length;
+  }
+  reachRoutePoint(a,point){
+    // 483550 and 47F780: mode 1 counts down without drawing, mode 2 sets +97.
+    if(point.mode===2){a.npc.hidden=true;return;}
+    if(point.mode===1){a.npc.route_hidden_ticks=this.random()%10+20;return;}
+    const action=a.role.actions.find(row=>row.index===point.waitAction)??this.action(a,0);
+    if(point.wait){a.wait=point.wait*this.logicalCount(action);a.routeWaitAction=action.index;}
+    else if(point.randomWait&&this.random()%5>2)a.wait=this.random()%10+10;
+  }
+  planRoute(a,player){
+    const {npc,route}=a, point=route[npc.route_next];
+    const start={x:Math.floor(npc.x/this.cellSize),y:Math.floor(npc.y/this.cellSize)};
+    if(distance(start.x,start.y,point.x,point.y)<3){
+      npc.route_next=(npc.route_next+1)%route.length;
+      this.reachRoutePoint(a,point);
+      if(!npc.hidden&&!npc.route_hidden_ticks)this.idle(a);
+      return;
+    }
+    a.goal={x:point.x*this.cellSize,y:point.y*this.cellSize};
+    a.routeTravelAction=point.travelAction||undefined;
+    a.path=npcPath(this.scene.movement,start,point,{
+      flying:a.source.type===1,occupied:(x,y)=>!npc.passThroughActors&&this.occupied(x,y,a,player),
+      fallbackScore:(x,y)=>distance(x,y,point.x,point.y)
+    });
+    if(!a.path.length)this.idle(a);
+  }
   tick(a,player){
     if(this.held.has(a.npc.id)){this.idle(a);return;}
     if(!this.canWander(a)){this.idle(a);return;}
-    if(a.wait>0){a.wait--;this.idle(a);return;}
+    if(a.wait>0){
+      a.wait--;
+      const action=a.role.actions.find(row=>row.index===a.routeWaitAction);
+      if(action&&a.action!==action.index){a.action=action.index;a.logicalFrame=0;}
+      this.idle(a,action);
+      if(!a.wait)a.routeWaitAction=undefined;
+      return;
+    }
     if(a.step){
       a.npc.x+=a.step.dx;a.npc.y+=a.step.dy;a.step.left--;
       if(--a.animationCountdown===0)this.animateWalk(a);
@@ -227,6 +305,7 @@ export class MapNpcRuntime {
       return;
     }
     if(!a.path.length){
+      if(a.route.length){this.planRoute(a,player);return;}
       this.chooseGoal(a);
       if(a.wait){this.idle(a);return;}
       const start={x:Math.floor(a.npc.x/this.cellSize),y:Math.floor(a.npc.y/this.cellSize)};
@@ -244,7 +323,8 @@ export class MapNpcRuntime {
       const target={x:Math.floor(a.goal.x/this.cellSize),y:Math.floor(a.goal.y/this.cellSize)};
       const rows=this.scene.movement.rows.map((row,y)=>Array.from(row,(value,x)=>
         this.occupied(x,y,a,player)&&!(x===start.x&&y===start.y)?'1':value).join(''));
-      a.path=npcPath({...this.scene.movement,rows},start,target);
+      a.path=npcPath({...this.scene.movement,rows},start,target,a.route.length
+        ?{fallbackScore:(x,y)=>distance(x,y,target.x,target.y)}:undefined);
       this.idle(a);return;
     }
     const dx=Math.sign(cell.x-Math.floor(a.npc.x/this.cellSize)),dy=Math.sign(cell.y-Math.floor(a.npc.y/this.cellSize));
@@ -259,6 +339,14 @@ export class MapNpcRuntime {
     const delta=this.lastTime===null?0:Math.max(0,now-this.lastTime);this.lastTime=now;
     if(paused||delta>250){for(const a of this.actors.values())a.elapsed=0;return;}
     for(const a of this.actors.values()){
+      // +98 is separate from +97. Hidden route actors still consume these visits.
+      if(!a.npc.hidden&&a.npc.route_hidden_ticks>0){
+        a.elapsed+=delta;
+        const visits=Math.min(a.npc.route_hidden_ticks,Math.floor(a.elapsed/a.interval));
+        a.npc.route_hidden_ticks-=visits;a.elapsed-=visits*a.interval;
+        if(a.npc.route_hidden_ticks===0)a.contactBlocked=false;
+        continue;
+      }
       if(!visible(a.npc)){a.elapsed=0;continue;}
       // A body waiting at contact must not accumulate a route backlog. Keep
       // its current goal/step and retry the continuous path every display frame.
@@ -267,7 +355,10 @@ export class MapNpcRuntime {
       // Long suspension was discarded above; bounded normal frame deltas can
       // contain multiple 10ms visits without changing source step sizes.
       let visits=0;
-      while(a.elapsed>=a.interval&&visits++<32){a.elapsed-=a.interval;this.tick(a,player);}
+      while(a.elapsed>=a.interval&&visits++<32){
+        a.elapsed-=a.interval;this.tick(a,player);
+        if(a.npc.hidden||a.npc.route_hidden_ticks>0)break;
+      }
       this.project(a,delta,player);
     }
   }
@@ -282,8 +373,8 @@ export class MapNpcRuntime {
     this.rng=createNativeRng(other.rng.state);
     for(const [id,a] of this.actors){const previous=other.actors.get(id);if(!previous)continue;
       for(const key of ['home','goal','path','step'])a[key]=structuredClone(previous[key]);
-      for(const key of ['wait','waitLatch','logicalFrame','action','interval','elapsed','animationCountdown','contactBlocked'])a[key]=previous[key];
-      for(const key of ['x','y','direction','hidden'])a.npc[key]=previous.npc[key];
+      for(const key of ['wait','waitLatch','logicalFrame','action','interval','elapsed','animationCountdown','contactBlocked','routeWaitAction','routeTravelAction'])a[key]=previous[key];
+      for(const key of ['x','y','direction','hidden','route_next','route_hidden_ticks'])a.npc[key]=previous.npc[key];
       a.visual={...previous.visual};Object.assign(a.gait,previous.gait);this.project(a);
     }
   }

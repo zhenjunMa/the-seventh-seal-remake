@@ -349,6 +349,9 @@ def decode_native_save(raw):
         world['map_npc_state']['actors'].append(dict(slot=slot, x=u32(actor, 0x6F) * 2,
             y=u32(actor, 0x73) * 2, direction=actor[0x45], hidden=bool(actor[0x97]),
             action=action, frame=frame, layer=u32(actor, 0x93)))
+        if u32(actor, 0x14B):
+            world['map_npc_state']['actors'][-1].update(
+                route_next=actor[0xF7], route_hidden_ticks=u32(actor, 0x98))
     world['recipe_unlock_indices'] = list(struct.unpack_from(f'<{u32(sections["last_table"])}I', sections['last_table'], 4))
     payload = json.dumps(world, ensure_ascii=False, separators=(',', ':'))
     digest = hashlib.sha256(payload.encode('utf-8')).hexdigest()
@@ -521,6 +524,10 @@ def encode_native_save(envelope, *, saved_at=None):
             old_direction = map_objects[at + 0x45]
             map_objects[at + 0x45] = npc['direction']
             map_objects[at + 0x97] = int(npc['hidden'])
+            if 'route_next' in npc:
+                map_objects[at + 0xF7] = npc['route_next']
+            if 'route_hidden_ticks' in npc:
+                put(map_objects, at + 0x98, npc['route_hidden_ticks'])
             if 'layer' in npc:
                 put(map_objects, at + 0x93, npc['layer'])
             old_action, logical = u32(map_objects, at + 0x83), u32(map_objects, at + 0x7B)
