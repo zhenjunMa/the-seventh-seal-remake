@@ -81,7 +81,8 @@ export class OperationEquipmentView{
   picture(parent,src,x,y){const image=document.createElement('img');image.alt='';image.className='menu-source';if(src)setImageSource(image,src);absolute(image,x,y);image.hidden=!src;parent.append(image);return image;}
   text(node,value,font,foreground,shadow='#222222'){
     if(node.style.color!==foreground)node.style.color=foreground;
-    menuText(node,value,this.textRenderer,{font,foreground,shadow,maxLines:1});
+    // Keep equipment glyphs in their DOM layers so the preview covers the worn list.
+    menuText(node,value,this.textRenderer,{font,foreground,shadow,maxLines:1,composite:false});
   }
   get pickerOpen(){return !this.picker.hidden;}
   get selectedId(){return this.candidates[this.selectedIndex]?.instance_id??'';}

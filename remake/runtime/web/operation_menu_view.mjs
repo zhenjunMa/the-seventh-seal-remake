@@ -322,7 +322,7 @@ export class OperationMenuView{
       const panel=this.node('menuEquipmentStats');
       for(const [i,[label,value]]of [['力量',status.attack],['防御',status.defense],['速度',status.speed]].entries()){
         let row=panel.children[i];if(!row){row=document.createElement('div');const term=document.createElement('dt'),number=document.createElement('dd');row.style.top=i*30+'px';term.textContent=label;term.className='sr-only';row.append(term,number);panel.append(row);}
-        this.mnuText(row.children[1],value,'game001a','text'+String(i+7).padStart(2,'0'));
+        this.mnuText(row.children[1],value,'game001a','text'+String(i+7).padStart(2,'0'),{composite:false});
       }
     }
     if(this.current!=='status')return;
