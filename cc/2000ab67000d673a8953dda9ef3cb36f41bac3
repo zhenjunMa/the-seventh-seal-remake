@@ -1,0 +1,37 @@
+remake/runtime/tests/test_map_locomotion.mjs
+  s_399e22cd17bbdd::t_2c03bad3d3ef31 33
+remake/runtime/web/core/world/world.mjs
+  s_399e22cd17bbdd::t_1fd2ea2bd7c80a 163-172
+remake/runtime/web/controllers/story.mjs
+  s_399e22cd17bbdd::t_f2d45ea26ad3ef 329-330
+remake/runtime/web/controllers/map.mjs
+  s_399e22cd17bbdd::t_dc416cfceb092f 239-240
+  s_399e22cd17bbdd::t_f2d45ea26ad3ef 149-150,153,237-238,241,376-379,527-532,537,551,560
+  s_399e22cd17bbdd::t_2c03bad3d3ef31 512-526,533,538-539,552-554
+remake/runtime/tests/test_story_completion.mjs
+  s_399e22cd17bbdd::t_dc416cfceb092f 119
+remake/runtime/web/controllers/boot.mjs
+  s_399e22cd17bbdd::t_dc416cfceb092f 287-288
+remake/runtime/web/core/story/chapter_runner.mjs
+  s_399e22cd17bbdd::t_38eb4618f83465 150,153,160-161,164-168
+  s_399e22cd17bbdd::t_de54c1458daf4f 9,169-174
+  s_399e22cd17bbdd::t_4e099a3fb6e0cf 175
+remake/runtime/web/core/story/story_flow.mjs
+  s_399e22cd17bbdd::t_7c75eaee34b57b 186-187,194-196,198,201-202,207-218,221-222,225,227-228,231-240,325
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "cc2000ab67000d673a8953dda9ef3cb36f41bac3",
+  "prompts": {},
+  "sessions": {
+    "s_399e22cd17bbdd": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d936-2656-7171-a2fc-f0b20a84e4df",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
