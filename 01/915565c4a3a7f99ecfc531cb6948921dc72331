@@ -1,0 +1,23 @@
+remake/runtime/web/operation_menu_view.mjs
+  s_6ab83acb6f1748::t_1da8e205efdf7b 325
+remake/runtime/web/native_service_view.css
+  s_6ab83acb6f1748::t_3ee31c75fd42b6 10
+remake/runtime/web/operation_equipment_view.mjs
+  s_6ab83acb6f1748::t_1da8e205efdf7b 84-85
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "01915565c4a3a7f99ecfc531cb6948921dc72331",
+  "prompts": {},
+  "sessions": {
+    "s_6ab83acb6f1748": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d52f-12e0-7232-9b5f-4130db9eb5a9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
