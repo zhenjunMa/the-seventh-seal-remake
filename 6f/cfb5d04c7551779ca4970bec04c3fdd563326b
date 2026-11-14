@@ -1,0 +1,30 @@
+remake/runtime/web/native_service_view.mjs
+  s_6ab83acb6f1748::t_6eb03723b371a4 41,147-149,202-213,216-221
+  s_6ab83acb6f1748::t_1848b2c6acc4d8 157-158,160,214
+  s_6ab83acb6f1748::t_e2d551a3bbf63b 64,68-69,83,86-89,95,100,102,299,321-322
+  s_6ab83acb6f1748::t_229a509db3f9e3 7-12,44,46,49,57-58,65-67,80-82,84-85,90-93,101,103-107,111-114,274,300-312
+  s_6ab83acb6f1748::t_3c5291e4b81ba4 16,34,143,155-156,159,161-168,315-319,323-325
+remake/runtime/web/controllers/native_services.mjs
+  s_6ab83acb6f1748::t_229a509db3f9e3 33
+remake/runtime/web/core/items/native_economy.mjs
+  s_6ab83acb6f1748::t_1848b2c6acc4d8 86
+remake/runtime/web/native_service_view.css
+  s_6ab83acb6f1748::t_6eb03723b371a4 22
+  s_6ab83acb6f1748::t_229a509db3f9e3 10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "6fcfb5d04c7551779ca4970bec04c3fdd563326b",
+  "prompts": {},
+  "sessions": {
+    "s_6ab83acb6f1748": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d52f-12e0-7232-9b5f-4130db9eb5a9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
