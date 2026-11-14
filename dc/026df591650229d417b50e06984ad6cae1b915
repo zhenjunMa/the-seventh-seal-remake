@@ -1,0 +1,35 @@
+remake/runtime/web/controllers/map.mjs
+  s_e65d2800abc888::t_3cbea4c2ec647f 18,29-31,72,76,83,91,93,96-104,107,113,116-123,130-136,175-187,189-190,192-199,208-209,212-219,221,223-264,266-273,275-290,293,295-301,308,310-311,320-333,369,591-594,684-688
+  s_e65d2800abc888::t_b51df99b3a57f5 27-28,111,124,210-211,220,222,265,274,291-292,294,302-307,309,312-319
+remake/runtime/web/core/ui/map_presentation.mjs
+  s_e65d2800abc888::t_0ccc076047fde5 9-26,48,51,60
+remake/runtime/web/controllers/story.mjs
+  s_e65d2800abc888::t_ea8fdfb2aaba11 345-346,366-367
+  s_e65d2800abc888::t_0ccc076047fde5 331
+  s_e65d2800abc888::t_b51df99b3a57f5 344,349
+remake/runtime/web/core/resources/image_resources.mjs
+  s_e65d2800abc888::t_0ccc076047fde5 107-112
+  s_e65d2800abc888::t_b51df99b3a57f5 113-120
+remake/runtime/web/phaser/scenes/exploration_scene.mjs
+  s_e65d2800abc888::t_0ccc076047fde5 1,42,91
+README.md
+  s_e65d2800abc888::t_ea8fdfb2aaba11 78
+remake/runtime/web/core/exploration/scene_controller.mjs
+  s_e65d2800abc888::t_0ccc076047fde5 21-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "dc026df591650229d417b50e06984ad6cae1b915",
+  "prompts": {},
+  "sessions": {
+    "s_e65d2800abc888": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1da48-d491-7771-9296-13ddaf66df76",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
