@@ -203,6 +203,36 @@ export class BattleMenuView{
     catch(error){if(!this.disposed&&epoch===this.epoch){this.reject(error.message);this.update(this.battle.presentationSnapshot());}}
   }
   escape(){if(this.stage==='target'){this.draft=null;this.setStage(this.returnStage??'wheel');this.syncWheel();if(['skills','items'].includes(this.stage)){this.syncList();this.listButtons[this.listIndex-this.listOffset]?.focus({preventScroll:true});}else this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});}else if(['skills','items'].includes(this.stage)){this.entries=null;this.setStage('wheel');this.syncWheel();this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});}else if(this.stage==='wheel'){this.setStage('actors');this.syncWheel();this.players.get(this.snapshot.player_id)?.focus({preventScroll:true});}else return;this.syncTargets();this.syncList();this.cue('menuCancel');this.syncInfo();}
+  moveTarget(key){
+    const candidates=this.targetActors();
+    if(!candidates.length)return;
+    let next=candidates[0].id;
+    if(candidates.some(actor=>actor.id===this.targetId)){
+      const positions=this.positions??battleActorPositions(this.snapshot.actors);
+      const origin=positions[this.targetId];
+      if(!origin)return;
+      const horizontal=key==='ArrowLeft'||key==='ArrowRight';
+      const sign=key==='ArrowLeft'||key==='ArrowUp'?-1:1;
+      const [x,y]=origin;
+      let bestScore=Infinity;
+      next=this.targetId;
+      for(const {id} of candidates){
+        const point=positions[id];
+        if(!point)continue;
+        const dx=point[0]-x,dy=point[1]-y;
+        const along=(horizontal?dx:dy)*sign;
+        if(along<=1)continue;
+        const across=Math.abs(horizontal?dy:dx);
+        // Favor targets close to the same row or column.
+        const score=along+across*3;
+        if(score<bestScore){bestScore=score;next=id;}
+      }
+    }
+    if(next===this.targetId)return;
+    this.targetId=next;
+    this.targets.get(next)?.focus({preventScroll:true});
+    this.cue('menuSelect');
+  }
   moveWheel(key){
     const next=TECHNIQUE_WHEEL_NAVIGATION[key]?.[this.focusIndex];
     if(next===undefined||next===this.focusIndex)return;
@@ -238,7 +268,7 @@ export class BattleMenuView{
     if(this.stage==='actors')this.moveActor(key);
     else if(this.stage==='wheel')this.moveWheel(key);
     else if(['skills','items'].includes(this.stage))this.moveList(direction);
-    else if(this.stage==='target'){const actors=this.targetActors(),i=actors.findIndex(a=>a.id===this.targetId);if(actors.length){this.targetId=actors[(i+direction+actors.length)%actors.length].id;this.targets.get(this.targetId)?.focus({preventScroll:true});this.cue('menuSelect');}}
+    else if(this.stage==='target')this.moveTarget(key);
     return true;
   }
   keyup(key){if(key===' ')this.resultView?.release();}
