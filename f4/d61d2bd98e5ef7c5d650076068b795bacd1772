@@ -1,0 +1,33 @@
+remake/runtime/web/core/exploration/map_npcs.mjs
+  s_f987654c2b0ea9::t_b1a60a927bcb99 367-370,372-385
+README.md
+  s_f987654c2b0ea9::t_01477bd5801866 76-77
+remake/runtime/web/controllers/story.mjs
+  s_f987654c2b0ea9::t_9d43a8b1b672ed 270
+  s_f987654c2b0ea9::t_6a0dec9fd17f88 269,271
+  s_f987654c2b0ea9::t_42dceefb1eedea 12,138-141,151,163,166,264,266,279,290
+remake/runtime/web/core/exploration/movement.mjs
+  s_f987654c2b0ea9::t_0fe28f84ccb4a5 406-422,427,453,459-474,546,560
+remake/runtime/web/controllers/map.mjs
+  s_f987654c2b0ea9::t_f8d8210c3e273d 2,16,19-20,250-252,261-268,282,314-315,318-346,348-354,402,527
+  s_f987654c2b0ea9::t_1b2d61a816e6ab 316-317
+  s_f987654c2b0ea9::t_574522f026c1b6 347
+remake/runtime/web/core/exploration/map_interaction.mjs
+  s_f987654c2b0ea9::t_0d94c348a9c780 32-76,106-109,121
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "f4d61d2bd98e5ef7c5d650076068b795bacd1772",
+  "prompts": {},
+  "sessions": {
+    "s_f987654c2b0ea9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d7b2-4dbe-72f2-b2a4-0cd336a55df1",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
