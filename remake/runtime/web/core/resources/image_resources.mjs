@@ -104,6 +104,20 @@ export class ImageResources {
       else entry.promise.then(bitmap=>evictBitmap(bitmap),()=>{});
     }
   }
+  retainScope(from,to){
+    for(const entry of this.entries.values())if(entry.scopes.has(from)&&!entry.scopes.has(to)){
+      entry.scopes.add(to);
+      this.revision++;
+    }
+  }
+  releaseViewport(path,scope,owner){
+    const key=`${scope}\0${path}`;
+    const entry=this.entries.get(key);
+    if(!entry?.scopes.delete(owner)||entry.scopes.size)return;
+    this.entries.delete(key);
+    this.revision++;
+    this.prunePages();
+  }
   release(scope){
     for(const [path,entry]of this.entries){entry.scopes.delete(scope);if(!entry.scopes.size){this.entries.delete(path);this.revision++;}}
     this.prunePages();

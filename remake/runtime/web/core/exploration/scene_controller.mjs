@@ -18,7 +18,8 @@ export class SceneController {
     if(!restoredWorld)delete before.map_npc_state;
     this.setPhase('loading');
     try {
-      prepared = await this.prepare(location.map_id,{world:restoredWorld??before,onProgress});
+      prepared = await this.prepare(location.map_id,{world:restoredWorld??before,onProgress,
+        entry:reason==='exit'&&!restoredWorld?location:undefined});
       checkCurrent();
       this.validateEntry(prepared, location);
       const next = structuredClone(restoredWorld ?? before);

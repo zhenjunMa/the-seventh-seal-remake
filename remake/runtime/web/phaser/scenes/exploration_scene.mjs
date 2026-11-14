@@ -1,4 +1,4 @@
-import {mapPresentation,mapViewport} from '../../core/ui/map_presentation.mjs';
+import {mapPresentation,mapViewport,mapPoseBounds} from '../../core/ui/map_presentation.mjs';
 import {TextureCache} from '../rendering/texture_cache.mjs';
 import {MapActor} from '../actors/map_actor.mjs';
 import {ActionClock} from '../components/action_clock.mjs';
@@ -8,17 +8,6 @@ const uploadBudgetMs=4;
 const viewportMargin=96;
 function viewport({view,nativeViewport},margin=0){
   return mapViewport(nativeViewport?{...view,zoom:1}:view,margin);
-}
-function poseBounds({x,y,image,width=image.width,height=image.height,displayWidth=width,displayHeight=height,body_offset,shadow_geometry}){
-  // Include virtual xBR padding and wall-contact offsets at the viewport edge.
-  const dx=body_offset?.x??0,dy=body_offset?.y??0;
-  const paddingX=2*displayWidth/width,paddingY=2*displayHeight/height;
-  const scaleX=displayWidth/width,scaleY=displayHeight/height;
-  const left=Math.min(0,dx,shadow_geometry?.x*scaleX||0)-paddingX;
-  const top=Math.min(0,dy,shadow_geometry?.y*scaleY||0)-paddingY;
-  const right=Math.max(displayWidth+Math.max(0,dx),shadow_geometry?(shadow_geometry.x+shadow_geometry.width)*scaleX:0)+paddingX;
-  const bottom=Math.max(displayHeight+Math.max(0,dy),shadow_geometry?(shadow_geometry.y+shadow_geometry.height)*scaleY:0)+paddingY;
-  return {x:x+left,y:y+top,width:right-left,height:bottom-top};
 }
 
 export function explorationScene(Phaser,runtime){
@@ -50,7 +39,7 @@ export function explorationScene(Phaser,runtime){
         const visible=viewport(options);
         const background=textures.tileRegions(options.scene.bitmap).filter(visible);
         signal?.throwIfAborted();
-        const poses=mapPresentation(options).filter(({pose})=>visible(poseBounds(pose)));
+        const poses=mapPresentation(options).filter(({pose})=>visible(mapPoseBounds(pose)));
         const regions=[...background,...poses.flatMap(({pose})=>[...poseRegions(pose)])];
         if(preload)await new Promise((resolve,reject)=>runtime.clock.requestFrame(resolve,{signal,onCancel:reject}));
         const budget=preload?2:uploadBudgetMs;
@@ -99,7 +88,7 @@ export function explorationScene(Phaser,runtime){
       for(let index=0;index<entries.length;index++){
         const entry=entries[index],key=entry.key??`opening:${index}`;
         if(!entry.pose)throw new Error(`Phaser 地图显示描述缺失：${key}`);
-        const bounds=poseBounds(entry.pose);
+        const bounds=mapPoseBounds(entry.pose);
         if(!visible(bounds)){
           if(near(bounds)){
             nearbyPoses.push(entry.pose);

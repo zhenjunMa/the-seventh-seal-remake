@@ -6,6 +6,24 @@ export function mapViewport({x,y,zoom=1},margin=0){
   return ({x,y,width,height})=>x<right&&y<bottom&&x+width>left&&y+height>top;
 }
 
+export function mapPoseBounds({x,y,image,width=image.width,height=image.height,displayWidth=width,displayHeight=height,body_offset,shadow_geometry}){
+  // Include virtual xBR padding and wall-contact offsets at the viewport edge.
+  const dx=body_offset?.x??0,dy=body_offset?.y??0;
+  const paddingX=2*displayWidth/width,paddingY=2*displayHeight/height;
+  const scaleX=displayWidth/width,scaleY=displayHeight/height;
+  const left=Math.min(0,dx,shadow_geometry?.x*scaleX||0)-paddingX;
+  const top=Math.min(0,dy,shadow_geometry?.y*scaleY||0)-paddingY;
+  const right=Math.max(displayWidth+Math.max(0,dx),shadow_geometry?(shadow_geometry.x+shadow_geometry.width)*scaleX:0)+paddingX;
+  const bottom=Math.max(displayHeight+Math.max(0,dy),shadow_geometry?(shadow_geometry.y+shadow_geometry.height)*scaleY:0)+paddingY;
+  return {x:x+left,y:y+top,width:right-left,height:bottom-top};
+}
+
+export function mapNpcVisible(npc,data,world){
+  return !npc.hidden&&!(npc.route_hidden_ticks>0)&&
+    (npc.native_layer===undefined||data.native_layer===undefined||npc.native_layer===data.native_layer)&&
+    (npc.event?.conditions??[]).every(condition=>world.flags[condition.index]===condition.value);
+}
+
 // Ground contact in full sprite-frame pixels, measured from each playable
 // role's idle frames. A single point per role keeps the pose stable as gait
 // and facing change. Exploration collision already uses this world position.
@@ -27,10 +45,10 @@ export function mapPresentation({scene,world,role,action,view,
   const queue=scene.objects.filter(obj=>opening||world.object_states[`${scene.data.id}:${obj.index}`]?.visible!==false)
     .map(obj=>{
       const bitmap=objectBitmap(scene,obj);
-      if(bitmap===null)return null;
+      if(!bitmap)return null;
       const previewing=objectPreview?.mapId===scene.data.id&&objectPreview.objectIndex===obj.index;
       const motion=previewing?objectPreview.motion:bitmap===obj.bitmap?obj.motion:null;
-      const pose=motion
+      const pose=motion?.main
         ?{image:motion.main,light:motion.intrinsic,shadow:motion.shadow,sx:motion.frame*motion.width,sy:0,width:motion.width,height:motion.height,x:obj.draw_x,y:obj.draw_y}
         :{image:bitmap,x:obj.draw_x,y:obj.draw_y};
       return {key:`object:${obj.index}`,layer:obj.layer??0,sort_y:obj.sort_y??0,pose};
@@ -39,8 +57,7 @@ export function mapPresentation({scene,world,role,action,view,
     const motion=npc.motion,actorRole=motion?.role,actorAction=actorRole?.actions.find(a=>a.index===motion.action);
     const position=mapActorPosition(npc);
     const bitmap=actorAction?.bitmap??npc.bitmap;
-    if(!bitmap||npc.hidden||npc.route_hidden_ticks>0||npc.native_layer!==undefined&&scene.data.native_layer!==undefined&&npc.native_layer!==scene.data.native_layer
-      ||!(npc.event?.conditions??[]).every(c=>world.flags[c.index]===c.value))continue;
+    if(!bitmap||!mapNpcVisible(npc,scene.data,world))continue;
     const resource=actorAction?.bitmap?{frame_width:actorRole.frame_width,frame_height:actorRole.frame_height,
       anchor_x:actorRole.anchor.x,anchor_y:actorRole.anchor.y}:npc.resource;
     const frame=actorAction?.bitmap?motion.frame:Math.floor(time/(resource.interval_ms??180))%resource.frames_per_direction;

@@ -328,6 +328,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     if(!recordId||!['exit','world-map'].includes(reason))return false;
     const flags=state.chapterRunner.planFlagChanges(scene.data.id,recordId,draft);
     if(flags?.size===0)return false;
+    await scene.loadRemaining?.();
     state.sceneEntryDraft=draft;
     state.scenes.setPhase('event');$('worldMapPanel').hidden=true;
     if(onReady){actions.presentLoadedMap();onReady();}
@@ -340,9 +341,12 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     });}finally{state.sceneEntryDraft=null;}
   }
   async function animateObjectInteraction({mapId,objectIndex,object,actionGroup,signal,playback}){
+    if(!actionGroup)return;
+    const loadRemaining=state.scenes?.current?.loadRemaining;
+    if(loadRemaining)await playbackTask(loadRemaining(),signal);
     const role=state.openingResources.roles[state.world.value.leader_id];
     const actionIndex=role.native_action_bindings[actionGroup];
-    if(!actionGroup||actionIndex===-1)return;
+    if(actionIndex===-1)return;
     const target={x:object.x_native*2,y:object.y_native*2};
     const direction=mapInteractionDirection(state.world.location,target);
     const action=role.actions.find(row=>row.index===actionIndex),count=action.logical_count??action.frame_count;
@@ -359,6 +363,8 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
     }finally{state.objectActorPreview=null;}
   }
   async function animateChapterObject({mapId,objectIndex,fromState=2,signal,playback}){
+    const loadRemaining=state.scenes?.current?.loadRemaining;
+    if(loadRemaining)await playbackTask(loadRemaining(),signal);
     const object=state.chapterStory.maps[mapId]?.objects.find(row=>row.index===objectIndex);
     if([2,7,9].includes(object?.behavior_raw_cf)){
       if(state.scenes.current.data.id!==mapId)throw new Error('机关动作目标不是当前地图');

@@ -15,7 +15,7 @@ import {anmActorSlots} from "../core/story/anm_runtime.mjs";
 import {chapterRouteExits,nativeEmptyEventCells} from "../core/exploration/map_connections.mjs";
 import {DistanceGait,MapLocomotion,mapTravelDistance,playerMapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
 
-import {mapPresentation,mapViewport} from '../core/ui/map_presentation.mjs';
+import {mapPresentation,mapViewport,mapPoseBounds,mapNpcVisible} from '../core/ui/map_presentation.mjs';
 import {mapWorldPoint,mapTargetInFront,pickMapDialogueObject,pickMapNpc,mapConversationRoute,mapInteractionDirection} from '../core/exploration/map_interaction.mjs';
 import {playbackFrame} from '../core/story/story_playback.mjs';
 
@@ -24,6 +24,11 @@ import {createExplorationPresentation} from './presentation_handoff.mjs';
 const actorImageFields = [['sheet','bitmap'], ['intrinsic_sheet','intrinsic_bitmap'], ['shadow_sheet','shadow_bitmap']];
 const returnCacheMs = 15000;
 const exitPreloadDistance = 144;
+const backgroundLoadConcurrency = 6;
+// Walking updates position and revision without replacing the layout inputs.
+const entryWorldFields = ['leader_id','party','flags','event_records','object_states','native_sequence'];
+const sameEntryWorld = (left,right) => entryWorldFields.every(key=>left[key]===right[key]);
+const sameEntry = (left,right) => left.x===right.x&&left.y===right.y&&left.direction===right.direction;
 
 function roleImages(roleId, poses = []) {
   const scope = `role:${roleId}`;
@@ -64,17 +69,18 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   }
   function stopMapPreload() {
     if(!preload)return;
-    const {controller,scope}=preload;
+    const {controller,scope,releaseStory}=preload;
     preload=null;
     controller.abort();
     state.resources.release(scope);
+    releaseStory();
   }
   function preloadExit(dx,dy,at) {
     const scene=state.scenes.current;
     const size=scene.movement.cellSize;
     let target=null,nearest=exitPreloadDistance;
     for(const exit of scene.data.exits??[]){
-      if(exit.state!=='ready'||!exit.entry||!exit.target_map||exit.target_map===at.map_id)continue;
+      if(exit.kind==='world-map-event'||exit.state!=='ready'||!exit.entry||!exit.target_map||exit.target_map===at.map_id)continue;
       for(const cell of exit.cells){
         const x=(cell.x+.5)*size-at.x,y=(cell.y+.5)*size-at.y;
         if(x*dx+y*dy<=0)continue;
@@ -82,57 +88,56 @@ export function createMapController({state, actions, $, canvas, ctx}) {
         if(distance<nearest){nearest=distance;target=exit;}
       }
     }
-    if(preload?.exit===target)return;
+    if(preload?.exit===target&&sameEntryWorld(preload.world,state.world.value))return;
     stopMapPreload();
-    if(!target||target.target_map===previousMap?.id)return;
+    if(!target)return;
     const controller=new AbortController(),{signal}=controller;
     const id=target.target_map,scope=`map-preload:${++preloadSerial}`;
-    const definition=readMapDefinition(id,signal);
-    preload={exit:target,controller,scope,definition};
-    void definition.then(async data=>{
-      signal.throwIfAborted();
-      const {background}=data;
-      const path=typeof background==='string'?background:background.image;
-      const width=background.width??data.movement.width*size;
-      const height=background.height??data.movement.height*size;
-      const view=openingCamera(target.entry,width,height),visible=mapViewport(view,2);
-      const world=state.world.value;
-      const [bitmap,objects]=await Promise.all([
-        state.resources.load(path,scope,{visible,mapBackground:true,signal}),
-        Promise.all((data.objects??[]).filter(obj=>world.object_states[`${id}:${obj.index}`]?.visible!==false
-          &&visible({x:obj.draw_x,y:obj.draw_y,width:obj.frame_width,height:obj.frame_height}))
-          .map(async obj=>({...obj,bitmap:await actions.image(obj.image,scope)}))),
-      ]);
-      signal.throwIfAborted();
-      if(state.scenes.phase!=='map')return;
-      await state.engine?.exploration.prepareViewport({scene:{data,bitmap,objects},world,view,openingQueue:[]},
+    const entry={map_id:id,...target.entry};
+    const world={...state.world.value,location:entry};
+    delete world.map_npc_state;
+    const releaseStory=state.storyRepository.retainMap(id);
+    const warm=preload={exit:target,controller,scope,world,releaseStory,roleIds:new Set()};
+    const previous=previousMap?.id===id&&previousMap.until>performance.now()?previousMap.definition:null;
+    warm.scene=prepareMapContent(id,{world,entry,warm},previous);
+    void warm.scene.then(prepared=>{
+      if(!signal.aborted&&state.scenes.phase==='map')return prepareMapView(prepared,world,
         {signal,preload:true,isCurrent:()=>state.scenes.phase==='map'&&state.scenes.current===scene});
     }).catch(error=>{
-      if(signal.aborted)return;
-      actions.log?.({type:'map-preload-failed',map_id:id,error:error.message});
+      if(!signal.aborted)actions.log?.({type:'map-preload-failed',map_id:id,error:error.message});
     });
   }
   async function prepareMap(id,options={}) {
-    if(preload&&preload.exit.target_map!==id)stopMapPreload();
+    const entry=state.engine?options.entry:undefined;
     const warm=preload;
-    const previous=previousMap?.until>performance.now()?previousMap:null;
+    const previous=previousMap?.id===id&&previousMap.until>performance.now()?previousMap.definition:null;
     const release=state.storyRepository.retainMap(id);
     try{
-      const definition=warm?.definition.catch(()=>readMapDefinition(id))
-        ??(previous?.id===id?previous.definition:undefined);
-      return await prepareMapContent(id,options,definition);
+      if(warm&&entry&&warm.exit.target_map===id&&sameEntry(entry,warm.exit.entry)&&sameEntryWorld(warm.world,state.world.value)){
+        const prepared=await warm.scene.catch(()=>null);
+        if(prepared&&!warm.controller.signal.aborted){
+          state.resources.retainScope(warm.scope,`map:${id}`);
+          return prepared;
+        }
+      }
+      if(warm&&preload===warm)stopMapPreload();
+      return await prepareMapContent(id,{...options,entry},previous);
     }finally{
       release();
       if(warm&&preload===warm)stopMapPreload();
     }
   }
-  async function prepareMapContent(id,{world=state.world.value,program,onProgress,duringAnimation=false}={},definition) {
-    await state.storyRepository.ensureMap(id,{protect:[state.scenes?.current?.data.id].filter(Boolean)});
+  async function prepareMapContent(id,{world=state.world.value,program,onProgress,duringAnimation=false,entry,warm}={},definition) {
+    const signal=warm?.controller.signal;
+    const [source]=await Promise.all([
+      definition??readMapDefinition(id,signal),
+      state.storyRepository.ensureMap(id,{protect:[state.scenes?.current?.data.id].filter(Boolean)}),
+    ]);
+    signal?.throwIfAborted();
     const mapEvents=state.events.filter(event=>event.map_id===id);
     for(const event of mapEvents){const resource=event.npc?.resource;
       if(resource){const roleId=resource.source?.match(/(?:^|\/)([^/]+)\.dgp$/i)?.[1],action=state.mapShadows?.roles[roleId]?.actions.find(action=>action.index===0);
         if(action){resource.shadow_sheet=action.shadow_sheet;resource.shadow_geometry=action.shadow_geometry;}}}
-    const source=await (definition??readMapDefinition(id));
     const data={...source};
     data.movement=nativeMapMovement(data.movement,state.chapterStory.maps[id],state.chapterStory.programs);
     const extraExits=[...(state.chapterResources.exits_by_map[id]??[]),...chapterRouteExits(id,state.chapterStory,state.chapterResources)];
@@ -165,51 +170,33 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if (role.side === 'player' && actorSlots.has(role.native_slot)) playerIds.add(roleId);
     }
     const actorIds = new Set([...playerIds, ...npcRoleIds]);
-    const actorImages = [
-      ...[...actorIds].flatMap(roleId => roleImages(roleId, state.openingResources.roles[roleId]?.actions)),
-      ...state.catalog.roles.filter(role => playerIds.has(role.id))
-        .flatMap(role => roleImages(role.id, role.actions.filter(action => action.index <= 2))),
-    ];
     const table = state.chapterStory.maps[id];
     data.native_layer=table?.map_flag_index;
-    const effectMap=state.mapEffects?.maps[id],effectObjects=effectMap?.objects??[];
-    const completedAnimations=(state.chapterResources.object_animations[id]??[]).filter(animation=>
-      table&&world.event_records[table.map_flag_index]?.[animation.object_index_zero_based]?.slice(0,2)==='03');
-    const total=1+(data.objects??[]).length+state.events.filter(e=>e.map_id===id&&e.npc?.resource?.sheet).length+
-      state.events.filter(e=>e.map_id===id&&e.npc?.resource?.shadow_sheet).length+
-      actorImages.length+completedAnimations.length+
-      effectObjects.reduce((count,obj)=>count+state.mapEffects.object_banks[obj.bank].actions
-        .reduce((n,action)=>n+['main','intrinsic','shadow'].filter(channel=>action[channel+'_sheet']).length,0),0);
-    let completed=0;onProgress?.({completed,total});
-    const step=async promise=>{const value=await promise;onProgress?.({completed:++completed,total});return value;};
-    const bitmap=await step(actions.image(typeof data.background==='string'?data.background:data.background.image,`map:${id}`,{mapBackground:true}));
-    if(bitmap.width!==movement.width*16||bitmap.height!==movement.height*16) throw new Error('背景尺寸与逻辑地图不匹配');
-    const objects=await Promise.all((data.objects??[]).map(async obj=>({...obj,bitmap:await step(actions.image(obj.image, `map:${id}`))})));
-    const npcs=await Promise.all(state.events.filter(event=>event.map_id===id&&event.npc).map(async event=>({event,...event.npc,
-      bitmap:event.npc.resource?.sheet?await step(actions.image(event.npc.resource.sheet, `map:${id}`)):null,
-      shadow_bitmap:event.npc.resource?.shadow_sheet?await step(actions.image(event.npc.resource.shadow_sheet, `map:${id}`)):null})));
-    await Promise.all(actorImages.map(({pose, path, scope, field}) => step(state.resources.attach(pose, path, scope, field))));
-    await Promise.all(completedAnimations.filter(animation=>animation.completed_last_frame<animation.frames.length)
-      .map(animation=>step(actions.image(animation.frames[animation.completed_last_frame].image, `map:${id}`))));
-    for(const npc of data.opening_npcs??[]){
-      const r=state.openingResources.roles[npc.resource_id],a=r?.actions.find(a=>a.index===0);
-      if(!a?.bitmap)throw new Error(`地图人物资源未准备：${npc.resource_id}`);
-      npcs.push({...npc,event:mapEvents.find(event=>event.npc_slot===npc.slot_zero_based),bitmap:a.bitmap,shadow_bitmap:a.shadow_bitmap,resource:{frame_width:r.frame_width,frame_height:r.frame_height,
-        frames_per_direction:a.frame_count,interval_ms:a.interval_raw,anchor_x:r.anchor.x,anchor_y:r.anchor.y,shadow_geometry:a.shadow_geometry}});
-    }
+    const mapScope=`map:${id}`;
+    const objects=(data.objects??[]).map(obj=>({...obj}));
+    const eventNpcs=mapEvents.filter(event=>event.npc).map(event=>({event,...event.npc}));
+    const nativeActors=data.opening_npcs.map(npc=>{
+      const role=state.openingResources.roles[npc.resource_id];
+      const idle=role?.actions.find(action=>action.index===0);
+      if(!idle)throw new Error(`地图人物资源未准备：${npc.resource_id}`);
+      return {npc:{...npc,event:mapEvents.find(event=>event.npc_slot===npc.slot_zero_based),
+        resource:{frame_width:role.frame_width,frame_height:role.frame_height,
+          frames_per_direction:idle.frame_count,interval_ms:idle.interval_raw,
+          anchor_x:role.anchor.x,anchor_y:role.anchor.y,shadow_geometry:idle.shadow_geometry}},idle};
+    });
+    const npcs=[...eventNpcs,...nativeActors.map(({npc})=>npc)];
     for(const npc of npcs)npc.native_layer??=data.native_layer;
-    const probes=[...(data.probes??[]),...state.events.filter(event=>event.map_id===id&&event.sample?.probe).map(event=>event.sample.probe)];
-    const scene={data,definition:source,movement,bitmap,objects,npcs,probes,npcRoleIds};
+    const probes=[...(data.probes??[]),...mapEvents.filter(event=>event.sample?.probe).map(event=>event.sample.probe)];
+    const scene={data,definition:source,movement,objects,npcs,probes,npcRoleIds};
     scene.npcRuntime=new MapNpcRuntime({scene,table,roles:state.openingResources.roles});
-    if(effectObjects.length){
-      const resources=await Promise.all(effectObjects.map(async obj=>{
-        const source=state.mapEffects.object_banks[obj.bank],resource={...source,actions:source.actions.map(action=>({...action}))};
-        await Promise.all(resource.actions.flatMap(action=>['main','intrinsic','shadow'].filter(channel=>action[channel+'_sheet']).map(async channel=>{
-          action[channel+'_bitmap']=await step(actions.image(action[channel+'_sheet'],`map:${id}`));
-        })));
-        return {...obj,resource};
-      }));
-      scene.objectRuntime=new MapObjectRuntime({objects,resources,mapFlagIndex:effectMap.map_flag_index,mapId:id,movement,
+
+    const effectMap=state.mapEffects?.maps[id];
+    const effects=(effectMap?.objects??[]).map(obj=>{
+      const bank=state.mapEffects.object_banks[obj.bank];
+      return {...obj,resource:{...bank,actions:bank.actions.map(action=>({...action}))}};
+    });
+    if(effects.length){
+      scene.objectRuntime=new MapObjectRuntime({objects,resources:effects,mapFlagIndex:effectMap.map_flag_index,mapId:id,movement,
         onSound:({token,x,y})=>{
           const listener=state.openingView?.active?state.openingView.cameraAt:state.world.location;
           const shift=data.movement.native_coordinate_shift;
@@ -217,6 +204,132 @@ export function createMapController({state, actions, $, canvas, ctx}) {
             position:{dx:((Math.trunc(listener.x/2)-x)>>shift)<<1,dy:((y-Math.trunc(listener.y/2))>>shift)<<1}});
         }});
       scene.objectRuntime.update(0,{world,paused:true});
+    }
+
+    const width=movement.width*16,height=movement.height*16;
+    const view=entry&&openingCamera(entry,width,height);
+    const visible=view&&mapViewport(view);
+    const backgroundPath=typeof data.background==='string'?data.background:data.background.image;
+    const background=async(scope,region,signal)=>{
+      const bitmap=await actions.image(backgroundPath,scope,{mapBackground:true,visible:region,signal});
+      if(bitmap.width!==width||bitmap.height!==height)throw new Error('背景尺寸与逻辑地图不匹配');
+      return bitmap;
+    };
+    const priority=[],remaining=[];
+    const queue=(needed,load)=>(needed?priority:remaining).push(load);
+    const queueImage=(needed,path,assign)=>queue(needed,async scope=>{
+      const bitmap=await actions.image(path,scope??mapScope);
+      assign?.(bitmap);
+    });
+    const visibleObjects=new Set();
+    for(const obj of objects){
+      const bank=scene.objectRuntime?.actors.find(actor=>actor.object===obj)?.resource;
+      const needed=visible&&world.object_states[`${id}:${obj.index}`]?.visible!==false&&
+        [obj,bank].some(row=>row&&visible(mapPoseBounds({x:obj.draw_x,y:obj.draw_y,width:row.frame_width,height:row.frame_height})));
+      if(needed)visibleObjects.add(obj.index);
+      queueImage(needed,obj.image,bitmap=>{obj.bitmap=bitmap;});
+    }
+    for(const effect of effects){
+      for(const action of effect.resource.actions){
+        for(const channel of ['main','intrinsic','shadow']){
+          if(action[channel+'_sheet'])queueImage(visibleObjects.has(effect.index),action[channel+'_sheet'],bitmap=>{action[channel+'_bitmap']=bitmap;});
+        }
+      }
+    }
+    for(const animation of state.chapterResources.object_animations[id]??[]){
+      const index=animation.object_index_zero_based;
+      const frame=animation.frames[animation.completed_last_frame];
+      if(table&&frame&&world.event_records[table.map_flag_index]?.[index]?.slice(0,2)==='03')
+        queueImage(visibleObjects.has(index),frame.image);
+    }
+
+    const visiblePoses=new Set();
+    const inView=(npc,resource)=>{
+      if(!visible||!mapNpcVisible(npc,data,world))return false;
+      const {x,y}=mapActorPosition(npc);
+      return visible(mapPoseBounds({x:x+16-resource.anchor_x,y:y-resource.anchor_y,
+        width:resource.frame_width,height:resource.frame_height,shadow_geometry:resource.shadow_geometry}));
+    };
+    for(const npc of eventNpcs){
+      const resource=npc.resource;
+      if(!resource)continue;
+      const needed=inView(npc,resource);
+      if(resource.sheet)queueImage(needed,resource.sheet,bitmap=>{npc.bitmap=bitmap;});
+      if(resource.shadow_sheet)queueImage(needed,resource.shadow_sheet,bitmap=>{npc.shadow_bitmap=bitmap;});
+    }
+    for(const {npc,idle} of nativeActors){
+      const role=npc.motion?.role;
+      const action=role?.actions.find(row=>row.index===npc.motion.action);
+      const resource=role?{frame_width:role.frame_width,frame_height:role.frame_height,
+        anchor_x:role.anchor.x,anchor_y:role.anchor.y,shadow_geometry:action?.shadow_geometry}:npc.resource;
+      if(inView(npc,resource)||(action&&inView(npc,npc.resource))){
+        visiblePoses.add(idle);
+        if(action)visiblePoses.add(action);
+      }
+    }
+    const actorImages=[
+      ...[...actorIds].flatMap(roleId=>roleImages(roleId,state.openingResources.roles[roleId]?.actions)),
+      ...state.catalog.roles.filter(role=>playerIds.has(role.id)).flatMap(role=>{
+        const actions=role.actions.filter(action=>action.index<=2);
+        if(entry)for(const action of actions)visiblePoses.add(action);
+        return roleImages(role.id,actions);
+      }),
+    ];
+    for(const {pose,path,scope,field} of actorImages)
+      queue(visiblePoses.has(pose),owner=>state.resources.attach(pose,path,owner??scope,field));
+    if(warm)for(const roleId of actorIds)warm.roleIds.add(roleId);
+
+    const refreshNpcs=()=>{
+      for(const {npc,idle} of nativeActors){npc.bitmap=idle.bitmap;npc.shadow_bitmap=idle.shadow_bitmap;}
+    };
+    const checkNpcs=()=>{
+      refreshNpcs();
+      for(const {npc} of nativeActors)if(!npc.bitmap)throw new Error(`地图人物资源未准备：${npc.resource_id}`);
+    };
+    if(entry){
+      const scope=warm?.scope??mapScope;
+      // A small strip around the landing screen covers movement while the rest loads.
+      const region=state.resources.peek(backgroundPath)?undefined:mapViewport(view,64);
+      await Promise.all([
+        background(scope,region,signal).then(bitmap=>{scene.bitmap=bitmap;}),
+        ...priority.map(load=>load(scope)),
+      ]);
+      signal?.throwIfAborted();
+      refreshNpcs();
+      scene.objectRuntime?.update(0,{world,paused:true});
+      let pending;
+      scene.loadRemaining=()=>pending??=(async()=>{
+        const work=region?[async()=>{
+          scene.bitmap=await background(mapScope);
+          state.resources.releaseViewport(backgroundPath,scope,mapScope);
+        },...remaining]:remaining;
+        let next=0,interrupted=false;
+        const workers=Array.from({length:Math.min(work.length,backgroundLoadConcurrency)},async()=>{
+          while(next<work.length){
+            if(state.scenes.current!==scene){interrupted=true;return;}
+            await work[next++]();
+          }
+        });
+        const results=await Promise.allSettled(workers);
+        const failure=results.find(result=>result.status==='rejected');
+        if(failure)throw failure.reason;
+        if(interrupted){pending=null;scene.backgroundLoadStarted=false;return;}
+        checkNpcs();
+        delete scene.loadRemaining;
+      })().catch(error=>{
+        pending=null;
+        throw error;
+      });
+    }else{
+      const images=[async()=>{scene.bitmap=await background(mapScope);},...remaining];
+      let completed=0;
+      onProgress?.({completed,total:images.length});
+      await Promise.all(images.map(async load=>{
+        await load();
+        onProgress?.({completed:++completed,total:images.length});
+      }));
+      checkNpcs();
+      scene.objectRuntime?.update(0,{world,paused:true});
     }
     return scene;
   }
@@ -253,9 +366,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
   function fit(){if(!state.scenes?.current)return;const im=state.scenes.current.bitmap;state.view.zoom=Math.min(640/im.width,480/im.height)*.97;state.view.x=im.width/2;state.view.y=im.height/2;state.view.follow=false;}
   function resize(){const rect=$('screen').getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,2);state.cssWidth=rect.width;state.cssHeight=rect.height;for(const target of [canvas,$('battleCanvas')]){target.width=Math.round(rect.width*dpr);target.height=Math.round(rect.height*dpr);}ctx.setTransform(dpr,0,0,dpr,0,0);ctx.imageSmoothingEnabled=false;state.engine?.resize();}
   function npcAvailable(npc) {
-    if(npc.hidden||npc.route_hidden_ticks>0||npc.native_layer!==undefined&&state.scenes.current.data.native_layer!==undefined&&npc.native_layer!==state.scenes.current.data.native_layer)return false;
-    const conditions=npc.event?.conditions??[];
-    return conditions.every(condition=>state.world.value.flags[condition.index]===condition.value);
+    return mapNpcVisible(npc,state.scenes.current.data,state.world.value);
   }
   function npcCanTalk(npc,bindings=storyBindings(state.world.location.map_id)){
     return npcAvailable(npc)&&(npc.event||!bindings.npcs||bindings.npcs.includes(npc.slot_zero_based));
@@ -477,7 +588,10 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       scopes.push(`map:${previousMap.id}`);
       for(const id of previousMap.npcRoleIds)roleIds.add(id);
     }
-    if(preload)scopes.push(preload.scope);
+    if(preload){
+      scopes.push(preload.scope);
+      for(const id of preload.roleIds)roleIds.add(id);
+    }
     state.resources.retainScopes([...scopes,...[...roleIds].map(id=>`role:${id}`)]);
     const roles = [...Object.entries(state.openingResources.roles), ...state.catalog.roles.map(role => [role.id, role])];
     for (const [id, role] of roles) {
@@ -567,6 +681,11 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(state.view.follow)follow();updateNearest();
     }else {motionState.reset();state.view.collisionFeedback=null;}
     paint();
+    const scene=state.scenes?.current;
+    if(state.scenes?.phase==='map'&&scene?.loadRemaining&&!scene.backgroundLoadStarted){
+      scene.backgroundLoadStarted=true;
+      void scene.loadRemaining().catch(error=>actions.log?.({type:'map-background-load-failed',map_id:scene.data.id,error:error.message}));
+    }
   }
   return {explorationPresentation:presentation,role, sheetAction, buildHud, prepareMap, prepareMapView, stopMapPreload, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, mapPointerDown, approachConversation, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, presentLoadedMap, updateExploration,captureScene,captureSavePreview};
 }
