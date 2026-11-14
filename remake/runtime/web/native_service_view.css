@@ -7,6 +7,7 @@
 .native-service-frame canvas{display:block;max-width:none;image-rendering:pixelated}
 .native-service-text{display:block;white-space:pre-wrap;overflow:hidden;text-shadow:1px 1px #000;pointer-events:none}
 .native-service-control{appearance:none;border:0;padding:0;background:transparent;color:inherit;font:inherit;text-align:left;cursor:pointer;outline:none}
+.native-service-control:disabled{cursor:default}
 .native-service-control img{z-index:0}
 .native-service-control:hover{background:transparent}
 .native-service-highlight{visibility:hidden}
@@ -18,5 +19,4 @@
 .native-service-control:focus-visible{outline:1px solid #d7b36e;outline-offset:1px}
 .native-service-unavailable{background:rgba(0,0,0,.7)}
 .native-service-popup{position:absolute;inset:0;z-index:3;background:rgba(0,0,0,.55)}
-.native-service-quantity{position:absolute;left:205px;top:389px;width:230px;display:flex;justify-content:space-evenly}
-.native-service-quantity button{border:1px solid #957044;border-radius:3px;background:#281c13;color:#eed4a5;padding:4px 10px;font:inherit;cursor:pointer}
+.native-service-trade-popup{background:transparent}

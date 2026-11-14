@@ -83,7 +83,7 @@ export function nativeServiceRows(service,world,catalog,{mode,category='items',f
 
 export function applyNativeServiceAction(draft,service,catalog,{mode,id,quantity=1,category='items',filterIndex,mapId,recordId}){
   const row=nativeServiceRows(service,draft,catalog,{mode,category,filterIndex}).find(row=>row.id===id);
-  if(!row||!service.allowedModes.includes(mode)||!Number.isInteger(quantity)||quantity<1||quantity>99)
+  if(!row||!service.allowedModes.includes(mode)||!Number.isInteger(quantity)||quantity<1||mode!=='sell'&&quantity>99)
     return {changed:false,message:'请选择有效的物品及数量。'};
   const item=catalog[row.item_id];
   if(mode==='sell'){

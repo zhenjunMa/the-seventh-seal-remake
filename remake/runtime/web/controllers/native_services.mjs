@@ -30,7 +30,7 @@ export function createNativeServicesController({state,actions,$,canvas}){
         const details=item?{name:item.name,description:item.description,owned:nativeOwnedQuantity(draft,item.id),
           card:operationMenu?.manifest?operationItemCard(item,operationMenu.manifest):null,
           materials:item.ingredients.map(id=>({name:catalog[id].name,quantity:1,owned:nativeOwnedQuantity(draft,id)}))}:{};
-        view.show({...selection,title:service.title||table.name||mapId,allowedModes:service.allowedModes,money:draft.money,rows,details});
+        view.show({...selection,title:table.name||mapId,allowedModes:service.allowedModes,money:draft.money,rows,details});
       };
       view=new NativeServiceView({root,manifest,textRenderer:operationMenu?.textRenderer,
         isSuspended:()=>Boolean(state.engine?.paused||playback?.paused),
