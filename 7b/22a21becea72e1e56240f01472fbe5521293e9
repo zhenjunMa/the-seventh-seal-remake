@@ -1,0 +1,35 @@
+remake/runtime/web/controllers/map.mjs
+  s_399e22cd17bbdd::t_442b127276185c 501-505,510,522-527
+  s_399e22cd17bbdd::t_6e6b081fb1ed87 146-148
+remake/runtime/web/core/story/native_story_conditions.mjs
+  s_399e22cd17bbdd::t_da2308311ccf15 5,64
+  s_399e22cd17bbdd::t_712b3c96c6c156 6,41
+remake/runtime/web/core/story/story_flow.mjs
+  s_399e22cd17bbdd::t_a1e652dad94bcd 205
+  s_399e22cd17bbdd::t_ebc96eecd87e5d 195
+  s_399e22cd17bbdd::t_44c114d91ccb73 169-185,187-194,196-198,200-202,212-217,286-288,290
+  s_399e22cd17bbdd::t_689e339207b438 186,199,203-204,206-211
+remake/runtime/tests/test_map_locomotion.mjs
+  s_399e22cd17bbdd::t_9729a43269a456 33-34
+remake/runtime/web/core/story/chapter_runner.mjs
+  s_399e22cd17bbdd::t_e777205203f4a6 9,150,153-154
+  s_399e22cd17bbdd::t_3f7b24e52e2002 158,160-161
+  s_399e22cd17bbdd::t_574b9e8d690b58 10,151-152,155-157,159,162-165
+  s_399e22cd17bbdd::t_a0f62369b5095e 166
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "7b22a21becea72e1e56240f01472fbe5521293e9",
+  "prompts": {},
+  "sessions": {
+    "s_399e22cd17bbdd": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d936-2656-7171-a2fc-f0b20a84e4df",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
