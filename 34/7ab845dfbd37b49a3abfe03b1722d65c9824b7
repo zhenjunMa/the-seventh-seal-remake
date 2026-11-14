@@ -1,0 +1,22 @@
+remake/runtime/web/core/exploration/movement.mjs
+  s_f987654c2b0ea9::t_d169592ff6fe65 465,491-493,497-498,571,576
+remake/runtime/tests/test_map_locomotion.mjs
+  s_f987654c2b0ea9::t_bf500932715778 151,247,251,253
+  s_f987654c2b0ea9::t_403a262a7056b4 132,135,138-139,141-150,152-155
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "347ab845dfbd37b49a3abfe03b1722d65c9824b7",
+  "prompts": {},
+  "sessions": {
+    "s_f987654c2b0ea9": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d7b2-4dbe-72f2-b2a4-0cd336a55df1",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
