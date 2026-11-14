@@ -1,10 +1,10 @@
 import {locomotion,KeyboardMovement} from './movement.mjs';
 
-export async function loadPlayerRunSpeed(readJson) {
+export async function loadMapMovementConfig(readJson) {
   const config=await readJson('data/config/movement.json',{cache:'no-store'});
   const speed=config?.parameters?.run_speed_pixels_per_second;
   if(!Number.isFinite(speed)||speed<=0)throw new Error('地图跑速必须为正数');
-  return speed;
+  return {runSpeed:speed,rails:config.parameters.rail_boundaries};
 }
 
 // Native 46CED0 scales the movement visit interval, not the final atlas frame

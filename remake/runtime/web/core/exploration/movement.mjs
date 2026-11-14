@@ -4,6 +4,54 @@ export const MAP_FOOTPRINT = Object.freeze({halfWidth: 4, halfHeight: 3});
 const SKIN = 1e-5,
   EPS = 1e-9;
 
+// Order each polyline so a rightward segment has walkable ground below it,
+// and a leftward segment has walkable ground above it.
+function railSegments(lines, width, height) {
+  return lines.flatMap(line => {
+    if (!Array.isArray(line) || line.length < 2 ||
+        !line.every(point => Array.isArray(point) && point.length === 2 && point.every(Number.isFinite) &&
+          point[0] >= 0 && point[0] <= width && point[1] >= 0 && point[1] <= height)) {
+      throw new Error('栏杆坐标无效');
+    }
+    return line.slice(1).map(([x, y], index) => {
+      const [left, top] = line[index], dx = x - left, dy = y - top;
+      const length = Math.hypot(dx, dy);
+      if (!length) throw new Error('栏杆线段长度无效');
+      return {
+        from: {x: left, y: top}, to: {x, y},
+        normal: {x: -dy / length, y: dx / length}, length,
+      };
+    });
+  });
+}
+
+function sweepRail(x, y, dx, dy, {from, normal, length}, footprint) {
+  const speed = dx * normal.x + dy * normal.y;
+  if (speed >= -EPS) return null;
+  const margin = Math.abs(normal.x) * footprint.halfWidth + Math.abs(normal.y) * footprint.halfHeight;
+  const distance = (x - from.x) * normal.x + (y - from.y) * normal.y - margin;
+  // Saves made before the rail was added can leave the overlap toward the treads.
+  // A position well beyond the rail can be on a different level of the map.
+  if (distance < -2 * margin - 16) return null;
+  const t = Math.max(0, -distance / speed);
+  if (t > 1) return null;
+  const contactX = x + dx * t - from.x - Math.sign(normal.x) * footprint.halfWidth;
+  const contactY = y + dy * t - from.y - Math.sign(normal.y) * footprint.halfHeight;
+  const alongRail = contactX * normal.y - contactY * normal.x;
+  if (alongRail < -EPS || alongRail > length + EPS) {
+    // At a bend the feet may hit the joined endpoint before either segment's
+    // support corner reaches the line. Resolve that endpoint as a point.
+    const endpoint = alongRail < 0 ? from : {
+      x: from.x + normal.y * length, y: from.y - normal.x * length,
+    };
+    const hit = {blocked: true, reason: 'rail'};
+    return sweepBox(x, y, dx, dy, {
+      left: endpoint.x, right: endpoint.x, top: endpoint.y, bottom: endpoint.y, hit,
+    }, footprint);
+  }
+  return {t, nx: normal.x, ny: normal.y, hit: {blocked: true, reason: 'rail'}};
+}
+
 function sweepBox(x, y, dx, dy, box, footprint) {
   const left = box.left - footprint.halfWidth,
     right = box.right + footprint.halfWidth;
@@ -134,6 +182,7 @@ export class MovementMap {
     this.width = data.width;
     this.height = data.height;
     this.cellSize = data.cell_size;
+    this.rails = railSegments(data.rail_boundaries ?? [], this.width * this.cellSize, this.height * this.cellSize);
     this.rows = [...data.terrain_rows];
     this.triggers = new Map();
     this.entryCells = new Set();
@@ -270,6 +319,7 @@ export class MovementMap {
           } else consider(sweepBox(x, y, rx, ry, box, footprint));
         }
       for (const obstacle of obstacles) consider(sweepBox(x, y, rx, ry, obstacle, footprint));
+      for (const rail of this.rails) consider(sweepRail(x, y, rx, ry, rail, footprint));
       const bound = (value, delta, low, high, axis) => {
         if (delta < 0 && value + delta < low)
           consider({
@@ -290,16 +340,18 @@ export class MovementMap {
       bound(y, ry, Math.min(start.y, hh), Math.max(start.y, this.height * size - hh - SKIN), 'y');
       // Leave skin only on the blocked axes; shortening the whole vector
       // loses tangent distance once per frame and makes sliding frame-dependent.
-      const blockX = hits.some((hit) => hit.nx),
-        blockY = hits.some((hit) => hit.ny);
-      const sx = rx * first - (blockX ? Math.sign(rx) * Math.min(Math.abs(rx * first), SKIN) : 0);
-      const sy = ry * first - (blockY ? Math.sign(ry) * Math.min(Math.abs(ry * first), SKIN) : 0);
+      const rails = hits.filter(contact => contact.hit.reason === 'rail');
+      const blockX = hits.some(contact => contact.hit.reason !== 'rail' && contact.nx),
+        blockY = hits.some(contact => contact.hit.reason !== 'rail' && contact.ny);
+      const travel = rails.length ? Math.max(0, first - SKIN / Math.hypot(rx, ry)) : first;
+      const sx = rx * travel - (blockX ? Math.sign(rx) * Math.min(Math.abs(rx * travel), SKIN) : 0);
+      const sy = ry * travel - (blockY ? Math.sign(ry) * Math.min(Math.abs(ry * travel), SKIN) : 0);
       // Keep the approach ray through source-open diagonal corners intact.
       // Axis-only skin is a short correction near contact, not a change to
       // the whole approach direction. Final position/tangent travel stay exact.
       const approach = Math.max(
         0,
-        first -
+        travel -
           Math.max(
             blockX && rx ? Math.min(Math.abs(rx * first), SKIN) / Math.abs(rx) : 0,
             blockY && ry ? Math.min(Math.abs(ry * first), SKIN) / Math.abs(ry) : 0,
@@ -317,6 +369,13 @@ export class MovementMap {
       ry *= 1 - first;
       if (blockX) rx = 0;
       if (blockY) ry = 0;
+      for (const {nx, ny} of rails) {
+        const intoRail = rx * nx + ry * ny;
+        if (intoRail >= 0) continue;
+        if (blockX || blockY) { rx = 0; ry = 0; break; }
+        rx -= intoRail * nx;
+        ry -= intoRail * ny;
+      }
     }
     return {
       x,
@@ -452,7 +511,8 @@ export class KeyboardMovement {
         // accepted approach/slide travel before selecting a different vector.
         if (!this.detour && direct.blocked && !direct.moved) {
           contacts.push(...direct.contacts);
-          if (direct.hit?.reason === 'bounds' || direct.hit?.reason === 'transition') {
+          if (direct.hit?.reason === 'bounds' || direct.hit?.reason === 'transition' ||
+              direct.contacts.some(contact => contact.hit.reason === 'rail')) {
             stopped = true;
             break;
           }

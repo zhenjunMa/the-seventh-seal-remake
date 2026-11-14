@@ -114,9 +114,14 @@ export function explorationScene(Phaser,runtime){
       }
       for(const [key,actor]of this.actors)if(!live.has(key)){actor.destroy();this.actors.delete(key);}
       this.collision.clear();
-      if(view.collision)for(let y=0;y<scene.movement.height;y++)for(let x=0;x<scene.movement.width;x++){
-        const cell=scene.movement.cell(x,y);this.collision.fillStyle(cell.trigger?0xe6bd68:cell.blocked?0xd14d47:0x78c796,cell.trigger ? 0.333 : cell.blocked ? 0.22 : 0.137);
-        this.collision.fillRect(x*16,y*16,16,16);
+      if(view.collision){
+        const {cellSize,width,height,rails}=scene.movement;
+        for(let y=0;y<height;y++)for(let x=0;x<width;x++){
+          const cell=scene.movement.cell(x,y);this.collision.fillStyle(cell.trigger?0xe6bd68:cell.blocked?0xd14d47:0x78c796,cell.trigger ? 0.333 : cell.blocked ? 0.22 : 0.137);
+          this.collision.fillRect(x*cellSize,y*cellSize,cellSize,cellSize);
+        }
+        this.collision.lineStyle(2,0xff765b);
+        for(const {from,to} of rails??[])this.collision.lineBetween(from.x,from.y,to.x,to.y);
       }
       this.marker.clear().setDepth(entries.length+1);
       if(nearest&&openingQueue===null)this.marker.lineStyle(1/zoom,0xedd19b).strokeEllipse(nearest.x+16,nearest.y+6,38,12);

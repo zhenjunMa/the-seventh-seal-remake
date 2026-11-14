@@ -21,7 +21,7 @@ import {DialogueView} from "../dialogue_view.mjs";
 import {RewardNoticeView} from '../reward_notice_view.mjs';
 import {MapNameNoticeView} from '../map_name_notice_view.mjs';
 import {nativeNpcActionBindings} from '../core/exploration/map_npcs.mjs';
-import {loadPlayerRunSpeed} from '../core/exploration/map_locomotion.mjs';
+import {loadMapMovementConfig} from '../core/exploration/map_locomotion.mjs';
 import {WorldMapView} from "../world_map_view.mjs";
 import {runtimeContent,runtimeContentDefinition,validateContentRegistration} from "../core/content/content_registry.mjs";
 import {StoryRepository} from "../core/story/story_repository.mjs";
@@ -162,11 +162,12 @@ export function createBootController({state, actions, $, canvas}) {
     validateContentRegistration(runtimeContent);
     if(JSON.stringify(registration)!==JSON.stringify(runtimeContentDefinition))throw new Error('内容登记已变化，请执行 build_runtime.py --target content --run 并刷新页面');
     state.world=new WorldStore(await actions.json(state.catalog.seed),state.catalog.maps.map(m=>m.id));
-    const [openingResources,storyIndex,playerRunSpeed]=await Promise.all([
+    const [openingResources,storyIndex,movementConfig]=await Promise.all([
       actions.json(state.catalog.opening_resources),actions.json(state.catalog.story??'data/story/index.json'),
-      loadPlayerRunSpeed(actions.json),
+      loadMapMovementConfig(actions.json),
     ]);
-    state.playerRunSpeed=playerRunSpeed;
+    state.playerRunSpeed=movementConfig.runSpeed;
+    state.rails=movementConfig.rails;
     state.storyRepository=await StoryRepository.create({read:actions.json,index:storyIndex,content:runtimeContent,definition:runtimeContentDefinition,currentMap:()=>state.scenes?.current?.data.id});
     state.openingResources=openingResources;state.chapterResources=state.storyRepository.resources;state.chapterStory=state.storyRepository.story;
     state.events=state.storyRepository.events;state.routeEvents=state.storyRepository.routes;

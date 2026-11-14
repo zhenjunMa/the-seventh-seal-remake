@@ -148,7 +148,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       ...nativeEmptyEventCells(data.movement,state.chapterStory.maps[id])]);
     // Unknown trigger handlers must be visible failures, not silent pass-through.
     // The source JSON retains the original gate; this is a runtime coverage guard.
-    const movement=new MovementMap({...data.movement,triggers:data.movement.triggers.map(trigger=>
+    const movement=new MovementMap({...data.movement,rail_boundaries:state.rails?.[id],triggers:data.movement.triggers.map(trigger=>
       ({...trigger,path_gate:!readyCells.has(`${trigger.x},${trigger.y}`)}))});
     const npcRoleIds = new Set(data.opening_npcs.map(npc => npc.resource_id));
     const playerIds = new Set((world.party ?? []).map(actor => actor.id));
@@ -395,7 +395,18 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     }catch(error){actions.status(error.message,true);actions.log({type:'route-failed',error:error.message});}
     finally{if(state.scenes.phase==='event')state.scenes.setPhase('map');}
   }
-  function drawCollision(scene){const size=16;for(let y=0;y<scene.movement.height;y++)for(let x=0;x<scene.movement.width;x++){const cell=scene.movement.cell(x,y);ctx.fillStyle=cell.trigger?'#e6bd6855':cell.blocked?'#d14d4738':'#78c79623';ctx.fillRect(x*size,y*size,size,size);}}
+  function drawCollision(scene){
+    const {cellSize:size,width,height,rails}=scene.movement;
+    for(let y=0;y<height;y++)for(let x=0;x<width;x++){
+      const cell=scene.movement.cell(x,y);
+      ctx.fillStyle=cell.trigger?'#e6bd6855':cell.blocked?'#d14d4738':'#78c79623';
+      ctx.fillRect(x*size,y*size,size,size);
+    }
+    if(!rails.length)return;
+    ctx.save();ctx.strokeStyle='#ff765b';ctx.lineWidth=2;ctx.beginPath();
+    for(const {from,to} of rails){ctx.moveTo(from.x,from.y);ctx.lineTo(to.x,to.y);}
+    ctx.stroke();ctx.restore();
+  }
   function paint(){
     const scene=state.scenes?.current;
     const sourceWorld=state.sceneEntryDraft??state.world.value,actor=state.objectActorPreview;
