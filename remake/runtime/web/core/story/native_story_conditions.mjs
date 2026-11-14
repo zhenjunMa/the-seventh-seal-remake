@@ -2,7 +2,8 @@
 // Case5 also resets the native sequence input count after a wrong answer.
 const need=(ok,message)=>{if(!ok)throw new Error(`原剧情条件：${message}`);};
 const uint=value=>Number.isInteger(value)&&value>=0&&value<=0xffffffff;
-export const NATIVE_STORY_CONDITION_TYPES=new Set([1,2,4,5,6,8,10]);
+export const NATIVE_SEQUENCE_MATCH_CONDITION=5;
+export const NATIVE_STORY_CONDITION_TYPES=new Set([1,2,4,NATIVE_SEQUENCE_MATCH_CONDITION,6,8,10]);
 export const NATIVE_STORY_CONDITION_EVIDENCE={
   dispatch:'ev_e14d28c11ec31e5eebdf4c08a994a900102658650d8e5364d58b848cbd114ea7',
   object:'ev_ae80938b5372bbdb5a8910aed7225ecd370a8f09ab420dfa11092554bcbd6dac',
@@ -37,7 +38,7 @@ export function validateNativeStoryCondition(record,table){
     // 462600 calls 47B0C0(index,itemId,0): mode0 includes equipment
     // for every native role as well as inventory, regardless of active party.
     need(record.condition_bit>=1&&record.condition_bit<=416,'道具编号无效');
-  }else if(type===5||type===6){
+  }else if(type===NATIVE_SEQUENCE_MATCH_CONDITION||type===6){
     // 443650/4436A0 use the shared sequence globals, without TLK operands.
   }else if(type===8){
     // Case8 is a DWORD equality test, not an index into the party array.
@@ -60,7 +61,7 @@ export function evaluateNativeStoryCondition(record,world,table){
   validateNativeStoryCondition(record,table);
   switch(record.condition_type){
     case 6:return Boolean(world.native_sequence?.target.length)&&world.native_sequence.input_count===world.native_sequence.target.length;
-    case 5:{
+    case NATIVE_SEQUENCE_MATCH_CONDITION:{
       const sequence=world.native_sequence;
       if(!sequence?.target.length)return false;
       const matched=sequence.input.slice(0,sequence.target.length)===sequence.target;

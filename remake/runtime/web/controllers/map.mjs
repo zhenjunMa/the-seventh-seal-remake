@@ -143,6 +143,9 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     data.opening_npcs=await projectMapStage({mapId:id,world,story:state.chapterStory,npcs:data.opening_npcs,
       roles:state.openingResources.roles,duringAnimation});
     data.story_triggers=(state.chapterResources.trigger_regions[id]??[]).filter(trigger=>storyBindings(id).triggers.includes(trigger.id));
+    // Some legacy map exports also list a registered StoryFlow trigger as a world-map exit.
+    const storyTriggerIds=new Set(data.story_triggers.map(trigger=>trigger.id));
+    data.exits=data.exits.filter(exit=>exit.kind!=='world-map-event'||!storyTriggerIds.has(exit.id));
     const readyCells=new Set([...(data.exits??[]).filter(exit=>exit.state==='ready').flatMap(exit=>exit.cells.map(cell=>`${cell.x},${cell.y}`)),
       ...data.story_triggers.flatMap(trigger=>trigger.cells.map(cell=>`${cell.x},${cell.y}`)),
       ...nativeEmptyEventCells(data.movement,state.chapterStory.maps[id])]);
@@ -495,13 +498,16 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if((dx||dy)&&effectivePlayer.hp.current>0){const running=state.running;
         const headerRawHex=state.chapterStory.maps[at.map_id]?.header_raw_hex;
         const motion=playerMapMotionProfile(sheetAction(running?2:1),state.scenes.current.data.movement,headerRawHex,state.playerRunSpeed);
-        const movement=state.scenes.current.movement;
+        const {movement,data}=state.scenes.current;
+        const storyAt=cell=>data.story_triggers.find(trigger=>trigger.cells.some(c=>c.x===cell.x&&c.y===cell.y));
+        const storyTag=trigger=>`${at.map_id}:${trigger.id}`;
+        const shouldStartStory=trigger=>Boolean(trigger&&state.lastStoryTrigger!==storyTag(trigger)
+          &&state.chapterRunner.triggerHasEffect(at.map_id,trigger.id));
         let encounter=null,encounterState=state.world.value.encounters??initialEncounterState(state.world.value.party),encounterAdvanced=false;
         const moved=motionState.movement.advance(movement,at,{dx,dy,profile:motion,elapsedMs:delta*1000,
           obstacles:movement.actorObstacles(state.scenes.current.npcs.filter(npcAvailable)),onTravel:segment=>{
             const cell=movement.at(segment.x,segment.y),exit=cell.trigger?transitionFor(cell):null;
-            const story=state.scenes.current.data.story_triggers.find(trigger=>trigger.cells.some(c=>c.x===cell.x&&c.y===cell.y));
-            const stop=Boolean(exit||story&&state.lastStoryTrigger!==`${at.map_id}:${story.id}`);
+            const stop=Boolean(exit||shouldStartStory(storyAt(cell)));
             if(state.encounterData&&!state.battleUnavailable){
               const preview=previewMovement(encounterState,{party:state.world.value.party,leader_id:state.selectedRole,map_id:at.map_id,
                 dx:segment.dx,dy:segment.dy,distance:segment.distance,step_pixels:motion.keyboardStepSize,transition:stop,phase:'map',play_time_ms:actions.currentPlayTime(),world:state.world.value,itemData:state.itemData},state.encounterData);
@@ -513,12 +519,12 @@ export function createMapController({state, actions, $, canvas, ctx}) {
           role:role(),profile:motion});
         state.world.setPosition(moved.x,moved.y,pose.direction??at.direction);state.view.follow=true;
         if(encounterAdvanced&&!encounter)state.world.setEncounterState(encounterState);
-        const reached=state.scenes.current.movement.at(moved.x,moved.y),exit=reached.trigger?transitionFor(reached):null;
-        const storyTrigger=state.scenes.current.data.story_triggers.find(trigger=>trigger.cells.some(cell=>cell.x===reached.x&&cell.y===reached.y));
-        if(storyTrigger){
-          const tag=`${at.map_id}:${storyTrigger.id}`;
-          if(tag!==state.lastStoryTrigger){state.lastStoryTrigger=tag;actions.runChapter({mapId:at.map_id,triggerId:storyTrigger.id});}
-        }else state.lastStoryTrigger='';
+        const reached=movement.at(moved.x,moved.y),exit=reached.trigger?transitionFor(reached):null;
+        const storyTrigger=storyAt(reached);
+        if(shouldStartStory(storyTrigger)){
+          state.lastStoryTrigger=storyTag(storyTrigger);
+          actions.runChapter({mapId:at.map_id,triggerId:storyTrigger.id});
+        }else if(!storyTrigger||state.lastStoryTrigger!==storyTag(storyTrigger))state.lastStoryTrigger='';
         if(exit){
           const tag=`${at.map_id}:${exit.id}`;
           if(tag!==state.lastExit){state.lastExit=tag;if(exit.kind==='world-map-event')routeExit(exit);else changeMap({map_id:exit.target_map,...exit.entry},'exit',null,exit.source?.entry_sort_code);}

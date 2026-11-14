@@ -166,6 +166,55 @@ function compare(actual, command) {
       return actual >= command.value;
   }
 }
+
+function branchTarget(command, draft, next) {
+  switch (command.op) {
+    case 'if_flag':
+      return compare(draft.flags[command.index], command) ? command.target : next;
+    case 'test_flag_bit':
+      return bitSet(draft, command.index, command.bit) ? command.if_true : command.if_false;
+    case 'test_all_flag_bits':
+      return command.conditions.every((row) => bitSet(draft, row.index, row.bit))
+        ? command.if_true
+        : command.if_false;
+    case 'jump':
+      return command.target;
+  }
+}
+
+const previewPositions = new WeakMap();
+export function isEmptyStoryFlowPath(flow, entry, world, evaluateCondition) {
+  if (!flow || !entry) return false;
+  let positions = previewPositions.get(flow);
+  if (!positions) {
+    positions = new Map(flow.commands.map((command, index) => [command.id, index]));
+    previewPositions.set(flow, positions);
+  }
+  const visited = new Set();
+  let pc = positions.get(entry);
+  while (pc !== undefined && pc < flow.commands.length && !visited.has(pc)) {
+    visited.add(pc);
+    const command = flow.commands[pc];
+    if (command.op === 'end') return true;
+    if (command.op === 'record' || command.op === 'native_noop') {
+      pc++;
+      continue;
+    }
+    let target;
+    if (command.op === 'test_native_condition' || command.op === 'test_native_combination') {
+      const passed = evaluateCondition?.(command);
+      if (passed === undefined) return false;
+      target = passed ? command.if_true : command.if_false;
+    } else {
+      target = branchTarget(command, world, flow.commands[pc + 1]?.id);
+    }
+    // Mutations, random draws and presentation must use normal execution.
+    if (target === undefined) return false;
+    pc = positions.get(target);
+  }
+  return false;
+}
+
 export class StoryFlowRunner {
   constructor(handlers = {}) {
     this.handlers = handlers;
@@ -232,21 +281,13 @@ export class StoryFlowRunner {
           continue;
         }
         case 'if_flag':
-          if (compare(draft.flags[command.index], command)) {
-            pc = positions.get(command.target);
-            continue;
-          }
-          break;
         case 'test_flag_bit':
-          pc = positions.get(bitSet(draft, command.index, command.bit) ? command.if_true : command.if_false);
-          continue;
         case 'test_all_flag_bits':
-          pc = positions.get(
-            command.conditions.every((row) => bitSet(draft, row.index, row.bit))
-              ? command.if_true
-              : command.if_false,
-          );
+        case 'jump': {
+          const target = branchTarget(command, draft, flow.commands[pc + 1]?.id);
+          pc = target === undefined ? pc + 1 : positions.get(target);
           continue;
+        }
         case 'test_native_condition':
         case 'test_native_combination':
           pc = positions.get((await call(command.op, command)) ? command.if_true : command.if_false);
@@ -279,9 +320,6 @@ export class StoryFlowRunner {
             };
           });
           break;
-        case 'jump':
-          pc = positions.get(command.target);
-          continue;
         case 'unsupported':
           throw new Error(command.reason ?? '剧情分支尚未恢复');
         case 'end':

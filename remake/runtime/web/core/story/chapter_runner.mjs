@@ -6,8 +6,8 @@ import {admitPartyMember, deactivatePartyMember, controlPartyActor} from '../par
 import {applyNativeAnmFlagCommand, nativeAnmObjectTarget} from './native_anm_commands.mjs';
 export {chapterRoleFromDefinition} from '../party/party_members.mjs';
 import {runtimeContent, storyBindings} from '../content/content_registry.mjs';
-import {StoryFlowRunner} from './story_flow.mjs';
-import {evaluateNativeStoryCondition} from './native_story_conditions.mjs';
+import {isEmptyStoryFlowPath, StoryFlowRunner} from './story_flow.mjs';
+import {evaluateNativeStoryCondition, NATIVE_SEQUENCE_MATCH_CONDITION} from './native_story_conditions.mjs';
 import {applyNativeStoryMutation} from './native_story_mutations.mjs';
 import {removeNativeStoryItem, giveNativeStoryItem} from './native_story_inventory.mjs';
 import {applyWorldMapCommandToDraft} from '../exploration/world_map.mjs';
@@ -146,6 +146,23 @@ export class ChapterRunner {
       ),
     );
     this.running = false;
+  }
+  triggerHasEffect(mapId, triggerId) {
+    const table = this.data.maps[mapId];
+    const descriptor = table?.descriptors?.find((row) => row.id === triggerId);
+    if (descriptor?.state_raw !== 2) return true;
+    const flow = this.data.flows?.[nativeFlowId(mapId)];
+    const world = this.world.value;
+    return !isEmptyStoryFlowPath(flow, flow?.entries?.[descriptor.field_26_raw], world, (command) => {
+      const record = table.records.find((row) => row.id === command.record_id);
+      if (!record) return undefined;
+      // An incorrect sequence resets its input count as part of execution.
+      if (command.op === 'test_native_condition' && record.condition_type === NATIVE_SEQUENCE_MATCH_CONDITION)
+        return undefined;
+      return command.op === 'test_native_condition'
+        ? evaluateNativeStoryCondition(record, world, table)
+        : evaluateNativeStoryCombination(record, world, table);
+    });
   }
   async runTrigger({mapId, triggerId, playback} = {}) {
     const table = this.data.maps[mapId],

@@ -30,7 +30,8 @@ function fixture({wall=false,sealed=false,encounters=false,roleId='001'}={}) {
   const state={world,scenes:{phase:'map',current:scene},resources:{revision:0,retainScopes(){}},
     actorResourcesByMap:new Map(),openingResources:{roles:{}},keys:new Set(),running:false,selectedRole:roleId,
     catalog:{roles:[role]},playerRunSpeed:runSpeed,mapVitals:new Map(),view:{action:0,frame:0,follow:false,zoom:1},
-    clock:0,chapterStory:{maps:{}},engine:{presentMap(){}},battleUnavailable:'',encounterData};
+    clock:0,chapterStory:{maps:{}},chapterRunner:{triggerHasEffect:()=>true},
+    engine:{presentMap(){}},battleUnavailable:'',encounterData};
   value.encounters=initialEncounterState(value.party,294);
   const controller=createMapController({state,actions:{currentPlayTime:()=>now,guarded:fn=>fn,startBattle(group,encounters){
     state.battle={group,encounters};state.scenes.phase='battle-loading';},runChapter(event){state.event=event;state.scenes.phase='event';}},$,canvas:{},ctx:{}});let now=0;
