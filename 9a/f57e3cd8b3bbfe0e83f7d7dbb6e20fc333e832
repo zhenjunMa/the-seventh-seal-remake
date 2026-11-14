@@ -1,0 +1,22 @@
+remake/runtime/web/controllers/native_services.mjs
+  s_a5bf5dfcd385c8::t_476d2ca2ad26b5 37
+remake/runtime/web/native_service_view.mjs
+  s_a5bf5dfcd385c8::t_7703de83d63758 29,66-67,70,296,307
+  s_a5bf5dfcd385c8::t_5a2a1815289131 19,21,26-28,30-34,52,65,68-69,71-73,103,124,136-137,144,155,319,344-346
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "9af57e3cd8b3bbfe0e83f7d7dbb6e20fc333e832",
+  "prompts": {},
+  "sessions": {
+    "s_a5bf5dfcd385c8": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1daac-990d-7732-b277-4cedcad38d71",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
