@@ -36,6 +36,12 @@ const playerGroundAnchors = {
   '006': {x:80,y:144},
 };
 
+export function playerMapDrawOffset(role) {
+  const ground=playerGroundAnchors[role.id];
+  return ground?{x:-ground.x,y:-ground.y}:
+    role.map_draw_offset??{x:16-(role.anchor?.x??role.anchor_raw?.[0]??0),y:-(role.anchor?.y??role.anchor_raw?.[1]??0)};
+}
+
 // Shared source geometry for the live Phaser scene and read-only save previews.
 // Producing entries never advances animation, RNG, or persistent world state.
 export function mapPresentation({scene,world,role,action,view,
@@ -70,9 +76,7 @@ export function mapPresentation({scene,world,role,action,view,
   }
   if(opening)queue.push(...openingQueue);
   else {
-    const ground=playerGroundAnchors[role.id];
-    const offset=ground?{x:-ground.x,y:-ground.y}:
-      role.map_draw_offset??{x:16-(role.anchor?.x??role.anchor_raw?.[0]??0),y:-(role.anchor?.y??role.anchor_raw?.[1]??0)};
+    const offset=playerMapDrawOffset(role);
     queue.push({key:'leader',character:true,layer:scene.data.role_layer_preview??2,sort_y:at.y+32,
       pose:{image:action.bitmap,light:action.intrinsic_bitmap,shadow:action.shadow_bitmap,shadow_geometry:action.shadow_geometry,
         sx:(view.frame??0)*role.frame_width,sy:at.direction*role.frame_height,

@@ -4,7 +4,7 @@ import {ChapterAnimationRunner} from "../core/story/chapter_animation.mjs";
 import {StoryMediaView} from '../story_media_view.mjs';
 import {StoryPlayback,storyCancelled,playbackTask,playbackFrame} from '../core/story/story_playback.mjs';
 import {runtimeContent,storyBindings} from "../core/content/content_registry.mjs";
-import {worldMapEntry} from '../core/exploration/map_connections.mjs';
+import {chapterAnimationEntry,worldMapEntry} from '../core/exploration/map_connections.mjs';
 import {hasNativeStoryCompletion} from '../core/story/story_completion.mjs';
 import {nativeChestAnimation} from '../core/exploration/native_map_chests.mjs';
 import {captureMapNpcState} from '../core/exploration/map_npc_state.mjs';
@@ -197,7 +197,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       const initialActor=content.roles[draft.leader_id]?.native_slot;
       if(!Number.isInteger(initialActor))throw new Error('剧情控制角色来源缺失');
       view=new OpeningView({resources:state.openingResources,prepared,prepare,nativeViewport:true,clock:state.engine?.exploration.clock,
-        content,initialActor,
+        content,initialActor,alignPlayerGround:true,
         install:scene=>{state.scenes.current=scene;actions.commitView(scene,draft.location);state.view.follow=false;},
         camera:(x,y)=>{state.view.x=x;state.view.y=y;},say,log:actions.log,
         shade:alpha=>{$('openingShade').hidden=false;$('openingShade').style.opacity=String(alpha);}});
@@ -226,6 +226,11 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
         if(name==='map'&&!payload.bootstrap&&payload.mapId!==(view.mapId??previous.scene?.data.id)){
           // 466EC0 skips the map setup TLK while the ANM is running.
           prepared.set(payload.mapId,await prepare(payload.mapId,payload.signal,{duringAnimation:true}));
+        }
+        if(name==='map'){
+          const scene=prepared.get(payload.mapId);
+          const initialLocation=chapterAnimationEntry(scene,payload.initialLocation,state.chapterStory,draft.native_map_sort_code);
+          payload={...payload,initialLocation};
         }
         const result=await invoke(payload);
         if(name==='map')loadEncounterMap(draft,payload.mapId,state.encounterData);

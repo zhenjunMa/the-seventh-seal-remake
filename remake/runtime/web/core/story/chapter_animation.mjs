@@ -113,9 +113,13 @@ export class ChapterAnimationRunner {
         if (COMMON_ANM_OPCODES.has(c.opcode)) { await actions.execute(c); continue; }
         switch(c.opcode) {
           case 10:
-            await actions.flush(); mapId = c.filename.slice(0,-4).toUpperCase();
-            positions.clear();positions.set(controlledActor,{...this.initialLocation,map_id:mapId});
-            await actions.call('map', c, {mapId, initialLocation:this.initialLocation}); break;
+            await actions.flush();
+            mapId=c.filename.slice(0,-4).toUpperCase();
+            const initialLocation=this.initialLocation;
+            const loaded=await actions.call('map',c,{mapId,initialLocation});
+            positions.clear();
+            positions.set(controlledActor,{...(loaded?.position??initialLocation),map_id:mapId});
+            break;
           case 14:
             await this.runTlk({mapId, recordId:c.u32_plus5}); await actions.frame(c); break;
           case 12: {

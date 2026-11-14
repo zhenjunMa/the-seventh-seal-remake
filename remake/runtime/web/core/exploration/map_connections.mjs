@@ -93,3 +93,14 @@ export function worldMapEntry(scene,destination,story){
   need(Number.isInteger(x)&&x>=0&&Number.isInteger(y)&&y>=0,'入口格坐标无效');
   return {map_id:destination.map_id,x:x*16,y:y*16,direction};
 }
+
+// ANM loads can carry coordinates across map variants. When those coordinates
+// are outside the destination's usable ground, seed the scene at its source
+// marker. Later ANM placement and movement still control the final position.
+export function chapterAnimationEntry(scene,location,story,sortCode=1){
+  const id=scene.data.id;
+  if(location.map_id===id||!scene.movement||scene.movement.validEntry(location.x,location.y))return location;
+  if(!story.maps[id]?.entry_markers?.[1]?.length)return location;
+  const entry=worldMapEntry(scene,{map_id:id,entry_marker:1,sort_code:sortCode},story);
+  return scene.movement.validEntry(entry.x,entry.y)?entry:location;
+}

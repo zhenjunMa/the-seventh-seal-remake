@@ -8,6 +8,7 @@ import {openingCamera,approachPoint,directArrivalMoves,nativeActorPixelEffects} 
 import {ActorEffectView} from './actor_effect_view.mjs';
 import {drawMapSprite} from './map_sprite.mjs';
 import {runtimeContent} from './core/content/content_registry.mjs';
+import {playerMapDrawOffset} from './core/ui/map_presentation.mjs';
 import {DistanceGait,mapMotionProfile,mapTravelDistance} from './core/exploration/map_locomotion.mjs';
 import {nativeNpcActionBindings,scriptedGroundRoute} from './core/exploration/map_npcs.mjs';
 
@@ -19,9 +20,11 @@ export function physicalFrame(action, logicalIndex) {
 }
 export class OpeningView {
   constructor({resources, prepared, prepare, install, camera, say, shade, log, program,staging={},effects={},nativeViewport=false,clock=null,
-    initialActor=0,content=runtimeContent,cameraRenderMode=0}) {
+    initialActor=0,content=runtimeContent,cameraRenderMode=0,alignPlayerGround=false}) {
     Object.assign(this, {resources, prepared, prepare, install, camera, say, shade, log,staging,effects,nativeViewport,clock,content});
+    this.finalMap=program?.expected?.control_map;
     this.controlledActor=initialActor;
+    this.alignPlayerGround=alignPlayerGround;
     this.cameraRenderMode=cameraRenderMode;
     this.actors = new Map(); this.active = false; this.focus = null;
     this.controller=new AbortController();
@@ -99,6 +102,7 @@ export class OpeningView {
           actors:[...this.actors.entries()].map(([slot,actor])=>({slot,direction:actor.direction,
             direction_raw_45:actor.direction_raw_45,visible:actor.visible,x:actor.x,y:actor.y})),
           staging:this.staging[mapId]??null});
+        if(initialLocation)return {position:{...initialLocation,map_id:mapId}};
       },
       actor: async payload => {
         const {kind, signal} = payload;
@@ -163,12 +167,15 @@ export class OpeningView {
         if (kind === 'animation') {
           const action = actor.role.actions.find(a => a.index === payload.actionId);
           if (!action) throw new Error(`角色 ${payload.actor} 缺少动作 ${payload.actionId}`);
-          // Native writes zero-based start/end. The last sentinel frame and
-          // exact busy-state boundary still need native runtime comparison.
-          const start=payload.frameStart||1,end=payload.frameEnd||(action.logical_count??(action.uses_sequence?action.sequence_length_raw:action.frame_count));
-          if(!Number.isInteger(end)||end<start)throw new Error('剧情原动作默认帧范围无效');
-          const indices = Array.from({length:end-start},(_,i)=>i+start-1);
-          const frames = indices.map(index => physicalFrame(action, index));
+          const count = action.logical_count ?? (action.uses_sequence ? action.sequence_length_raw : action.frame_count);
+          const start = payload.frameStart || 1;
+          const end = payload.frameEnd || count;
+          if(!Number.isInteger(start)||start<1||start>count||!Number.isInteger(end)||end<start)
+            throw new Error('剧情原动作帧范围无效');
+          // Source scripts can request an end beyond the actor's DGP action.
+          // Keep the existing end convention and stop after the last available frame.
+          const frames = [];
+          for(let index=start-1;index<Math.min(end-1,count);index++)frames.push(physicalFrame(action,index));
           actor.action = action.index;
           if(!frames.length){actor.frame=physicalFrame(action,start-1);return;}
           const interval = Math.max(16, action.interval_raw), total = frames.length * (payload.repetitions||1);
@@ -317,21 +324,26 @@ export class OpeningView {
     };
   }
   drawQueue(layer = 2) {
+    // Keep the scripted staging on earlier prologue maps. The final map
+    // already uses the exploration anchor throughout the arrival.
+    const alignPlayerGround=this.alignPlayerGround||(this.finalMap&&this.mapId===this.finalMap);
     return [...this.actors.entries()].filter(([,a]) => a.visible&&!(a.route_hidden_ticks>0)).flatMap(([slot,actor]) => {
       const r=actor.role,a=r.actions.find(a=>a.index===actor.action);
+      const offset=alignPlayerGround&&slot<10?playerMapDrawOffset(r):{x:16-r.anchor.x,y:-r.anchor.y};
+      const x=actor.x+offset.x,y=actor.y+offset.y;
       const entry={key:`opening:${slot}`,character:!actor.effect,layer,sort_y:actor.y+32,alpha:actor.alpha,
       blend:actor.blendEffect?.blend??(actor.effect&&['rise','scatter','rise-trail'].includes(actor.effect.kind)?'lighter':'source-over'),
-      pose:actor.effect?{image:actor.effect.image,x:actor.x+16-r.anchor.x-(actor.effect.offsetX??0),y:actor.y-r.anchor.y-actor.effect.offsetY}
+      pose:actor.effect?{image:actor.effect.image,x:x-(actor.effect.offsetX??0),y:y-actor.effect.offsetY}
         :{image:a.bitmap,light:a.intrinsic_bitmap,shadow:a.shadow_bitmap,shadow_geometry:a.shadow_geometry,sx:actor.frame*r.frame_width,sy:actor.direction*r.frame_height,
-          width:r.frame_width,height:r.frame_height,x:actor.x+16-r.anchor.x,y:actor.y-r.anchor.y,
+          width:r.frame_width,height:r.frame_height,x,y,
           body_offset:{x:0,y:actor.blendEffect?.offsetY??0}},
       draw: ctx => {
         const r = actor.role, a = r.actions.find(a => a.index === actor.action);
         ctx.save(); ctx.globalAlpha = actor.alpha;
         if(actor.blendEffect)ctx.globalCompositeOperation=actor.blendEffect.blend;
-        if(actor.effect)actor.effect.draw(ctx,actor.x+16-r.anchor.x,actor.y-r.anchor.y);
+        if(actor.effect)actor.effect.draw(ctx,x,y);
         else drawMapSprite(ctx,a.bitmap,a.intrinsic_bitmap,actor.frame*r.frame_width,actor.direction*r.frame_height,
-          r.frame_width,r.frame_height,actor.x+16-r.anchor.x,actor.y-r.anchor.y,a.shadow_bitmap,a.shadow_geometry,
+          r.frame_width,r.frame_height,x,y,a.shadow_bitmap,a.shadow_geometry,
           {x:0,y:actor.blendEffect?.offsetY??0});
         ctx.restore();
       }};
