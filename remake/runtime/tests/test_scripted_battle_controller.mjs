@@ -39,7 +39,7 @@ after(()=>{globalThis.ResizeObserver=oldObserver;battleResources.json=oldJson;Ba
 function fixture({jsonGate=null,configGate=null,viewGate=null}={}){
   const doc={nodes:[],createElement(){return new Node(doc);},getElementById(id){return this.nodes.find(node=>node.id===id&&node.parentNode)??null;}},nodes=new Map();
   const $=id=>{if(!nodes.has(id)){const node=doc.createElement();node.id=id;nodes.set(id,node);}return nodes.get(id);};
-  const oldButton=doc.createElement();oldButton.id='battleReturn';$('battleHud').append(oldButton);
+  const previousHud=doc.createElement();$('battleHud').append(previousHud);
   $('openingShade').hidden=false;$('openingShade').style.opacity='0.7';$('dialogue').hidden=true;
   const value=copy(seed);value.opening.status='complete';value.location={map_id:'M17030-2',x:608,y:1408,direction:2};
   const world=new WorldStore(value),draft=world.snapshot(),canvas={hidden:false,focus(){}},events=[];
@@ -52,7 +52,7 @@ function fixture({jsonGate=null,configGate=null,viewGate=null}={}){
   const actions={json:()=>jsonGate?jsonGate.promise:Promise.resolve({}),readConfiguredData:()=>configGate?configGate.promise:Promise.resolve(copy(configured)),
     resize(){},status(){},log:event=>events.push(event),guarded:fn=>fn};
   const playback=new StoryPlayback(),controller=createBattleController({state,actions,$,canvas});
-  return {state,previous,world,draft,canvas,events,$,oldButton,cached,playback,controller,actions,run:(options={})=>controller.startScriptedBattle({group,draft,playback,...options})};
+  return {state,previous,world,draft,canvas,events,$,previousHud,cached,playback,controller,actions,run:(options={})=>controller.startScriptedBattle({group,draft,playback,...options})};
 }
 async function until(predicate){
   // Real manifest reads need I/O time; a fixed number of immediate turns can
@@ -71,9 +71,9 @@ async function cancel(f,running){f.playback.cancel();await assert.rejects(runnin
 test('cancellation settles while JSON/configuration resources remain unresolved and late completion cannot install state',async()=>{
   for(const kind of ['json','config']){
     const gate=deferred(),f=fixture(kind==='json'?{jsonGate:gate}:{configGate:gate}),before=f.world.snapshot(),running=f.run();
-    await cancel(f,running);const sentinel={next:true};f.controller.runtime.battleView=sentinel;f.$('battleHud').replaceChildren(f.oldButton);
+    await cancel(f,running);const sentinel={next:true};f.controller.runtime.battleView=sentinel;f.$('battleHud').replaceChildren(f.previousHud);
     gate.resolve(kind==='json'?{}:copy(configured));await new Promise(resolve=>setImmediate(resolve));
-    assert.equal(f.controller.runtime.battleView,sentinel);assert.deepEqual(f.$('battleHud').childNodes,[f.oldButton]);assert.deepEqual(f.world.snapshot(),before);
+    assert.equal(f.controller.runtime.battleView,sentinel);assert.deepEqual(f.$('battleHud').childNodes,[f.previousHud]);assert.deepEqual(f.world.snapshot(),before);
     assert.equal(f.previous.battleMenu.disposed,false);assert.equal(f.state.sidePriority,0);
   }
 });
@@ -82,9 +82,9 @@ test('cancelling cached view preparation leaves the cache reusable and ignores i
   const sentinel={next:true};f.controller.runtime.battleView=sentinel;gate.resolve();await new Promise(resolve=>setImmediate(resolve));
   assert.equal(f.controller.runtime.battleView,sentinel);assert.equal(f.cached.rosters,0);assert.equal(f.cached.stops,0);assert.equal(f.previous.battleMenu.disposed,false);
 });
-test('pending detached HUD cannot steal an old return button or install after cancellation, including unstarted battle cleanup',async()=>{
+test('pending detached HUD leaves the previous controls in place and cannot install after cancellation, including unstarted battle cleanup',async()=>{
   hudPreparation=deferred();const gate=hudPreparation,f=fixture(),running=f.run();await until(()=>f.controller.runtime.scriptedBattleSession?.menu?.testPrepareStarted);
-  assert.deepEqual(f.$('battleHud').childNodes,[f.oldButton]);assert.equal(f.controller.runtime.battle.state,null);
+  assert.deepEqual(f.$('battleHud').childNodes,[f.previousHud]);assert.equal(f.controller.runtime.battle.state,null);
   assert.equal(f.state.scenes.phase,'battle-loading');
   assert.deepEqual(f.events.filter(event=>event.battle),[{mapId:f.draft.location.map_id,battle:true,stageId:group.stage}]);
   await cancel(f,running);const replacement=f.$('battleHud').ownerDocument.createElement();f.$('battleHud').replaceChildren(replacement);
@@ -99,7 +99,7 @@ for(const outcome of ['victory','escaped'])test(`${outcome} return retains final
   assert.equal(f.state.sidePriority,1);assert.equal(f.draft.party[0].hp.current,7);assert.equal(f.draft.money,before.money+10);
   assert.equal(f.draft.encounters.rng_state,session.simulation.rng.state);assert.equal(f.draft.revision,before.revision);assert.deepEqual(f.world.snapshot(),before);
   assert.equal(f.state.openingView.active,true);assert.equal(f.state.scenes.phase,'event');assert.deepEqual(f.state.view,{x:100,y:200});
-  assert.equal(f.$('openingShade').hidden,false);assert.equal(f.$('openingShade').style.opacity,'0.7');assert.deepEqual(f.$('battleHud').childNodes,[f.oldButton]);
+  assert.equal(f.$('openingShade').hidden,false);assert.equal(f.$('openingShade').style.opacity,'0.7');assert.deepEqual(f.$('battleHud').childNodes,[f.previousHud]);
   assert.equal(f.state.lastBattle.battle,battle.state);assert.equal(f.state.lastBattle.result.outcome,outcome);await f.controller.returnFromBattle();assert.equal(f.state.lastBattle.battle,battle.state);assert.equal(f.state.lastBattle.result.outcome,outcome);
   const previousRecord=f.state.lastBattle;previousRecord.battle.history.push({action_id:'previous-battle-action'});
   f.state.logs.push({type:'previous-battle-event'});

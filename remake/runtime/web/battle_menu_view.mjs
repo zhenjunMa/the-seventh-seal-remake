@@ -23,10 +23,10 @@ export function battleHudPaths(manifest){
 }
 // Stable transparent controls over the original source pixels. No world writes.
 export class BattleMenuView{
-  constructor({root,manifest,battle,getSettings,getBindings=null,getCursorHeight,playCue,onReturn,onStage=()=>{},textRenderer=null,memory=null,returnLabel=null,autoReturnOnDefeat=false,resultManifest=null,onResultEvent=()=>{},now=()=>performance.now(),reuseReturnButton=true,deferResult=false,prepareResources=work=>work(),onResourcesPrepared=()=>{},prefetchCommand=()=>{},onResourceError=()=>{}}){
+  constructor({root,manifest,battle,getSettings,getBindings=null,getCursorHeight,playCue,onReturn,onStage=()=>{},textRenderer=null,memory=null,autoReturnOnDefeat=false,resultManifest=null,onResultEvent=()=>{},now=()=>performance.now(),deferResult=false,prepareResources=work=>work(),onResourcesPrepared=()=>{},prefetchCommand=()=>{},onResourceError=()=>{}}){
     Object.assign(this,{deferResult,prepareResources,onResourcesPrepared,prefetchCommand,onResourceError});
     this.resourceScope=battleResources.createScope('battle-hud');
-    Object.assign(this,{root,manifest,battle,getSettings,getBindings,getCursorHeight,playCue,onReturn,onStage,textRenderer,returnLabel,autoReturnOnDefeat});
+    Object.assign(this,{root,manifest,battle,getSettings,getBindings,getCursorHeight,playCue,onReturn,onStage,textRenderer,autoReturnOnDefeat});
     this.doc=root.ownerDocument;this.images=new Map();this.players=new Map();this.targets=new Map();this.memory=memory??new Map();this.textCache=new Map();this.ballCache=new Map();this.fontOptions=new WeakMap();this.stage='waiting';this.focusIndex=0;this.listIndex=0;this.listOffset=0;this.draft=null;this.message='';this.epoch=0;this.cueSequence=0;
     this.menus=new Map(manifest.menus.map(m=>[m.id,m]));
     this.frame=this.doc.createElement('div');this.frame.className='battle-interface-frame';this.frame.tabIndex=-1;this.root.replaceChildren(this.frame);
@@ -61,7 +61,12 @@ export class BattleMenuView{
     });
     this.previous=this.button('battle-scroll-hit',()=>this.moveList(-6));this.previous.setAttribute('aria-label','上一页');this.place(this.previous,467+152,274+40,12,16);this.frame.append(this.previous);
     this.next=this.button('battle-scroll-hit',()=>this.moveList(6));this.next.setAttribute('aria-label','下一页');this.place(this.next,467+152,274+186,12,16);this.frame.append(this.next);
-    this.returnButton=(reuseReturnButton?this.doc.getElementById('battleReturn'):null)??this.doc.createElement('button');this.returnButton.id='battleReturn';this.returnButton.className='battle-result-return';this.returnButton.hidden=true;this.returnButton.onclick=()=>this.onReturn();this.frame.append(this.returnButton);
+    this.resultContinue=this.button('battle-result-continue',()=>this.onReturn());
+    this.resultContinue.hidden=true;
+    this.resultContinue.setAttribute('aria-label','继续并离开战斗');
+    const infoPanel=this.menus.get('fight_info');
+    this.place(this.resultContinue,0,this.canvas.height-infoPanel.height,infoPanel.width,infoPanel.height);
+    this.frame.append(this.resultContinue);
     this.info=this.doc.createElement('span');this.info.className='sr-only';this.info.setAttribute('role','status');this.frame.append(this.info);
     this.resultView=resultManifest?new BattleResultView({root:this.frame,manifest:resultManifest,onComplete:onReturn,onEvent:onResultEvent,textRenderer,now}):null;
     this.resizeObserver=new ResizeObserver(()=>this.fit());this.resizeObserver.observe(root);this.fit();
@@ -103,7 +108,7 @@ export class BattleMenuView{
     if(this.disposed)return;const previous=this.snapshot;this.snapshot=snapshot;this.root.dataset.phase=snapshot.phase;this.root.dataset.actorId=snapshot.player_id;this.root.dataset.ticks=String(snapshot.scheduler?.ticks??0);this.root.dataset.readyIds=this.ready().join(',');
     const changed=previous?.player_id!==snapshot.player_id;
     if(changed){this.draft=null;this.entries=null;this.listIndex=0;this.listOffset=0;this.setStage(this.available()?'actors':'waiting');const memory=this.getSettings?.().battleCursor==='memory'?this.memory.get(snapshot.player_id):null;this.focusIndex=memory?.wheel??0;this.targetId=memory?.target??null;this.syncInfo();}
-    if(terminal(snapshot.phase)){this.draft=null;this.setStage('result');this.setInfo(snapshot.phase==='victory'?'战斗胜利':snapshot.phase==='defeat'?'队伍已经倒下':snapshot.phase==='escaped'?'已经逃离战斗':snapshot.error??'战斗结束');this.openResult(snapshot);}
+    if(terminal(snapshot.phase)){this.draft=null;this.setStage('result');this.openResult(snapshot);}
     else if(!this.available()){this.draft=null;if(this.stage!=='waiting')this.setStage('waiting');this.setInfo(snapshot.test_exit_requested?'正在返回技巧测试…':'');}
     else if(this.stage==='waiting'){this.focusIndex=this.getSettings?.().battleCursor==='memory'?(this.memory.get(snapshot.player_id)?.wheel??0):0;this.setStage('actors');this.needsFocus=true;this.syncInfo();}
     if(this.stage==='items')this.refreshItems();
@@ -114,8 +119,20 @@ export class BattleMenuView{
     }
     this.syncPlayers();this.syncWheel();this.syncList();this.syncTargets();
     this.actorLayer.hidden=this.targetLayer.hidden=Boolean(this.resultView?.active);
-    this.returnButton.hidden=this.stage!=='result'||snapshot.phase==='escaped'||Boolean(this.resultView?.active)||Boolean(this.resultPreparing)||snapshot.phase==='defeat'&&this.autoReturnOnDefeat;this.returnButton.disabled=false;this.returnButton.textContent=this.returnLabel??(snapshot.phase==='defeat'&&this.autoReturnOnDefeat?'返回主菜单':'返回地图');
+    this.syncResultContinue(snapshot);
     if((changed||this.needsFocus)&&this.available()){this.needsFocus=false;(this.stage==='actors'?this.players.get(snapshot.player_id):this.wheelButtons[this.focusIndex])?.focus({preventScroll:true});}
+  }
+  syncResultContinue(snapshot){
+    const show=this.stage==='result'&&snapshot.phase!=='escaped'&&!this.resultView?.active&&!this.resultPreparing&&
+      !(snapshot.phase==='defeat'&&this.autoReturnOnDefeat);
+    const wasHidden=this.resultContinue.hidden;
+    this.resultContinue.hidden=!show;
+    if(this.stage==='result'){
+      const message=snapshot.phase==='victory'?'战斗胜利':snapshot.phase==='defeat'?'队伍已经倒下':
+        snapshot.phase==='escaped'?'已经逃离战斗':snapshot.phase==='interrupted'?'战斗已中止':'战斗结束';
+      this.setInfo(show?`空格或点击此处继续 · ${message}`:message);
+    }
+    if(show&&wasHidden)this.resultContinue.focus({preventScroll:true});
   }
   openResult(snapshot){
     if(!this.resultView)return;

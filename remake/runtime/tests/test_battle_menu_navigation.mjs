@@ -90,7 +90,7 @@ function partyFixture(){
   view.snapshot={phase:'charging',player_id:'001',actors:[0,1,2,3].map(slot=>({id:String(slot+1).padStart(3,'0'),side:'player',party_slot_zero_based:slot}))};
   view.battle={canCommand:id=>id!=='004',targetIdsForSkill:()=>['002'],selectPlayer(id){selected.push(id);view.update({...view.snapshot,player_id:id});}};
   view.ready=()=>['001','002','003'];view.players=new Map(view.snapshot.actors.map(a=>[a.id,{focus(){view.focusedActor=a.id;}}]));
-  Object.assign(view,{actorLayer:{},targetLayer:{},returnButton:{},listIndex:0,listOffset:0});
+  Object.assign(view,{actorLayer:{},targetLayer:{},resultContinue:{hidden:true},listIndex:0,listOffset:0});
   view.syncPlayers=view.syncWheel=view.syncList=view.syncTargets=view.setInfo=()=>{};
   return {view,cues,selected};
 }

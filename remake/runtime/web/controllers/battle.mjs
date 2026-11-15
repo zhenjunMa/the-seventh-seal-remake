@@ -247,14 +247,14 @@ export function createBattleController({host, sessions = createBattleSessions()}
     view.onVictoryFrame=step=>{if(current().battle===battle)actionSound({action_id:step.battle_id},{...step,channel_id:`victory:${step.actor_id}:${step.cycle}`});};
     return battle;
   }
-  async function prepareHud(newParty,{returnLabel=null,onProgress,world=host.world,battle=current().battle,owner=null,signal}={}){
+  async function prepareHud(newParty,{showResultReport=true,onProgress,world=host.world,battle=current().battle,owner=null,signal}={}){
     const frame=current();
     const check=()=>{signal?.throwIfAborted();if(current()!==frame||owner&&!sessions.owns(owner))throw new Error('战斗界面会话已失效');};
     if(!owner)current().battleMenu?.dispose();
-    const [uiManifest,resultManifest]=await playbackTask(Promise.all([battleResources.manifest('data/battle_ui.json'),returnLabel?null:battleResources.manifest('data/battle_result.json')]),signal);check();
+    const [uiManifest,resultManifest]=await playbackTask(Promise.all([battleResources.manifest('data/battle_ui.json'),showResultReport?battleResources.manifest('data/battle_result.json'):null]),signal);check();
     const bindingSource=newParty?effectiveBattleSkillRoles(host.partySkills,world.value):null;
     const hud=$('battleHud'),root=owner?hud.ownerDocument.createElement('div'):hud,view=current().battleView;
-    const menu=new BattleMenuView({root,manifest:uiManifest,battle,returnLabel,autoReturnOnDefeat:Boolean(owner)||!current().skillTestSession&&!current().battleSampleMode,reuseReturnButton:!owner,
+    const menu=new BattleMenuView({root,manifest:uiManifest,battle,autoReturnOnDefeat:Boolean(owner)||!current().skillTestSession&&!current().battleSampleMode,
       getCursorHeight:id=>view.actorCursorHeight(id),
       getSettings:()=>host.menu.settings(),getBindings:newParty?id=>techniqueSlots(world.value,bindingSource,id).map(slot=>({...slot,name:slot.type===1?battle.skills[battleTechniqueId(id,slot.index_one_based)]?.name:techniqueSlotName(bindingSource,id,slot)})):null,
       playCue:(...args)=>host.audio?.playCue(...args),onReturn:actions.guarded(returnFromBattle),onStage:stage=>{if(current().battle===battle)battle.setCommandStage?.(stage);},textRenderer:host.menu.textRenderer,memory:current().battleCursorMemory,resultManifest,onResultEvent:actions.log,
@@ -347,7 +347,7 @@ export function createBattleController({host, sessions = createBattleSessions()}
         view.setRoster(sample.actors,sample.skills);current().battle=createCombat(world,newParty,view);
         if(testing)testSession.battle=current().battle;
         host.audio?.setScene({mapId:mapWorld.location.map_id,battle:true,stageId:testing?rules.stage.music_stage_id??'stage13.scn':group?.stage??null});
-        await measure('hud_assets',()=>prepareHud(newParty,{world,signal,returnLabel:testing?'返回技巧测试':null,
+        await measure('hud_assets',()=>prepareHud(newParty,{world,signal,showResultReport:!testing,
           onProgress:p=>progress({completed:(p.stage==='result'?95:85)+5*p.completed/p.total,total:100})}));
         signal?.throwIfAborted();progress({completed:100,total:100});
       });
