@@ -235,6 +235,9 @@ export function createBattleController({host, sessions = createBattleSessions()}
     const present=method=>async(result,options)=>{const played=await play(method,result,{...options,onFrame:step=>actionSound(result,step),onEffectFrame:step=>effectSound(result,step)});log({type:'battle-presentation',action_id:result.action_id,actor_id:result.actor_id,skill_id:result.skill_id,observations:played.observations});return played;};
     battle=new BattleController({world,resolveAction,applyDamage:applyNativeDamage,playAction:present('playAction'),playSequence:present('playSequence'),
       now,playTime:()=>actions.currentPlayTime(),
+      onPeriodicDamage:(targetId,damage,at)=>{
+        if(current().battle===battle)view.showPeriodicDamage(targetId,damage,at);
+      },
       resourcesForWorld:newParty?partyResourcesForWorld:resourcesForWorld,consumeResources:newParty?consumePartyMp:consumeBattleMp,
       notify:snapshot=>{if(current().battle===battle)updateBattle(snapshot);},log,itemData:newParty?current().itemData:null,
       playItem:async(event,hooks)=>{actions.status(`${event.name} → ${battle.actor(event.target_id).name}`);const played=await play('playItem',event,{...hooks,onFrame:step=>actionSound(event,step),onEffectFrame:step=>effectSound(event,step)});log({type:'battle-item-presentation',action_id:event.action_id,item_id:event.item_id,observations:played.observations});}});

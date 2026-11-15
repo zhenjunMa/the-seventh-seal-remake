@@ -113,6 +113,7 @@ export class BattleController {
     now = () => performance.now(),
     waitTick = () => new Promise((resolve) => setTimeout(resolve, 20)),
     playSequence = null,
+    onPeriodicDamage = null,
     itemData = null,
     playItem = async (_event, {onUse}) => {
       onUse();
@@ -125,6 +126,7 @@ export class BattleController {
       applyDamage,
       playAction,
       playSequence,
+      onPeriodicDamage,
       resourcesForWorld,
       consumeResources,
       notify,
@@ -1205,6 +1207,7 @@ export class BattleController {
             },
           });
           Object.assign(actor, update.actor);
+          for (const damage of update.periodic_damage) this.onPeriodicDamage?.(actor.id, damage, now);
           for (const response of update.periodic_reactions ?? [])
             if (this.lifecycleEnabled && response.skill) {
               this.pendingSourceEnds.delete(actor.id);

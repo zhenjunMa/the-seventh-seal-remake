@@ -817,11 +817,15 @@ export class BattleView {
 
   _damaging(result) {return result.hit !== false && result.hit !== 'miss' && result.hit !== 'MISS' && Number(result.damage) > 0;}
 
+  showPeriodicDamage(targetId,damage,now){
+    this._queueDamageText(null,{target_id:targetId,hit:true,damage},now);
+  }
+
   _queueDamageText(channel,result,now){
     if(result.skipped||result.item_used||result.item_effect||result.revived||result.supported&&!(result.hp_delta>0))return;
     const miss=result.hit===false||['miss','MISS'].includes(result.hit);
     if(!miss&&!(Number.isFinite(result.damage)&&result.damage>=0))return;
-    const targetId=result.target_id??channel.result.target_id;
+    const targetId=result.target_id??channel?.result.target_id;
     if(!targetId)return;
     this.damageTexts=this.damageTexts.filter(e=>now-e.created_at<DAMAGE_TEXT_TICKS*DAMAGE_TEXT_TICK_MS);
     // GAME.exe 50442D raises existing feedback for this target to 1.5 digit heights.

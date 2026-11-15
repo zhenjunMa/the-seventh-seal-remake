@@ -293,11 +293,14 @@ export function applyNativePeriodicResourceBlock({actor,effect_raw_hex,global_05
   out.raw_hp=(integer(out.raw_hp,'raw_hp')+delta)|0;
   const dead=out.raw_hp<=0;if(dead){out.raw_hp=0;out.state_raw=4;}
   syncResources(out);
-  return {actor:out,native_return:dead?1:(-get(0x23))|0,death_requested:dead,hp_delta:delta};
+  // 41C231 / 41C49F enqueue the negated fixed HP field only for surviving actors.
+  const damageNumber=(-get(0x23))|0;
+  return {actor:out,native_return:dead?1:damageNumber,death_requested:dead,hp_delta:delta,
+    damage_number:dead?null:damageNumber};
 }
 export function tickNativeStatuses({actor,threshold,now,data,rng,onPeriodicEffect,global_055ee004=0,content=runtimeContent}){
   validateForestStatusData(data,content);integer(threshold,'native status threshold');integer(now,'native elapsed time');
-  let records=slots(actor,data);const out=clone(actor),trace=[],expired=[],periodic_reactions=[];let ticks=0,cancel_command=false,death_requested=false;
+  let records=slots(actor,data);const out=clone(actor),trace=[],expired=[],periodic_reactions=[],periodic_damage=[];let ticks=0,cancel_command=false,death_requested=false;
   const controlling=flags(out)&0xe0;
   const controlledIndex=controlling?records.findIndex(record=>record.raw[1]&&record.raw[0xb]!==6&&(record.view.getUint32(0xb8,true)&0xe0)):-1;
   for(let index=0;index<records.length;index++){
@@ -315,6 +318,7 @@ export function tickNativeStatuses({actor,threshold,now,data,rng,onPeriodicEffec
         const effect={id_raw:b.raw[1],mode_raw:b.raw[0xb],raw_hex:hex(b.raw),reaction_argument_raw:b.view.getInt32(0xc,true)};
         const damageResult=applyNativePeriodicResourceBlock({actor:out,effect_raw_hex:effect.raw_hex,global_055ee004});Object.assign(out,damageResult.actor);
         death_requested||=damageResult.death_requested;
+        if(damageResult.damage_number!=null)periodic_damage.push(damageResult.damage_number);
         const current=bytes(out.current_skill?.fixed_raw_hex,0x41d,'periodic actor current skill');
         const reaction_requested=current[0x23c]===0&&out.hp.current>0&&out.state_raw<4&&effect.reaction_argument_raw!==0;
         out.native_status_slots[index]={raw_hex:hex(b.raw)};
@@ -336,5 +340,5 @@ export function tickNativeStatuses({actor,threshold,now,data,rng,onPeriodicEffec
     trace.push({kind:'status-tick',slot:index,now,gauge_before:before,gauge_added:gauge-before,gauge_after:records[index].view.getInt32(0x1b,true),duration_count_after:records[index].view.getInt32(2,true),expired:expired.includes(index)});
   }
   if(cancel_command)trace.push({kind:'native-command-cancel',function:'0x42fe40',command_kind_raw:6});
-  return {actor:presentStatuses(out),ticks,expired,cancel_command,death_requested,periodic_reactions,trace,evidence:data.evidence['0x509e10']};
+  return {actor:presentStatuses(out),ticks,expired,cancel_command,death_requested,periodic_reactions,periodic_damage,trace,evidence:data.evidence['0x509e10']};
 }
