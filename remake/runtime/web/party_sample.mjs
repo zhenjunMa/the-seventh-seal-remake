@@ -5,7 +5,7 @@ import {createPartyActors} from './core/party/party_attributes.mjs';
 import {runtimeSkillParameters,skillOwner} from './core/config/skill_registry.mjs';
 import {battleMenuSkillOrder,validateSourceSkillShortcuts} from './core/party/skill_shortcuts.mjs';
 import {partyBattleSkills,battleSkillEligibility,effectiveBattleSkillRoles,applySavedSkillProgress} from './core/battle/battle_skill_access.mjs';
-import {correctPartySkillType} from './core/party/party_skill_corrections.mjs';
+import {correctPartySkill} from './core/party/party_skill_corrections.mjs';
 import {createBattleTechniques} from './core/battle/battle_techniques.mjs';
 const copy=structuredClone;
 const need=(ok,message)=>{if(!ok)throw new Error(message);};
@@ -22,9 +22,9 @@ export function createPartySample(world,attributes,commands,configured=null,item
     if(!ids.has(original.actor_id))continue;
     need(original.source?.path===`Fight_Role/${original.actor_id}.CHR`&&
       original.source.sha256===commands.source_hashes[original.source.path], '队伍技能与角色来源不同');
-    const raw=fixed(correctPartySkillType(original));
+    const effective=correctPartySkill(original),raw=fixed(effective);
     if(!battleSkillEligibility(world,configured?.skill_registry?.[id]??original).available)continue;
-    need(original.id===id&&(byteAt(raw,0x32)&15)!==0&&(byteAt(raw,0x25)===0||['native-revival','native-support'].includes(original.battle_handler)),
+    need(original.id===id&&(byteAt(raw,0x32)&15)!==0&&(byteAt(raw,0x25)===0||['native-revival','native-support'].includes(effective.battle_handler)),
       '队伍命令未学会或目标规则尚未接入');
     let skill=original;
     if(configured){
@@ -33,7 +33,7 @@ export function createPartySample(world,attributes,commands,configured=null,item
       need(same(runtimeSkillParameters(original),cfg.original)&&same(overlay.actions,original.actions),'队伍技能数值或动作与配置基线不同');
       skill=overlay;
     }
-    skill=correctPartySkillType(applySavedSkillProgress(skill,world.party.find(role=>role.id===skill.actor_id)));skill.learned_effective=true;skills[id]=skill;
+    skill=correctPartySkill(applySavedSkillProgress(skill,world.party.find(role=>role.id===skill.actor_id)));skill.learned_effective=true;skills[id]=skill;
   }
   const selected=Object.fromEntries([...ids].map(id=>{const first=Object.values(skills).find(s=>s.actor_id===id);need(first,'当前角色没有已接入的可用攻击');return [id,first];}));
   const actors=createPartyActors(world,attributes,selected,itemData);

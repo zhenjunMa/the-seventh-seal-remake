@@ -1017,8 +1017,15 @@ export class BattleView {
     else if (step.segment_index===returning) progress=1-fraction;
     const amount = Math.max(0, Math.min(1, progress));
     const origin=slots[run.result.actor_id], target=slots[run.result.target_id]??origin;
-    const direction = Math.sign(target[0]-origin[0]) || (this.roster.find(actor=>actor.id===run.result.actor_id)?.side==='player'?-1:1);
-    const gap = policy.contact_gap ?? 110;
+    const plan = run.result.plan;
+    const handler = plan?.kind === 'combination' ? plan.skill_handlers?.[plan.skill_indices[0]] : plan?.handler;
+    const side = this.roster.find(actor=>actor.id===run.result.actor_id)?.side;
+    const allyContact = side === 'player' && handler === 'native-support';
+    if (allyContact && origin === target) return project();
+    // The close-range support sprites face left. Approach from the right and
+    // use a shorter gap so the caster stays beside the party at the screen edge.
+    const direction = allyContact ? -1 : Math.sign(target[0]-origin[0]) || (side==='player'?-1:1);
+    const gap = allyContact ? Math.min(policy.contact_gap ?? 110, 44) : policy.contact_gap ?? 110;
     origin[0] += (target[0]-direction*gap-origin[0])*amount;
     origin[1] += (target[1]+(policy.contact_y_offset??0)-origin[1])*amount;
     return project();

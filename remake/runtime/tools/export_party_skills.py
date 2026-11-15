@@ -444,7 +444,11 @@ def main():
                 skill['magic_native_bundle'] = dict(path='evidence/party_magic_native.json',sha256=sha(RUNTIME / 'evidence/party_magic_native.json'))
                 if skill['battle_handler'] in ('native-support', 'native-revival'):
                     fixed = bytes.fromhex(skill['fixed_raw_hex'])
-                    assert fixed[0x24] in (0, 1) and fixed[0x25] == 1 and fixed[0x16c] == 0 and fixed[0x23c] in (0, 1, 3, 5)
+                    # Kai's icebreaker keeps its original record in the export.
+                    # The remake corrects its hostile target flag when used.
+                    icebreaker = (ident, index, fixed[0], fixed[0x25], fixed[0x232], fixed[0x23c]) == ('002', 42, 70, 0, 5, 1)
+                    assert fixed[0x24] in (0, 1) and (fixed[0x25] == 1 or icebreaker)
+                    assert fixed[0x16c] == 0 and fixed[0x23c] in (0, 1, 3, 5)
                     skill.pop('effect_context', None)
             else:
                 assert skill['mp_cost'] >= 0 and skill['charge_i32_0x2e'] >= 0

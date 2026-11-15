@@ -305,7 +305,7 @@ export const definition = {
         },
         {
           "index": 42,
-          "handler": "direct"
+          "handler": "native-support"
         }
       ],
       "field_skills": [],
@@ -8374,7 +8374,7 @@ export default {
         },
         {
           "index": 42,
-          "handler": "direct",
+          "handler": "native-support",
           "id": "002_42"
         }
       ],

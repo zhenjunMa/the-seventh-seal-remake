@@ -2,7 +2,7 @@
 // records stay immutable; saved rank and experience are replayed onto the
 // selected source/configuration snapshot, never used as another parameter file.
 import {idiv} from './combat_rules.mjs';
-import {correctPartySkillType,isStoryGrantedPartySkill} from '../party/party_skill_corrections.mjs';
+import {correctPartySkill,isStoryGrantedPartySkill} from '../party/party_skill_corrections.mjs';
 const copy=structuredClone,need=(ok,message)=>{if(!ok)throw new Error(message);};
 const int=(n,label,min=-2147483648,max=2147483647)=>{need(Number.isInteger(n)&&n>=min&&n<=max,`${label}无效`);return n;};
 const add=(a,b)=>(a+b)|0;
@@ -111,7 +111,7 @@ function saveProgress(role,source_role,skills){
 /** Remake learning scan, also used after character levels. No practice is added. */
 export function learnEligiblePartySkills({role,source_role}){
   need(source_role?.id===role.id&&source_role.skills.length===source_role.skill_count,'技巧成长角色来源无效');
-  const skills=source_role.skills.map(skill=>correctPartySkillType(applySavedSkillProgress(skill,role)));
+  const skills=source_role.skills.map(skill=>correctPartySkill(applySavedSkillProgress(skill,role)));
   const notifications=learnSkills(skills,role,{allowEmpty:true});
   return {role:saveProgress(role,source_role,skills),skills,notifications};
 }
@@ -121,7 +121,7 @@ export function learnEligiblePartySkills({role,source_role}){
  */
 export function settleNativeSkillProgress({role,source_role,practice={},chain_bonus=0,remake=false}){
   int(chain_bonus,'连击技巧奖励',0);need(source_role?.id===role.id&&source_role.skills.length===source_role.skill_count,'技巧成长角色来源无效');
-  const skills=source_role.skills.map(skill=>{const saved=applySavedSkillProgress(skill,role);return remake?correctPartySkillType(saved):saved;}),notifications=[],trace=[];let changedRank=false,practiceTotal=0;
+  const skills=source_role.skills.map(skill=>{const saved=applySavedSkillProgress(skill,role);return remake?correctPartySkill(saved):saved;}),notifications=[],trace=[];let changedRank=false,practiceTotal=0;
   for(let index=0;index<skills.length;index++){
     let skill=skills[index],b=bytes(skill),v=view(b),required=v.getInt32(0x2f7,true);
     if(!b[0x23]||!(v.getUint32(0x32,true)&15)||required===0||b[0x2d]>=7)continue;

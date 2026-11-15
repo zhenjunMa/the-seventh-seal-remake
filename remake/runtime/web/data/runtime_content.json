@@ -232,7 +232,7 @@
         },
         {
           "index": 42,
-          "handler": "direct"
+          "handler": "native-support"
         }
       ],
       "field_skills": [],

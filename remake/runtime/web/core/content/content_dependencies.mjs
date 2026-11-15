@@ -12,7 +12,7 @@ import {validateChapterAnimation} from '../story/chapter_animation.mjs';
 import {validateBattleViewMetadata} from '../../battle_view.mjs';
 import {nativeKeyedChest,nativeScriptedChest,nativeChestAnimation,nativeToggleObject} from '../exploration/native_map_chests.mjs';
 import {nativeMapMechanism} from '../exploration/native_map_mechanisms.mjs';
-import {supplementalPartyCommands} from '../party/party_skill_corrections.mjs';
+import {correctPartySkill,supplementalPartyCommands} from '../party/party_skill_corrections.mjs';
 import {compileNativeTriggerFlow} from '../story/story_flow_compiler.mjs';
 import {nativeAnmObjectTarget} from '../story/native_anm_commands.mjs';
 import {compileNativeSequence,directSequence} from '../battle/skill_sequence.mjs';
@@ -169,7 +169,7 @@ export function validateContentDependencies(content,data){
   for(const row of lifecycle.roles)need(row.source_chr===content.roles[row.id].source.path&&row.source_chr_sha256===content.roles[row.id].source.sha256,`${row.id} 生命周期来源不一致`);
   // A new source skill may reuse implemented effect handlers, never silently
   // acquire an unknown status just because its owner was registered.
-  for(const skill of [...Object.values(commands.skills),...Object.values(ai.roles).flatMap(role=>role.learned_indices.map(index=>role.skills[index]))]){
+  for(const skill of [...Object.values(commands.skills).map(correctPartySkill),...Object.values(ai.roles).flatMap(role=>role.learned_indices.map(index=>role.skills[index]))]){
     need(typeof skill.fixed_raw_hex==='string'&&/^[0-9a-f]{2106}$/.test(skill.fixed_raw_hex),'技能源记录缺失');
     validateNativeSkillStatus(skill,status);
     if(skill.battle_handler==='native-support')need(nativeSupportSkillSupported(skill),'辅助技能来源未覆盖已恢复处理器');

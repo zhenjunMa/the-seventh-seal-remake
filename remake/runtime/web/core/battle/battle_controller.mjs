@@ -1511,7 +1511,7 @@ export class BattleController {
     requireValue(
       itemCommand
         ? this.itemTargetAvailable(target, itemCommand.instance_id, player)
-        : revival || support
+        : revival || support || skill.battle_handler === 'combination'
           ? target && this.targetIdsForSkill(skill.id).includes(target.id)
           : target?.side === 'enemy' && target.hp.current > 0 && target.state_raw !== 11 && !target.escaped,
       '目标已经倒下、离场或阵营不匹配',
@@ -1896,6 +1896,7 @@ export class BattleController {
             native_return: support.native_return,
             mp_cost: source.mp_cost,
             supported: support.applied,
+            ...(support.applied && source.play_support_contact_effect ? {play_target_effect: true} : {}),
             hp_delta: support.hp_delta ?? 0,
             number_feedback: support.number_feedback ?? [],
             mp_delta: support.mp_delta ?? 0,

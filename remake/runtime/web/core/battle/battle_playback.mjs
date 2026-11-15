@@ -302,7 +302,10 @@ export class BattlePlayback {
           const hits=effect.unconditional&&step.command_raw===4?
             allocation?channel.carrier_targets.target_ids.map(target_id=>({target_id})):[channel.result]:
             effect.slot==='target'&&channel.result.group_results?channel.result.group_results:[channel.result];
-          for(const hit of hits){if(effect.slot==='target'&&!effect.unconditional&&(!(hit.target_id??channel.result.target_id)||!this._damaging(hit)))continue;
+          for(const hit of hits){
+            const hasTarget=Boolean(hit.target_id??channel.result.target_id);
+            const showContact=hit.play_target_effect===true||this._damaging(hit);
+            if(effect.slot==='target'&&!effect.unconditional&&!(hasTarget&&showContact))continue;
             channel.effects.push({...clone(effect),...(effect.unconditional&&step.command_raw===4?{logical_start:step.logical_frame,visited_frame:0}:{}),...(allocation?{slot:'target'}:{}),...(allocation||effect.slot==='target'?{target_id:hit.target_id??channel.result.target_id}:{}),...(step.duration_ms>0?{frame_ms:step.duration_ms}:{}),at:at-(channel.at??0)});}
         }
         const interval=(step.duration_ms??ms)*(channel.slow_record===step.plan_record_index?2:1);

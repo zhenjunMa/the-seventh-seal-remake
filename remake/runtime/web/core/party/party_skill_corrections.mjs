@@ -10,7 +10,17 @@ export function hasPartySkillTypeCorrection(skill){
   const sourceId=typeof skill.fixed_raw_hex==='string'?parseInt(skill.fixed_raw_hex.slice(0,2),16):skill.original_id_raw??skill.id;
   return id!==undefined&&sourceId===id;
 }
-export function correctPartySkillType(skill){
+export function correctPartySkill(skill){
+  if(skill.actor_id==='002'&&(skill.original_skill_index??skill.index)===42&&skill.fixed_raw_hex?.startsWith('46')){
+    // 碎冰拳的说明和友方状态块均指向解冻，原记录的类别和阵营字段有误。
+    const bytes=Uint8Array.from(skill.fixed_raw_hex.match(/../g),value=>parseInt(value,16));
+    bytes[0x25]=1;
+    bytes[0x32]=(bytes[0x32]&0xf0)|3;
+    const flags=new DataView(bytes.buffer).getUint32(0x32,true);
+    return {...skill,fixed_raw_hex:Array.from(bytes,value=>value.toString(16).padStart(2,'0')).join(''),
+      type_raw:3,type_flags_u32_0x32:flags,target_side_raw:1,battle_handler:'native-support',
+      play_support_contact_effect:true};
+  }
   if(!hasPartySkillTypeCorrection(skill))return skill;
   const flags=parseInt(skill.fixed_raw_hex.slice(0x32*2,0x33*2),16);
   if((flags&15)!==0)return skill;

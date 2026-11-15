@@ -268,7 +268,7 @@ test('110-115 actual source attributes receive normal/guard/dodge contacts, reac
     const guarded=await act('kai_mieyan',0);assert.ok(guarded.some(row=>row.result.reaction===1),String(id));
     assert.ok(guarded.every(row=>row.result.reaction_descriptor===null));
     assert.equal(Buffer.from(target.current_skill.fixed_raw_hex,'hex')[0],0);assert.equal(target.native_active,false);
-    const dodged=await act('002_42',50);assert.ok(dodged.some(row=>row.result.reaction===2),String(id));
+    const dodged=await act('kai_mieyan',99);assert.ok(dodged.some(row=>row.result.reaction===2),String(id));
     assert.equal(target.current_target_id,attacker.id);assert.equal(Buffer.from(target.current_skill.fixed_raw_hex,'hex')[0],0);
     assert.equal(target.native_active,false);
     // Damage comes from unchanged source skills and normal99-level growth;
