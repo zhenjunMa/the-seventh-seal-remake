@@ -343,7 +343,10 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       objectBitmap:(scene,obj)=>objectBitmap(scene,obj,world,false)},options);
   }
   function commitView(scene,at,reason) {
-    if(scene!==gaitScene&&reason!=='boot')state.mapNameNoticeView?.show(scene.data.name||scene.data.id);
+    if(scene!==gaitScene&&reason!=='boot'){
+      if(scene.data.name)state.mapNameNoticeView?.show(scene.data.name);
+      else state.mapNameNoticeView?.close();
+    }
     motionState.reset();state.view.collisionFeedback=null;gaitScene=scene;gaitRole=state.selectedRole;
     state.view.action=0;state.view.frame=0;state.view.follow=true;state.view.zoom=1;
     Object.assign(state.view,openingCamera(at,scene.bitmap.width,scene.bitmap.height));
