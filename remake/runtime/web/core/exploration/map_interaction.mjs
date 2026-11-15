@@ -67,6 +67,13 @@ export function mapInteractionDirection(actor, target) {
   return nativeConversationDirection(actor, target);
 }
 
+export function mapConversationFacing(actor, target) {
+  const dx = target.x - actor.x, dy = target.y - actor.y;
+  if (dx === 0 && dy === 0) return null;
+  // Pose 1 faces right. Increasing indices turn counterclockwise on screen.
+  return (Math.round(Math.atan2(-dy, dx) / (Math.PI / 4)) + 9) % 8;
+}
+
 // GAME.exe 483D40/486410 opens the talk when both grid axes are within two
 // cells. Find a reachable point on that ring using the remake's swept feet.
 export function mapConversationRoute(map, from, target, obstacles, storyTriggers = []) {

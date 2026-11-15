@@ -36,10 +36,24 @@ const playerGroundAnchors = {
   '006': {x:80,y:144},
 };
 
+function playerSourceAnchor(role) {
+  return {x:role.anchor?.x??role.anchor_raw?.[0]??0,y:role.anchor?.y??role.anchor_raw?.[1]??0};
+}
+
 export function playerMapDrawOffset(role) {
   const ground=playerGroundAnchors[role.id];
-  return ground?{x:-ground.x,y:-ground.y}:
-    role.map_draw_offset??{x:16-(role.anchor?.x??role.anchor_raw?.[0]??0),y:-(role.anchor?.y??role.anchor_raw?.[1]??0)};
+  if(ground)return {x:-ground.x,y:-ground.y};
+  const anchor=playerSourceAnchor(role);
+  return role.map_draw_offset??{x:16-anchor.x,y:-anchor.y};
+}
+
+export function playerMapDrawAnchor(position,role) {
+  const anchor=playerSourceAnchor(role),offset=playerMapDrawOffset(role);
+  return {x:position.x+offset.x+anchor.x,y:position.y+offset.y+anchor.y};
+}
+
+export function npcMapDrawAnchor(position) {
+  return {x:position.x+16,y:position.y};
 }
 
 // Shared source geometry for the live Phaser scene and read-only save previews.
@@ -62,6 +76,7 @@ export function mapPresentation({scene,world,role,action,view,
   for(const [npcIndex,npc]of (opening?[]:scene.npcs).entries()){
     const motion=npc.motion,actorRole=motion?.role,actorAction=actorRole?.actions.find(a=>a.index===motion.action);
     const position=mapActorPosition(npc);
+    const anchor=npcMapDrawAnchor(position);
     const bitmap=actorAction?.bitmap??npc.bitmap;
     if(!bitmap||!mapNpcVisible(npc,scene.data,world))continue;
     const resource=actorAction?.bitmap?{frame_width:actorRole.frame_width,frame_height:actorRole.frame_height,
@@ -72,7 +87,7 @@ export function mapPresentation({scene,world,role,action,view,
         shadow:actorAction?.bitmap?actorAction.shadow_bitmap:npc.shadow_bitmap,
         shadow_geometry:actorAction?.bitmap?actorAction.shadow_geometry:resource.shadow_geometry,
         sx:frame*resource.frame_width,sy:position.direction*resource.frame_height,
-        width:resource.frame_width,height:resource.frame_height,x:position.x+16-resource.anchor_x,y:position.y-resource.anchor_y}});
+        width:resource.frame_width,height:resource.frame_height,x:anchor.x-resource.anchor_x,y:anchor.y-resource.anchor_y}});
   }
   if(opening)queue.push(...openingQueue);
   else {

@@ -15,8 +15,8 @@ import {anmActorSlots} from "../core/story/anm_runtime.mjs";
 import {chapterRouteExits,nativeEmptyEventCells} from "../core/exploration/map_connections.mjs";
 import {DistanceGait,MapLocomotion,mapTravelDistance,playerMapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
 
-import {mapPresentation,mapViewport,mapPoseBounds,mapNpcVisible} from '../core/ui/map_presentation.mjs';
-import {mapWorldPoint,mapTargetInFront,pickMapDialogueObject,pickMapNpc,pickMapConversationTarget,mapConversationRoute,mapInteractionDirection} from '../core/exploration/map_interaction.mjs';
+import {mapPresentation,mapViewport,mapPoseBounds,mapNpcVisible,playerMapDrawAnchor,npcMapDrawAnchor} from '../core/ui/map_presentation.mjs';
+import {mapWorldPoint,mapTargetInFront,pickMapDialogueObject,pickMapNpc,pickMapConversationTarget,mapConversationRoute,mapConversationFacing} from '../core/exploration/map_interaction.mjs';
 import {playbackFrame} from '../core/story/story_playback.mjs';
 
 import {createExplorationPresentation} from './presentation_handoff.mjs';
@@ -246,8 +246,8 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     const visiblePoses=new Set();
     const inView=(npc,resource)=>{
       if(!visible||!mapNpcVisible(npc,data,world))return false;
-      const {x,y}=mapActorPosition(npc);
-      return visible(mapPoseBounds({x:x+16-resource.anchor_x,y:y-resource.anchor_y,
+      const {x,y}=npcMapDrawAnchor(mapActorPosition(npc));
+      return visible(mapPoseBounds({x:x-resource.anchor_x,y:y-resource.anchor_y,
         width:resource.frame_width,height:resource.frame_height,shadow_geometry:resource.shadow_geometry}));
     };
     for(const npc of eventNpcs){
@@ -457,10 +457,13 @@ export function createMapController({state, actions, $, canvas, ctx}) {
           start=world.location;
         }
       }
-      const at=world.location,target=mapActorPosition(npc);
-      world.setPosition(at.x,at.y,mapInteractionDirection(at,target));
-      const direction=mapInteractionDirection(target,at);
-      if(Number.isInteger(direction)&&!scene.npcRuntime?.face(npc.id,direction))npc.direction=direction;
+      const at=world.location;
+      const direction=mapConversationFacing(playerMapDrawAnchor(at,role()),npcMapDrawAnchor(mapActorPosition(npc)));
+      if(direction!==null){
+        world.setPosition(at.x,at.y,direction);
+        const opposite=(direction+4)%8;
+        if(!scene.npcRuntime?.face(npc.id,opposite))npc.direction=opposite;
+      }
       return true;
     }finally{
       if(state.scenes.current===scene&&state.world===world){
