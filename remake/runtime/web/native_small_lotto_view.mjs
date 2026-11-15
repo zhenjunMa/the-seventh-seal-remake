@@ -176,15 +176,17 @@ export class NativeSmallLottoView{
   key(key,repeat=false){
     if(this.disposed)return false;
     if(this.isSuspended())return true;
-    if(key==='ArrowUp'||key==='ArrowDown'){
-      if(this.phase==='rules')this.setPoint(key==='ArrowUp'?[493,395]:[413,395]);
-      else if(this.phase==='continue')this.setPoint(key==='ArrowUp'?[361,286]:[281,286]);
-      else if(this.phase==='spin')this.setPoint(key==='ArrowUp'?[553,349]:[487,411]);
+    const selectUp=key==='ArrowUp'||key==='ArrowRight';
+    const selectDown=key==='ArrowDown'||key==='ArrowLeft';
+    if(selectUp||selectDown){
+      if(this.phase==='rules')this.setPoint(selectUp?[493,395]:[413,395]);
+      else if(this.phase==='continue')this.setPoint(selectUp?[361,286]:[281,286]);
+      else if(this.phase==='spin')this.setPoint(selectUp?[553,349]:[487,411]);
       return true;
     }
     if(key==='Enter'||key===' '){if(!repeat)this.down(this.surface.pointer);return true;}
     // Escape was not mapped in the original mini-game message table.
-    return ['Escape','Tab','ArrowLeft','ArrowRight'].includes(key);
+    return key==='Escape'||key==='Tab';
   }
   dispose(){
     if(this.disposed)return;this.disposed=true;

@@ -1,13 +1,15 @@
 // NumberDisc: 4DBE90/4DCF90/4DFF50. The six digits are chosen with the
 // original disc, never a browser text field or a second confirmation dialog.
-import {NativeCasinoFrame,nativeRectContains} from './native_casino_frame.mjs';
+import {NativeCasinoFrame,nativeNamedFrame,nativeRectContains} from './native_casino_frame.mjs';
 import {STATUE_CONTROLS} from './native_statue_view.mjs';
 import {setImageSource} from './core/ui/image_dom.mjs';
 
 export class NativeCodeView{
   constructor({root,manifest,isSuspended=()=>false,onSubmit,onClose,onSound=()=>{},onStopSound=()=>{}}){
-    if(manifest.disc?.length!==30||manifest.numbers?.length!==11)throw new Error('兑换数字符盘原素材不完整');
-    Object.assign(this,{manifest,isSuspended,onSubmit,onClose,onSound,onStopSound});
+    // The original loader looks up 0.bmp through 10.bmp by name; 10.bmp is the empty slot.
+    const numberImages=Array.from({length:11},(_,digit)=>nativeNamedFrame(manifest.numbers??[],`${digit}.bmp`)?.image);
+    if(manifest.disc?.length!==30||numberImages.some(image=>!image))throw new Error('兑换数字符盘原素材不完整');
+    Object.assign(this,{manifest,numberImages,isSuspended,onSubmit,onClose,onSound,onStopSound});
     this.symbols=[10,-1,-1,-1,-1,-1];this.selected=0;this.frame=0;this.target=0;
     this.direction=0;this.keyboardIndex=4;this.blink=true;this.blinkCount=0;this.heldMs=0;this.held=false;this.pending=false;
     this.surface=new NativeCasinoFrame({root,title:'赌场数字符盘',cursor:manifest.cursor,isSuspended,
@@ -50,7 +52,7 @@ export class NativeCodeView{
     setImageSource(this.disc,this.manifest.disc[this.frame].image);this.disc.alt=`当前数字 ${Math.trunc(this.target/3)}`;
     this.slots.forEach((image,i)=>{
       const digit=this.symbols[i];image.hidden=digit<0||i===this.selected&&!this.blink;
-      if(digit>=0)setImageSource(image,this.manifest.numbers[digit].image);
+      if(digit>=0)setImageSource(image,this.numberImages[digit]);
       image.alt=`兑换码第${i+1}位，${digit<0||digit===10?'空白':digit}${i===this.selected?'，当前输入位':''}`;
     });
   }
@@ -76,8 +78,10 @@ export class NativeCodeView{
   resume(){this.pending=false;}
   key(key,repeat=false){
     if(this.disposed)return false;if(this.isSuspended()||this.pending)return true;
-    if(key==='ArrowUp'||key==='ArrowDown'){
-      this.keyboardIndex=Math.max(0,Math.min(6,this.keyboardIndex+(key==='ArrowUp'?-1:1)));
+    const selectUp=key==='ArrowUp'||key==='ArrowRight';
+    const selectDown=key==='ArrowDown'||key==='ArrowLeft';
+    if(selectUp||selectDown){
+      this.keyboardIndex=Math.max(0,Math.min(6,this.keyboardIndex+(selectUp?-1:1)));
       this.surface.setPointer(STATUE_CONTROLS[this.keyboardIndex].center);
     }else if((key==='Enter'||key===' ')&&!repeat)this.activate(this.surface.pointer);
     return true;
