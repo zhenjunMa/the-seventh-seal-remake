@@ -1,0 +1,49 @@
+remake/runtime/tools/export_audio.py
+  s_4a1329b9b760af::t_f32ef8ba528f97 28,54,56,63-65,360
+remake/runtime/web/controllers/services.mjs
+  s_4a1329b9b760af::t_72d4bb87be3aee 43-48
+remake/runtime/tools/export_media.py
+  s_4a1329b9b760af::t_621cc06b52c1c1 471-475
+remake/runtime/tools/build_runtime.py
+  s_4a1329b9b760af::t_f32ef8ba528f97 102,354
+remake/runtime/tools/export_map_ambience.py
+  s_4a1329b9b760af::t_fc2c98612bd544 1-3,5-9,11-16,18-43,45-59,63-74,94-104
+  s_4a1329b9b760af::t_c9ce87fb2811a5 4,10,17,44,60-62,75-93
+remake/runtime/tools/data_recipes.py
+  s_4a1329b9b760af::t_621cc06b52c1c1 7,19,35-39,127-128,218-228,236
+remake/runtime/web/core/resources/audio.mjs
+  s_4a1329b9b760af::t_3b13f5cb1cfc85 202,205-207,212-226,228-230,236-250,254-262,268-281,316-318,340-342,344-346
+  s_4a1329b9b760af::t_a5d9285558a532 11-17,19-51,76-77,99-100,111-113,115-116,118,164,166-169,181
+  s_4a1329b9b760af::t_c9ce87fb2811a5 18,263-267
+remake/runtime/web/controllers/map.mjs
+  s_4a1329b9b760af::t_72d4bb87be3aee 685-689
+remake/runtime/tools/refresh_audio_map_bindings.py
+  s_4a1329b9b760af::t_f32ef8ba528f97 12,165
+README.md
+  s_4a1329b9b760af::t_d78d320a503398 80-81
+remake/runtime/web/controllers/boot.mjs
+  s_4a1329b9b760af::t_72d4bb87be3aee 107-108,110
+remake/runtime/tools/export_data_recipes.py
+  s_4a1329b9b760af::t_621cc06b52c1c1 15,254,282-283
+remake/runtime/tools/tool_index.json
+  s_4a1329b9b760af::t_d78d320a503398 127,555-564,790,989,1241,1244
+remake/runtime/tools/media_definitions.py
+  s_4a1329b9b760af::t_621cc06b52c1c1 71,74,86-88,92,94-96,98
+  s_4a1329b9b760af::t_c9ce87fb2811a5 93,97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "901cba86d6220159a5421d497d7e701a04d30181",
+  "prompts": {},
+  "sessions": {
+    "s_4a1329b9b760af": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1de0b-1c82-70b1-9412-026a4f0df8a6",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
