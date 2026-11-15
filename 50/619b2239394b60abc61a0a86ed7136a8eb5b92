@@ -1,0 +1,45 @@
+remake/runtime/web/data/runtime_content.mjs
+  s_2c817dabd62d45::t_dd9ab7d1dc10f7 308,8377
+remake/runtime/web/core/battle/battle_playback.mjs
+  s_2c817dabd62d45::t_d0ef5f2ddec733 305-308
+remake/runtime/web/core/battle/battle_skill_access.mjs
+  s_2c817dabd62d45::t_c0c91e1543b4da 7,27,37,39,56
+remake/runtime/web/core/party/party_skill_corrections.mjs
+  s_2c817dabd62d45::t_13cb60d67361b1 13,15-23
+  s_2c817dabd62d45::t_d0ef5f2ddec733 14
+remake/runtime/web/core/battle/battle_controller.mjs
+  s_2c817dabd62d45::t_d0ef5f2ddec733 1514,1899
+remake/runtime/tests/test_seal_battle_rewards.mjs
+  s_2c817dabd62d45::t_07a804739bea1b 271
+remake/runtime/web/core/battle/battle_skill_growth.mjs
+  s_2c817dabd62d45::t_c0c91e1543b4da 5,114,124
+remake/runtime/web/data/runtime_content.json
+  s_2c817dabd62d45::t_c0c91e1543b4da 235
+remake/runtime/web/party_sample.mjs
+  s_2c817dabd62d45::t_c0c91e1543b4da 8,36
+  s_2c817dabd62d45::t_36b081b2c96731 25,27
+remake/runtime/web/core/content/content_dependencies.mjs
+  s_2c817dabd62d45::t_13cb60d67361b1 15
+  s_2c817dabd62d45::t_beaa1827fe9e5d 172
+remake/runtime/web/battle_view.mjs
+  s_2c817dabd62d45::t_9e93c5d5a7d408 1024-1026,1028
+  s_2c817dabd62d45::t_aaefe14298055c 1020-1023,1027
+remake/runtime/tools/export_party_skills.py
+  s_2c817dabd62d45::t_beaa1827fe9e5d 447-451
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "50619b2239394b60abc61a0a86ed7136a8eb5b92",
+  "prompts": {},
+  "sessions": {
+    "s_2c817dabd62d45": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1dd69-7af5-7451-8d37-4e43cc514fb7",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
