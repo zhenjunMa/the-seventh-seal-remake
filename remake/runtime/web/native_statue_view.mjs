@@ -13,9 +13,13 @@ export const STATUE_CONTROLS=Object.freeze([
 ]);
 const inside=(x,y,[left,top,right,bottom])=>x>left&&x<right&&y>top&&y<bottom;
 export const statueControlAt=(x,y)=>STATUE_CONTROLS.findIndex(row=>inside(x,y,row.bounds));
-const f32step=Math.fround(0.2);
-export const nativeStatueState=()=>({symbols:[15,24,-1,-1,-1,13],selected:1,frame:0,target:0,
-  direction:0,held:false,heldMs:0,clueVisible:true,clueX:-600,blink:true,blinkCount:0,keyboardIndex:4});
+const DISC_FRAMES=72,FRAMES_PER_SYMBOL=3,TICKS_PER_FRAME=5;
+const wrapDiscFrame=frame=>((frame%DISC_FRAMES)+DISC_FRAMES)%DISC_FRAMES;
+const currentDiscFrame=state=>Math.floor(state.position/TICKS_PER_FRAME);
+const targetSymbol=state=>Math.floor(wrapDiscFrame(state.target)/FRAMES_PER_SYMBOL);
+// Keep positions unwrapped so quick taps can accumulate or cancel across frame zero.
+export const nativeStatueState=()=>({symbols:[15,24,-1,-1,-1,13],selected:1,position:0,target:0,
+  clueVisible:true,clueX:-600,blink:true,blinkCount:0,keyboardIndex:4});
 
 export function moveStatueSlot(state,step){
   if(state.symbols[state.selected]===24)state.symbols[state.selected]=-1;
@@ -23,39 +27,19 @@ export function moveStatueSlot(state,step){
   if(state.symbols[state.selected]===-1)state.symbols[state.selected]=24;
 }
 export function rotateStatue(state,direction){
-  state.target+=direction*3;
-  if(state.target>=72)state.target=0;
-  if(state.target<0)state.target=71;
-  state.direction=direction;state.held=true;state.heldMs=0;
+  state.target+=direction*FRAMES_PER_SYMBOL;
 }
-function stepDisc(state){
-  state.frame=Math.fround(state.frame+state.direction*f32step);
-  if(state.frame>=72)state.frame=0;
-  if(state.frame<0)state.frame=71;
-}
-export function releaseStatueRotation(state){
-  state.held=false;state.heldMs=0;
-  if(state.direction){
-    let remaining=400;
-    while(Math.trunc(state.frame)%3!==0&&remaining-->0)stepDisc(state);
-    state.target=Math.trunc(state.frame);state.direction=0;
-  }
-}
-export function tickStatue(state,elapsed){
+export function tickStatue(state){
   if(++state.blinkCount>50){state.blink=!state.blink;state.blinkCount=0;}
   state.clueX=state.clueVisible?Math.min(10,state.clueX+10):Math.max(-600,state.clueX-10);
-  if(state.held)state.heldMs+=Math.max(0,elapsed);
-  const continuous=state.held&&state.heldMs>500&&state.direction!==0;
-  if(state.direction&&(continuous||Math.trunc(state.frame)!==state.target))stepDisc(state);
-  if(continuous)state.target=Math.trunc(state.frame);
-  return {continuous};
+  state.position+=Math.sign(state.target*TICKS_PER_FRAME-state.position);
 }
 
 export class NativeStatueView{
-  constructor({root,manifest,statueIndex,isSuspended=()=>false,onSubmit,onClose,onSound=()=>{},onStopSound=()=>{}}){
-    if(!manifest?.disc||manifest.disc.length!==72||manifest.symbols?.length!==25||!manifest.questions?.[statueIndex-1])
+  constructor({root,manifest,statueIndex,isSuspended=()=>false,onSubmit,onClose,onSound=()=>{}}){
+    if(!manifest?.disc||manifest.disc.length!==DISC_FRAMES||manifest.symbols?.length!==25||!manifest.questions?.[statueIndex-1])
       throw new Error('神秘石像原素材不完整');
-    Object.assign(this,{root,manifest,statueIndex,isSuspended,onSubmit,onClose,onSound,onStopSound});
+    Object.assign(this,{root,manifest,statueIndex,isSuspended,onSubmit,onClose,onSound});
     this.state=nativeStatueState();this.disposed=false;this.pending=false;
     this.pointer=[508,386];this.pointerVisible=false;
     root.classList.add('native-statue-panel');root.hidden=false;
@@ -86,22 +70,12 @@ export class NativeStatueView{
       else if(event.button===0)this.activateAt(...this.pointer);
     },options);
     this.frameNode.addEventListener('contextmenu',event=>event.preventDefault(),options);
-    window.addEventListener('pointerup',event=>{if(event.button===0)this.release();},options);
-    window.addEventListener('keyup',()=>this.release(),options);
-    window.addEventListener('blur',()=>this.release(),options);
-    document.addEventListener('visibilitychange',()=>{if(document.hidden)this.release();},options);
     this.resize=new ResizeObserver(()=>this.fit());this.resize.observe(root);this.fit();this.paint();
     this.frameNode.focus({preventScroll:true});
-    let previous;
-    const draw=time=>{
+    const draw=()=>{
       if(this.disposed)return;
-      const delta=previous===undefined?0:Math.max(0,time-previous),elapsed=delta>250?0:delta;previous=time;
-      if(this.isSuspended()){
-        if(!this.suspended)this.onStopSound('roll');this.suspended=true;
-      }else if(!this.pending){
-        this.suspended=false;
-        const {continuous}=tickStatue(this.state,elapsed);
-        if(continuous)this.onSound('roll',{singleVoice:true,loop:true});
+      if(!this.isSuspended()&&!this.pending){
+        tickStatue(this.state);
         this.paint();
       }
       this.animation=requestAnimationFrame(draw);
@@ -139,8 +113,8 @@ export class NativeStatueView{
       image.hidden=symbol<0||i===state.selected&&!state.blink;
       if(symbol>=0)setImageSource(image,this.manifest.symbols[symbol].image);
     });
-    const index=Math.trunc(state.frame);setImageSource(this.disc,this.manifest.disc[index].image);
-    this.disc.alt=`当前古文字 ${Math.trunc(state.target/3)+1}`;
+    const index=wrapDiscFrame(currentDiscFrame(state));setImageSource(this.disc,this.manifest.disc[index].image);
+    this.disc.alt=`当前古文字 ${targetSymbol(state)+1}`;
     this.clue.style.left=`${state.clueX}px`;this.clueButton.setAttribute('aria-pressed',String(state.clueVisible));
     this.paintPointer();
   }
@@ -155,7 +129,7 @@ export class NativeStatueView{
     if(index===1||index===2)moveStatueSlot(this.state,index===1?1:-1);
     else if(index===3)this.state.symbols[this.state.selected]=24;
     else if(index===4){
-      this.state.symbols[this.state.selected]=Math.trunc(this.state.target/3);
+      this.state.symbols[this.state.selected]=targetSymbol(this.state);
       this.state.selected=Math.min(5,this.state.selected+1);
       if(this.state.symbols[this.state.selected]===-1)this.state.symbols[this.state.selected]=24;
       if(this.state.symbols.every(symbol=>symbol!==-1)){
@@ -165,10 +139,6 @@ export class NativeStatueView{
     if(!this.disposed)this.paint();
   }
   resume(){this.pending=false;}
-  release(){
-    if(this.disposed)return;
-    releaseStatueRotation(this.state);this.onStopSound('roll');this.paint();
-  }
   key(key,repeat=false){
     if(this.disposed)return false;
     if(this.isSuspended()||this.pending)return true;
@@ -185,6 +155,6 @@ export class NativeStatueView{
   }
   dispose(){
     if(this.disposed)return;this.disposed=true;cancelAnimationFrame(this.animation);
-    this.listeners.abort();this.resize.disconnect();this.onStopSound('roll');this.root.replaceChildren();this.root.hidden=true;
+    this.listeners.abort();this.resize.disconnect();this.root.replaceChildren();this.root.hidden=true;
   }
 }

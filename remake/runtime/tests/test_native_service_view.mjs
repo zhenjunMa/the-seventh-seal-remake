@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {NativeServiceView} from '../web/native_service_view.mjs';
-import {NativeStatueView,nativeStatueState,moveStatueSlot,rotateStatue,releaseStatueRotation,tickStatue,statueControlAt} from '../web/native_statue_view.mjs';
+import {NativeStatueView,nativeStatueState,moveStatueSlot,rotateStatue,tickStatue,statueControlAt} from '../web/native_statue_view.mjs';
 
 function service(){
   const view=Object.create(NativeServiceView.prototype),events=[];
@@ -46,13 +46,16 @@ test('native WordDisc keeps its prefills, white-point cursor and render-count an
   const state=nativeStatueState();assert.deepEqual(state.symbols,[15,24,-1,-1,-1,13]);assert.equal(state.selected,1);
   moveStatueSlot(state,1);assert.deepEqual(state.symbols,[15,-1,24,-1,-1,13]);
   moveStatueSlot(state,-1);assert.deepEqual(state.symbols,[15,24,-1,-1,-1,13]);
-  for(let i=0;i<51;i++)tickStatue(state,16);
+  for(let i=0;i<51;i++)tickStatue(state);
   assert.equal(state.blink,false);assert.equal(state.clueX,-90);
-  for(let i=0;i<10;i++)tickStatue(state,16);assert.equal(state.clueX,10);
-  rotateStatue(state,1);for(let i=0;i<10;i++)tickStatue(state,16);releaseStatueRotation(state);
-  assert.equal(state.target,3);assert.equal(Math.trunc(state.frame),3);
-  const reverse=nativeStatueState();rotateStatue(reverse,-1);assert.equal(reverse.target,71);
-  tickStatue(reverse,16);releaseStatueRotation(reverse);assert.equal(reverse.target,69);
+  for(let i=0;i<10;i++)tickStatue(state);assert.equal(state.clueX,10);
+  rotateStatue(state,1);assert.equal(state.target,3);
+  for(let i=0;i<60;i++)tickStatue(state);
+  assert.equal(state.position,15);
+  const reverse=nativeStatueState();rotateStatue(reverse,-1);
+  assert.equal(reverse.target,-3);
+  for(let i=0;i<60;i++)tickStatue(reverse);
+  assert.equal(reverse.position,-15);
 });
 
 test('native WordDisc hides the clue with Escape, gates main buttons and checks on insertion without an OK button',()=>{

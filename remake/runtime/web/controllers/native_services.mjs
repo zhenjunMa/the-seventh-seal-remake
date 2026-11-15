@@ -203,7 +203,7 @@ export function createNativeServicesController({state,actions,$,canvas}){
     const root=document.createElement('div');$('screen').append(root);
     const options={definitions:state.itemData.definitions,sourceHashes:state.itemData.source_hashes,mapId,recordId:record.id};
     const clips={click:'sound/WordDisc/click.wav',rotateClick:'sound/WordDisc/RollClick.wav',
-      page:'sound/WordDisc/Page.wav',roll:'sound/WordDisc/Roll.wav'};
+      page:'sound/WordDisc/Page.wav'};
     let closed=false,statueView;
     return new Promise((resolve,reject)=>{
       const closeView=()=>{
@@ -219,11 +219,11 @@ export function createNativeServicesController({state,actions,$,canvas}){
       try{
         statueView=new NativeStatueView({root,manifest:manifest.special.statue,statueIndex:service.index,
           isSuspended:()=>Boolean(state.engine?.paused||playback?.paused),
-          onSound:(name,settings)=>{
-            if(name!=='roll')state.audio?.stopClip(clips[name]);
-            return state.audio?.playClip(clips[name],null,settings);
+          onSound:name=>{
+            state.audio?.stopClip(clips[name]);
+            return state.audio?.playClip(clips[name],null);
           },
-          onStopSound:name=>state.audio?.stopClip(clips[name]),onClose:()=>finish(),
+          onClose:()=>finish(),
           onSubmit:async({symbols})=>{
             try{
               signal?.throwIfAborted();playback?.check();
