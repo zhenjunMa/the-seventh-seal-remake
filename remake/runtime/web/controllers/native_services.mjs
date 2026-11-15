@@ -18,6 +18,9 @@ export function createNativeServicesController({state,actions,$,canvas}){
       service.goods.some(id=>catalog[id].type===2)?'equipment':'items',filterIndex:0,selected:null,message:'',clearInfo:false};
     const manifest=await actions.json('data/native_services.json');
     const operationMenu=state.operationMenu;
+    const itemDetails=item=>({name:item.name,description:item.description,
+      owned:nativeOwnedQuantity(draft,item.id),
+      card:operationMenu?.manifest?operationItemCard(item,operationMenu.manifest):null});
     if(playback?.paused)await playback.ready();signal?.throwIfAborted();
     const root=document.createElement('div');$('screen').append(root);
     return new Promise((resolve,reject)=>{
@@ -27,9 +30,8 @@ export function createNativeServicesController({state,actions,$,canvas}){
         const rows=nativeServiceRows(service,draft,catalog,selection);
         const selected=rows.find(row=>row.id===selection.selected)??rows[0];selection.selected=selected?.id??null;
         const item=selected?catalog[selected.item_id]:null;
-        const details=item?{name:item.name,description:item.description,owned:nativeOwnedQuantity(draft,item.id),
-          card:operationMenu?.manifest?operationItemCard(item,operationMenu.manifest):null,
-          materials:item.ingredients.map(id=>({name:catalog[id].name,quantity:1,owned:nativeOwnedQuantity(draft,id)}))}:{};
+        const details=item?itemDetails(item):{};
+        if(item&&['forge','synthesize'].includes(selection.mode))details.materials=item.ingredients.map(id=>itemDetails(catalog[id]));
         view.show({...selection,title:table.name||mapId,allowedModes:service.allowedModes,money:draft.money,rows,details});
       };
       view=new NativeServiceView({root,manifest,textRenderer:operationMenu?.textRenderer,

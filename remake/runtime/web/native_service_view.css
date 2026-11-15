@@ -19,4 +19,6 @@
 .native-service-control:focus-visible{outline:1px solid #d7b36e;outline-offset:1px}
 .native-service-unavailable{background:rgba(0,0,0,.7)}
 .native-service-popup{position:absolute;inset:0;z-index:3;background:rgba(0,0,0,.55)}
-.native-service-trade-popup{background:transparent}
+.native-service-trade-popup,.native-service-recipe-popup{background:transparent}
+/* Fill the translucent interior of the confirmation art without covering its frame. */
+.native-service-craft-confirmation::before{content:"";position:absolute;left:197px;top:181px;width:245px;height:115px;background:#000}

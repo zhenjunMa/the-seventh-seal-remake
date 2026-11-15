@@ -46,8 +46,12 @@ export function nativeEconomyCatalog(data){
   }));
 }
 
+function nativeBagQuantity(world,id){
+  return world.inventory.reduce((total,row)=>total+(row.id===id?row.quantity:0),0);
+}
+
 export function nativeOwnedQuantity(world,id){
-  let total=world.inventory.filter(row=>row.id===id).reduce((n,row)=>n+row.quantity,0);
+  let total=nativeBagQuantity(world,id);
   for(const role of allPartyRoles(world)){
     const worn=world.equipment?.roles?.[role.id];
     total+=(worn??world.source.initial_equipment?.filter(row=>row.role_id===role.id)??[])
@@ -74,7 +78,7 @@ export function nativeServiceRows(service,world,catalog,{mode,category='items',f
       recipeCategory==='crystal'&&catalog[id].type===3&&catalog[id].subtype===1||
       recipeCategory==='material'&&catalog[id].type===3&&catalog[id].subtype===2);
   return ids.filter(id=>mode!=='buy'||categoryMatches(catalog[id])).map(id=>{
-    const item=catalog[id],owned=nativeOwnedQuantity(world,id);
+    const item=catalog[id],owned=mode==='buy'?nativeOwnedQuantity(world,id):nativeBagQuantity(world,id);
     return {id,item_id:id,name:item.name,quantity:owned,price:mode==='buy'?item.price:0,
       enabled:mode==='buy'?item.price<=world.money&&owned<99:recipeCategory==='all'?false:
         item.ingredients.every(component=>nativeOwnedQuantity(world,component)>0)};

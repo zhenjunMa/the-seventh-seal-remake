@@ -10,6 +10,11 @@ const sidebarOptions=[
   {widget:'03',label:'武器锻造',modes:['forge']},
   {widget:'04',label:'物件合成',modes:['synthesize']},
 ];
+const craftCommands={
+  forge:[{id:'weapon',label:'锻造'},{id:'crystal',label:'强化'}],
+  synthesize:[{id:'material',label:'合成'},{id:'all',label:'列表'}],
+};
+const exitCommand={id:'exit',label:'离开'};
 const regularFont='simsun19_text',compactFont='simsun12_text';
 // Keep shop glyphs alongside the DOM artwork so the confirmation panel
 // covers the list and its text together.
@@ -83,9 +88,10 @@ export class NativeServiceView{
   }
   enabledSidebarOptions(){return sidebarOptions.filter(option=>option.modes.some(mode=>this.allowedModes.includes(mode)));}
   tradeCommands(){return ['buy','sell'].filter(mode=>this.allowedModes.includes(mode)).concat('exit');}
+  craftCommands(){return [...craftCommands[this.state.mode],exitCommand];}
   focusTrade(target){
     this.tradeFocus=target;
-    this.tradeCommand=target==='header'?this.state.mode:null;
+    this.tradeCommand=target==='header'?(this.trading?this.state.mode:this.state.category):null;
     this.paint();
   }
   switchTradeCategory(category){
@@ -94,7 +100,7 @@ export class NativeServiceView{
     this.changeCategory(category);
   }
   sidebarKey(key,repeat){
-    if((key==='Enter'||key===' ')&&!repeat)this.focusTrade(this.trading?'header':'list');
+    if((key==='Enter'||key===' ')&&!repeat)this.focusTrade('header');
     if(key==='ArrowUp'||key==='ArrowDown'){
       const enabled=this.enabledSidebarOptions();
       const current=enabled.findIndex(option=>this.currentSidebarOption(option)),step=key==='ArrowUp'?-1:1;
@@ -112,6 +118,7 @@ export class NativeServiceView{
     const state=this.state,rows=state.rows??[],mode=state.mode??'buy',allowed=this.allowedModes;
     this.index=Math.max(0,rows.findIndex(row=>row.id===state.selected));
     const selected=rows[this.index],main=this.menus.get('boss_main'),o=this.manifest.origins.listing;
+    const crafting=!this.trading;
     this.frame.replaceChildren();this.image(main.images[0].image);
     this.frame.setAttribute('aria-label',`${state.title??'城镇服务'} · ${labels[mode]}`);
     const enabledOptions=this.enabledSidebarOptions();
@@ -120,7 +127,11 @@ export class NativeServiceView{
       const current=enabled&&this.currentSidebarOption(option);
       const button=this.control(main,this.widget(main,option.widget),option.label,()=>{
         if(option.category)this.switchTradeCategory(option.category);
-        else{this.tradeFocus='list';this.changeMode(option.modes[0]);}
+        else if(mode===option.modes[0])this.focusTrade('header');
+        else{
+          this.tradeFocus='header';this.tradeCommand=craftCommands[option.modes[0]][0].id;
+          this.changeMode(option.modes[0]);
+        }
       },{selected:current,disabled:!enabled,menuSelection:true});
       button.setAttribute('aria-pressed',String(current));
     }
@@ -130,7 +141,7 @@ export class NativeServiceView{
     this.text(String(state.money??0).padStart(8,'0'),{...gold.rect,top:gold.draw_point_raw.y,right:639},this.frame,
       {font:'simsun20',foreground:'#ffff24',shadow:'#313100'});
     const header=this.menus.get(mode==='forge'?'boss_text_02':mode==='synthesize'?'boss_text_03':'boss_text_01');this.image(header.images[0].image);
-    const command=this.tradeFocus==='category'?null:this.tradeFocus==='header'?this.tradeCommand:mode;
+    const command=this.tradeFocus==='category'?null:this.tradeFocus==='header'?this.tradeCommand:crafting?state.category:mode;
     if(this.trading){
       for(const [index,value]of ['buy','sell'].entries())if(allowed.includes(value)){
         const button=this.control(header,this.widget(header,String(index+1).padStart(2,'0')),labels[value],()=>this.enterTrade(value),
@@ -138,10 +149,11 @@ export class NativeServiceView{
         button.setAttribute('aria-pressed',String(command===value));
       }
     }else{
-      const categories=mode==='forge'?['weapon','crystal']:['material','all'];
-      for(const [index,category]of categories.entries())this.control(header,this.widget(header,String(index+1).padStart(2,'0')),category==='weapon'?'锻造武器':category==='crystal'?'强化水晶':category==='material'?'合成材料':'配方列表',()=>{
-        this.confirming=false;this.offset=0;this.onAction({type:'category',category});
-      },{selected:category===state.category,menuSelection:true});
+      for(const [index,{id,label}]of craftCommands[mode].entries()){
+        const button=this.control(header,this.widget(header,String(index+1).padStart(2,'0')),label,()=>this.enterCraft(id),
+          {selected:command===id,menuSelection:true});
+        button.setAttribute('aria-pressed',String(command===id));
+      }
     }
     this.control(header,this.widget(header,'03'),'离开',()=>this.close(),{selected:command==='exit'});
     const listing=this.menus.get(state.category==='equipment'||mode==='forge'||mode==='synthesize'?'boss_buy_02':'boss_buy_01');this.image(listing.images[0].image,o.x,o.y);
@@ -157,18 +169,21 @@ export class NativeServiceView{
         button.title=filter.label;
       }
     }
-    const slots=listing.widgets.filter(widget=>/^LIST\d+$/i.test(widget.name));
+    // The materials panel replaces the product rows in this part of the screen.
+    const slots=this.materialsOpen?[]:listing.widgets.filter(widget=>/^LIST\d+$/i.test(widget.name));
     const selling=mode==='sell';
     for(const [index,widget]of slots.entries()){
       const row=rows[this.offset+index];if(!row)continue;
-      const current=row.id===selected?.id&&(!this.trading||this.tradeFocus==='list');
-      // Both native sell lists use "%sx%d" for stacks larger than one.
-      const name=selling&&row.quantity>1?`${row.name}x${row.quantity}`:row.name;
-      const button=this.control(listing,widget,`${name}，${row.price??0}库伦`,()=>{
-        if(this.trading)this.tradeFocus='list';
-        if(current)this.openConfirmation();else this.select(this.offset+index);
+      const current=row.id===selected?.id&&this.tradeFocus==='list';
+      // 0x437FA0 appends the owned count for recipes and never draws a price.
+      const name=(selling&&row.quantity>1||crafting&&row.quantity>0)?`${row.name}x${row.quantity}`:row.name;
+      const button=this.control(listing,widget,crafting?name:`${name}，${row.price??0}库伦`,()=>{
+        this.tradeFocus='list';
+        if(state.category==='all')this.openMaterials(this.offset+index);
+        else if(current){if(crafting)this.openMaterials();else this.openConfirmation();}
+        else this.select(this.offset+index);
       },{...o,selected:current});this.rowButtons.push(button);
-      button.setAttribute('aria-disabled',String(row.enabled===false));
+      button.setAttribute('aria-disabled',String(!crafting&&row.enabled===false));
       const {left,top,right,bottom}=widget.rect,width=right-left+1,height=bottom-top+1;
       if(selling){
         const foreground=current?'#44ffff':'#ffffff',shadow=current?'#4f4f4f':'#4f4f00';
@@ -178,6 +193,9 @@ export class NativeServiceView{
           {font,lineHeight:22,foreground,shadow});
         this.text(row.price,{left:190,top:4,right:width-9,bottom:height-1},button,
           {font:'simsun18',lineHeight:18,foreground,shadow});
+      }else if(crafting){
+        this.text(name,{left:14,top:0,right:width-9,bottom:height-1},button,
+          {verticalAlign:'center',foreground:current?'#44ffff':'#eee'});
       }else{
         this.text(name,{left:14,top:0,right:183,bottom:height-1},button,
           {verticalAlign:'center',foreground:row.enabled===false?'#8a8278':'#eee'});
@@ -187,11 +205,12 @@ export class NativeServiceView{
     }
     for(const [name,step]of [['up',-9],['dn',9]])this.control(listing,this.widget(listing,name),step<0?'上一页':'下一页',()=>{
       if(rows.length){
-        if(this.trading)this.tradeFocus='list';
+        this.tradeFocus='list';
         this.moveRow(step);
       }
     },o);
-    const details=(!this.trading||this.tradeFocus==='list')?state.details??{}:{};
+    const details=this.materialsOpen?(state.details?.materials?.[this.materialIndex]??state.details??{}):
+      this.tradeFocus==='list'?(state.details??{}):{};
     // The native list renderer draws the selected ITM card at the PIC origin.
     const pic=this.widget(listing,'PIC').rect;
     if(details.card){
@@ -202,20 +221,44 @@ export class NativeServiceView{
     // Boss_Main widget 40007 receives the selected item's description.
     const info=this.widget(main,'INFO');
     const infoRect={...info.rect,top:info.draw_point_raw.y,bottom:479};
-    const crafting=mode==='forge'||mode==='synthesize';
-    const materials=crafting?(details.materials??[]).map(row=>`${row.name} ${row.owned??0}/${row.quantity}`).join('　'):'';
-    const infoText=state.clearInfo?'':state.message||[details.description,materials].filter(Boolean).join('\n');
+    const infoText=state.clearInfo?'':(this.materialsOpen?'':state.message)||details.description||'';
     this.text(infoText,infoRect,this.frame,crafting?{font:compactFont,lineHeight:13}:{font:'requested_black20_text'});
+    if(this.materialsOpen&&selected)this.paintMaterials(state.details);
     if(this.confirming&&selected)this.paintConfirmation(selected,mode);
+  }
+  paintMaterials({name,materials=[]}){
+    // 0x4394C0 places Boss_Buy_03 at (10,75); the material ITM card
+    // shares the product card origin. The panel stays open on missing items.
+    const menu=this.menus.get('boss_buy_03'),x=10,y=75;
+    const overlay=document.createElement('div');overlay.className='native-service-popup native-service-recipe-popup';
+    overlay.setAttribute('role','dialog');
+    overlay.setAttribute('aria-label',`${name} · 所需材料`);
+    this.frame.append(overlay);
+    this.image(menu.images[0].image,x,y,overlay);
+    const title=this.widget(menu,'NAME');
+    this.text(name,{left:x+title.draw_point_raw.x,top:y+title.rect.top,right:x+title.rect.right,bottom:y+title.rect.bottom},overlay,
+      {verticalAlign:'center'});
+    const slots=menu.widgets.filter(widget=>/^LIST\d+$/i.test(widget.name));
+    for(const [index,widget]of slots.entries()){
+      const material=materials[index];if(!material)continue;
+      const current=index===this.materialIndex,available=material.owned>0;
+      const button=this.control(menu,widget,`${material.name}${available?'':'（缺少）'}`,()=>{
+        if(current)this.openConfirmation();else this.selectMaterial(index);
+      },{x,y,selected:current},overlay);
+      this.text(material.name,{left:14,top:0,right:262,bottom:24},button,
+        {verticalAlign:'center',foreground:available?(current?'#44ffff':'#eee'):'#ff0f0f'});
+    }
+    for(const [id,step]of [['UP',-1],['DN',1]])this.control(menu,this.widget(menu,id),step<0?'上一项材料':'下一项材料',
+      ()=>this.selectMaterial(this.materialIndex+step),{x,y},overlay);
   }
   paintConfirmation(row,mode){
     const popup=document.createElement('div');popup.className='native-service-popup';this.frame.append(popup);
     if(mode==='forge'||mode==='synthesize'){
       const menu=this.menus.get('boss_buy_03a');this.image(menu.images[0].image,0,0,popup);
-      this.text(this.state.details?.name??row.name,{left:180,top:152,right:460,bottom:173},popup,
-        {align:'center',verticalAlign:'center'});
-      this.control(menu,this.widget(menu,'OK'),'确认合成',()=>this.confirm(),{},popup);
-      this.control(menu,this.widget(menu,'CANCEL'),'取消合成',()=>{this.confirming=false;this.paint();},{},popup);
+      popup.classList.add('native-service-recipe-popup','native-service-craft-confirmation');
+      popup.setAttribute('role','dialog');popup.setAttribute('aria-label','确认合成');
+      this.control(menu,this.widget(menu,'OK'),'确认合成',()=>this.confirm(),{selected:this.craftConfirm===0,menuSelection:true},popup);
+      this.control(menu,this.widget(menu,'CANCEL'),'取消合成',()=>this.cancelConfirmation(),{selected:this.craftConfirm===1,menuSelection:true},popup);
     }else{
       const menu=this.menus.get('boss_buy');
       const x=Math.floor((640-menu.width)/2),y=Math.floor((480-menu.height)/2);
@@ -251,9 +294,29 @@ export class NativeServiceView{
     else{this.tradeFocus='list';this.changeMode(mode);}
   }
   changeCategory(category){this.confirming=false;this.offset=0;this.onAction({type:'category',category});}
+  enterCraft(category){
+    if(category==='exit'){this.close();return;}
+    this.tradeFocus='list';
+    this.changeCategory(category);
+  }
   changeFilter(index){this.tradeFocus='list';this.offset=0;this.onAction({type:'filter',index});}
   select(index){const row=this.state.rows[index];if(row)this.onAction({type:'select',id:row.id});}
   moveRow(step){this.select(Math.max(0,Math.min(this.state.rows.length-1,this.index+step)));}
+  openMaterials(index=this.index){
+    if(!this.state.rows[index])return;
+    this.materialsOpen=true;
+    this.materialIndex=0;
+    this.onSelect?.();
+    if(index===this.index)this.paint();
+    else this.select(index);
+  }
+  selectMaterial(index){
+    const next=Math.max(0,Math.min((this.state.details?.materials?.length??0)-1,index));
+    if(next===this.materialIndex)return;
+    this.materialIndex=next;
+    this.onSelect?.();
+    this.paint();
+  }
   get minimumQuantity(){return this.state.mode==='sell'?0:1;}
   maximumQuantity(row){
     // The native quantity control checks the limit before increasing.
@@ -270,18 +333,22 @@ export class NativeServiceView{
   openConfirmation(){
     const row=this.state.rows[this.index];
     if(this.state.category==='all'||!row||row.enabled===false)return;
+    if(!this.trading&&!this.materialsOpen)return;
     this.quantity=this.minimumQuantity;
+    this.craftConfirm=0;
     this.confirming=true;
     this.paint();
   }
+  cancelConfirmation(){this.confirming=false;this.paint();}
   confirm(){
     const row=this.state.rows[this.index];
-    if(this.state.category==='all'||!row||row.enabled===false)return;
+    if(this.state.category==='all'||!row||row.enabled===false||!this.trading&&!this.confirming)return;
     this.confirming=false;
+    this.materialsOpen=false;
     if(this.quantity===0)this.paint();
     else this.onAction({type:'confirm',id:row.id,quantity:this.quantity});
   }
-  hide(){this.confirming=false;this.root.hidden=true;}
+  hide(){this.confirming=false;this.materialsOpen=false;this.root.hidden=true;}
   close(){this.hide();this.onClose();}
   tradeKey(key,repeat){
     this.frame?.classList.add('keyboard-navigation');
@@ -314,40 +381,59 @@ export class NativeServiceView{
     }
     return true;
   }
+  craftKey(key,repeat){
+    // 0x43AEC0 activates a category's list. 0x438630 sends Escape back to
+    // the header and treats both pairs of directions as list navigation.
+    const activate=key==='Enter'||key===' ';
+    const horizontal=key==='ArrowLeft'||key==='ArrowRight';
+    const vertical=key==='ArrowUp'||key==='ArrowDown';
+    const step=key==='ArrowLeft'||key==='ArrowUp'?-1:1;
+    if(this.confirming){
+      if(horizontal||vertical){
+        this.craftConfirm=1-this.craftConfirm;
+        this.onSelect?.();
+        this.paint();
+      }
+      if(key==='Escape'&&!repeat||activate&&!repeat&&this.craftConfirm===1)this.cancelConfirmation();
+      else if(activate&&!repeat)this.confirm();
+    }else if(this.materialsOpen){
+      if(horizontal||vertical)this.selectMaterial(this.materialIndex+step);
+      if(key==='PageUp'||key==='PageDown')this.selectMaterial(key==='PageUp'?0:(this.state.details?.materials?.length??0)-1);
+      if(activate&&!repeat)this.openConfirmation();
+      if(key==='Escape'&&!repeat){this.materialsOpen=false;this.paint();}
+    }else if(this.tradeFocus==='category'){
+      return this.sidebarKey(key,repeat);
+    }else if(this.tradeFocus==='header'){
+      if(horizontal){
+        const commands=this.craftCommands(),index=commands.findIndex(({id})=>id===this.tradeCommand);
+        this.tradeCommand=commands[(index+step+commands.length)%commands.length].id;
+        this.onSelect?.();
+        this.paint();
+      }
+      if(activate&&!repeat)this.enterCraft(this.tradeCommand);
+      if(key==='Escape'&&!repeat)this.focusTrade('category');
+    }else{
+      if(horizontal||vertical)this.moveRow(step);
+      if(key==='PageUp'||key==='PageDown')this.moveRow(key==='PageUp'?-9:9);
+      if(activate&&!repeat)this.openMaterials();
+      if(key==='Escape'&&!repeat)this.focusTrade('header');
+    }
+    return true;
+  }
   key(key,repeat=false){
     if(!this.active||this.isSuspended())return false;
     this.pointerSelection=null;
-    const mixedService=this.allowedModes.includes('buy')&&this.allowedModes.some(mode=>mode==='forge'||mode==='synthesize');
-    if(!this.confirming&&['Escape','Enter',' ','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','PageUp','PageDown','Tab'].includes(key)){
-      if(this.tradeFocus==='category'&&(this.trading||mixedService)){
-        this.frame?.classList.add('keyboard-navigation');
-        return this.sidebarKey(key,repeat);
-      }
-      if(this.trading)return this.tradeKey(key,repeat);
-    }
-    if(key==='Escape'){
-      if(this.confirming){this.confirming=false;this.paint();}
-      else if(mixedService)this.focusTrade('category');
-      else this.close();
-      return true;
-    }
-    if(['Enter',' '].includes(key)){if(!repeat){if(this.confirming)this.confirm();else this.openConfirmation();}return true;}
-    if(['ArrowUp','ArrowDown','PageUp','PageDown'].includes(key)&&!this.confirming){const step={ArrowUp:-1,ArrowDown:1,PageUp:-9,PageDown:9}[key];this.moveRow(step);return true;}
-    if(this.confirming&&this.trading&&['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(key)){
+    if(!['Escape','Enter',' ','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','PageUp','PageDown','Tab'].includes(key))return false;
+    this.frame?.classList.add('keyboard-navigation');
+    if(!this.trading)return this.craftKey(key,repeat);
+    if(!this.confirming)return this.tradeFocus==='category'?this.sidebarKey(key,repeat):this.tradeKey(key,repeat);
+    if(key==='Escape'&&!repeat)this.cancelConfirmation();
+    if((key==='Enter'||key===' ')&&!repeat)this.confirm();
+    if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(key)){
       const step=key==='ArrowLeft'||key==='ArrowUp'?-1:1;
       this.changeQuantity(this.quantity+step);
-      return true;
     }
-    if(['ArrowLeft','ArrowRight'].includes(key)){
-      if(!this.confirming&&!mixedService){
-        const modes=this.allowedModes,index=modes.indexOf(this.state.mode);
-        const next=modes[(index+(key==='ArrowLeft'?-1:1)+modes.length)%modes.length];
-        if(next!==this.state.mode)this.onSelect?.();
-        this.changeMode(next);
-      }
-      return true;
-    }
-    return key==='Tab';
+    return true;
   }
   dispose(){this.resize.disconnect();this.root.replaceChildren();this.root.hidden=true;}
 }
