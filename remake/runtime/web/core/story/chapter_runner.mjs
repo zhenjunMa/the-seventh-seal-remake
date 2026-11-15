@@ -402,6 +402,11 @@ export class ChapterRunner {
     }
     return this.atomic({mapId, recordId, objectIndex, playback}, async (draft) => {
       let result = {traversed: [], dialogueIds: []};
+      let objectAnimationPlayed = false;
+      const playObjectAnimation = () => this.objectAnimation({
+        mapId, objectIndex, draft, source: object.source, fromState: 2, toState: 3,
+        playback, signal: playback?.signal,
+      });
       // Source 0x4137C0 clears pending state1 before dispatching +F6.
       // Saved state2 means its event already ran: finish the animation only.
       if (chest || toggle) setObjectEventState(draft, table.map_flag_index, objectIndex, 2);
@@ -412,7 +417,16 @@ export class ChapterRunner {
             mapId,
             recordId,
             draft,
-            context: {steps: 0, playback, explicitInteraction: true, objectMapId: mapId, objectIndex},
+            context: {
+              steps: 0, playback, explicitInteraction: true, objectMapId: mapId, objectIndex,
+              async presentActivatedObject(targetMap, targetIndex) {
+                // A stationary scripted object can start its own action before
+                // the following dialogue or ANM. Commit state3 only on success.
+                if (targetMap !== mapId || targetIndex !== objectIndex || objectAnimationPlayed) return;
+                await playObjectAnimation();
+                objectAnimationPlayed = true;
+              },
+            },
           });
       }
       let state = chapterObjectState(draft, mapId, objectIndex, this.data);
@@ -422,20 +436,7 @@ export class ChapterRunner {
         // persists completed state for an off-map target without replaying it.
         await Promise.all([
           interaction,
-          ...(draft.location.map_id === mapId
-            ? [
-                this.objectAnimation({
-                  mapId,
-                  objectIndex,
-                  draft,
-                  source: object.source,
-                  fromState: 2,
-                  toState: 3,
-                  playback,
-                  signal: playback?.signal,
-                }),
-              ]
-            : []),
+          !objectAnimationPlayed && draft.location.map_id === mapId ? playObjectAnimation() : null,
         ]);
         playback?.check();
         if (chest) {
@@ -707,10 +708,10 @@ export class ChapterRunner {
     ) {
       const objectIndex = record.mutation_bit - 1,
         object = table.objects.find((row) => row.index === objectIndex);
-      if (
-        [2, 9].includes(object?.behavior_raw_cf) &&
-        chapterObjectState(draft, table.id, objectIndex, this.data) === 2
-      )
+      if (chapterObjectState(draft, table.id, objectIndex, this.data) !== 2) return;
+      if (object?.behavior_raw_cf === 3)
+        return context.presentActivatedObject?.(table.id, objectIndex);
+      if ([2, 9].includes(object?.behavior_raw_cf))
         return (async () => {
           await this.objectAnimation({
             mapId: table.id,
