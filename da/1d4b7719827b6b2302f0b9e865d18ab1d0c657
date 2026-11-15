@@ -1,0 +1,25 @@
+remake/runtime/web/native_statue_view.mjs
+  s_a4111640cbf756::t_6215332c1a1bc5 16,22,32,35,39-40,42,75,77-78,158
+  s_a4111640cbf756::t_98393018e41a38 17-21,30,116-117,132
+remake/runtime/web/controllers/native_services.mjs
+  s_a4111640cbf756::t_a182086bcfc1a5 206,222-224,226
+remake/runtime/tests/test_native_service_view.mjs
+  s_a4111640cbf756::t_a63ca30925310b 4,49,51-53,56-57
+  s_a4111640cbf756::t_f7fdd6181ac2ab 54-55,58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "da1d4b7719827b6b2302f0b9e865d18ab1d0c657",
+  "prompts": {},
+  "sessions": {
+    "s_a4111640cbf756": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ddcb-67b7-7f80-9abf-47180eae9216",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
