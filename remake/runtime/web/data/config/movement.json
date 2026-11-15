@@ -1,6 +1,11 @@
 {
   "parameters": {
     "run_speed_pixels_per_second": 200,
+    "npc_interaction_hint": {
+      "close_distance_pixels": 24,
+      "exit_margin_pixels": 8,
+      "exit_margin_degrees": 10
+    },
     "rail_boundaries": {
       "M01060": [
         [[828, 746], [880, 676], [939, 652], [950, 642], [964, 628], [1011, 607]]

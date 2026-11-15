@@ -168,6 +168,7 @@ export function createBootController({state, actions, $, canvas}) {
     ]);
     state.playerRunSpeed=movementConfig.runSpeed;
     state.rails=movementConfig.rails;
+    state.npcInteractionHint=movementConfig.npcInteractionHint;
     state.storyRepository=await StoryRepository.create({read:actions.json,index:storyIndex,content:runtimeContent,definition:runtimeContentDefinition,currentMap:()=>state.scenes?.current?.data.id});
     state.openingResources=openingResources;state.chapterResources=state.storyRepository.resources;state.chapterStory=state.storyRepository.story;
     state.events=state.storyRepository.events;state.routeEvents=state.storyRepository.routes;

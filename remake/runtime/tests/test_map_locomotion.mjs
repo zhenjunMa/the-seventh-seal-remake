@@ -141,7 +141,7 @@ test('direct keyboard travel can cross a visible NPC on open terrain',()=>{
     }
     assert.ok(crossed&&f.state.world.location.x>320);
     assert.equal(f.state.view.action,1);
-    assert.equal(f.state.nearest,null);
+    assert.equal(f.state.nearest?.id,hidden?undefined:'guard');
   }
 });
 

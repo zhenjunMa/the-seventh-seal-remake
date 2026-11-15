@@ -16,7 +16,7 @@ import {chapterRouteExits,nativeEmptyEventCells} from "../core/exploration/map_c
 import {DistanceGait,MapLocomotion,mapTravelDistance,playerMapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
 
 import {mapPresentation,mapViewport,mapPoseBounds,mapNpcVisible} from '../core/ui/map_presentation.mjs';
-import {mapWorldPoint,mapTargetInFront,pickMapDialogueObject,pickMapNpc,mapConversationRoute,mapInteractionDirection} from '../core/exploration/map_interaction.mjs';
+import {mapWorldPoint,mapTargetInFront,pickMapDialogueObject,pickMapNpc,pickMapConversationTarget,mapConversationRoute,mapInteractionDirection} from '../core/exploration/map_interaction.mjs';
 import {playbackFrame} from '../core/story/story_playback.mjs';
 
 import {createExplorationPresentation} from './presentation_handoff.mjs';
@@ -397,17 +397,12 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     return true;
   }
   function updateNearest(){
-    state.nearest=null;if(!state.scenes.current)return;const at=state.world.location;
-    const bindings=storyBindings(at.map_id);
-    for(const npc of state.scenes.current.npcs){
-      if(!npcCanTalk(npc,bindings))continue;
-      const position=mapActorPosition(npc);
-      if(!mapTargetInFront(at,position))continue;
-      const distance=Math.hypot(position.x-at.x,position.y-at.y);
-      if(distance<64&&(!state.nearest||distance<state.nearest.distance)){
-        state.nearest={...npc,x:position.x,y:position.y,direction:position.direction??npc.direction,distance};
-      }
-    }
+    const scene=state.scenes.current,previous=state.nearest;
+    state.nearest=null;if(!scene)return;
+    const at=state.world.location,bindings=storyBindings(at.map_id);
+    const previousNpcId=previous?.kind==='object'||previous?.kind==='rest'?undefined:previous?.id;
+    state.nearest=pickMapConversationTarget(at,scene.npcs.filter(npc=>npcCanTalk(npc,bindings)),
+      previousNpcId,state.npcInteractionHint);
     for(const object of state.chapterStory.maps[at.map_id]?.objects??[]){
       const binding=bindings.objects.find(row=>row.index===object.index);
       if(!binding)continue;

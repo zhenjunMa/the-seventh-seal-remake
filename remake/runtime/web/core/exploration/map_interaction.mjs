@@ -1,13 +1,51 @@
+import {mapActorPosition} from './movement.mjs';
+
 // Direction indices match the eight exploration poses, starting down-right.
 const forwardVectors = [[1, 1], [1, 0], [1, -1], [0, -1], [-1, -1], [-1, 0], [-1, 1], [0, 1]];
+const conversationHintDistance = 64;
 
-export function mapTargetInFront(player, target) {
+export function mapTargetInFront(player, target, sideRatio = 1) {
   const dx = target.x - player.x, dy = target.y - player.y;
   if (dx === 0 && dy === 0) return true;
   const [x, y] = forwardVectors[player.direction];
   const forward = x * dx + y * dy;
-  // Allow 45 degrees to either side so diagonal approaches are easy to aim.
-  return forward > 0 && Math.abs(x * dy - y * dx) <= forward;
+  // A side ratio of one allows 45 degrees to either side.
+  return forward > 0 && Math.abs(x * dy - y * dx) <= forward * sideRatio;
+}
+
+export function pickMapConversationTarget(player, npcs, previousId, {
+  close_distance_pixels: closeDistance = 24,
+  exit_margin_pixels: exitMargin = 8,
+  exit_margin_degrees: exitAngle = 10,
+} = {}) {
+  let nearest = null, close = null, retained = null, nearbyCount = 0;
+  const exitSideRatio = exitAngle === 0 ? 1 : Math.tan((45 + exitAngle) * Math.PI / 180);
+  const seen = new Set();
+  for (const npc of npcs) {
+    // Event and native scene entries can refer to the same actor.
+    if (seen.has(npc.id)) continue;
+    seen.add(npc.id);
+    const position = mapActorPosition(npc);
+    const distance = Math.hypot(position.x - player.x, position.y - player.y);
+    const wasSelected = previousId != null && npc.id === previousId;
+    if (distance >= conversationHintDistance + (wasSelected ? exitMargin : 0)) continue;
+    const candidate = {npc, position, distance};
+    if (distance < conversationHintDistance) {
+      nearbyCount++;
+      if (distance < closeDistance + (wasSelected ? exitMargin : 0)) close = candidate;
+      if (distance < (nearest?.distance ?? conversationHintDistance) && mapTargetInFront(player, position)) {
+        nearest = candidate;
+      }
+    }
+    if (wasSelected && mapTargetInFront(player, position, exitSideRatio)) {
+      retained = candidate;
+    }
+  }
+  // A freshly aimed target takes precedence over a hint in its exit margin.
+  const target = nearest ?? (nearbyCount === 1 ? close : null) ?? retained;
+  if (!target) return null;
+  const {npc, position, distance} = target;
+  return {...npc, x: position.x, y: position.y, direction: position.direction ?? npc.direction, distance};
 }
 
 // 486060 uses float32 coordinate deltas and ratio, then compares the ratio
