@@ -1,0 +1,29 @@
+remake/runtime/web/index.html
+  s_1ea4ce1a5fff39::t_bdb2e0a0708627 14
+remake/runtime/tests/test_scripted_battle_controller.mjs
+  s_1ea4ce1a5fff39::t_bdb2e0a0708627 42,55,74,76,85,87,102
+remake/runtime/web/battle_menu_view.mjs
+  s_1ea4ce1a5fff39::t_f3ae17fe085aac 132-133
+  s_1ea4ce1a5fff39::t_bdb2e0a0708627 26,29,64-69,111,122,125-131,134-135
+  s_1ea4ce1a5fff39::t_a59ec42611b7ff 136
+remake/runtime/web/controllers/battle.mjs
+  s_1ea4ce1a5fff39::t_bdb2e0a0708627 250,254,257,350
+remake/runtime/tests/test_battle_menu_navigation.mjs
+  s_1ea4ce1a5fff39::t_4800f8fb559aba 93
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "7ae32d987f4be3913cb4f3f9999a287638f0faa6",
+  "prompts": {},
+  "sessions": {
+    "s_1ea4ce1a5fff39": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1de80-3244-7cb0-bd6b-12a978cc8daa",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
