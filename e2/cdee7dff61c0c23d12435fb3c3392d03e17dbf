@@ -1,0 +1,22 @@
+remake/runtime/web/native_code_view.mjs
+  s_0b344ae95ef445::t_315e6c82ce6185 81-84
+  s_0b344ae95ef445::t_12c9fd3c8c4a74 3,9-12,55
+remake/runtime/web/native_small_lotto_view.mjs
+  s_0b344ae95ef445::t_176542821c160a 179-184,189
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e2cdee7dff61c0c23d12435fb3c3392d03e17dbf",
+  "prompts": {},
+  "sessions": {
+    "s_0b344ae95ef445": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1dde8-7ef9-7e71-885c-1ac696247f77",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
