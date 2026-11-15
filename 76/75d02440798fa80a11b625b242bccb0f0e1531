@@ -1,0 +1,23 @@
+remake/runtime/web/native_service_view.mjs
+  s_60221922d1cff4::t_7dd9a57a7ba273 224-225
+README.md
+  s_60221922d1cff4::t_7dd9a57a7ba273 82-83
+remake/runtime/web/core/items/native_economy.mjs
+  s_60221922d1cff4::t_7dd9a57a7ba273 64-89,108,110-111,132,152,154-155,157
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "7675d02440798fa80a11b625b242bccb0f0e1531",
+  "prompts": {},
+  "sessions": {
+    "s_60221922d1cff4": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1dd3c-0283-76d2-a021-67814d5b1996",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
