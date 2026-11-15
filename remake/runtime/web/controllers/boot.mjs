@@ -104,9 +104,10 @@ export function createBootController({state, actions, $, canvas}) {
     });
     const audioReady=Promise.all([
       actions.json('data/audio.json'),pictures.then(()=>actions.json('data/startup_menu.json')),
-    ]).then(([audioManifest,startupManifest])=>{
+      actions.json('data/map_ambience.json',{optional:true}),
+    ]).then(([audioManifest,startupManifest,mapAmbience])=>{
       signal.throwIfAborted();
-      state.audio=createAudioController({...audioManifest,clips:{...audioManifest.clips,...startupManifest.audio.clips}},{storage:localStorage});
+      state.audio=createAudioController({...audioManifest,clips:{...audioManifest.clips,...startupManifest.audio.clips}},{storage:localStorage,mapAmbience});
       state.audio.attachUnlock(document);
       if(interacted)state.audio.unlock();
       view.audio=state.audio;view.syncVideoAudio(true);

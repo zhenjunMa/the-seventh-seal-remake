@@ -68,9 +68,10 @@ class MediaDefinitions:
         self.inputs = {}
         self.expected = {}
         self.definition_hashes = {}
+        ambience = 'data/map_ambience.json'
         for path in sorted((self.web / 'data').rglob('*.json')):
             relative = path.relative_to(self.web / 'data').as_posix()
-            if generated is not None and relative in generated.manifest['documents']:
+            if generated is not None and (relative in generated.manifest['documents'] or 'data/' + relative == ambience):
                 continue
             if 'source' in path.relative_to(self.web / 'data').parts:
                 continue
@@ -82,11 +83,19 @@ class MediaDefinitions:
                 key = 'data/' + name
                 self.definition_hashes[key] = row['sha256']
                 self.documents[key] = generated.value(row['root'])
+            if generated.map_ambience is not None:
+                self.definition_hashes[ambience] = hashlib.sha256(generated.map_ambience).hexdigest()
+                self.documents[ambience] = json.loads(generated.map_ambience)
         for key, data in self.documents.items():
             if key == 'data/battle_packs.json':
                 continue
-            self.collect(data)
-            self.visit(data)
+            if key == ambience:
+                self.collect(data['clips'])
+                for clip in data['clips'].values():
+                    self.add(clip['path'], 'copy', source=clip['source']['path'])
+            else:
+                self.collect(data)
+                self.visit(data)
         packs = self.documents['data/battle_packs.json']
         for name, row in packs['images'].items():
             self.required.add(url(name))

@@ -12,7 +12,7 @@ import json
 import re
 import struct
 
-from data_recipes import RUNTIME, SCHEMA, OriginalBytes, authored, encoded, digest, document_bytes, atomic_write, player_save
+from data_recipes import RUNTIME, SCHEMA, OriginalBytes, frozen_document, encoded, digest, document_bytes, atomic_write, player_save
 from media_definitions import OriginalFiles, checksum, original
 
 HEX = re.compile('[0-9a-f]{16,}')
@@ -251,7 +251,7 @@ def export(runtime, original_dir):
     files = sorted((runtime / 'web/data').rglob('*.json'))
     for index, path in enumerate(files):
         name = path.relative_to(runtime / 'web/data').as_posix()
-        if authored(name):
+        if not frozen_document(name):
             continue
         raw = path.read_bytes()
         data = json.loads(raw)
@@ -279,6 +279,8 @@ def update_documents(runtime, original_dir, names):
     compiler.locator.sources.update(reader.sources)
     documents = dict(reader.manifest['documents'])
     for name in names:
+        if not frozen_document(name):
+            raise ValueError('运行数据不可从固定配方生成：' + name)
         path = reader.output(name)
         raw = path.read_bytes()
         data = json.loads(raw)

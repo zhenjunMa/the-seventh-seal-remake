@@ -40,7 +40,12 @@ export function createServicesController({state, actions, $, canvas, ctx,now=()=
       : event.error ?? `${event.type} ${event.event??''} ${event.op??''}`;
     $('eventLog').append(item); while($('eventLog').children.length>50) $('eventLog').firstChild.remove();
   }
-  async function json(path,{cache='no-cache',signal}={}) { const response=await fetch(path,{cache,signal}); if(!response.ok) throw new Error(`资源加载失败：${path}（${response.status}）`); return imageDefinitionJson(path,response); }
+  async function json(path,{cache='no-cache',signal,optional=false}={}) {
+    const response=await fetch(path,{cache,signal});
+    if(optional&&response.status===404)return null;
+    if(!response.ok)throw new Error(`资源加载失败：${path}（${response.status}）`);
+    return imageDefinitionJson(path,response);
+  }
   async function initializeRuntimeConfiguration(options,prepare){
     // Coalesce startup calls, including a failed startup. Refreshing the page
     // creates a new owner; menu/battle/save operations never reload this input.

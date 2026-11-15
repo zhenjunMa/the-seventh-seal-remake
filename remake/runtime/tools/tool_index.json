@@ -124,6 +124,7 @@
         "export_enemy_content.py",
         "export_forest_rewards.py",
         "export_item_presentation.py",
+        "export_map_ambience.py",
         "export_operation_menu.py",
         "export_party_combat.py",
         "export_party_rewards.py",
@@ -552,6 +553,16 @@
       "imported_by": []
     },
     {
+      "path": "export_map_ambience.py",
+      "role": "independent-source-export",
+      "build_targets": [],
+      "imported_by": [
+        "data_recipes.py",
+        "export_audio.py",
+        "refresh_audio_map_bindings.py"
+      ]
+    },
+    {
       "path": "export_map_effects.py",
       "role": "registered-build",
       "build_targets": [
@@ -776,6 +787,7 @@
         "export_forest_skills.py",
         "export_forest_stage.py",
         "export_item_presentation.py",
+        "export_map_ambience.py",
         "export_map_effects.py",
         "export_party_skills.py",
         "export_skill_test.py",
@@ -974,6 +986,7 @@
       "role": "shared-current",
       "build_targets": [],
       "imported_by": [
+        "export_map_ambience.py",
         "export_media.py",
         "media_fingerprints.py"
       ]
@@ -1225,8 +1238,10 @@
       "role": "source-decoder",
       "build_targets": [],
       "imported_by": [
+        "export_audio.py",
         "export_chapter_maps.py",
         "export_events.py",
+        "export_map_ambience.py",
         "export_map_effects.py",
         "export_maps.py",
         "export_movement.py",

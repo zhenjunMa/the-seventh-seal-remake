@@ -9,6 +9,7 @@ sys.dont_write_bytecode = True
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from content_registration import map_ids
 from export_audio import GAME_SHA, original_text
+from export_map_ambience import export_map_ambience
 from export_media import MediaBuilder
 from export_native_services import statue_sounds, casino_sounds
 from route_extract_resources import tlk_record
@@ -161,6 +162,7 @@ def refresh():
                  missing_original_files=sorted(missing))
     if any(digest(ROOT / name) != expected for name, expected in sources.items()):
         raise ValueError('Audio source changed during binding refresh')
+    export_map_ambience(RUNTIME, (ROOT / 'GAME.exe').resolve().parent, maps)
     write_json(output, value)
     report = dict(schema='seventh-seal-audio-map-binding-refresh', version=1, passed=True,
         source_hashes=sources, output_sha256=digest(output), source_bytes_unchanged=True,

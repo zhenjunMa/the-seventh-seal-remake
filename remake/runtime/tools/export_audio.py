@@ -25,6 +25,7 @@ from source.combat_resources import CHR
 from source.dgp import DGP
 from source.map_objects import MapObjects
 from content_registration import map_ids
+from export_map_ambience import export_map_ambience
 from route_extract_resources import tlk_record
 
 
@@ -50,14 +51,18 @@ def evidence_record(filename, procedure):
 
 
 def source_files():
-    """Track active CF1/CF2 sound inputs before the first export ledger exists."""
+    """Track map sounds before the first export ledger exists."""
     paths = set()
+    sound_files = {path.name.casefold(): path for path in (ROOT / 'sound').iterdir() if path.is_file()}
     for ident in map_ids():
         relative = f'Map/{ident.lower()}.dat'
         paths.add(relative)
         table = MapObjects(ROOT / relative)
         for obj in table.objects:
             raw = bytes.fromhex(obj['raw_hex'])
+            ambient = original_text(raw, 0x7c, 0x1e).casefold()
+            if ambient in sound_files:
+                paths.add(sound_files[ambient].relative_to(ROOT).as_posix())
             if raw[0xcf] not in (1, 2) or not struct.unpack_from('<I', raw, 0x9e)[0]:
                 continue
             path = table.resource_source(struct.unpack_from('<I', raw, 0x1e)[0])
@@ -352,6 +357,7 @@ def main():
         effect_sounds=effect_sounds,item_effects=item_effects,object_sounds=object_sounds,native_sound_tokens=native_sound_tokens,native_sound_sources=native_sound_sources,reference_hashes=reference_hashes,
         action_sources=action_sources,invalid_source_actions=invalid_source_actions,source_hashes=sources,native_evidence=evidence,native_bundle_hashes=native_ref,
         missing_original_files=missing,limitations=limitations)
+    export_map_ambience(RUNTIME, (ROOT / 'GAME.exe').resolve().parent, maps)
     save(WEB/'data/audio.json',manifest)
     assert all(sha((ROOT/p).read_bytes())==value for p,value in sources.items()), 'Original source changed during export'
     save(RUNTIME/'evidence/audio_export.json',dict(success=True,original_source_unchanged=True,original_game_execution_observed=False,

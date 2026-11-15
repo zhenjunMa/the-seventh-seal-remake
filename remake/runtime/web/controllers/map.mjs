@@ -681,8 +681,12 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       state.view.collisionFeedback=pose.feedback;state.clock=pose.elapsed;
       if(state.view.follow)follow();updateNearest();
     }else {motionState.reset();state.view.collisionFeedback=null;}
-    paint();
     const scene=state.scenes?.current;
+    if(scene&&['map','event','opening'].includes(state.scenes.phase)){
+      const listener=state.openingView?.active?state.openingView.cameraAt:(state.sceneEntryDraft??state.world.value).location;
+      if(listener)state.audio?.updateMapAmbience?.(scene.data.id,listener,now);
+    }
+    paint();
     if(state.scenes?.phase==='map'&&scene?.loadRemaining&&!scene.backgroundLoadStarted){
       scene.backgroundLoadStarted=true;
       void scene.loadRemaining().catch(error=>actions.log?.({type:'map-background-load-failed',map_id:scene.data.id,error:error.message}));

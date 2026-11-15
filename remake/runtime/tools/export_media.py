@@ -468,6 +468,11 @@ class MediaBuilder:
                 if row['kind'] == 'builtin':
                     raw = (self.runtime / 'builtin' / row['file']).read_bytes()
                     write_bytes(path, raw)
+                elif row['kind'] == 'copy':
+                    raw = self.source(row['source']).read_bytes()
+                    if digest(raw) != expected:
+                        raise ValueError('原声文件与导出清单不一致：' + row['source'])
+                    write_bytes(path, raw)
                 elif row['kind'] in ('audio', 'video'):
                     self.transcode(name, row, path)
                 else:

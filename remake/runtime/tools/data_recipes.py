@@ -4,6 +4,7 @@
 路径与字节格式，游戏和开发检查继续使用同一数据合同。
 """
 from collections import OrderedDict
+from functools import cached_property
 from pathlib import Path, PurePosixPath
 import argparse
 import gzip
@@ -15,6 +16,7 @@ import re
 import tempfile
 
 from media_definitions import OriginalFiles, checksum
+from export_map_ambience import MAP_AMBIENCE_FILE, read_map_ambience
 
 SCHEMA = 'seventh-seal-data-recipes'
 RUNTIME = Path(__file__).resolve().parents[1]
@@ -28,6 +30,11 @@ def player_save(name):
 def authored(name):
     path = PurePosixPath(name)
     return name in AUTHORING or path.parts[0] in {'config', 'events', 'source'}
+
+
+def frozen_document(name):
+    # This manifest is parsed from the selected installation on each build.
+    return not authored(name) and name != MAP_AMBIENCE_FILE
 
 
 def encoded(value):
@@ -117,6 +124,8 @@ class DataRecipes:
         self.source_cache = OriginalBytes()
         for name in self.manifest['documents']:
             self.output(name)
+            if not frozen_document(name):
+                raise ValueError('运行数据不可从固定配方生成：' + name)
         self.audio_headers = {}
         audio = self.manifest['documents'].get('audio.json')
         if ignore_fingerprint and audio:
@@ -206,6 +215,17 @@ class DataRecipes:
             if digest(raw) != row['sha256']:
                 raise ValueError('重建后的运行数据与已核实定义不同：' + name)
             yield name, raw
+        if self.map_ambience is not None:
+            yield MAP_AMBIENCE_FILE, self.map_ambience
+
+    @cached_property
+    def map_ambience(self):
+        audio = self.manifest['documents'].get('audio.json')
+        maps = self.value(audio['root']).get('maps') if audio else None
+        if maps:
+            manifest = read_map_ambience(self.original, maps)
+            return (json.dumps(manifest, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
+        return None
 
     def build(self, *, run=False):
         problems = self.preflight()
@@ -213,7 +233,7 @@ class DataRecipes:
             raise ValueError('；'.join(problems))
         # Complete validation precedes installation, including failures in the
         # last document. Staging never touches player saves or config/.
-        stats = dict(files=len(self.manifest['documents']), bytes=0, written=0, reused=0)
+        stats = dict(files=len(self.manifest['documents']) + (self.map_ambience is not None), bytes=0, written=0, reused=0)
         if not run:
             return dict(passed=True, run=False, **stats)
         cache = self.runtime / '.cache'
