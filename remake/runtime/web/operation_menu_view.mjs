@@ -68,7 +68,7 @@ export class OperationMenuView{
     }
     if(this.current==='system'){this.system.navFocus=this.mode==='sub';this.system.committed=this.subCommitted;this.system.paint();}
   }
-  focusInitial(){this.mode='main';this.mainIndex=0;this.mainCommitted=true;this.subCommitted=false;this.actorFocused=false;this.itemFocused=false;this.itemFilterIndex=0;this.itemOffset=0;this.subIndex=0;this.frame.focus({preventScroll:true});}
+  focusInitial(){this.mode='main';this.focused=null;this.mainIndex=0;this.mainCommitted=true;this.subCommitted=false;this.actorFocused=false;this.itemFocused=false;this.itemFilterIndex=0;this.itemOffset=0;this.subIndex=0;this.frame.focus({preventScroll:true});}
   mainPage(){return ['roster','status','equipment','weapon','formation'].includes(this.current)?'roster':this.current;}
   headerIndex(){if(this.current==='skills')return Math.max(0,['use','edit','test'].indexOf(this.techniques.section));if(this.current==='system')return this.system.navIndex??0;const controls=this.controls('sub'),pressed=controls.findIndex(node=>node.getAttribute('aria-pressed')==='true');return Math.max(0,pressed);}
   focusGroup(mode,index=0){this.mode=mode;if(this.current==='skills'){this.techniques.mode=mode;this.techniques.paintHeaders();}let controls=this.controls(mode);if(mode==='sub'&&!controls.length){this.mode='content';controls=this.controls('content');}if(!controls.length){this.frame.focus({preventScroll:true});return;}controls[((index%controls.length)+controls.length)%controls.length]?.focus({preventScroll:true});}
