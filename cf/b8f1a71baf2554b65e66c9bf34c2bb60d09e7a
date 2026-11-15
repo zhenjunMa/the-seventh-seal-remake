@@ -1,0 +1,19 @@
+remake/runtime/web/core/story/chapter_runner.mjs
+  s_cfa8b10b76836a::t_d7ede1f4b141b3 405-409,420-429,439,711-714
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "cfb8f1a71baf2554b65e66c9bf34c2bb60d09e7a",
+  "prompts": {},
+  "sessions": {
+    "s_cfa8b10b76836a": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ddc7-6a3b-7642-b1ae-990177b60317",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
