@@ -1,0 +1,25 @@
+remake/runtime/web/core/ui/map_presentation.mjs
+  s_74cc17a0379535::t_a739e1db659135 39-42,45-56,79,90
+remake/runtime/web/controllers/map.mjs
+  s_74cc17a0379535::t_646d571dc049b1 18-19,249-250,460-466
+README.md
+  s_74cc17a0379535::t_a739e1db659135 76
+remake/runtime/web/core/exploration/map_interaction.mjs
+  s_74cc17a0379535::t_a739e1db659135 70-76
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ef53db7959e417276cad169d1a17b225c31e4327",
+  "prompts": {},
+  "sessions": {
+    "s_74cc17a0379535": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1dcd3-2aee-73b2-b7e0-f7ae7af38472",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
