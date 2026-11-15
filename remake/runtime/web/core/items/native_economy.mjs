@@ -61,6 +61,32 @@ export function nativeOwnedQuantity(world,id){
   return total;
 }
 
+function hasRecipeIngredients(world,item){
+  const required=new Map();
+  for(const id of item.ingredients)required.set(id,(required.get(id)??0)+1);
+  return [...required].every(([id,count])=>nativeOwnedQuantity(world,id)>=count);
+}
+
+// Object.ITM places the two upgrade stages in blocks of six, in role order.
+function weaponForgeStage(id){return id>=259&&id<=264?2:id>=253&&id<=258?1:0;}
+
+function weaponForgeTarget(world,item){
+  const roles=allPartyRoles(world),mask=item.allowed_role_mask_raw_13e;
+  const accepts=role=>mask===0||(mask&(1<<(Number(role.id)-1)))!==0;
+  const role=roles.find(role=>role.id===world.leader_id&&accepts(role))??
+    roles.slice().sort((a,b)=>Number(a.id)-Number(b.id)).find(accepts);
+  if(!role)return {blockedReason:'可使用此武器的角色尚未加入。'};
+  const worn=world.equipment?.roles?.[role.id];
+  const currentId=worn?worn.find(row=>row.slot_id==='weapon')?.id:
+    world.source.initial_equipment?.find(row=>row.role_id===role.id&&row.group_index===0&&row.entry_index===0)?.item_id;
+  const stage=weaponForgeStage(item.id);
+  // Original 0x4397F0 spends the materials and overwrites the weapon slot.
+  // Guard completed stages before spending, using the equipped weapon in old saves too.
+  const blockedReason=currentId===item.id||stage>0&&weaponForgeStage(currentId)>=stage?
+    '当前武器已达到此锻造阶段。':null;
+  return {roleId:role.id,blockedReason};
+}
+
 export function nativeServiceRows(service,world,catalog,{mode,category='items',filterIndex}){
   const equipment=category==='equipment';
   const filter=nativeShopFilters[category]?.[filterIndex];
@@ -79,9 +105,10 @@ export function nativeServiceRows(service,world,catalog,{mode,category='items',f
       recipeCategory==='material'&&catalog[id].type===3&&catalog[id].subtype===2);
   return ids.filter(id=>mode!=='buy'||categoryMatches(catalog[id])).map(id=>{
     const item=catalog[id],owned=mode==='buy'?nativeOwnedQuantity(world,id):nativeBagQuantity(world,id);
+    const target=mode==='forge'&&item.type===1?weaponForgeTarget(world,item):null;
     return {id,item_id:id,name:item.name,quantity:owned,price:mode==='buy'?item.price:0,
-      enabled:mode==='buy'?item.price<=world.money&&owned<99:recipeCategory==='all'?false:
-        item.ingredients.every(component=>nativeOwnedQuantity(world,component)>0)};
+      ...target,enabled:mode==='buy'?item.price<=world.money&&owned<99:
+        recipeCategory!=='all'&&!target?.blockedReason&&hasRecipeIngredients(world,item)};
   });
 }
 
@@ -102,7 +129,7 @@ export function applyNativeServiceAction(draft,service,catalog,{mode,id,quantity
     if(row.price*quantity>draft.money)return {changed:false,message:'金钱不足。'};
     if(nativeOwnedQuantity(draft,item.id)+quantity>99)return {changed:false,message:'同种物品最多持有99件。'};
   }else{
-    if(!row.enabled)return {changed:false,message:'合成材料不足。'};
+    if(!row.enabled)return {changed:false,message:row.blockedReason??'合成材料不足。'};
     quantity=1;
   }
   const stack=draft.inventory.find(row=>row.id===item.id&&parseInt(row.source_raw_hex.slice(24,26),16)===0);
@@ -122,15 +149,12 @@ export function applyNativeServiceAction(draft,service,catalog,{mode,id,quantity
     if(!removeNativeStoryItem(draft,component).changed)return {changed:true,message:'材料已不足，本次未能合成。'};
   }
   if(item.type===1){
-    const roles=allPartyRoles(draft),mask=item.allowed_role_mask_raw_13e;
-    const candidates=[roles.find(role=>role.id===draft.leader_id),...roles.slice().sort((a,b)=>Number(a.id)-Number(b.id))].filter(Boolean);
-    const role=candidates.find(role=>mask===0||(mask&(1<<(Number(role.id)-1)))!==0);
-    if(!role)throw new Error('锻造武器的原角色尚未拥有');
+    const {roleId}=row;
     draft.equipment??={version:1,roles:{}};
-    const worn=draft.equipment.roles[role.id]??(draft.source.initial_equipment??[]).filter(row=>row.role_id===role.id).map(row=>({
-      instance_id:`initial:${role.id}:${row.group_index}:${row.entry_index}`,id:row.item_id,name:catalog[row.item_id].name,
+    const worn=draft.equipment.roles[roleId]??(draft.source.initial_equipment??[]).filter(row=>row.role_id===roleId).map(row=>({
+      instance_id:`initial:${roleId}:${row.group_index}:${row.entry_index}`,id:row.item_id,name:catalog[row.item_id].name,
       quantity:1,slot_id:catalog[row.item_id].slot_id,source_raw_hex:row.source_raw_hex}));
-    draft.equipment.roles[role.id]=[...worn.filter(row=>row.slot_id!=='weapon'),{...created,slot_id:'weapon'}];
+    draft.equipment.roles[roleId]=[...worn.filter(row=>row.slot_id!=='weapon'),{...created,slot_id:'weapon'}];
   }else if(stack){
     draft.inventory[draft.inventory.indexOf(stack)]=withItemQuantity(stack,Math.min(99,stack.quantity+quantity));
   }else draft.inventory.push(created);

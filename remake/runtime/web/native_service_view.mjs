@@ -221,7 +221,8 @@ export class NativeServiceView{
     // Boss_Main widget 40007 receives the selected item's description.
     const info=this.widget(main,'INFO');
     const infoRect={...info.rect,top:info.draw_point_raw.y,bottom:479};
-    const infoText=state.clearInfo?'':(this.materialsOpen?'':state.message)||details.description||'';
+    const blockedReason=this.tradeFocus==='list'?selected?.blockedReason:null;
+    const infoText=state.clearInfo?'':(this.materialsOpen?'':state.message)||blockedReason||details.description||'';
     this.text(infoText,infoRect,this.frame,crafting?{font:compactFont,lineHeight:13}:{font:'requested_black20_text'});
     if(this.materialsOpen&&selected)this.paintMaterials(state.details);
     if(this.confirming&&selected)this.paintConfirmation(selected,mode);

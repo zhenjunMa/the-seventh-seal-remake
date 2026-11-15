@@ -79,6 +79,8 @@ python -B remake/runtime/tools/export_hd_animations.py --weights "/path/to/RealE
 
 `remake/saves/` 中的 `SaveGame0.Dat` 至 `SaveGame19.Dat` 为普通档，`Game.SAV` 为快速档。
 
+武器锻造按角色当前装备的武器判断进度。已达到的锻造阶段仍可查看配方，无法再次确认或消耗材料。
+
 ## 游戏事件索引
 
 ### 主线事件索引
