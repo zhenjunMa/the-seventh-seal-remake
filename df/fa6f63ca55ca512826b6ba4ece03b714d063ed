@@ -1,0 +1,33 @@
+remake/runtime/web/core/battle/battle_status.mjs
+  s_afeb290e0d6634::t_80641cd9783de3 285-288,302,306,324,346
+remake/runtime/web/core/items/items.mjs
+  s_afeb290e0d6634::t_c3b0af9c8fc2ee 123-132,134
+remake/runtime/web/core/battle/battle_controller.mjs
+  s_afeb290e0d6634::t_80641cd9783de3 116,129,1210,1900,1931
+remake/runtime/web/core/battle/battle_revival.mjs
+  s_afeb290e0d6634::t_d8b7b6d0401f47 75-77,81,83-84,87-90,107-111,130-131,140
+remake/runtime/web/battle_view.mjs
+  s_afeb290e0d6634::t_80641cd9783de3 821-827,829-835,842
+remake/runtime/web/core/battle/item_action.mjs
+  s_afeb290e0d6634::t_c3b0af9c8fc2ee 79
+remake/runtime/web/core/battle/battle_support.mjs
+  s_afeb290e0d6634::t_d8b7b6d0401f47 57-58
+remake/runtime/web/controllers/battle.mjs
+  s_afeb290e0d6634::t_80641cd9783de3 238-239
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "dffa6f63ca55ca512826b6ba4ece03b714d063ed",
+  "prompts": {},
+  "sessions": {
+    "s_afeb290e0d6634": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1dd02-2674-7be3-9ebc-dafe647fe04e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
