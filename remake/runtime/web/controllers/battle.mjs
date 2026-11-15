@@ -235,8 +235,8 @@ export function createBattleController({host, sessions = createBattleSessions()}
     const present=method=>async(result,options)=>{const played=await play(method,result,{...options,onFrame:step=>actionSound(result,step),onEffectFrame:step=>effectSound(result,step)});log({type:'battle-presentation',action_id:result.action_id,actor_id:result.actor_id,skill_id:result.skill_id,observations:played.observations});return played;};
     battle=new BattleController({world,resolveAction,applyDamage:applyNativeDamage,playAction:present('playAction'),playSequence:present('playSequence'),
       now,playTime:()=>actions.currentPlayTime(),
-      onPeriodicDamage:(targetId,damage,at)=>{
-        if(current().battle===battle)view.showPeriodicDamage(targetId,damage,at);
+      onPeriodicFeedback:(targetId,feedback,at)=>{
+        if(current().battle===battle)view.showBattleFeedback(targetId,feedback,at);
       },
       resourcesForWorld:newParty?partyResourcesForWorld:resourcesForWorld,consumeResources:newParty?consumePartyMp:consumeBattleMp,
       notify:snapshot=>{if(current().battle===battle)updateBattle(snapshot);},log,itemData:newParty?current().itemData:null,

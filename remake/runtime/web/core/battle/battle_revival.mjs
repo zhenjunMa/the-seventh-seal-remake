@@ -72,18 +72,22 @@ export function applyNativeRevivalRecoveryBlock({actor,effect_raw_hex}){
   if(out.state_raw>=4)return {actor:out,native_return:0};
   out.raw_mp=add(out.raw_mp,get(0x2b));out.raw_mp_maximum=add(out.raw_mp_maximum,get(0x2f));out.raw_hp_maximum=add(out.raw_hp_maximum,get(0x27));
   const hp=status(out,0x521f551),maximum=status(out,0x521f555),currentPercent=status(out,0x521f571),maximumPercent=status(out,0x521f575);
-  if(get(0x23)>0){
-    out.raw_hp=add(out.raw_hp,get(0x23));
+  const flatHp=get(0x23),percentHp=get(0x43);
+  if(flatHp>0){
+    out.raw_hp=add(out.raw_hp,flatHp);
     const base=add(out.raw_hp,hp),extra=currentPercent?idiv(mul(base,currentPercent),100):0;
     const maxBase=add(out.raw_hp_maximum,maximum),maxExtra=maximumPercent?idiv(mul(maxBase,maximumPercent),100):0,max=add(maxBase,maxExtra);
     if(add(base,extra)>max)out.raw_hp=sub(sub(max,extra),hp);
-  }else if(get(0x43)>0){
+  }else if(percentHp>0){
     const maxBase=add(out.raw_hp_maximum,maximum),maxExtra=maximumPercent?idiv(mul(maxBase,100),maximumPercent):0,max=add(maxBase,maxExtra);
-    const extra=currentPercent?idiv(mul(max,add(currentPercent,get(0x43))),100):0,current=add(add(out.raw_hp,hp),extra);
-    out.raw_hp=add(out.raw_hp,idiv(mul(max,get(0x43)),100));
+    const extra=currentPercent?idiv(mul(max,add(currentPercent,percentHp)),100):0,current=add(add(out.raw_hp,hp),extra);
+    out.raw_hp=add(out.raw_hp,idiv(mul(max,percentHp),100));
     if(current>max)out.raw_hp=sub(sub(max,extra),hp);
   }
-  sync(out);return {actor:out,native_return:0};
+  sync(out);
+  // 41C16D / 41C374 use the source flat HP operand after applying the cap.
+  const number_feedback=flatHp>0||percentHp>0?[{kind:'healed',value:flatHp}]:[];
+  return {actor:out,native_return:0,number_feedback};
 }
 /** Shared 41E950 recovery arithmetic. The caller owns this actor copy and
  * supplies the source fixed-record DataView; no damage or status roll occurs.
@@ -100,7 +104,11 @@ export function recoverSkill(actor,view,rng,trace,label='revival'){
   const mpExtra=mul(hpTerm,status(actor,0x521f579)),mpStatus=status(actor,0x521f559),mpTerm=add(add(actor.raw_mp,mpStatus),mpExtra);
   const mpMaxBase=add(actor.raw_mp_maximum,status(actor,0x521f55d)),mpMaxDiv=status(actor,0x521f57d),mpMax=add(mpMaxBase,mpMaxDiv?idiv(mul(mpMaxBase,100),mpMaxDiv):0);
   if(mpTerm>mpMax)actor.raw_mp=sub(sub(mpMax,mpExtra),mpStatus);
-  sync(actor);return {hp:hpDelta,mp:mpDelta};
+  sync(actor);
+  // 41E950 displays the selected recovery amount even if the target is full.
+  const recoveryNumber=hpDelta||mpDelta;
+  const number_feedback=recoveryNumber>0?[{kind:'healed',value:recoveryNumber}]:[];
+  return {hp:hpDelta,mp:mpDelta,number_feedback};
 }
 /** Pure admitted mode3 contact. Learning, caster resources, command/gauge
  * dispatch and one-contact commitment belong to the calling transaction.
@@ -119,7 +127,8 @@ export function applyNativeRevivalEffect({target,effect_raw_hex,rng,selectAnimat
   // here so its draws precede any 41E950 recovery-range draws.
   const animation=selectAnimation?selectAnimation(out,{animation_type_raw:14,rng}):null;
   const recovered=applyNativeRevivalRecoveryBlock({actor:out,effect_raw_hex});Object.assign(out,recovered.actor);
-  return result(true,1,'revived',{animation_type_raw:14,animation,hp_delta:out.hp.current-target.hp.current,recovery_block_raw_hex:effect_raw_hex});
+  return result(true,1,'revived',{animation_type_raw:14,animation,hp_delta:out.hp.current-target.hp.current,
+    number_feedback:recovered.number_feedback??[],recovery_block_raw_hex:effect_raw_hex});
 }
 export function applyNativeRevival({target,skill,rng,selectAnimation=null}){
   const {bytes,view}=skillView(skill);need(bytes[0x23c]===3,'Only native revival mode3 supported');
@@ -128,6 +137,7 @@ export function applyNativeRevival({target,skill,rng,selectAnimation=null}){
   if(!result.applied)return result;
   const deltas=recoverSkill(result.actor,view,rng,result.trace);
   result.hp_delta=result.actor.hp.current-target.hp.current;
+  result.number_feedback.push(...deltas.number_feedback);
   result.trace.push({kind:'revival-contact',state_before:target.state_raw,state_after:0,hp_before:target.hp.current,
     hp_after:result.actor.hp.current,flat_hp:deltas.hp,flat_mp:deltas.mp});
   return result;

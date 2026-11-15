@@ -817,23 +817,29 @@ export class BattleView {
 
   _damaging(result) {return result.hit !== false && result.hit !== 'miss' && result.hit !== 'MISS' && Number(result.damage) > 0;}
 
-  showPeriodicDamage(targetId,damage,now){
-    this._queueDamageText(null,{target_id:targetId,hit:true,damage},now);
+  _queueDamageText(channel,result,now){
+    if(result.skipped)return;
+    const targetId=result.target_id??channel?.result?.target_id;
+    if(result.number_feedback){
+      for(const feedback of result.number_feedback)this.showBattleFeedback(targetId,feedback,now);
+      return;
+    }
+    if(result.item_used||result.item_effect||result.revived||result.supported&&!(result.hp_delta>0))return;
+    const miss=result.hit===false||['miss','MISS'].includes(result.hit);
+    const kind=miss?'miss':result.supported?'healed':'damage';
+    this.showBattleFeedback(targetId,{kind,value:result.supported?result.hp_delta:result.damage},now);
   }
 
-  _queueDamageText(channel,result,now){
-    if(result.skipped||result.item_used||result.item_effect||result.revived||result.supported&&!(result.hp_delta>0))return;
-    const miss=result.hit===false||['miss','MISS'].includes(result.hit);
-    if(!miss&&!(Number.isFinite(result.damage)&&result.damage>=0))return;
-    const targetId=result.target_id??channel?.result.target_id;
-    if(!targetId)return;
+  showBattleFeedback(targetId,{kind,value},now){
+    const miss=kind==='miss';
+    if(!targetId||(!miss&&!(Number.isFinite(value)&&value>=0)))return;
     this.damageTexts=this.damageTexts.filter(e=>now-e.created_at<DAMAGE_TEXT_TICKS*DAMAGE_TEXT_TICK_MS);
     // GAME.exe 50442D raises existing feedback for this target to 1.5 digit heights.
     const digitHeight=this.damageTextAssets.damage.height;
     for(const e of this.damageTexts)if(e.target_id===targetId){
       e.riseOffset=digitHeight+(digitHeight>>1)-3*Math.floor((now-e.created_at)/DAMAGE_TEXT_TICK_MS);
     }
-    this.damageTexts.push({id:++this.damageTextSerial,target_id:targetId,text:miss?'MISS':String(result.supported?result.hp_delta:result.damage),miss,healed:Boolean(result.supported),created_at:now,riseOffset:0});
+    this.damageTexts.push({id:++this.damageTextSerial,target_id:targetId,text:miss?'MISS':String(value),miss,healed:kind==='healed',created_at:now,riseOffset:0});
   }
 
   _drawDamageTexts(now,groundSlots){

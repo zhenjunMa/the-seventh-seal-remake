@@ -120,7 +120,18 @@ export function restoreActorWithItem(actor,item,data,{scope='battle',statusData,
     ||(def.effect[`restore_${resource}_flat`]??0)!==0||(def.effect[`restore_${resource}_percent`]??0)!==0);
   const applied=Boolean(resourceApplied||status?.native_return===1);
   const state_changed=['raw_hp','raw_mp','raw_hp_maximum','raw_mp_maximum'].some(field=>next[field]!==actor[field]);
+  const number_feedback=[...(status?.number_feedback??[])];
+  if(scope==='battle'&&applied){
+    // 41B3C0 queues the flat and percentage HP amounts separately, before display capping.
+    const {restore_hp_flat:flat=0,restore_hp_percent:percent=0}=def.effect;
+    if(flat>0)number_feedback.push({kind:'healed',value:flat});
+    if(percent>0){
+      const maximum=def.battle?.all_targets_raw_156?next.raw_hp_maximum:next.hp.maximum;
+      number_feedback.push({kind:'healed',value:Math.trunc(Math.imul(maximum,percent)/100)});
+    }
+  }
   return {actor:next,changes,name:def.name,applied,state_changed,native_return:applied?1:0,effect_requested:true,
+    ...(scope==='battle'?{number_feedback}:{}),
     ...(def.effect.encounter_modifier_delta?{encounter_effect:{modifier_delta:def.effect.encounter_modifier_delta,duration_ticks:def.effect.encounter_duration_ticks}}:{}),
     revived:status?.reason==='revived',animation:status?.animation??null,cancel_command:status?.cancel_command??false,trace};
 }

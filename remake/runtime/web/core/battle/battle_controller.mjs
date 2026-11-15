@@ -113,7 +113,7 @@ export class BattleController {
     now = () => performance.now(),
     waitTick = () => new Promise((resolve) => setTimeout(resolve, 20)),
     playSequence = null,
-    onPeriodicDamage = null,
+    onPeriodicFeedback = null,
     itemData = null,
     playItem = async (_event, {onUse}) => {
       onUse();
@@ -126,7 +126,7 @@ export class BattleController {
       applyDamage,
       playAction,
       playSequence,
-      onPeriodicDamage,
+      onPeriodicFeedback,
       resourcesForWorld,
       consumeResources,
       notify,
@@ -1207,7 +1207,7 @@ export class BattleController {
             },
           });
           Object.assign(actor, update.actor);
-          for (const damage of update.periodic_damage) this.onPeriodicDamage?.(actor.id, damage, now);
+          for (const feedback of update.periodic_feedback) this.onPeriodicFeedback?.(actor.id, feedback, now);
           for (const response of update.periodic_reactions ?? [])
             if (this.lifecycleEnabled && response.skill) {
               this.pendingSourceEnds.delete(actor.id);
@@ -1897,6 +1897,7 @@ export class BattleController {
             mp_cost: source.mp_cost,
             supported: support.applied,
             hp_delta: support.hp_delta ?? 0,
+            number_feedback: support.number_feedback ?? [],
             mp_delta: support.mp_delta ?? 0,
             cleared_statuses: support.cleared_statuses ?? false,
             trace: copy(support.trace ?? []),
@@ -1927,6 +1928,7 @@ export class BattleController {
             mp_cost: source.mp_cost,
             revived: revival.applied,
             hp_delta: revival.hp_delta ?? 0,
+            number_feedback: revival.number_feedback ?? [],
             ...(!revival.applied ? {skipped: revival.reason} : {}),
             trace: [...copy(revival.animation?.trace ?? []), ...copy(revival.trace)],
           };

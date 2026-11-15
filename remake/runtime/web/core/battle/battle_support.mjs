@@ -54,5 +54,6 @@ export function applyNativeSupport({target,skill,rng,statusData,content=runtimeC
   const deltas=recoverSkill(out,view,rng,trace,'support');
   trace.push({kind:'support-contact',mode_raw:mode,flat_hp:deltas.hp,flat_mp:deltas.mp,hp_before:before,hp_after:out.hp.current,
     mp_before:mpBefore,mp_after:out.mp.current,cleared_statuses});
-  return result(true,1,mode===5?'statuses-cleared':mode===1?'cured-and-recovered':bytes[0x232]?'status-and-recovered':'recovered');
+  return {...result(true,1,mode===5?'statuses-cleared':mode===1?'cured-and-recovered':bytes[0x232]?'status-and-recovered':'recovered'),
+    number_feedback:deltas.number_feedback};
 }
