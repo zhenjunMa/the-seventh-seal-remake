@@ -1,0 +1,23 @@
+remake/runtime/tools/export_native_services.py
+  s_a4111640cbf756::t_25271f1310e2dc 126-132,138-142
+remake/runtime/web/native_statue_view.mjs
+  s_a4111640cbf756::t_f38e0d65f2fde4 146-148
+remake/runtime/tools/data_recipes/index.json
+  s_a4111640cbf756::t_a0739df0835d19 11908,11916,20014
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "0c4c9f132edd67bddc03b3f112f782879fba401d",
+  "prompts": {},
+  "sessions": {
+    "s_a4111640cbf756": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1ddcb-67b7-7f80-9abf-47180eae9216",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
