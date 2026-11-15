@@ -306,7 +306,10 @@ export class BattleMenuView{
       this.image(stat.images[0].image,x,y);const hp=stat.widgets.find(w=>w.name==='hp_bar'),mp=stat.widgets.find(w=>w.name==='mp_bar');
       for(const [resource,w]of [[actor.hp,hp],[actor.mp,mp]]){const image=this.images.get(w.normal_images[0]),r=w.rect;if(image&&resource.maximum>0){const width=Math.floor(image.width*clamp(resource.current/resource.maximum));if(width)drawBattleImage(c,image,0,0,width,image.height,x+r.left,y+r.top,width,image.height);}}
       this.text(`${actor.hp.current}/${actor.hp.maximum}`,x+70,y+21,{font:'bold 10px Arial',widget:stat.widgets.find(w=>w.name==='HpText')});this.text(`${actor.mp.current}/${actor.mp.maximum}`,x+144,y+21,{font:'bold 10px Arial',widget:stat.widgets.find(w=>w.name==='MpText')});
-      const nameIndex=actor.id==='002'?1:actor.id==='001'?0:null;if(nameIndex!==null)this.asset('fight_role_name',nameIndex,x+70,y+3);else this.text(actor.name,x+70,y+3);
+      // Native name frames are ordered by the one-based role ID.
+      const nameIndex=Number(actor.id)-1;
+      if(this.manifest.assets.fight_role_name?.frames[nameIndex])this.asset('fight_role_name',nameIndex,x+70,y+3);
+      else this.text(actor.name,x+70,y+3);
       // Native 42EAD0 shades time_bar, then draws time_glass. Canvas uses
       // the original alpha silhouette and an 8bit colour adapter.
       const state=this.snapshot.scheduler?(actor.hp.current>0&&!(actor.state_raw>=4&&actor.state_raw<=7)?battleBallState(g,threshold):null):{top:0,color:[0,128,0],phase:'charge',level:23};
