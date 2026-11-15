@@ -143,14 +143,14 @@ export class NativeStatueView{
     if(this.disposed)return false;
     if(this.isSuspended()||this.pending)return true;
     if(key==='Escape'){if(!repeat)this.toggleClue();return true;}
-    if(key==='ArrowUp'||key==='ArrowDown'){
-      this.state.keyboardIndex=Math.max(0,Math.min(6,this.state.keyboardIndex+(key==='ArrowUp'?-1:1)));
+    if(['ArrowUp','ArrowRight','ArrowDown','ArrowLeft'].includes(key)){
+      const step=key==='ArrowUp'||key==='ArrowRight'?-1:1;
+      this.state.keyboardIndex=Math.max(0,Math.min(6,this.state.keyboardIndex+step));
       this.pointer=[...STATUE_CONTROLS[this.state.keyboardIndex].center];this.pointerVisible=true;this.paintPointer();return true;
     }
     if(key==='Enter'||key===' '){
       if(!repeat){if(this.state.clueVisible)this.toggleClue();else this.activateAt(...this.pointer);}return true;
     }
-    // Original WordDisc has no left/right, Tab or text editing command.
     return true;
   }
   dispose(){

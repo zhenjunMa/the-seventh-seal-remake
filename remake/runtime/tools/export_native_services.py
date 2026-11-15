@@ -123,12 +123,23 @@ def decode_pe_cursor(raw, source, width, height, hotspot):
     dib = payload[4:]
     if struct.unpack_from('<IiiHHI', dib) != (40, width, height * 2, 1, 8, 0):
         raise ValueError('PE cursor DIB geometry/encoding differs from the fixed source')
+    palette_colors = struct.unpack_from('<I', dib, 32)[0] or 256
+    color_stride = (width + 3) // 4 * 4
+    mask_stride = (width + 31) // 32 * 4
+    mask_offset = 40 + palette_colors * 4 + color_stride * height
+    mask = dib[mask_offset:]
+    if len(mask) != mask_stride * height:
+        raise ValueError('PE cursor AND mask differs from the fixed dimensions')
     header = struct.pack('<HHHBBBBHHII', 0, 2, 1, width % 256, height % 256,
                          0, 0, hotspot['x'], hotspot['y'], len(dib), 22)
     with Image.open(BytesIO(header + dib)) as opened:
         if opened.format != 'CUR' or opened.size != (width, height):
             raise ValueError('Decoded PE cursor geometry differs from the fixed source')
-        return opened.convert('RGBA')
+        image = opened.convert('RGBA')
+    # Pillow's CUR decoder reads the color bitmap but leaves the AND mask unused.
+    transparent = Image.frombytes('1', (width, height), mask, 'raw', '1', mask_stride, -1)
+    image.putalpha(ImageOps.invert(transparent.convert('L')))
+    return image
 
 
 def statue_cursor(raw):

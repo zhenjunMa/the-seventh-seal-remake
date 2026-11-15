@@ -11905,7 +11905,7 @@
     },
     "native_services.json": {
       "root": [
-        636597
+        908760
       ],
       "format": {
         "indent": 2,
@@ -11913,7 +11913,7 @@
         "crlf": false,
         "newline": true
       },
-      "sha256": "26bcde3e4f6f08cc6b6b126c4b7a2bec31920e6bee03d47f2c8d0b78874783a7",
+      "sha256": "3ba6b4828591ea5c10f2f19a8f20033f251501e66dd4c99db1bfa6639ce8ceee",
       "bytes": 789569
     },
     "opening_map_resources.json": {
@@ -20011,6 +20011,6 @@
     "0107": "da5d41c105b95bc972e9d14a801145d8e5b4d07d28b7cee225aab8ce46953787",
     "0108": "19b14cab6ef1be1f31f8d7e31a2bb736b9f4eb09dd27952f3effa0ecf4d0b168",
     "0109": "e9743843e69704602a22f2c609d48e8c0179f8a967b59795fda94a96c63d44e2",
-    "0110": "bd8da4c85c077d6e4eca8d8a07b033d1e5d9fb0fd5882c911f361c72b8efbbe8"
+    "0110": "858bb403d24091d4d6f5b92cb1bae448e2c5e679a55134ec102b30bcb96259e7"
   }
 }
