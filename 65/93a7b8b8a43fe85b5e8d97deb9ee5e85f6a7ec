@@ -1,0 +1,19 @@
+remake/runtime/web/core/exploration/map_npcs.mjs
+  s_e7d6e17790b970::t_ed43d4d7ab20fc 163-167,169,178-181,206
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "6593a7b8b8a43fe85b5e8d97deb9ee5e85f6a7ec",
+  "prompts": {},
+  "sessions": {
+    "s_e7d6e17790b970": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e4d8-1525-7f90-bfd0-b2e0fcd5d673",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
