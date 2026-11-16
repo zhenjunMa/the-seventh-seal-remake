@@ -1,7 +1,7 @@
 import {setImageSource} from './core/ui/image_dom.mjs';
 import {menuText,menuStyle,menuImage} from './menu_dom.mjs';
 import {techniqueSlots,sourceTechniqueSlot,techniqueSlotName,techniqueCandidates,TECHNIQUE_CATEGORIES,TECHNIQUE_WHEEL_NAVIGATION,techniqueCombinations,techniqueCombinationName} from './core/ui/menu_techniques.mjs';
-import {operationSummaryFields,techniqueDisplayName} from './core/ui/menu_presentation.mjs';
+import {operationSummaryFields,techniqueDescription,techniqueDisplayName,techniqueMpCostText} from './core/ui/menu_presentation.mjs';
 
 const position=(node,x,y,w=null,h=null)=>Object.assign(node.style,{position:'absolute',left:x+'px',top:y+'px',...(w===null?{}:{width:w+'px'}),...(h===null?{}:{height:h+'px'})});
 const skillRecords=new WeakMap();
@@ -10,8 +10,6 @@ const raw=skill=>{
   if(!record||record.hex!==skill.fixed_raw_hex){record={hex:skill.fixed_raw_hex,view:new DataView(Uint8Array.from(skill.fixed_raw_hex.match(/../g),v=>parseInt(v,16)).buffer)};skillRecords.set(skill,record);}
   return record.view;
 };
-const description=skill=>{if(!skill)return '';const bytes=new Uint8Array(raw(skill).buffer).slice(0x3b,0x3b+200);return new TextDecoder('gbk').decode(bytes.slice(0,Math.max(0,bytes.indexOf(0))));};
-const mpCostText=cost=>cost>0?` Mp/${cost}`:'';
 
 // Owns only its overlay. World transactions, field casting and test battles are
 // host callbacks; scratch previews never modify the persistent seven-slot table.
@@ -300,7 +298,7 @@ export class OperationTechniqueView{
     const yellow=!composed&&entry.type!==2&&selected;
     const options={foreground:composed?'#505050':yellow?'#ffff00':'#ffffff',shadow:yellow?'#4f4f00':'#000000',
       ...(direct?{layout:'mnu',advanceOverride:19,lineHeight:19,maxWidth:250,maxLines:1}:{})};
-    const cost=this.section==='use'?mpCostText(entry.source?.mp_cost):'';
+    const cost=this.section==='use'?techniqueMpCostText(entry.source?.mp_cost):'';
     if(!button._labelNode)button._labelNode=this.text('',34,direct?5:7,button,'',options);
     menuStyle(button._labelNode,{top:(direct?5:7)+'px',color:options.foreground});this.paintText(button._labelNode,techniqueDisplayName(entry.name)+cost,'simsun19_text',options);
   }
@@ -317,10 +315,10 @@ export class OperationTechniqueView{
     if(entry.record){
       const skills=entry.record.indices.map(index=>this.source.roles[this.roleId].skills[index]);
       const cost=skills.reduce((sum,skill)=>sum+skill.mp_cost,0);
-      this.onInfo?.(skills.map(skill=>techniqueDisplayName(skill.name)).join(' → ')+mpCostText(cost));
+      this.onInfo?.(skills.map(skill=>techniqueDisplayName(skill.name)).join(' → ')+techniqueMpCostText(cost));
     }else{
-      const cost=this.section==='edit'?mpCostText(entry.source?.mp_cost):'';
-      this.onInfo?.(description(entry.source)+cost);
+      const cost=this.section==='edit'?techniqueMpCostText(entry.source?.mp_cost):'';
+      this.onInfo?.(techniqueDescription(entry.source)+cost);
     }
     this.paintPreview();
   }

@@ -2,7 +2,7 @@ import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {battleViewport,battleActorPositions,battleBallState} from './core/battle/battle_layout.mjs';
 import {commandForActor} from './core/battle/battle_scheduler.mjs';
-import {operationMnuTextOptions,techniqueDisplayName} from './core/ui/menu_presentation.mjs';
+import {operationMnuTextOptions,techniqueDescription,techniqueDisplayName,techniqueMpCostText} from './core/ui/menu_presentation.mjs';
 import {TECHNIQUE_CATEGORIES,TECHNIQUE_WHEEL_NAVIGATION} from './core/ui/menu_techniques.mjs';
 import {BattleResultView} from './battle_result_view.mjs';
 import {battleResources,drawBattleImage} from './core/battle/battle_resources.mjs';
@@ -23,6 +23,12 @@ const skillCategory=skill=>{
   const type=(skill?.type_flags_u32_0x32??skill?.type_raw??parseInt(skill?.fixed_raw_hex?.slice(0x64,0x66),16))&15;
   return {2:1,1:2,3:3}[type]??2;
 };
+function techniqueHpCost(skill){
+  const hex=skill?.fixed_raw_hex?.slice(0x14b*2,0x14f*2);
+  if(hex?.length!==8)return 0;
+  const bytes=Uint8Array.from(hex.match(/../g),value=>parseInt(value,16));
+  return Math.max(0,-new DataView(bytes.buffer).getInt32(0,true));
+}
 export function battleHudPaths(manifest){
   const paths=new Set();
   for(const menu of manifest.menus)for(const image of menu.images)paths.add(image.image);
@@ -95,16 +101,32 @@ export class BattleMenuView{
   cue(name){this.playCue?.(name,`battle-menu:${this.epoch}:${++this.cueSequence}`);}
   setInfo(message){this.message=message;this.info.textContent=message;}
   reject(message){this.setInfo(message);this.cue('menuError');}
+  skillInfo(name,skill){
+    if(!skill)return name;
+    const wheel=this.stage==='wheel';
+    const combination=skill.battle_handler==='combination';
+    const detail=combination?skill.component_names?.map(techniqueDisplayName).join(' + '):techniqueDescription(skill);
+    // Game.exe 0x429340 and 0x42B990 use different separators for single skills.
+    const separator=combination?'=':wheel?':':'-';
+    const label=detail?`${name}${separator}${detail}`:name;
+    const mp=wheel?techniqueMpCostText(skill.mp_cost):'';
+    if(!mp)return label;
+    const hp=combination?(skill.component_skill_ids??[]).reduce((sum,id)=>sum+techniqueHpCost(this.battle.skills[id]),0):techniqueHpCost(skill);
+    return label+mp+(hp>0?` Hp/${hp}`:'');
+  }
   syncInfo(){
     if(this.stage==='result')return;
     let message='';
     if(this.stage==='actors')message=this.snapshot?.actors.find(a=>a.id===this.snapshot.player_id)?.name??'';
     else if(this.stage==='wheel'){
       const slot=this.commandSlots?.[this.focusIndex];
-      const names=slot?.skill?.component_names;
-      message=slot?.skill?.battle_handler==='combination'&&names?.length?`${slot.name}=${names.map(techniqueDisplayName).join(' + ')}`:slot?.name??'';
+      message=this.skillInfo(slot?.name??'',slot?.skill);
     }
-    else if(['skills','items'].includes(this.stage))message=this.entries?.[this.listIndex]?.name??(this.stage==='skills'?'此分类没有招式。':'此分类没有可用的道具。');
+    else if(this.stage==='skills'){
+      const entry=this.entries?.[this.listIndex];
+      message=entry?this.skillInfo(entry.name,entry.skill):'此分类没有招式。';
+    }
+    else if(this.stage==='items')message=this.entries?.[this.listIndex]?.name??'此分类没有可用的道具。';
     else if(this.stage==='target'){
       const preview=this.targetPreview();
       message=preview.group&&preview.actors.length?(preview.actors[0].side==='player'?'我方全体':'敌方全体'):preview.actors[0]?.name??'';
@@ -184,7 +206,7 @@ export class BattleMenuView{
     else if(slot?.type===2&&slot.index_one_based===4&&this.battle.chooseEscape)this.commitFixed('escape');
     else this.reject('当前无法执行此指令。');
   }
-  skillEntries(){return this.skills().filter(s=>skillCategory(s)===this.skillCategory).map(s=>({id:s.id,name:techniqueDisplayName(s.name),description:this.battle.skillUnavailableReason?.(s.id)||`${s.name}　MP ${s.mp_cost}`,available:this.battle.canChoose(s.id),skill:s}));}
+  skillEntries(){return this.skills().filter(s=>skillCategory(s)===this.skillCategory).map(s=>({id:s.id,name:techniqueDisplayName(s.name),available:this.battle.canChoose(s.id),skill:s}));}
   openSkills(){const memory=this.getSettings?.().battleCursor==='memory'?this.memory.get(this.snapshot.player_id):null;this.skillCategory=memory?.skillCategory??0;this.entries=this.skillEntries();this.openList('skills');}
   listCategory(){return this.stage==='items'?(this.itemCategory??0):this.skillCategory;}
   selectListCategory(index){
@@ -405,7 +427,7 @@ export class BattleMenuView{
       if(actor.id===playerId&&canCommand)this.asset('fight_mark',Math.floor(now/120),x-30,y-16,{blend:'lighter'});
     });
     const info=this.menus.get('fight_info'),infoText=info.widgets.find(w=>w.name==='TEXT');
-    const wrap=this.stage==='wheel'&&this.commandSlots?.[this.focusIndex]?.type===1;
+    const wrap=this.stage==='wheel'?Boolean(this.commandSlots?.[this.focusIndex]?.skill):this.stage==='skills'&&Boolean(this.entries?.[this.listIndex]?.skill);
     this.image(info.images[0].image,0,443);this.text(this.message,infoText.rect.left,443+infoText.rect.top,{font:'14px SimSun',widget:infoText,wrap});
     if(this.stage!=='result')this.drawWheel(now);
     if(['skills','items'].includes(this.stage))this.drawList();

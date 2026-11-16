@@ -24,6 +24,16 @@ export function techniqueDisplayName(name) {
   return name.replaceAll('．','·');
 }
 
+export function techniqueDescription(skill) {
+  const hex=skill?.fixed_raw_hex?.slice(0x3b*2,(0x3b+200)*2);
+  if(!hex)return '';
+  const bytes=Uint8Array.from(hex.match(/../g),value=>parseInt(value,16));
+  const end=bytes.indexOf(0);
+  return new TextDecoder('gbk').decode(end<0?bytes:bytes.subarray(0,end));
+}
+
+export const techniqueMpCostText=cost=>cost>0?` Mp/${cost}`:'';
+
 export function operationMnuTextOptions(widget) {
   if(widget?.type_raw!==7||typeof widget.raw_hex!=='string'||widget.raw_hex.length!==946)throw new Error('Invalid source MNU text widget');
   const bytes=Uint8Array.from(widget.raw_hex.match(/../g),value=>parseInt(value,16)),view=new DataView(bytes.buffer);
