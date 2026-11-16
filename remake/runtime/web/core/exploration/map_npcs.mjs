@@ -160,11 +160,13 @@ export class MapNpcRuntime {
       if(!source||!role)continue;
       npc.passThroughActors=source.type===1||PASS_THROUGH_ROLES.has(npc.resource_id);
       source={...source,bindings_raw:[...source.bindings],bindings:nativeNpcActionBindings(role),bindings_initialized:true};
-      const idle=role.actions.find(action=>action.index===(npc.stage_action??source.bindings[0]));
-      if(!idle)throw new Error('人物缺少源初始化待机动作');
-      const a={npc,source,role,home:{x:npc.x,y:npc.y},goal:{x:npc.x,y:npc.y},path:[],step:null,
+      // 4B4F10 initializes action 0 even for roles with no channel 0 binding (ROLE124).
+      const idleIndex=source.bindings[0]===-1?0:source.bindings[0];
+      const initialAction=role.actions.find(action=>action.index===(npc.stage_action??idleIndex));
+      if(!initialAction)throw new Error(`人物缺少源初始化动作：${npc.id} / ${npc.resource_id}`);
+      const a={npc,source,role,idleIndex,home:{x:npc.x,y:npc.y},goal:{x:npc.x,y:npc.y},path:[],step:null,
         route:npcRoute(source,geometry),
-        wait:source.wait,waitLatch:source.waitLatch,logicalFrame:idle.uses_sequence?Math.max(0,idle.sequence_raw.indexOf(npc.stage_frame??0)):npc.stage_frame??0,action:idle.index,interval:80,
+        wait:source.wait,waitLatch:source.waitLatch,logicalFrame:initialAction.uses_sequence?Math.max(0,initialAction.sequence_raw.indexOf(npc.stage_frame??0)):npc.stage_frame??0,action:initialAction.index,interval:80,
         elapsed:0,animationCountdown:0,contactBlocked:false,
         visual:{x:npc.x,y:npc.y,direction:npc.direction},gait:new DistanceGait()};
       if (a.route.length) this.initializeRoute(a);
@@ -173,7 +175,10 @@ export class MapNpcRuntime {
       this.actors.set(npc.id,a);this.project(a);
     }
   }
-  action(a,channel){return a.role.actions.find(action=>action.index===a.source.bindings[channel]);}
+  action(a,channel){
+    const index=channel===0?a.idleIndex:a.source.bindings[channel];
+    return a.role.actions.find(action=>action.index===index);
+  }
   logicalCount(action){return action.logical_count??(action.uses_sequence?action.sequence_length_raw:action.frame_count);}
   setAction(a,channel){
     const action=this.action(a,channel)??this.action(a,0)??a.role.actions[0];
@@ -198,7 +203,7 @@ export class MapNpcRuntime {
     if(movedX||movedY)a.visual.direction=direction(movedX,movedY);
     // Missing walk channels alias idle. Keep that animation on its native
     // timer instead of feeding stationary actors into the distance gait.
-    const walking=walk&&walk.index!==a.source.bindings[0]&&!this.held.has(a.npc.id)
+    const walking=walk&&walk.index!==a.idleIndex&&!this.held.has(a.npc.id)
       &&(movedX||movedY||a.action===walk.index&&!a.contactBlocked);
     const display=walking?walk:a.contactBlocked?this.action(a,0):action;
     const frame=walking?a.gait.advance(walk,{dx:movedX,dy:movedY,stride:motion.stride})
