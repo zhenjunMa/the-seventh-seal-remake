@@ -85,7 +85,7 @@ class SourceFingerprints:
         changed = {name: dict(reference_sha256=self.expected[name], actual_sha256=self.files[name])
                    for name in sorted(self.expected.keys() & self.files.keys())
                    if self.expected[name] != self.files[name]}
-        # The media plan checks the remaining backgrounds individually.
+        # The media plan accepts any usable backgrounds from this archive.
         changed_required = [name for name in changed
                             if not (allow_loading_subset and name == LOADING_BACKGROUND_SOURCE.casefold())]
         from hashlib import sha256

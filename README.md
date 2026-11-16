@@ -37,7 +37,7 @@ Windows 下用 `python -m venv .venv` 创建虚拟环境，并将 `.venv/bin/pyt
 .venv/bin/python -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/DiQiFengYin" --dry-run
 ```
 
-缺少音频时游戏会静默处理，缺少影片时会跳过播放并继续。载入背景可以缺少一部分，至少要有一张通过校验，进度条和边框仍需齐全。这些允许的缺失无需额外参数。
+缺少音频时游戏会静默处理，缺少影片时会跳过播放并继续。载入背景按传入的原版目录导出，至少要有一张能解码且含可见内容的图片，进度条和边框仍需齐全。这些允许的缺失无需额外参数。
 
 如果换了原版版本，脚本可能提示多出文件或同名文件的内容与基准不同。确认安装来源后，可以加 `--ignore-fingerprint` 重试。脚本仍会校验必需文件、读取的游戏数据和导出产物。
 

@@ -116,7 +116,7 @@ class MediaDefinitions:
             self.select_audio(fingerprints)
             self.select_videos(fingerprints.original)
         if media_documents and 'data/prologue_presentation.json' in media_documents:
-            self.select_loading_backgrounds(fingerprints)
+            self.select_loading_backgrounds(fingerprints.original)
         for key, data in self.documents.items():
             if key == 'data/battle_packs.json':
                 continue
@@ -149,14 +149,12 @@ class MediaDefinitions:
                     unavailable = self.unavailable_audio if kind == 'audio' else self.unavailable_video
                     unavailable.add(source)
 
-    def select_loading_backgrounds(self, fingerprints):
+    def select_loading_backgrounds(self, original):
         source = LOADING_BACKGROUND_SOURCE
         try:
-            path = fingerprints.original.path(source)
+            path = original.path(source)
         except FileNotFoundError:
             return  # The ordinary source preflight reports a missing archive.
-        if fingerprints.file_hash(path) == fingerprints.expected.get(source.casefold()):
-            return
 
         from source.dgp import DGP, DGPError
 
@@ -164,23 +162,31 @@ class MediaDefinitions:
         known = {row['sha256']: row['image'] for row in loading['backgrounds']}
         try:
             graphics = DGP(path)
-            for index, frame in enumerate(graphics.frames):
-                if frame.size == 0:
-                    continue
-                image = graphics.decode(index)
-                if not image.getchannel('A').getbbox():
-                    continue
-                with io.BytesIO() as png:
-                    image.save(png, format='PNG')
-                    name = known.get(hashlib.sha256(png.getvalue()).hexdigest())
-                if name is None:
-                    raise ValueError(f'{source} 的第 {index + 1} 张载入背景与已核对素材不一致')
-                self.loading_frames.setdefault(name, index)
         except DGPError as error:
             raise ValueError(f'无法读取载入背景 {source}：{error}') from error
-        if not self.loading_frames:
+
+        backgrounds = []
+        for index, frame in enumerate(graphics.frames):
+            if frame.size == 0:
+                continue
+            try:
+                image = graphics.decode(index)
+            except DGPError:
+                continue
+            if not image.getchannel('A').getbbox():
+                continue
+            with io.BytesIO() as png:
+                image.save(png, format='PNG')
+                digest = hashlib.sha256(png.getvalue()).hexdigest()
+            # Keep existing HD bindings for identical pictures. A different
+            # picture gets its own path so it cannot pick up the old HD file.
+            name = known.get(digest, f'/assets/prologue_loading/background_{index:02d}_{digest[:16]}.png')
+            if name not in self.loading_frames:
+                self.loading_frames[name] = index
+                backgrounds.append({'image': name, 'sha256': digest})
+        if not backgrounds:
             raise ValueError(f'{source} 缺少可用的载入背景图')
-        loading['backgrounds'] = [row for row in loading['backgrounds'] if row['image'] in self.loading_frames]
+        loading['backgrounds'] = backgrounds
 
     def select_videos(self, original):
         def available(source):

@@ -5,7 +5,7 @@ const supported = [
   /^dialogue_ui\/(?:faces_\d+|(?:board|think|map_name|reward)_000|wait[12]_\d+)\.png$/i,
   /^world_map\/locate_\d+\/image_\d+\.png$/i,
   /^prologue\/wait_\d+\.png$/i,
-  /^prologue_loading\/(?:background_\d+|progress\/image_00[01])\.png$/i,
+  /^prologue_loading\/(?:background_\d+(?:_[a-f0-9]{16})?|progress\/image_00[01])\.png$/i,
   /^maps\/[a-z\d_-]+\/(?:background|objects\/\d+_frame_000)\.png$/i,
   /^(?:stages\/stage\d+|forest_stage|skill_test_stage)\/[a-z\d_]+\/(?:frame|intrinsic)_000\.png$/i,
   /^startup\/(?:(?:menulbk|menulbx|specialback)\/frame_000|menuback\/frame_00[0-5])\.png$/i,
