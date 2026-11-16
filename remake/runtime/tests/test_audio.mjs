@@ -39,7 +39,7 @@ test('title music uses registered clips, keeps channel settings and returns to s
   audio.setChannelVolume('music',.5);audio.setMusic(clip);await tick();
   assert.equal(audio.snapshot().desired_clip,clip);assert.equal(audio.snapshot().channels.music.volume,.5);
   const count=voices.length;audio.setMusic(clip);await tick();assert.equal(voices.length,count);
-  assert.throws(()=>audio.setMusic('missing/title.wav'));
+  assert.equal(audio.setMusic('missing/title.wav').desired_clip,clip);
   audio.setScene({mapId:'M70010'});await tick();assert.equal(audio.snapshot().desired_clip,original);
 });
 

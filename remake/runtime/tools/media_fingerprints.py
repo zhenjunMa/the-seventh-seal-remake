@@ -58,7 +58,7 @@ class SourceFingerprints:
             self.digests[path] = checksum(path)
         return self.digests[path]
 
-    def check(self, *, ignore=False):
+    def check(self, *, ignore=False, allow_missing_media=False):
         try:
             raw = self.reference.read_bytes()
         except FileNotFoundError as error:
@@ -76,6 +76,11 @@ class SourceFingerprints:
         if 'game.exe' not in self.expected:
             raise ValueError('原版指纹基准缺少 GAME.exe')
         missing = sorted(self.expected.keys() - self.files.keys())
+        optional = [name for name in missing if allow_missing_media and (
+            name.startswith('sound/') and PurePosixPath(name).suffix in {'.wav', '.mp3'}
+            or name.startswith('animate/') and name.endswith('.bik')
+        )]
+        missing_required = sorted(set(missing) - set(optional))
         extra = sorted(self.files.keys() - self.expected.keys())
         changed = {name: dict(reference_sha256=self.expected[name], actual_sha256=self.files[name])
                    for name in sorted(self.expected.keys() & self.files.keys())
@@ -83,10 +88,10 @@ class SourceFingerprints:
         from hashlib import sha256
         self.report = dict(reference='tools/'+self.reference.name, reference_sha256=sha256(raw).hexdigest(),
                            compared=len(self.files), matched=not (missing or changed or extra),
-                           ignored=ignore, missing=missing, changed=changed, extra=extra)
+                           ignored=ignore, missing=missing, missing_media=optional, changed=changed, extra=extra)
         problems = []
         if not ignore:
-            for label, names in [('缺少基准文件', missing), ('内容与基准不同', list(changed)), ('多出素材文件', extra)]:
+            for label, names in [('缺少基准文件', missing_required), ('内容与基准不同', list(changed)), ('多出素材文件', extra)]:
                 if names:
                     problems.append(f'{label} {len(names)} 个：'+ '、'.join(names[:8])+(' …' if len(names)>8 else ''))
             if problems:

@@ -30,9 +30,8 @@ export class StoryMediaView{
     Object.assign(this,{manifest,root,audio,playback,createMedia,setTimer,clearTimer,createAudioContext});
     this.entries=new Set();this.persistent=null;this.deferredRelease=false;this.disposed=false;this.timer=null;
   }
-  check(){need(!this.disposed,'播放器已关闭');if(this.error)throw this.error;this.playback?.check();}
+  check(){need(!this.disposed,'播放器已关闭');this.playback?.check();}
   suppressMusic(value){this.audio.setStoryMusicSuppressed(value);}
-  fail(error){this.error??=error;this.playback?.fail(error);}
   retire(entry){
     if(!this.entries.delete(entry))return;
     entry.clean();try{entry.media.pause();entry.media.removeAttribute?.('src');entry.media.load?.();entry.media.remove?.();}catch{}
@@ -42,6 +41,15 @@ export class StoryMediaView{
   releaseSounds(){
     for(const entry of [...this.entries])if(entry.kind==='audio')this.retire(entry);
     this.persistent=null;this.deferredRelease=false;
+  }
+  mediaFailed(entry){
+    if(!this.entries.has(entry))return;
+    if(entry===this.persistent&&this.deferredRelease)this.releaseSounds();
+    else{
+      if(entry===this.persistent)this.persistent=null;
+      this.retire(entry);
+    }
+    entry.resolve();
   }
   sync(){
     if(this.disposed)return;
@@ -69,12 +77,11 @@ export class StoryMediaView{
     const promise=Promise.resolve(result).then(()=>{
       entry.pending=false;
       if(!this.entries.has(entry)||this.disposed||this.playback?.paused)entry.media.pause();
-    },error=>{entry.pending=false;if(this.entries.has(entry)){entry.reject(error);this.fail(error);}throw error;});
+    },()=>{entry.pending=false;this.mediaFailed(entry);});
     entry.startPromise=promise;promise.catch(()=>{});return promise;
   }
-  make(kind,filename,signal){
+  make(kind,row,signal){
     this.check();signal?.throwIfAborted();
-    const row=this.manifest[kind==='video'?'videos':'sounds'][filename.toLowerCase()];need(row,`原资源尚未准备：${filename}`);
     const media=this.createMedia(kind),entry={kind,media,ended:false,pending:false};
     entry.finished=new Promise((resolve,reject)=>Object.assign(entry,{resolve,reject}));entry.finished.catch(()=>{});
     const ended=()=>{
@@ -82,7 +89,7 @@ export class StoryMediaView{
       entry.ended=true;entry.resolve();
       if(entry===this.persistent&&this.deferredRelease)this.releaseSounds();
     };
-    const failed=()=>{if(this.entries.has(entry)){const error=media.error??new Error(`无法播放原剧情资源 ${filename}`);entry.reject(error);this.fail(error);}};
+    const failed=()=>this.mediaFailed(entry);
     const abort=()=>{entry.reject(signal.reason);this.retire(entry);};
     media.addEventListener('ended',ended);media.addEventListener('error',failed);signal?.addEventListener('abort',abort,{once:true});
     entry.clean=()=>{media.removeEventListener('ended',ended);media.removeEventListener('error',failed);signal?.removeEventListener('abort',abort);};
@@ -107,10 +114,14 @@ export class StoryMediaView{
   }
   hooks(){return {
     media:async({filename,signal})=>{
+      this.check();signal?.throwIfAborted();
+      const clip=this.manifest.videos[filename.toLowerCase()];
+      if(!clip)return;
       const previous=this.audio.snapshot?.().story_music_suppressed??false;
       this.suppressMusic(true);let entry;
       try{
-        entry=this.make('video',filename,signal);
+        try{entry=this.make('video',clip,signal);}
+        catch{signal?.throwIfAborted();this.check();return;}
         await playbackTask(entry.finished,signal);
         if(this.playback?.paused)await this.playback.ready();this.check();
       }finally{if(entry)this.retire(entry);this.suppressMusic(previous);}
@@ -127,11 +138,13 @@ export class StoryMediaView{
         return;
       }
       need(kind==='play','声音操作未恢复');
-      // Missing original sounds are explicit source facts. Retain the ANM
-      // command and music lifecycle without guessing another carrier.
-      if(this.manifest.missing_sounds?.[filename.toLowerCase()])return;
-      const entry=this.make('audio',filename,signal);
-      if(persistent)this.persistent=entry;
+      const name=filename.toLowerCase();
+      const clip=this.manifest.sounds[name]??this.audio.getClip?.(this.manifest.missing_sounds?.[name]?.source_path??'sound/'+name);
+      if(!clip)return;
+      let entry;
+      try{entry=this.make('audio',clip,signal);}
+      catch{signal?.throwIfAborted();this.check();return;}
+      if(persistent&&this.entries.has(entry))this.persistent=entry;
       await this.start(entry);this.check();
     }
   };}

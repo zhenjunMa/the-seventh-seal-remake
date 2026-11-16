@@ -19,6 +19,7 @@ import shutil
 import struct
 import subprocess
 import sys
+from tempfile import TemporaryDirectory
 from uuid import uuid4
 
 from media_definitions import MediaDefinitions, OriginalFiles, checksum, url
@@ -34,11 +35,14 @@ def digest(value):
 
 class MediaBuilder:
     def __init__(self, runtime, original_dir, *, force=False, images_only=False, ignore_fingerprint=False,
-                 generated=None):
+                 generated=None, media_documents=None, media_formats=None, fingerprints=None):
         self.runtime = Path(runtime)
         self.web = self.runtime / 'web'
-        self.original = OriginalFiles(original_dir)
-        self.plan = MediaDefinitions(self.runtime, generated=generated)
+        self.fingerprints = fingerprints or SourceFingerprints(OriginalFiles(original_dir), self.runtime / 'tools/media_inputs.json')
+        self.original = self.fingerprints.original
+        self.media_formats = media_formats or {}
+        self.plan = MediaDefinitions(self.runtime, generated=generated, media_documents=media_documents,
+                                     fingerprints=self.fingerprints)
         self.force = force
         self.images_only = images_only
         self.ignore_fingerprint = ignore_fingerprint
@@ -82,8 +86,7 @@ class MediaBuilder:
             if row.get('source'):
                 names.add(row['source'])
             names.update(row.get('backgrounds', []))
-        self.fingerprints = SourceFingerprints(self.original, self.runtime / 'tools/media_inputs.json')
-        problems.extend(self.fingerprints.check(ignore=self.ignore_fingerprint))
+        problems.extend(self.fingerprints.check(ignore=self.ignore_fingerprint, allow_missing_media=bool(self.media_formats)))
         expected = {key.casefold(): value for key, value in self.plan.inputs.items()}
         for name in sorted(names):
             try:
@@ -409,6 +412,50 @@ class MediaBuilder:
         finally:
             temporary.unlink(missing_ok=True)
 
+    def export_changed_audio(self, row, path):
+        from export_story_media import export_sound
+        from incremental import write_bytes
+
+        source = self.source(row['source'])
+        try:
+            with TemporaryDirectory() as directory:
+                output, report = export_sound(self.ffmpeg, self.ffprobe, source, Path(directory) / 'audio')
+                if output.suffix != path.suffix:
+                    raise ValueError('音频格式在构建期间发生变化')
+                payload = output.read_bytes()
+        except (AssertionError, subprocess.CalledProcessError) as error:
+            raise ValueError('无法导出原版音频：' + row['source']) from error
+        write_bytes(path, payload)
+        stream = report['output_probe']['streams'][0]
+        return dict(
+            mime=report['mime'], bytes=len(payload),
+            audio=dict(codec=stream['codec_name'], sample_rate=int(stream['sample_rate']),
+                       channels=int(stream['channels']), duration_seconds=float(stream['duration'])),
+            source=dict(sha256=self.source_hashes[row['source']], bytes=source.stat().st_size,
+                        header_hex=report['validation']['source_header_hex']),
+            export=dict(decoded_audio_unchanged=True, decoded_pcm_sha256=report['validation']['full_decoded_pcm_sha256']),
+        )
+
+    def render_media_definitions(self):
+        from data_recipes import document_bytes
+
+        for path, rows in self.plan.audio_updates.items():
+            metadata = self.state[path]['audio']
+            for row in rows:
+                row.update(mime=metadata['mime'], sha256=self.outputs[path])
+                row['source'].update(metadata['source'])
+                if 'referenced_by' in row:
+                    audio = metadata['audio']
+                    row.update(bytes=metadata['bytes'], sample_rate=audio['sample_rate'], channels=audio['channels'])
+                else:
+                    row.update(audio=metadata['audio'], export=metadata['export'])
+        documents = {}
+        for name, format_ in self.media_formats.items():
+            raw = document_bytes(self.plan.documents[name], format_)
+            documents[name] = raw
+            self.plan.definition_hashes[name] = digest(raw)
+        return documents
+
     @lru_cache(maxsize=None)
     def resource_signature(self, name):
         row = self.plan.recipes[name]
@@ -445,6 +492,7 @@ class MediaBuilder:
         path = self.local(name)
         signature = self.resource_signature(name)
         previous = self.state.get(name)
+        audio = None
         expected = self.plan.expected.get(name) if row['kind'] not in ('audio', 'video') else None
         must_decode = self.variant_assets[name]
         if not self.force and not must_decode and expected and path.is_file() and checksum(path) == expected:
@@ -453,7 +501,9 @@ class MediaBuilder:
             self.state[name] = dict(signature=signature, sha256=expected)
             self.stats['reused'] += 1
             return
-        if not self.force and previous and previous['signature'] == signature and path.is_file() and checksum(path) == previous['sha256']:
+        if (not self.force and previous and previous['signature'] == signature
+                and (not row.get('inspect_audio') or 'audio' in previous)
+                and path.is_file() and checksum(path) == previous['sha256']):
             self.outputs[name] = previous['sha256']
             self.aliases[previous['sha256']] = path
             self.stats['reused'] += 1
@@ -473,6 +523,8 @@ class MediaBuilder:
                     if digest(raw) != expected:
                         raise ValueError('原声文件与导出清单不一致：' + row['source'])
                     write_bytes(path, raw)
+                elif row.get('inspect_audio'):
+                    audio = self.export_changed_audio(row, path)
                 elif row['kind'] in ('audio', 'video'):
                     self.transcode(name, row, path)
                 else:
@@ -490,6 +542,8 @@ class MediaBuilder:
         self.outputs[name] = actual
         self.aliases[actual] = path
         self.state[name] = dict(signature=signature, sha256=actual)
+        if audio is not None:
+            self.state[name]['audio'] = audio
 
     def battle_pages(self):
         from PIL import Image
@@ -534,14 +588,13 @@ class MediaBuilder:
 
     def build(self):
         import PIL
-        from incremental import build_lock, local_modules, write_json
+        from incremental import build_lock, local_modules, write_bytes, write_json
         from PIL import Image
         # Some frozen source sheets exceed Pillow's heuristic area limit. Their
         # dimensions and exact PNG digests are supplied by the fixed manifest.
         previous_limit = Image.MAX_IMAGE_PIXELS
         Image.MAX_IMAGE_PIXELS = None
         self.cache.mkdir(parents=True, exist_ok=True)
-        self.state = json.loads(self.state_path.read_text('utf-8')) if self.state_path.is_file() else {}
         modules = local_modules(Path(__file__), self.runtime)
         encoders = {name: self.run([tool, '-version']).decode('utf-8', 'replace').splitlines()[0]
                     for name, tool in [('ffmpeg', self.ffmpeg), ('ffprobe', self.ffprobe)] if tool} if not self.images_only else {}
@@ -552,9 +605,11 @@ class MediaBuilder:
         report = dict(schema='seventh-seal-media-build', version=1, scope='images' if self.images_only else 'game',
                       started_utc=datetime.now(timezone.utc).isoformat(), passed=False,
                       missing_original_files=sorted(self.missing), source_variants=self.variants,
+                      unavailable_audio=sorted(self.plan.unavailable_audio), unavailable_video=sorted(self.plan.unavailable_video),
                       fingerprint=self.fingerprints.report, definitions_unchanged=False)
         directory = self.runtime / 'evidence/builds' / (datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'-media-'+uuid4().hex[:8])
         with build_lock(self.cache):
+            self.state = json.loads(self.state_path.read_text('utf-8')) if self.state_path.is_file() else {}
             try:
                 selected = self.selected()
                 # Group by original input to reuse source parsing and sparse
@@ -568,13 +623,16 @@ class MediaBuilder:
                         write_json(self.state_path, self.state, compact=True)
                         print(f'素材 {index+1}/{len(selected)} {self.stats}', flush=True)
                 self.battle_pages()
-                catalog = build_image_catalog(self)
-                resolved = set(self.outputs) | set(catalog['images'])
                 self.fingerprints.verify_unchanged()
                 for name, expected in self.plan.definition_hashes.items():
-                    if checksum(self.web / name) != expected:
+                    if name not in self.media_formats and checksum(self.web / name) != expected:
                         raise ValueError('构建期间游戏定义发生变化：' + name)
+                media_documents = self.render_media_definitions()
+                catalog = build_image_catalog(self)
+                resolved = set(self.outputs) | set(catalog['images'])
                 publish_runtime_indexes(self, catalog)
+                for name, raw in media_documents.items():
+                    write_bytes(self.web / name, raw)
                 report.update(passed=True, definitions_unchanged=True, counts=self.stats,
                               files=len(self.outputs), missing_assets=sorted(name for name in self.selected() if name not in resolved),
                               report=str(directory / 'run.json'))
@@ -621,28 +679,42 @@ def main(argv=None):
             result = write_reference(OriginalFiles(args.original_dir), RUNTIME / 'tools/media_inputs.json')
             print(json.dumps(result, ensure_ascii=False, indent=2), flush=True)
             return 0
-        from data_recipes import DataRecipes
+        from data_recipes import DataRecipes, MEDIA_DOCUMENTS
         # Fingerprints are checked before any output is installed, even when
         # only rebuilding JSON. Config/ is never a recipe output.
+        build_media = args.target != ['data'] and not args.images_only
         inputs = SourceFingerprints(OriginalFiles(args.original_dir), RUNTIME / 'tools/media_inputs.json')
-        problems = inputs.check(ignore=args.ignore_fingerprint)
+        problems = inputs.check(ignore=args.ignore_fingerprint, allow_missing_media=build_media)
         if problems:
             print(json.dumps(dict(problems=problems, fingerprint=inputs.report), ensure_ascii=False, indent=2))
             return 1
-        generated = DataRecipes(RUNTIME, args.original_dir, ignore_fingerprint=args.ignore_fingerprint)
-        data_report = generated.build(run=args.run)
+        deferred = MEDIA_DOCUMENTS | {'story/index.json'} if build_media else set()
+        generated = DataRecipes(RUNTIME, args.original_dir, ignore_fingerprint=args.ignore_fingerprint, media_audio=build_media)
+        data_report = generated.build(run=args.run, defer=deferred)
         print(json.dumps(dict(data=data_report), ensure_ascii=False, indent=2), flush=True)
         if args.target == ['data']:
             return 0
+        media_documents = {'data/' + name: raw for name, raw in generated.documents(MEDIA_DOCUMENTS)} if build_media else {}
+        media_formats = {name: generated.manifest['documents'][name.removeprefix('data/')]['format']
+                         for name in media_documents}
         if args.run:
             # Files are now materialized. Release the shared reconstruction
             # graph before media decoding and let the planner read the files.
             generated = None
+            if build_media:
+                node = shutil.which('node')
+                if not node:
+                    raise ValueError('缺少外部工具：node')
+                compiled = subprocess.run([node, str(RUNTIME / 'tools/export_story_packages.mjs')])
+                if compiled.returncode:
+                    return compiled.returncode
         builder = MediaBuilder(RUNTIME, args.original_dir, force=args.force, images_only=args.images_only,
-                               ignore_fingerprint=args.ignore_fingerprint, generated=generated)
+                               ignore_fingerprint=args.ignore_fingerprint, generated=generated, media_documents=media_documents,
+                               media_formats=media_formats, fingerprints=inputs)
         problems = builder.preflight()
         print(json.dumps(dict(assets=len(builder.selected()), original_files=len(builder.source_hashes),
                               missing_original_files=builder.missing, fingerprint=builder.fingerprints.report,
+                              unavailable_video=sorted(builder.plan.unavailable_video),
                               problems=problems), ensure_ascii=False, indent=2), flush=True)
         if args.ignore_fingerprint and not builder.fingerprints.report['matched']:
             print('已按 --ignore-fingerprint 放行来源差异；缺失必需文件和不匹配的导出结果仍会失败', flush=True)

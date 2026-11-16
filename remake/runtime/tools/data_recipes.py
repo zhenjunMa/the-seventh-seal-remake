@@ -21,6 +21,7 @@ from export_map_ambience import MAP_AMBIENCE_FILE, read_map_ambience
 SCHEMA = 'seventh-seal-data-recipes'
 RUNTIME = Path(__file__).resolve().parents[1]
 AUTHORING = {'runtime_content.json', 'content_checklist.json', 'battle_result.json'}
+MEDIA_DOCUMENTS = {'audio.json', 'startup_menu.json', 'startup_media.json', 'story_media.json'}
 
 
 def player_save(name):
@@ -99,7 +100,7 @@ class OriginalBytes:
 
 
 class DataRecipes:
-    def __init__(self, runtime, original_dir, *, ignore_fingerprint=False):
+    def __init__(self, runtime, original_dir, *, ignore_fingerprint=False, media_audio=False):
         self.runtime = Path(runtime).resolve()
         self.directory = self.runtime / 'tools/data_recipes'
         self.original = OriginalFiles(original_dir)
@@ -127,8 +128,11 @@ class DataRecipes:
             if not frozen_document(name):
                 raise ValueError('运行数据不可从固定配方生成：' + name)
         self.audio_headers = {}
+        self.replaceable_headers = set()
+        self.optional_audio_sources = set()
+        self.audio_header_unavailable = False
         audio = self.manifest['documents'].get('audio.json')
-        if ignore_fingerprint and audio:
+        if (ignore_fingerprint or media_audio) and audio:
             definition = dict(self.nodes[audio['root'][0]][1])
             for _, reference in self.nodes[definition['clips'][0]][1]:
                 clip = dict(self.nodes[reference[0]][1])
@@ -137,11 +141,18 @@ class DataRecipes:
                 node = self.nodes[index]
                 if node[0] != 'source' or node[2:5] != [0, 16, 'hex'] or not node[1].casefold().endswith('.wav'):
                     continue
+                if media_audio and node[1].startswith('sound/'):
+                    self.replaceable_headers.add(index)
                 # These are fixed provenance headers, not game content. Recover
                 # only a RIFF header whose bytes match the retained range SHA.
                 header = b'RIFF' + (source['bytes'] - 8).to_bytes(4, 'little') + b'WAVEfmt '
-                if digest(header) == node[5]:
+                if ignore_fingerprint and digest(header) == node[5]:
                     self.audio_headers[index] = header
+            if media_audio:
+                # A file may be absent only if every range reference is clip metadata.
+                required = {node[1] for i, node in enumerate(self.nodes)
+                            if node[0] == 'source' and i not in self.replaceable_headers}
+                self.optional_audio_sources = {self.nodes[i][1] for i in self.replaceable_headers} - required
 
     def output(self, name):
         path = PurePosixPath(name)
@@ -164,7 +175,8 @@ class DataRecipes:
                     raise ValueError('原版内容与运行数据配方不一致：' + name)
                 self.paths[name] = path
             except (ValueError, OSError) as error:
-                problems.append(str(error))
+                if not isinstance(error, FileNotFoundError) or name not in self.optional_audio_sources:
+                    problems.append(str(error))
         return problems
 
     def source_bytes(self, name):
@@ -188,13 +200,17 @@ class DataRecipes:
             _, name, offset, length, codec, expected = node
             if type(offset) is not int or type(length) is not int or offset < 0 or length < 0:
                 raise ValueError('运行数据原版范围无效')
-            raw = self.source_bytes(name)[offset:offset + length]
+            raw = self.source_bytes(name)[offset:offset + length] if name in self.paths else b''
             complete = len(raw) == length
             if not complete or digest(raw) != expected:
                 header = self.audio_headers.get(index)
-                if not complete or header is None or raw[:4] != b'RIFF' or raw[8:12] != b'WAVE':
+                if complete and header is not None and raw[:4] == b'RIFF' and raw[8:12] == b'WAVE':
+                    raw = header
+                elif index in self.replaceable_headers and (name not in self.paths or self.ignore_fingerprint):
+                    self.audio_header_unavailable = True
+                    raw = b''
+                else:
                     raise ValueError(f'运行数据原版范围不匹配：{name}+{offset}')
-                raw = header
             value = raw.hex() if codec == 'hex' else raw.decode(codec, 'strict')
         elif kind in {'object', 'array'}:
             children = node[1]
@@ -209,13 +225,15 @@ class DataRecipes:
         self.values[index] = value
         return value
 
-    def documents(self):
+    def documents(self, names=None):
         for name, row in self.manifest['documents'].items():
+            if names is not None and name not in names:
+                continue
             raw = document_bytes(self.value(row['root']), row['format'])
-            if digest(raw) != row['sha256']:
+            if digest(raw) != row['sha256'] and not (name == 'audio.json' and self.audio_header_unavailable):
                 raise ValueError('重建后的运行数据与已核实定义不同：' + name)
             yield name, raw
-        if self.map_ambience is not None:
+        if (names is None or MAP_AMBIENCE_FILE in names) and self.map_ambience is not None:
             yield MAP_AMBIENCE_FILE, self.map_ambience
 
     @cached_property
@@ -227,7 +245,7 @@ class DataRecipes:
             return (json.dumps(manifest, ensure_ascii=False, indent=2) + '\n').encode('utf-8')
         return None
 
-    def build(self, *, run=False):
+    def build(self, *, run=False, defer=()):
         problems = self.preflight()
         if problems:
             raise ValueError('；'.join(problems))
@@ -243,6 +261,8 @@ class DataRecipes:
             pending = []
             for name, raw in self.documents():
                 stats['bytes'] += len(raw)
+                if name in defer:
+                    continue
                 target = self.output(name)
                 if target.is_file() and checksum(target) == digest(raw):
                     stats['reused'] += 1

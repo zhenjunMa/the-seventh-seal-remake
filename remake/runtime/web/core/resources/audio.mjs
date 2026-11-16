@@ -7,6 +7,7 @@ const clone = value => structuredClone(value);
 const clipPath = value => typeof value === 'string' && /^\/assets\/(?:audio|startup\/audio)\/[A-Za-z0-9_./-]+\.(?:mp3|wav)$/.test(value)
   && !value.split('/').some(part => part === '.' || part === '..');
 const digest = value => /^[a-f0-9]{64}$/.test(value);
+const clipId = value => typeof value === 'string' && /^[A-Za-z0-9_./-]+$/.test(value);
 
 function validateMapAmbience(data) {
   if (data == null) return;
@@ -37,13 +38,14 @@ function spatialLevels(position) {
   return {volumeNative, panNative, gain:volumeNative / 127, pan:(panNative - 64) / (panNative < 64 ? 64 : 63)};
 }
 
-function mapAmbienceGroups(map) {
+function mapAmbienceGroups(map, clips) {
   const groups = new Map();
   for (const row of map?.emitters ?? []) {
-    if (!row.clip) continue;
+    const clip = row.clip ?? 'sound/' + row.token.toLowerCase();
+    if (!clips[clip]) continue;
     // 0x4102b0 groups negative intervals by the DAT object resource ID.
     const key = row.interval_ms < 0 ? `resource:${row.resource_id}` : `object:${row.object_index}`;
-    if (!groups.has(key)) groups.set(key, {key, clip:row.clip, interval:row.interval_ms, points:[], nextPlay:null, failed:false});
+    if (!groups.has(key)) groups.set(key, {key, clip, interval:row.interval_ms, points:[], nextPlay:null, failed:false});
     groups.get(key).points.push(row);
   }
   return [...groups.values()];
@@ -52,12 +54,12 @@ function mapAmbienceGroups(map) {
 export function validateAudioManifest(data) {
   requireValue(data?.schema === 'seventh-seal-audio' && data.version === 1 && data.clips && data.maps && data.battles && data.cues, '音乐音效清单版本无效');
   for (const [id, clip] of Object.entries(data.clips)) {
-    requireValue(/^[A-Za-z0-9_./-]+$/.test(id) && clipPath(clip.path) && ['audio/mpeg', 'audio/wav'].includes(clip.mime)
+    requireValue(clipId(id) && clipPath(clip.path) && ['audio/mpeg', 'audio/wav'].includes(clip.mime)
       && digest(clip.sha256) && digest(clip.source?.sha256) && clip.source.path?.startsWith('sound/'), '音频资源来源无效');
   }
   for (const entry of [...Object.values(data.maps), ...Object.values(data.battles), ...Object.values(data.cues), ...(data.world_map ? [data.world_map] : [])]) {
-    requireValue(entry && (entry.clip === null || data.clips[entry.clip]) && Array.isArray(entry.evidence)
-      && (!entry.pool || Array.isArray(entry.pool) && entry.pool.length > 0 && entry.pool.every(id => data.clips[id])), '音乐场景或音效映射无效');
+    requireValue(entry && (entry.clip === null || clipId(entry.clip)) && Array.isArray(entry.evidence)
+      && (!entry.pool || Array.isArray(entry.pool) && entry.pool.length > 0 && entry.pool.every(clipId)), '音乐场景或音效映射无效');
   }
   for (const entry of [...Object.values(data.frame_sounds ?? {}).flatMap(cues => Object.values(cues)), ...Object.values(data.effect_sounds ?? {})]) {
     requireValue(entry && (entry.clip === null || data.clips[entry.clip]) && Number.isInteger(entry.logical_frame) && entry.logical_frame >= 0
@@ -75,6 +77,10 @@ export function createAudioController(manifest, options = {}) {
   validateAudioManifest(manifest);
   const mapAmbience = options.mapAmbience;
   validateMapAmbience(mapAmbience);
+  const ambientClips = {...manifest.clips, ...mapAmbience?.clips};
+  const clipsByName = new Map(Object.entries(manifest.clips).map(([id, clip]) => [id.toLowerCase(), clip]));
+  const getClip = id => typeof id === 'string' && (Object.hasOwn(manifest.clips, id)
+    ? manifest.clips[id] : clipsByName.get(id.toLowerCase()));
   const createMedia = options.createMedia ?? (path => new Audio(path));
   const storage = options.storage ?? null, storageKey = options.storageKey ?? 'seventh-seal-audio-v1';
   let saved = null;
@@ -142,8 +148,9 @@ export function createAudioController(manifest, options = {}) {
     if (disposed) return;
     if (music?.clip === desired) { playMusic(); return; }
     clearMusic();
-    if (!desired || !unlocked) return;
-    const clip = manifest.clips[desired], media = createMedia(clip.path);
+    const clip = getClip(desired);
+    if (!clip || !unlocked) return;
+    const media = createMedia(clip.path);
     media.preload = 'auto'; media.loop = true; media.volume = musicVolume(); media.muted = channelMuted('music');
     const entry = {id:++nextId, clip:desired, media, started:false, pending:false, clean:() => {}};
     const restorePosition = () => {
@@ -165,19 +172,20 @@ export function createAudioController(manifest, options = {}) {
     scene = nextScene;
     if (!scene.battle && !scene.worldMap && ambientGroups === null) {
       const map = mapAmbience?.maps[scene.mapId];
-      ambientGroups = mapAmbienceGroups(map); coordinateShift = map?.coordinate_shift ?? 0;
+      ambientGroups = mapAmbienceGroups(map, ambientClips); coordinateShift = map?.coordinate_shift ?? 0;
     }
     const mapping = scene.battle ? manifest.battles[scene.stageId ?? scene.mapId] : scene.worldMap ? manifest.world_map : manifest.maps[scene.mapId];
-    if (mapping?.pool && (changed || !mapping.pool.includes(desired))) {
+    const pool = mapping?.pool?.filter(getClip);
+    if (pool?.length && (changed || !pool.includes(desired))) {
       const draw = (options.rng ?? Math.random)();
       requireValue(Number.isFinite(draw) && draw >= 0 && draw < 1, '音乐随机数无效');
-      desired = mapping.pool[Math.floor(draw * mapping.pool.length)];
-    } else if (!mapping?.pool && !mapping?.inherit) desired = mapping?.clip ?? null;
+      desired = pool[Math.floor(draw * pool.length)];
+    } else if (!pool?.length && !mapping?.inherit) desired = getClip(mapping?.clip) ? mapping.clip : null;
     if(changed&&scene.battle)positions.delete(desired);
     syncMusic(); return snapshot();
   }
   function setMusic(clipId) {
-    requireValue(clipId===null||Boolean(manifest.clips[clipId]), '音乐资源无效');
+    if (clipId !== null && !getClip(clipId)) return snapshot();
     if(desired!==clipId){stopEffects();clearAmbience();seen.clear();}
     desired=clipId;syncMusic();return snapshot();
   }
@@ -198,7 +206,8 @@ export function createAudioController(manifest, options = {}) {
   function playClip(clipId, eventKey = null, {position=null,singleVoice=false,loop=false}={}) {
     if (disposed || channelMuted('effects')) return false;
     if (!unlocked) { stats.suppressed_before_unlock++; return false; }
-    if (!manifest.clips[clipId]) { stats.missing_clips++; return false; }
+    const clip = getClip(clipId);
+    if (!clip) { stats.missing_clips++; return false; }
     const levels = spatialLevels(position);
     // 52D938/52D8A8 apply new levels before 52D74A checks quick_status.
     // An active handle moves in the stereo field without restarting its clip.
@@ -215,7 +224,7 @@ export function createAudioController(manifest, options = {}) {
     }
     const event={clip:clipId,event_key:eventKey,started:false,...(position?{position:{...position},volume_native:levels.volumeNative,pan_native:levels.panNative}:{})};
     effectEvents.push(event);if(effectEvents.length>256)effectEvents.shift();
-    startVoice(effects,++nextId,clipId,manifest.clips[clipId].path,{levels,position,loop,event});
+    startVoice(effects,++nextId,clipId,clip.path,{levels,position,loop,event});
     return true;
   }
   function setVoiceLevels(entry,{gain,pan}) {
@@ -275,7 +284,7 @@ export function createAudioController(manifest, options = {}) {
       const position = {dx,dy}, levels = spatialLevels(position), entry = ambience.get(group.key);
       if (entry) setVoiceLevels(entry,levels);
       if (!entry && !channelMuted('effects')) {
-        startVoice(ambience,group.key,group.clip,mapAmbience.clips[group.clip].path,
+        startVoice(ambience,group.key,group.clip,ambientClips[group.clip].path,
           {levels,position,loop:group.interval<=0,onError:()=>{group.failed=true;}});
       }
     }
@@ -343,6 +352,6 @@ export function createAudioController(manifest, options = {}) {
   }
   function suspend() { desired = null; clearMusic(); stopEffects(); clearAmbience(); seen.clear(); return snapshot(); }
   function dispose() { if (disposed) return; disposed = true; cleanupUnlock?.(); cleanupUnlock = null; clearMusic(); stopEffects(); clearAmbience(); seen.clear();positionalContext?.close(); }
-  return {setScene, setMusic, unlock, attachUnlock, updateMapAmbience, playCue, playClip, playAction, playEffect, playItemEffect, setMuted, setVolume,
+  return {setScene, setMusic, getClip, unlock, attachUnlock, updateMapAmbience, playCue, playClip, playAction, playEffect, playItemEffect, setMuted, setVolume,
     setChannelMuted, setChannelVolume,setStoryMusicSuppressed, stopEffects, stopClip, suspend, snapshot, dispose};
 }

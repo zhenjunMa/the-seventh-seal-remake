@@ -97,12 +97,15 @@ export class StartupView {
       return;
     }
     this.audio?.suspend();
-    const clip=this.media.media[stage],video=this.activeVideo;
+    const clips=this.media.media;
+    const clip=clips[stage],video=this.activeVideo;
+    if(!clip){this.sequence.fail(epoch);return;}
     video.hidden=false;
     this.syncVideoAudio();
     video.onended=()=>this.sequence.complete(epoch);
     video.onerror=()=>{if(this.sequence.epoch!==epoch)return;this.log({type:'startup-media-error',stage,error:video.error?.message});this.sequence.fail(epoch);};
     if(stage==='openpress'){
+      if(!video.src)video.src=clip.url;
       if(video.error){video.onerror();return;}
       // Keep the ended transition on top until the loop has a decoded frame.
       const reveal=()=>{
@@ -119,8 +122,8 @@ export class StartupView {
         // 原版片头前约 3 秒全黑且静音，约第 3 秒开始有声音，因此从这里开播。
         if(this.sequence.epoch===epoch)video.currentTime=3;
       };
-      if(stage==='preopenpress'){
-        this.pressVideo.src=this.media.media.openpress.url;
+      if(stage==='preopenpress'&&clips.openpress){
+        this.pressVideo.src=clips.openpress.url;
         this.pressVideo.hidden=false;
       }
     }

@@ -157,17 +157,21 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
     return true;
   }
   async function presentGameOver(policy){
-    state.audio?.suspend();state.scenes.setPhase('game-over');$('gameOver').hidden=false;
-    const video=$('gameOverVideo');video.currentTime=0;$('gameOver').focus({preventScroll:true});
+    state.audio?.suspend();state.scenes.setPhase('game-over');
+    const movie=state.startupView?.media?.game_over===false?null:'/assets/video/go02.mp4';
     let playbackError=null;
-    await new Promise(resolve=>{
-      const finish=()=>{if(finishGameOver!==finish)return;finishGameOver=null;video.pause();video.onended=null;video.onerror=null;resolve();};
-      const failed=message=>{if(finishGameOver!==finish)return;playbackError=message;finish();};
-      finishGameOver=finish;video.onended=finish;video.onerror=()=>failed('败北电影加载失败');
-      video.play().catch(error=>failed(error.message));
-    });
+    if(movie){
+      $('gameOver').hidden=false;
+      const video=$('gameOverVideo');video.currentTime=0;$('gameOver').focus({preventScroll:true});
+      await new Promise(resolve=>{
+        const finish=()=>{if(finishGameOver!==finish)return;finishGameOver=null;video.pause();video.onended=null;video.onerror=null;resolve();};
+        const failed=message=>{if(finishGameOver!==finish)return;playbackError=message;finish();};
+        finishGameOver=finish;video.onended=finish;video.onerror=()=>failed('败北电影加载失败');
+        video.play().catch(error=>failed(error.message));
+      });
+    }
     $('gameOver').hidden=true;showTitle();actions.status('全队倒下。请载入已保存的进度，或开始新游戏。');
-    actions.log({type:'game-over',policy,movie:'/assets/video/go02.mp4',playback_error:playbackError});
+    actions.log({type:'game-over',policy,movie,playback_error:playbackError});
   }
   return {showTitle, finishStoryCompletion,resumeExploration, beginOpening, restore, openSaveCrystal,openSaveMenu,closeSaveMenu,selectSaveSlot, presentGameOver,gameOverKey};
 }

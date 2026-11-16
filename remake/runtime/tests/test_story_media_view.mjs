@@ -84,19 +84,30 @@ test('source sound modes restore music, mute music, release ordinary voices and 
   await f.h.sound({kind:'release',modeRaw:0});assert.equal(f.created[1].removed,true);f.view.dispose();
 });
 
-test('movie load failure and cancellation reject the waiting instruction and cannot advance on stale ended events',async()=>{
+test('missing and failed movies are skipped, while cancellation still aborts the instruction',async()=>{
   for(const cancel of [false,true]){
-    const f=fixture(),running=f.h.media({filename:'20.bik',signal:f.playback.signal});await tick();const movie=f.created[0];
+    const f=fixture();
+    await f.h.media({filename:'99.bik',signal:f.playback.signal});
+    assert.equal(f.created.length,0);
+    const running=f.h.media({filename:'20.bik',signal:f.playback.signal});await tick();const movie=f.created[0];
     if(cancel)f.playback.cancel();else {movie.error=new Error('media decode failed');movie.emit('error');}
-    await assert.rejects(running,cancel?{name:'AbortError'}:/media decode failed/);
+    if(cancel)await assert.rejects(running,{name:'AbortError'});else await running;
     assert.equal(movie.listeners.size,0);assert.equal(movie.removed,true);assert.equal(f.timers.size,0);movie.emit('ended');
-    assert.equal(f.playback.phase,cancel?'cancelled':'failed');f.view.dispose();
+    assert.equal(f.audio.snapshot().story_music_suppressed,false);
+    assert.equal(f.playback.phase,cancel?'cancelled':'running');f.view.dispose();
   }
 });
 
-test('late sound errors abort the owning transaction; manifest filenames and paths stay confined',async()=>{
-  const f=fixture();await f.h.sound({kind:'play',filename:'manyanshort.wav',persistent:true,signal:f.playback.signal});
-  f.created[0].error=new Error('late audio failure');f.created[0].emit('error');assert.equal(f.playback.phase,'failed');assert.equal(f.playback.signal.aborted,true);
+test('missing or failed story audio is skipped and manifest paths stay confined',async()=>{
+  const f=fixture({...manifest,sounds:{}});
+  f.audio.getClip=id=>id==='sound/manyanshort.wav'?manifest.sounds['manyanshort.wav']:undefined;
+  const play=filename=>f.h.sound({kind:'play',filename,persistent:true,signal:f.playback.signal});
+  await play('missing.wav');assert.equal(f.created.length,0);
+  await play('manyanshort.wav');assert.equal(f.created[0].src,manifest.sounds['manyanshort.wav'].path);
+  f.created[0].error=new Error('late audio failure');f.created[0].emit('error');
+  assert.equal(f.playback.signal.aborted,false);assert.equal(f.view.persistent,null);
+  f.view.createMedia=()=>Object.assign(new Media(),{playError:new Error('audio unavailable')});
+  await play('manyanshort.wav');assert.equal(f.playback.signal.aborted,false);assert.equal(f.view.entries.size,0);
   f.view.dispose();assert.equal(f.timers.size,0);assert.equal(f.created[0].listeners.size,0);
   const bad=structuredClone(manifest);bad.videos['20.bik'].path='/assets/video/story/../20.mp4';assert.throws(()=>validateStoryMedia(bad),/路径无效/);
   bad.videos['20.bik'].path=manifest.videos['20.bik'].path;bad.videos['20.bik'].source.path='Animate/24.bik';assert.throws(()=>validateStoryMedia(bad),/文件名不匹配/);

@@ -72,7 +72,10 @@ export function createNativeServicesController({state,actions,$,canvas}){
   }
   function serviceSounds(manifest){
     const aliases={ballclick:'ballClick',rotate_step:'rotateClick'};
-    const clip=name=>manifest.sounds?.[aliases[name]??name]?.clip;
+    const clip=name=>{
+      const row=manifest.sounds?.[aliases[name]??name], source=row?.source?.path;
+      return row?.clip??(state.audio?.getClip?.(source)?source:null);
+    };
     return {
       onSound(name,settings={}){
         const id=clip(name);if(!id)return false;
@@ -80,7 +83,7 @@ export function createNativeServicesController({state,actions,$,canvas}){
         return state.audio?.playClip(id,null,{singleVoice:true,...settings});
       },
       onStopSound(name){const id=clip(name);if(id)state.audio?.stopClip(id);},
-      dispose(){for(const row of Object.values(manifest.sounds??{}))if(row.clip)state.audio?.stopClip(row.clip);}
+      dispose(){for(const name of Object.keys(manifest.sounds??{})){const id=clip(name);if(id)state.audio?.stopClip(id);}}
     };
   }
   async function openSpecialService({mapId,record,draft,playback,signal}){

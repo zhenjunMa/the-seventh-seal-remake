@@ -11,6 +11,20 @@ import re
 MEDIA = re.compile(r'^/?assets/.+\.(?:png|mp3|wav|ogg|mp4|webm)$', re.I)
 ORIGINAL = re.compile(r'^(?!/|[A-Za-z]:)(?!.*(?:^|/)\.\.(?:/|$)).+\.(?:dgp|dat|chr|itm|anm|tlk|mnu|cap|pak|bik|wav|exe|scn|mag|stg|bmp)$', re.I)
 
+# 已筛掉的入场和胜利录音。按内容排除，保留原触发点和同名替换的能力。
+OMITTED_VOICES = {
+    'sound/os01-01.wav': '571983496a663dc8b914e73875e7e7420cc7d9a7f7b69648e898e68724b18978',
+    'sound/os01-02.wav': '1ff9b489620fbf751c2fcc95247469d24230f797451a243d8f2ddbc1a90f022e',
+    'sound/os02-01.wav': 'd56a03b32eb929e67b94a4b63ad6da1ced3b740dd62dc4f5e189b42d23ade2e4',
+    'sound/os03-1.wav': 'f22732487d585f63c8faf932614183e124c3a5dfeb5ea8845c616657b3967289',
+    'sound/os04-1.wav': 'c1b50657551886ae0216fdf0e1fa946f3badebdedd1cbc963a8d3addde8455e2',
+    'sound/os05-1.wav': '186ae0ad5e9e46222f36f35f1d82573a982cb5db22ee39139d39912259998f6f',
+    'sound/os06-2.wav': 'd91fd29f79ae7e1a0a54abd8fab63773f304608fce5ebfc0b695e381aa96ed7d',
+    'sound/os03-2.wav': 'e9bc85292db0a8a235b70a3b4753cff687e9f9d8ffb1deed0a9b27182dc8dd1b',
+    'sound/os03-3.wav': '02ff716c1a84fc885088a1a3fa0cbc9c62a1ace9c58220bfa06524ef117f0c37',
+    'sound/os04-2.wav': '58df7378fee10c6d4cc042135550de4585dc490205121ce163d60e8705d93287',
+}
+
 
 def checksum(path):
     value = hashlib.sha256()
@@ -59,7 +73,7 @@ class OriginalFiles:
 
 
 class MediaDefinitions:
-    def __init__(self, runtime, generated=None):
+    def __init__(self, runtime, generated=None, media_documents=None, fingerprints=None):
         self.runtime = Path(runtime)
         self.web = self.runtime / 'web'
         self.documents = {}
@@ -68,6 +82,9 @@ class MediaDefinitions:
         self.inputs = {}
         self.expected = {}
         self.definition_hashes = {}
+        self.audio_updates = {}
+        self.unavailable_audio = set()
+        self.unavailable_video = set()
         ambience = 'data/map_ambience.json'
         for path in sorted((self.web / 'data').rglob('*.json')):
             relative = path.relative_to(self.web / 'data').as_posix()
@@ -76,6 +93,8 @@ class MediaDefinitions:
             if 'source' in path.relative_to(self.web / 'data').parts:
                 continue
             key = path.relative_to(self.web).as_posix()
+            if media_documents and key in media_documents:
+                continue
             self.definition_hashes[key] = checksum(path)
             self.documents[key] = json.loads(path.read_text('utf-8-sig'))
         if generated is not None:
@@ -86,13 +105,19 @@ class MediaDefinitions:
             if generated.map_ambience is not None:
                 self.definition_hashes[ambience] = hashlib.sha256(generated.map_ambience).hexdigest()
                 self.documents[ambience] = json.loads(generated.map_ambience)
+        if media_documents:
+            self.documents.update({key: json.loads(raw) for key, raw in media_documents.items()})
+            for key, value in media_documents.items():
+                self.definition_hashes[key] = hashlib.sha256(value).hexdigest()
+            self.select_audio(fingerprints)
+            self.select_videos(fingerprints.original)
         for key, data in self.documents.items():
             if key == 'data/battle_packs.json':
                 continue
             if key == ambience:
                 self.collect(data['clips'])
                 for clip in data['clips'].values():
-                    self.add(clip['path'], 'copy', source=clip['source']['path'])
+                    self.recipes[clip['path']] = dict(kind='copy', source=clip['source']['path'])
             else:
                 self.collect(data)
                 self.visit(data)
@@ -101,6 +126,149 @@ class MediaDefinitions:
             self.required.add(url(name))
             self.expected[url(name)] = row['sha256']
         self.specials()
+        for path in self.audio_updates:
+            self.recipes[path]['inspect_audio'] = True
+        if media_documents:
+            # Some packed definitions keep their original sound reference for
+            # provenance. Skip the output without rewriting the packed JSON.
+            for path, row in self.recipes.items():
+                kind = row['kind']
+                if path not in self.required or kind not in ('audio', 'video'):
+                    continue
+                source = row['source']
+                try:
+                    fingerprints.original.path(source)
+                except FileNotFoundError:
+                    self.required.discard(path)
+                    unavailable = self.unavailable_audio if kind == 'audio' else self.unavailable_video
+                    unavailable.add(source)
+
+    def select_videos(self, original):
+        def available(source):
+            try:
+                original.path(source)
+            except FileNotFoundError:
+                self.unavailable_video.add(source)
+                return False
+            return True
+
+        startup = self.documents['data/startup_media.json']
+        story = self.documents['data/story_media.json']
+        startup['media'] = {key: row for key, row in startup['media'].items() if available(row['source'])}
+        story['videos'] = {key: row for key, row in story['videos'].items() if available(row['source']['path'])}
+        if not available('Animate/GO02.bik'):
+            startup['game_over'] = False
+
+    def select_audio(self, fingerprints):
+        audio = self.documents['data/audio.json']
+        story = self.documents['data/story_media.json']
+        startup = self.documents['data/startup_menu.json']['audio']['clips']
+        ambience = self.documents['data/map_ambience.json']
+        original = fingerprints.original
+
+        def select(name, row, target):
+            try:
+                path = original.path(name)
+            except FileNotFoundError:
+                self.unavailable_audio.add(name)
+                return None
+            sha = fingerprints.file_hash(path)
+            if not row and OMITTED_VOICES.get(name.casefold()) == sha:
+                self.unavailable_audio.add(name)
+                return None
+            if row and row['source']['sha256'] == sha:
+                if row['source'].get('header_hex') == '':
+                    with path.open('rb') as stream:
+                        row['source']['header_hex'] = stream.read(16).hex()
+                return row
+            with path.open('rb') as stream:
+                header = stream.read(16)
+            mpeg = header.startswith(b'ID3') or len(header) > 1 and header[0] == 0xff and header[1] & 0xe0 == 0xe0
+            target = str(PurePosixPath(target).with_suffix('.mp3' if mpeg else '.wav'))
+            row = {**row, 'path': target, 'source': {**row.get('source', {}), 'path': name}}
+            self.audio_updates.setdefault(target, []).append(row)
+            return row
+
+        clips = {}
+        ids = {}
+
+        def register(ident, row=None):
+            name = (row['source']['path'] if row else ident)
+            key = name.casefold()
+            if key in ids:
+                return ids[key]
+            target = row['path'] if row else '/assets/audio/' + name.removeprefix('sound/')
+            selected = select(name, row or {}, target)
+            ids[key] = ident if selected else None
+            if selected:
+                clips[ident] = selected
+            return ids[key]
+
+        for ident, row in audio['clips'].items():
+            register(ident, row)
+        for ident, row in ambience['clips'].items():
+            if ident.casefold() not in ids:
+                ids[ident.casefold()] = ident
+                clips[ident] = row
+        self.unavailable_audio.update(ambience['missing_original_files'])
+        candidates = list(audio['missing_original_files'])
+        candidates.extend(row['source_path'] for row in story['missing_sounds'].values())
+        # 原版测试地图的配乐也随安装目录导出。
+        candidates.append('sound/Opening_song.wav')
+        for ident in candidates:
+            register(ident)
+
+        def bind(ident):
+            return ids.get(ident.casefold()) if ident else None
+
+        def bind_rows(value):
+            if isinstance(value, list):
+                for child in value:
+                    bind_rows(child)
+            elif isinstance(value, dict):
+                if 'clip' in value:
+                    source = value.get('source')
+                    token = value.get('token')
+                    if isinstance(source, dict):
+                        token = token or source.get('token')
+                        source = source.get('path')
+                    ident = value['clip'] or (('sound/' + token) if token else source)
+                    value['clip'] = bind(ident)
+                if 'pool' in value:
+                    pool = [clip for ident in value['pool'] if (clip := bind(ident))]
+                    if pool:
+                        value['pool'] = pool
+                    else:
+                        del value['pool']
+                for child in value.values():
+                    bind_rows(child)
+
+        for key in ('maps', 'battles', 'cues', 'world_map', 'frame_sounds', 'effect_sounds',
+                    'object_sounds', 'native_services', 'native_sound_sources'):
+            bind_rows(audio.get(key))
+        for key in ('action_tokens', 'native_sound_tokens'):
+            for token, ident in audio[key].items():
+                audio[key][token] = bind(ident or 'sound/' + token)
+        audio['clips'] = clips
+        for name, row in list(story['missing_sounds'].items()):
+            if bind(row['source_path']):
+                del story['missing_sounds'][name]
+        for name, row in list(story['sounds'].items()):
+            selected = select(row['source']['path'], row, row['path'])
+            if selected:
+                story['sounds'][name] = selected
+            else:
+                del story['sounds'][name]
+                story['missing_sounds'][name] = dict(
+                    source_path=row['source']['path'], referenced_by=row['referenced_by'],
+                    policy='declared-missing-original-sound; continue-without-substitution')
+        for ident, row in list(startup.items()):
+            selected = select(row['source']['path'], row, row['path'])
+            if selected:
+                startup[ident] = selected
+            else:
+                del startup[ident]
+        audio['missing_original_files'] = sorted(self.unavailable_audio, key=str.casefold)
 
     def source(self, node, inherited=None):
         value = node.get('source')
@@ -304,15 +472,17 @@ class MediaDefinitions:
                      offset=area['sensor']['source_offset'], width=641, height=481, raw_sha256=area['sensor']['sha256'])
         for name, row in self.documents['data/audio.json']['clips'].items():
             self.add(row['path'], 'audio', source=row['source']['path'])
-        for row in self.documents['data/startup_media.json']['media'].values():
+        startup = self.documents['data/startup_media.json']
+        for row in startup['media'].values():
             self.add(row['url'], 'video', source=row['source'], encode_gain=1)
         story = self.documents['data/story_media.json']
         for row in story['videos'].values():
             self.add(row['path'], 'video', source=row['source']['path'], encode_gain=(row.get('audio') or {}).get('encode_gain', 1))
         for row in story['sounds'].values():
             self.add(row['path'], 'audio', source=row['source']['path'])
-        self.add('/assets/video/go02.mp4', 'video', source='Animate/GO02.bik', encode_gain=1)
-        self.required.add('/assets/video/go02.mp4')
+        if startup.get('game_over', True):
+            self.add('/assets/video/go02.mp4', 'video', source='Animate/GO02.bik', encode_gain=1)
+            self.required.add('/assets/video/go02.mp4')
         for role in self.documents['data/battle_lifecycle.json']['roles']:
             shadow = role.get('shadow')
             if shadow:
