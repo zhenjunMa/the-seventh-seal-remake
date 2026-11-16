@@ -1,0 +1,28 @@
+remake/runtime/web/core/ui/dialogue.mjs
+  s_a182f2f40e2b51::t_3ce674809a764b 32,36,38-40,49
+README.md
+  s_a182f2f40e2b51::t_3ce674809a764b 82-83
+remake/runtime/web/dialogue_view.mjs
+  s_a182f2f40e2b51::t_3ce674809a764b 6-8,30,32,54-64,135-137,155
+remake/runtime/web/controllers/input.mjs
+  s_a182f2f40e2b51::t_18d6f484957fe4 15-17,139,165-167,173
+  s_a182f2f40e2b51::t_33dc9042aadc1f 172
+remake/runtime/web/controllers/story.mjs
+  s_a182f2f40e2b51::t_18d6f484957fe4 94-95
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "c11e82d4ad9d0e089856696dc87c43f96a138a22",
+  "prompts": {},
+  "sessions": {
+    "s_a182f2f40e2b51": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e42f-dc70-7650-88a0-65a2679058a1",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
