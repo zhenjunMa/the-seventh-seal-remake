@@ -1,0 +1,44 @@
+remake/runtime/web/controllers/boot.mjs
+  s_a182f2f40e2b51::t_fbc87aa5e00b50 125
+  s_a182f2f40e2b51::t_19fa24e1218db3 122-124
+remake/runtime/web/story_media_view.mjs
+  s_a182f2f40e2b51::t_19fa24e1218db3 25,30,57,65
+README.md
+  s_a182f2f40e2b51::t_fbc87aa5e00b50 82
+remake/runtime/web/phaser/runtime.mjs
+  s_a182f2f40e2b51::t_19fa24e1218db3 81,90-99
+  s_a182f2f40e2b51::t_fbc87aa5e00b50 76
+remake/runtime/web/controllers/input.mjs
+  s_a182f2f40e2b51::t_9462ec2c8bece2 16-22,144,170-172,177-178
+remake/runtime/web/controllers/map.mjs
+  s_a182f2f40e2b51::t_5dbe71c6f25d55 608,689-691,693,699
+remake/runtime/web/index.html
+  s_a182f2f40e2b51::t_9462ec2c8bece2 75
+remake/runtime/web/core/ui/dialogue.mjs
+  s_a182f2f40e2b51::t_fbc87aa5e00b50 3-4,34,38,40,49
+remake/runtime/web/dialogue_view.mjs
+  s_a182f2f40e2b51::t_fbc87aa5e00b50 4,59,132,151
+remake/runtime/web/controllers/battle.mjs
+  s_a182f2f40e2b51::t_5dbe71c6f25d55 84-95,547
+remake/runtime/web/caption_view.mjs
+  s_a182f2f40e2b51::t_fbc87aa5e00b50 4,30,39-48
+remake/runtime/web/controllers/story.mjs
+  s_a182f2f40e2b51::t_9462ec2c8bece2 24,93,95
+  s_a182f2f40e2b51::t_5dbe71c6f25d55 211-212
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "2f9ea6ce5f2a5d1cd652ff9062e18402525a66bc",
+  "prompts": {},
+  "sessions": {
+    "s_a182f2f40e2b51": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e42f-dc70-7650-88a0-65a2679058a1",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
