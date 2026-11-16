@@ -35,38 +35,53 @@ test('transition preview leaves entry hidden and does not execute its records or
  const {view,control}=await fixture(),drawn=[],sounds=[],before=structuredClone(control.state);
  view._sprite=(role,action,frame,x,y,alpha)=>drawn.push({id:role.id,alpha});
  view.onLifecycleFrame=step=>sounds.push([step.actor_id,step.source_frame]);
- view._appearanceBounds=()=>assert.fail('Party entry should not measure reveal bounds');
+ const bounds=view._appearanceBounds.bind(view);
+ view._appearanceBounds=()=>assert.fail('Transition preview should not measure reveal bounds');
  const state=snapshot(['001','002'].map(actor_id=>({token:'entry-'+actor_id,actor_id,life_epoch:0,kind:'entry',source_skill_index:11,source_id_raw:11})));
  state.actors[1].hp.current=900;
  view.present(state,5000,{entryPreview:true});
  assert.equal(drawn.some(row=>row.id!=='012'),false);assert.deepEqual(view.lifecycleSnapshot().active,[]);
  assert.deepEqual(control.state,before);assert.deepEqual(sounds,[]);assert.equal(view.lastActorPoses.size,0);
- drawn.length=0;view.present(state,5000);
- assert.equal(drawn.find(row=>row.id==='001').alpha,1);assert.equal(drawn.find(row=>row.id==='002').alpha,1);
- assert.deepEqual(sounds,[['001',170],['002',164]]);
- view.present(state,5099);assert.equal(sounds.length,2);
- view.present(state,5100);assert.deepEqual(sounds.at(-1),['002',163]);
- view.present(state,5119);assert.equal(view.lifecycle.pose('001').source_frame,170);
- view.present(state,5120);assert.deepEqual(sounds.at(-1),['001',171]);
+
+ view._appearanceBounds=(...args)=>({...bounds(...args),min_x:0,max_y:0});
+ view.present(state,5000);
+ assert.equal(view.lifecycle.alpha('001'),0);assert.equal(view.lifecycle.alpha('002'),0);
+ assert.deepEqual(sounds,[['001',170]]);
+ view.present(state,5120);view.present(state,5137);
+ assert.ok(view.lifecycleSnapshot().active.every(row=>row.appearance?.mode===5&&row.alpha>0&&row.alpha<1));
+ assert.deepEqual(sounds,[['001',170]]);
+ view.present(state,5800);
+ assert.deepEqual(sounds,[['001',170],['001',171],['002',164]]);
  assert.ok(view.lifecycleSnapshot().active.every(row=>row.appearance===null));
+ view.destroy();
 });
 test('all entry sequences begin at the first source record when the transition ends',async()=>{
- const {view}=await fixture('012','003'),sounds=[];
- const state=snapshot(['001','003','enemy'].map(actor_id=>({token:'entry-'+actor_id,actor_id,life_epoch:0,kind:'entry',source_skill_index:11,source_id_raw:11})));
- state.actors[1]={id:'003',hp:{current:900},life_epoch:0};
- view.onLifecycleFrame=step=>sounds.push([step.actor_id,step.source_frame]);
+ for(const [index,first] of [[11,191],[12,217]]){
+  const {view}=await fixture('012','003'),sounds=[];
+  const state=snapshot(['001','003','enemy'].map(actor_id=>({token:'entry-'+actor_id,actor_id,life_epoch:0,kind:'entry',source_skill_index:actor_id==='003'?index:11,source_id_raw:11})));
+  state.actors[1]={id:'003',hp:{current:900},life_epoch:0};
+  view.onLifecycleFrame=step=>sounds.push([step.actor_id,step.source_frame]);
+  const bounds=view._appearanceBounds.bind(view);
+  view._appearanceBounds=(roleId,pose,actorId)=>roleId==='003'&&pose?.source_frame===191
+    ?{empty:true}:bounds(roleId,pose,actorId);
 
- view.present(state,5000,{entryPreview:true});
- assert.deepEqual(view.lifecycleSnapshot().active,[]);assert.deepEqual(sounds,[]);
- view.present(state,6000);
- assert.deepEqual(sounds,[['001',170],['003',191],['enemy',0]]);
- assert.equal(view.lifecycle.alpha('001'),1);assert.equal(view.lifecycle.alpha('003'),1);assert.equal(view.lifecycle.alpha('enemy'),0);
- view.present(state,6099);assert.equal(view.lifecycle.pose('003').source_frame,191);
- view.present(state,6100);
- assert.deepEqual(sounds.at(-1),['003',192]);
- assert.equal(view.lifecycle.pose('001').source_frame,170);
- assert.deepEqual(view.drainLifecycleCompleted(),[]);
- view.destroy();
+  view.present(state,5000,{entryPreview:true});
+  assert.deepEqual(view.lifecycleSnapshot().active,[]);assert.deepEqual(sounds,[]);
+  view.present(state,6000);
+  assert.deepEqual(sounds,[['001',170],['003',first],['enemy',0]]);
+  assert.ok(view.lifecycleSnapshot().active.every(row=>row.cursor===1&&row.alpha===0));
+  view.present(state,6099);assert.equal(view.lifecycle.pose('003').source_frame,first);
+  view.present(state,6100);
+  assert.equal(view.lifecycleSnapshot().active.find(row=>row.actor_id==='003').appearance.mode,5);
+  view.present(state,6117);
+  if(index===12){
+   assert.equal(view.lifecycle.pose('003').source_frame,first);
+   assert.ok(view.lifecycle.alpha('003')>0&&view.lifecycle.alpha('003')<1);
+   view.present(state,9000);
+  }
+  assert.deepEqual(sounds.filter(([id])=>id==='003'),[['003',first],['003',first+1]]);
+  view.destroy();
+ }
 });
 
 test('077 original entry executes both background fades, camera snap and return only after activation, then restores both channels',async()=>{
