@@ -1,0 +1,57 @@
+remake/runtime/tests/test_audio.mjs
+  s_213ff450c2430e::t_2860232ab7d4dd 42
+remake/runtime/tools/media_fingerprints.py
+  s_213ff450c2430e::t_8404d292e6d1d3 61,79-83,91,94
+remake/runtime/web/story_media_view.mjs
+  s_213ff450c2430e::t_58fc1573a93900 33,45-50,52,80,83,92,117-119,123-124,145
+  s_213ff450c2430e::t_52f459a9b25f3f 51,53,141-144
+  s_213ff450c2430e::t_64586259c8d3e5 146-147
+remake/runtime/tests/test_story_media_view.mjs
+  s_213ff450c2430e::t_3faa1f92c5e2dd 101-110
+  s_213ff450c2430e::t_87fe02b4d0d6aa 87,89-92,94,96-97
+remake/runtime/web/core/resources/audio.mjs
+  s_213ff450c2430e::t_61ba5c75871d64 81
+  s_213ff450c2430e::t_6a06c082555886 10,57,61-62,151-153,178-179,182-183
+  s_213ff450c2430e::t_3114cb61066ada 209-210,227
+  s_213ff450c2430e::t_dac596fd17e08d 41,44-45,48,80,175,188,287,355
+  s_213ff450c2430e::t_0aa5a1aea5b731 82-83
+remake/runtime/tools/media_definitions.py
+  s_213ff450c2430e::t_0aa5a1aea5b731 253-255,271
+  s_213ff450c2430e::t_7b9b094e1e6a32 14-26,85-86,97,111-112,120,129-130,145,162-229,236-252,256-270
+  s_213ff450c2430e::t_8404d292e6d1d3 76,87,96,108-110,113,146-161,475-476,483-485
+  s_213ff450c2430e::t_3114cb61066ada 230-235
+  s_213ff450c2430e::t_05555da4856928 131-144
+  s_213ff450c2430e::t_f4811510de29e0 27
+remake/runtime/tools/export_media.py
+  s_213ff450c2430e::t_47fe7830fd1c09 705-710
+  s_213ff450c2430e::t_0c4dbbc43f231a 22,41-42,45,415-438,440-451,454,456,458,495,504-506,526-527,545-546,612,631-632,693
+  s_213ff450c2430e::t_1b4e406ba6e6e4 38,43-44,89,439,453,608,628,630,634,682,685,687,691-692,697-699,704,712-713,717
+  s_213ff450c2430e::t_8e025636808205 452,455,457,591,635
+remake/runtime/web/controllers/session.mjs
+  s_213ff450c2430e::t_58fc1573a93900 160-161,163-172,174
+remake/runtime/web/startup_view.mjs
+  s_213ff450c2430e::t_58fc1573a93900 100-102,108,125-126
+remake/runtime/tools/data_recipes.py
+  s_213ff450c2430e::t_0aa5a1aea5b731 211
+  s_213ff450c2430e::t_e4799e619d73d3 103,131-133,151,178-179,203,207-208,210,212,228,230-231,233,236,248,264-265
+  s_213ff450c2430e::t_3114cb61066ada 144-145,152-155
+  s_213ff450c2430e::t_8404d292e6d1d3 24,135,149,209
+remake/runtime/web/controllers/native_services.mjs
+  s_213ff450c2430e::t_3df5b262a4aa84 75-78,86
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "30c413652e2a172ab37989ccb6d808e8bb03a2f0",
+  "prompts": {},
+  "sessions": {
+    "s_213ff450c2430e": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e279-8dc7-79e0-91a4-ae9e86769df4",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
