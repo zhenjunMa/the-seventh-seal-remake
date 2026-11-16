@@ -3,6 +3,9 @@ import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {createMenuTextRenderer} from './core/ui/menu_text.mjs';
 import {dialoguePages,DialoguePlayback} from './core/ui/dialogue.mjs';
 
+const FAST_FORWARD_SPEED=8;
+const FAST_FORWARD_PAGE_HOLD_MS=120;
+
 export class DialogueView {
   static async create({manifest,fonts,windowsFonts,image,...options}){
     const resources={};
@@ -24,9 +27,9 @@ export class DialogueView {
     const box=this.root.parentElement.getBoundingClientRect();
     this.root.style.setProperty('--dialogue-scale',String(Math.min(box.width/640,box.height/480)));
   }
-  show({speaker,text,style,choices,record,sessionId,getAnchor}){
+  show({speaker,text,style,choices,record,sessionId,getAnchor,isFastForwarding}){
     this.close();this.active=true;this.root.hidden=false;
-    Object.assign(this,{style:style&15,sessionId,getAnchor,record});
+    Object.assign(this,{style:style&15,sessionId,getAnchor,record,isFastForwarding});
     const m=this.manifest;
     this.started=this.now();this.entryDuration=m.ordinary.portrait_entry.ticks*m.ordinary.portrait_entry.tick_ms;
     this.readyAt=this.started+(this.style<=1?this.entryDuration:0);
@@ -48,7 +51,17 @@ export class DialogueView {
     }));
     this.choicesRoot.hidden=true;this.button.hidden=false;this.resize();this.button.focus({preventScroll:true});
     const epoch=this.epoch;
-    const frame=now=>{if(!this.active||epoch!==this.epoch)return;this.draw(now);this.scheduleFrame(frame);};
+    let advanceAt=null;
+    const frame=now=>{
+      if(!this.active||epoch!==this.epoch)return;
+      this.draw(now);
+      this.scheduleFrame(frame);
+      if(!this.isFastForwarding?.()||this.playback.stage!=='waiting'){
+        advanceAt=null;return;
+      }
+      advanceAt??=now+FAST_FORWARD_PAGE_HOLD_MS;
+      if(now>=advanceAt){advanceAt=null;this.onAdvance();}
+    };
     this.draw(this.started);this.scheduleFrame(frame);
     this.log?.({type:'dialogue-open',session:sessionId,style:this.style,text,speaker,face_index:this.faceIndex,
       face_left:this.faceLeft,pages:this.playback.pages.length,choices:choices?.map(choice=>({index:choice.index,text:choice.text}))??[]});
@@ -119,8 +132,9 @@ export class DialogueView {
       let revealed=playback.pages.slice(0,playback.page).reduce((sum,page)=>sum+page.runs.length,0)+playback.revealed,page=0;
       while(page+1<pages.length&&revealed>pages[page].runs.length){revealed-=pages[page].runs.length;page++;}
       playback.pages=pages;playback.page=page;playback.revealed=revealed;
-      playback.started=now-Math.max(0,revealed-1)*playback.interval;
-      if(playback.stage!=='choices')playback.stage=playback.complete?'waiting':'typing';
+      playback.lastTick=Math.max(now,this.readyAt);
+      playback.elapsed=Math.max(0,revealed-1)*playback.interval;
+      if(playback.stage!=='choices')playback.stage='typing';
       if(!this.choicesRoot.hidden)this.showChoices();
     }
     const c=this.context,r=this.resources,l=this.geometry();c.clearRect(0,0,640,480);c.imageSmoothingEnabled=false;
@@ -138,7 +152,7 @@ export class DialogueView {
       }
     }
     if(now<this.readyAt)return;
-    this.playback.tick(now);
+    this.playback.tick(now,this.isFastForwarding?.()?FAST_FORWARD_SPEED:1);
     if(this.playback.stage==='choices'&&this.choicesRoot.hidden)this.showChoices();
     const colors=this.manifest.colors,player=(this.record?.speaker??1)<colors.speaker_cutoff;
     const {foreground,shadow}=player?colors.party:colors.npc;

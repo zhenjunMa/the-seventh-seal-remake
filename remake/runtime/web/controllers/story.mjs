@@ -91,7 +91,8 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       try{
         if(style===3&&!choices)state.captionView.show(text);
         else state.dialogueView.show({speaker,text,style,choices,record,sessionId:current.id,
-          getAnchor:()=>dialogueAnchor(mapId,record)});
+          getAnchor:()=>dialogueAnchor(mapId,record),
+          isFastForwarding:()=>!inputSuspended()&&actions.isDialogueFastForwarding?.()});
       }catch(error){if(closeSession(current))reject(error);}
     });
   }

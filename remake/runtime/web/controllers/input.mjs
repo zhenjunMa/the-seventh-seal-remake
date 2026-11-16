@@ -12,6 +12,9 @@ import {hdImagesPreference,saveHdImagesPreference} from '../core/resources/hd_im
 export function createInputController({state, actions, $, canvas, ctx}) {
   const listeners=new AbortController(),options={signal:listeners.signal};
   const fullscreen=createFullscreenController({$,canvas});
+  let controlHeld=false;
+  const isDialogueFastForwarding=()=>controlHeld&&['event','opening'].includes(state.scenes?.phase);
+  const releaseInput=()=>{controlHeld=false;actions.releaseInput();};
   function saveKey(key,repeat=false){
     if(!['F4','F5'].includes(key))return false;
     const title=state.startupView;
@@ -133,6 +136,7 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     $('layerPrevious').onclick=actions.guarded(async()=>{state.layerIndex=Math.max(0,state.layerIndex-1);await actions.drawLayer();});$('layerNext').onclick=actions.guarded(async()=>{state.layerIndex=Math.min(state.layerData.frames.length-1,state.layerIndex+1);await actions.drawLayer();});$('mainLayer').onchange=actions.guarded(actions.drawLayer);$('intrinsicLayer').onchange=actions.guarded(actions.drawLayer);
     $('layerSelect').onchange=actions.guarded(async()=>{state.layerIndex=Number($('layerSelect').value);await actions.drawLayer();});
     window.addEventListener('keydown',event=>{
+      controlHeld=event.ctrlKey;
       if(event.defaultPrevented)return;
       const key=event.key.length===1?event.key.toLowerCase():event.key;
       if(actions.gameOverKey?.(key,event.repeat)){event.preventDefault();return;}
@@ -158,13 +162,13 @@ export function createInputController({state, actions, $, canvas, ctx}) {
       if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(document.activeElement?.tagName))return;
       if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','Shift',' '].includes(key)){event.preventDefault();if(key===' '){if(!event.repeat)actions.interact();}else if(key==='Shift'){if(!event.repeat)state.running=!state.running;}else state.keys.add(key);}
     },options);
-    window.addEventListener('keyup',event=>{if(actions.dialogueKeyUp(event.key))event.preventDefault();if(state.scenes?.phase.startsWith('battle-')){actions.battleKeyUp?.(event.key);if(event.key===' ')event.preventDefault();}if(state.menuContext&&event.key===' '&&$('menuShortcutEditor').hidden&&state.menuContext.page!=='system')event.preventDefault();state.keys.delete(event.key.length===1?event.key.toLowerCase():event.key);},options);
-    window.addEventListener('blur',actions.releaseInput,options);
-    document.addEventListener('visibilitychange',actions.releaseInput,options);
+    window.addEventListener('keyup',event=>{controlHeld=event.ctrlKey;if(actions.dialogueKeyUp(event.key))event.preventDefault();if(state.scenes?.phase.startsWith('battle-')){actions.battleKeyUp?.(event.key);if(event.key===' ')event.preventDefault();}if(state.menuContext&&event.key===' '&&$('menuShortcutEditor').hidden&&state.menuContext.page!=='system')event.preventDefault();state.keys.delete(event.key.length===1?event.key.toLowerCase():event.key);},options);
+    window.addEventListener('blur',releaseInput,options);
+    document.addEventListener('visibilitychange',releaseInput,options);
     window.addEventListener('resize',actions.resize,options);
     canvas.addEventListener('pointerdown',event=>{canvas.focus();actions.mapPointerDown?.(event);},options);
     canvas.addEventListener('wheel',event=>{event.preventDefault();if(!state.engine?.paused&&state.scenes.phase==='map')state.view.zoom=Math.min(3,Math.max(.15,state.view.zoom*(event.deltaY<0?1.1:1/1.1)));},{...options,passive:false});
   }
-  function disposeInput(){listeners.abort();fullscreen.dispose();state.keys.clear();}
-  return {wire,wireStartupInput,disposeInput,saveKey};
+  function disposeInput(){listeners.abort();fullscreen.dispose();controlHeld=false;state.keys.clear();}
+  return {wire,wireStartupInput,disposeInput,saveKey,isDialogueFastForwarding};
 }
