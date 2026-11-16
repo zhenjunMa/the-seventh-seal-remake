@@ -1,0 +1,85 @@
+remake/runtime/web/startup_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 130,171,180,300
+remake/runtime/web/operation_menu_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 124,133,135,139
+remake/runtime/tests/test_world_map_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 47-48
+remake/runtime/web/controllers/input.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 44-47,145
+remake/runtime/web/index.html
+  s_e46807a1e189a3::t_1410cdf9eff0e6 70,75,89
+remake/runtime/web/native_small_lotto_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 187
+remake/runtime/web/operation_equipment_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 147-148
+remake/runtime/web/native_roulette_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 245
+remake/runtime/web/operation_formation_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 27
+remake/runtime/web/operation_technique_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 426-427
+remake/runtime/web/caption_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 22
+remake/runtime/web/controllers/session.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 32,84
+remake/runtime/web/operation_weapon_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 87-88
+remake/runtime/tests/test_operation_formation_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 24
+remake/runtime/web/controllers/story.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 119
+remake/runtime/tests/helpers/first_build_browser.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 50
+remake/runtime/web/native_code_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 86
+remake/runtime/web/native_statue_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 151
+remake/runtime/tests/test_save_menu.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 66,68,77,115-116
+remake/runtime/web/native_service_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 103,356,388,427,432
+remake/runtime/web/world_map_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 120
+remake/runtime/web/controllers/map.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 519
+remake/runtime/tests/test_menu_navigation.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 185
+remake/runtime/web/operation_system_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 81
+remake/runtime/tests/test_dialogue.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 61-62
+remake/runtime/tests/test_operation_system_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 17
+remake/runtime/web/controllers/boot.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 83
+remake/runtime/tests/test_battle_menu_navigation.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 85,122
+remake/runtime/tests/test_native_service_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 16-17,20,25,29,36,42
+remake/runtime/web/battle_menu_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 334,343,345-346
+README.md
+  s_e46807a1e189a3::t_1410cdf9eff0e6 80
+remake/runtime/web/native_lotto_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 232
+remake/runtime/web/core/ui/startup.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 22
+remake/runtime/web/save_menu_view.mjs
+  s_e46807a1e189a3::t_1410cdf9eff0e6 37,40,78
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "7aa2f3d29e94e24831d8e399b4fa66ed4c2e6134",
+  "prompts": {},
+  "sessions": {
+    "s_e46807a1e189a3": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e37c-cd84-76f3-99cb-8855f7c7cf07",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
