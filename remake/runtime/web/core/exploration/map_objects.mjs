@@ -79,13 +79,22 @@ export class MapObjectRuntime {
     const draw=()=>{const value=this.random();if(!Number.isInteger(value)||value<0||value>32767)throw new Error('地图物件CRT随机值无效');return value;};
     const rows=[...resources].sort((a,b)=>a.index-b.index);
     if(new Set(rows.map(row=>row.index)).size!==rows.length)throw new Error('地图物件索引重复');
-    this.actors=rows.map(row=>{
+    this.actors=[];
+    for(const row of rows){
       const {index,resource,behavior_raw_cf}=row;
       if(![1,2,4,7,9].includes(behavior_raw_cf))throw new Error('地图物件待机类型尚未恢复');
-      const source=behavior_raw_cf===1?cf1Source(row):behavior_raw_cf===7?cf7Source(row):[2,9].includes(behavior_raw_cf)?activeObjectSource(row):null;
       if(mapId&&row.map_id&&mapId!==row.map_id)throw new Error('地图物件源地图不匹配');
       const object=objects.find(object=>object.index===index);
       if(!object)throw new Error('地图光效没有对应物件');
+      if(behavior_raw_cf===1&&resource.actions?.length===0){
+        // 410B59 skips the animation queue when the DGP has no actions.
+        const {raw,view}=sourceBytes(row.source_record_raw_hex,0x112,'地图物件');
+        if(raw[0xcf]!==1||view.getUint32(0xf6,true)!==0||resource.terrain_frames
+          ||!object.resource_sha256||resource.source?.sha256!==object.resource_sha256)throw new Error('CF1静态物件源记录不匹配');
+        object.intrinsic_sheet=resource.static_frame?.intrinsic_sheet;
+        continue;
+      }
+      const source=behavior_raw_cf===1?cf1Source(row):behavior_raw_cf===7?cf7Source(row):[2,9].includes(behavior_raw_cf)?activeObjectSource(row):null;
       const actor={object,resource,behavior:behavior_raw_cf,state:null,frame:0,elapsed:0,loaded:false};
       if(behavior_raw_cf===4){
         const {raw}=sourceBytes(row.source_record_raw_hex,0x112,'CF4地图物件');
@@ -106,8 +115,8 @@ export class MapObjectRuntime {
         if(behavior_raw_cf===7){actor.actionIndex=0;actor.displayActionIndex=0;actor.displayFrame=0;actor.fixed=source.fixed;}
         if([2,9].includes(behavior_raw_cf)){actor.actionIndex=0;actor.displayActionIndex=0;actor.displayFrame=0;actor.sounds=source.sounds;}
       }
-      this.project(actor,0);return actor;
-    });
+      this.project(actor,0);this.actors.push(actor);
+    }
     this.draw=draw;
   }
   animate({objectIndex,state,signal}){

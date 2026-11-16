@@ -228,6 +228,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
         [obj,bank].some(row=>row&&visible(mapPoseBounds({x:obj.draw_x,y:obj.draw_y,width:row.frame_width,height:row.frame_height})));
       if(needed)visibleObjects.add(obj.index);
       queueImage(needed,obj.image,bitmap=>{obj.bitmap=bitmap;});
+      if(obj.intrinsic_sheet)queueImage(needed,obj.intrinsic_sheet,bitmap=>{obj.intrinsic_bitmap=bitmap;});
     }
     for(const effect of effects){
       for(const action of effect.resource.actions){

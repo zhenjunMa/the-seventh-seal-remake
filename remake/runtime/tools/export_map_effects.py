@@ -90,6 +90,20 @@ def _export_bank(dgp, source, key, include_main, *, force_main=False, behavior_r
         return None
     audit = SourceAudit(dgp.data)
     actions = []
+    bank = dict(source=dict(path=source, sha256=dgp.sha256), frame_width=dgp.width,
+                frame_height=dgp.height, actions=actions)
+    if (not dgp.raw_actions and include_main and behavior_raw_cf == 1
+            and dgp.indexed_auxiliary and dgp.indexed_auxiliary[0]['active_raw']):
+        # 410850 skips the animation clock and starts drawing physical frame 0.
+        intrinsic = indexed_contribution(dgp, 0)[0]
+        pixels, checked = audit.sparse(0, True)
+        assert intrinsic.tobytes() == pixels
+        checks.append(dict(source=source, frame=0, intrinsic=checked))
+        out = web / 'assets/map_effects/static' / (dgp.sha256 + '.png')
+        save_png(intrinsic, out)
+        path = '/' + out.relative_to(web).as_posix()
+        outputs[path] = sha(out)
+        bank['static_frame'] = dict(first_frame=0, frame_count=1, directions=1, intrinsic_sheet=path)
     for action in dgp.actions:
         n, dirs = action['frames_per_direction'], action['directions']
         physicals = [action['first_frame'] + direction * n + frame
@@ -143,8 +157,6 @@ def _export_bank(dgp, source, key, include_main, *, force_main=False, behavior_r
             item[channel + '_sheet'] = '/' + out.relative_to(web).as_posix()
             outputs[item[channel + '_sheet']] = sha(out)
         actions.append(item)
-    bank = dict(source=dict(path=source, sha256=dgp.sha256), frame_width=dgp.width,
-                frame_height=dgp.height, actions=actions)
     volume = next((row for row in dgp.optional_blocks if row['kind'] == 'volume'), None)
     if volume is not None:
         count, width, height = struct.unpack_from('<3I', dgp.extra_header)

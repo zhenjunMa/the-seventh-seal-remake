@@ -68,9 +68,10 @@ export function mapPresentation({scene,world,role,action,view,
       if(!bitmap)return null;
       const previewing=objectPreview?.mapId===scene.data.id&&objectPreview.objectIndex===obj.index;
       const motion=previewing?objectPreview.motion:bitmap===obj.bitmap?obj.motion:null;
+      const light=!previewing&&bitmap===obj.bitmap?obj.intrinsic_bitmap:null;
       const pose=motion?.main
         ?{image:motion.main,light:motion.intrinsic,shadow:motion.shadow,sx:motion.frame*motion.width,sy:0,width:motion.width,height:motion.height,x:obj.draw_x,y:obj.draw_y}
-        :{image:bitmap,x:obj.draw_x,y:obj.draw_y};
+        :{image:bitmap,x:obj.draw_x,y:obj.draw_y,...(light?{light,width:obj.frame_width,height:obj.frame_height}:{})};
       return {key:`object:${obj.index}`,layer:obj.layer??0,sort_y:obj.sort_y??0,pose};
     }).filter(Boolean);
   for(const [npcIndex,npc]of (opening?[]:scene.npcs).entries()){
