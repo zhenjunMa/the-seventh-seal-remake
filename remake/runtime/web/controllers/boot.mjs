@@ -80,7 +80,7 @@ export function createBootController({state, actions, $, canvas}) {
       getSaves:()=>actions.saveEntries().filter(row=>row.summary),
       refreshSaves:()=>actions.refreshSaveSlots(),isBusy:()=>Boolean(state.saveOperation),status:actions.status,log:actions.log});
     actions.wireStartupInput();
-    actions.status('片头按Esc跳过；提示画面按任意键进入主菜单。首次交互启用声音。');
+    actions.status('片头按Esc跳过；提示画面按空格进入主菜单。首次交互启用声音。');
     view.start();
     // Let the video submit a frame before WebGL initialization competes for
     // the main thread. Skip and failed/slow media must also release boot.

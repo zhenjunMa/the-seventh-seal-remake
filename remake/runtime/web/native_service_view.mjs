@@ -100,7 +100,7 @@ export class NativeServiceView{
     this.changeCategory(category);
   }
   sidebarKey(key,repeat){
-    if((key==='Enter'||key===' ')&&!repeat)this.focusTrade('header');
+    if(key===' '&&!repeat)this.focusTrade('header');
     if(key==='ArrowUp'||key==='ArrowDown'){
       const enabled=this.enabledSidebarOptions();
       const current=enabled.findIndex(option=>this.currentSidebarOption(option)),step=key==='ArrowUp'?-1:1;
@@ -353,7 +353,7 @@ export class NativeServiceView{
   close(){this.hide();this.onClose();}
   tradeKey(key,repeat){
     this.frame?.classList.add('keyboard-navigation');
-    const confirm=key==='Enter'||key===' ';
+    const confirm=key===' ';
     const horizontal=key==='ArrowLeft'||key==='ArrowRight';
     const vertical=key==='ArrowUp'||key==='ArrowDown';
     const step=key==='ArrowLeft'||key==='ArrowUp'?-1:1;
@@ -385,7 +385,7 @@ export class NativeServiceView{
   craftKey(key,repeat){
     // 0x43AEC0 activates a category's list. 0x438630 sends Escape back to
     // the header and treats both pairs of directions as list navigation.
-    const activate=key==='Enter'||key===' ';
+    const activate=key===' ';
     const horizontal=key==='ArrowLeft'||key==='ArrowRight';
     const vertical=key==='ArrowUp'||key==='ArrowDown';
     const step=key==='ArrowLeft'||key==='ArrowUp'?-1:1;
@@ -424,12 +424,12 @@ export class NativeServiceView{
   key(key,repeat=false){
     if(!this.active||this.isSuspended())return false;
     this.pointerSelection=null;
-    if(!['Escape','Enter',' ','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','PageUp','PageDown','Tab'].includes(key))return false;
+    if(!['Escape',' ','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','PageUp','PageDown','Tab'].includes(key))return false;
     this.frame?.classList.add('keyboard-navigation');
     if(!this.trading)return this.craftKey(key,repeat);
     if(!this.confirming)return this.tradeFocus==='category'?this.sidebarKey(key,repeat):this.tradeKey(key,repeat);
     if(key==='Escape'&&!repeat)this.cancelConfirmation();
-    if((key==='Enter'||key===' ')&&!repeat)this.confirm();
+    if(key===' '&&!repeat)this.confirm();
     if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(key)){
       const step=key==='ArrowLeft'||key==='ArrowUp'?-1:1;
       this.changeQuantity(this.quantity+step);

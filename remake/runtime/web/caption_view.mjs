@@ -19,7 +19,7 @@ export class CaptionView {
     this.button.onclick=()=>this.onAdvance();
     // Confirmation belongs to the window's keydown handler. Consume keyup
     // too, so a focused button cannot synthesize a second Space click.
-    this.button.onkeyup=event=>{if(event.key===' '||event.key==='Enter')event.preventDefault();};
+    this.button.onkeyup=event=>{if(event.key===' ')event.preventDefault();};
     this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(root.parentElement);
   }
   resize(){

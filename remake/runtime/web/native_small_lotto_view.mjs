@@ -184,7 +184,7 @@ export class NativeSmallLottoView{
       else if(this.phase==='spin')this.setPoint(selectUp?[553,349]:[487,411]);
       return true;
     }
-    if(key==='Enter'||key===' '){if(!repeat)this.down(this.surface.pointer);return true;}
+    if(key===' '){if(!repeat)this.down(this.surface.pointer);return true;}
     // Escape was not mapped in the original mini-game message table.
     return key==='Escape'||key==='Tab';
   }

@@ -34,10 +34,10 @@ export class SaveMenuView {
     if(key==='Escape'){if(!repeat){if(this.confirming){this.confirming=false;this.render();}else this.onClose();}return true;}
     if(this.confirming){
       if(['ArrowUp','ArrowDown'].includes(key)){this.confirmIndex=key==='ArrowDown'?1:0;this.render();}
-      else if(!repeat&&[' ','Enter'].includes(key)){if(this.confirmIndex===1){this.confirming=false;this.render();}else this.submit();}return true;
+      else if(!repeat&&key===' '){if(this.confirmIndex===1){this.confirming=false;this.render();}else this.submit();}return true;
     }
     const steps={ArrowUp:-1,ArrowDown:1,PageUp:-3,PageDown:3};
-    if(key in steps)this.move(steps[key]);else if(key==='Home')this.select(0);else if(key==='End')this.select(this.slotIds().length-1);else if(!repeat&&[' ','Enter'].includes(key))this.confirm();return true;
+    if(key in steps)this.move(steps[key]);else if(key==='Home')this.select(0);else if(key==='End')this.select(this.slotIds().length-1);else if(!repeat&&key===' ')this.confirm();return true;
   }
   async confirm(){
     if(this.pending||this.loading||this.confirming)return;const row=this.row();
@@ -75,7 +75,7 @@ export class SaveMenuView {
     this.ctx.fillStyle='#fff';this.ctx.font='16px SimSun,serif';this.ctx.fillText(this.summary.name??'',522,355);this.ctx.fillText(String(this.summary.money??0),523,406);
     if(this.mode==='load'){const background=this.images.get(menu.images[0].image);if(background)drawImageRegion(this.ctx,background,151,3,43,30,43,3,43,30);}
     if(this.confirming){this.overlayImage(this.menus.get('game_save_03').images[0].image);const selected=this.menus.get('game_save_03').widgets.find(row=>row.name===(this.confirmIndex===1?'CANCEL':'OK'));this.overlayImage(selected.active_images[0],selected.draw_point_raw.x,selected.draw_point_raw.y);this.widgetButton('game_save_03','OK',`覆盖存档 ${this.row().slot}`,()=>this.submit());this.widgetButton('game_save_03','CANCEL','取消覆盖存档',()=>{this.confirming=false;this.render();});}
-    if(resetMessage)this.setMessage(this.loading?'正在读取存档栏位…':this.pending?'正在存取进度…':this.confirming?`覆盖栏位 ${this.row().slot} 的现有存档？`:`${this.mode==='save'?'保存':'读取'}${this.row().slot==='quick'?'快速存档':`栏位 ${this.row().slot}`}　方向键选择，Enter确认，Esc返回（${this.selected+1}/${count}）`);
+    if(resetMessage)this.setMessage(this.loading?'正在读取存档栏位…':this.pending?'正在存取进度…':this.confirming?`覆盖栏位 ${this.row().slot} 的现有存档？`:`${this.mode==='save'?'保存':'读取'}${this.row().slot==='quick'?'快速存档':`栏位 ${this.row().slot}`}　方向键选择，空格确认，Esc返回（${this.selected+1}/${count}）`);
     this.root.dataset.mode=this.mode;this.root.dataset.slot=this.row().slot;this.root.dataset.state=this.pending?'pending':this.confirming?'overwrite':'list';
   }
 }

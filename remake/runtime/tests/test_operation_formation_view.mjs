@@ -21,7 +21,7 @@ function fixture(ids=['001','002']){
 
 test('native cross-direction controls exchange only after two confirmations and can move into an empty slot',()=>{
   const{view,exchanges}=fixture();for(const [key,index]of [['ArrowDown',2],['ArrowLeft',0],['ArrowUp',1],['ArrowRight',3]]){view.key(key);assert.equal(view.focusIndex,index);assert.equal(view.root.ownerDocument.activeElement,view.buttons[index]);}
-  view.key('Enter',true);assert.equal(view.firstIndex,null);view.key(' ');assert.equal(view.firstIndex,3);assert.equal(view.buttons[3].attrs['aria-pressed'],'true');view.key('ArrowLeft');view.key('Enter');assert.deepEqual(exchanges,[[3,0]]);assert.deepEqual(view.slots,[null,'002',null,'001']);assert.equal(view.firstIndex,null);assert.equal(view.sprites.size,2);
+  view.key(' ',true);assert.equal(view.firstIndex,null);view.key(' ');assert.equal(view.firstIndex,3);assert.equal(view.buttons[3].attrs['aria-pressed'],'true');view.key('ArrowLeft');view.key(' ');assert.deepEqual(exchanges,[[3,0]]);assert.deepEqual(view.slots,[null,'002',null,'001']);assert.equal(view.firstIndex,null);assert.equal(view.sprites.size,2);
 });
 
 test('Esc clears a pending formation choice without a commit; retained cursor images use source draw offsets',()=>{

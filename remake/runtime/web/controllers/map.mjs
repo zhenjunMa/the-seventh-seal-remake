@@ -516,7 +516,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       const plan=planRouteExit(state.world.value,state.world.location.map_id,exit.record_id,state.routeEvents);
       if(plan.denied){await actions.say(plan.denied.speaker,plan.denied.text);actions.log({type:'route-denied',source:plan.denied});return;}
       state.worldMap.initialize();for(const command of plan.commands)state.worldMap.apply(command);
-      actions.log({type:'world-map-open',commands:plan.commands,source:plan.source});actions.status('方向键选择目的地，空格／Enter前往；也可点击地图上的地点，Esc返回。');
+      actions.log({type:'world-map-open',commands:plan.commands,source:plan.source});actions.status('方向键选择目的地，空格前往；也可点击地图上的地点，Esc返回。');
     }catch(error){actions.status(error.message,true);actions.log({type:'route-failed',error:error.message});}
     finally{if(state.scenes.phase==='event')state.scenes.setPhase('map');}
   }

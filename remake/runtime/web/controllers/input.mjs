@@ -41,6 +41,10 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     selectMapActor(available[(current + 1) % available.length].id);
   }
   function wireStartupInput(){
+    // Suppress the browser's default Enter click on focused game buttons.
+    $('screen').addEventListener('keydown',event=>{
+      if(event.key==='Enter')event.preventDefault();
+    },{...options,capture:true});
     window.addEventListener('keydown',event=>{
       if(event.defaultPrevented||state.engine?.paused||['F4','F5'].includes(event.key))return;
       const key=event.key.length===1?event.key.toLowerCase():event.key;
@@ -138,7 +142,7 @@ export function createInputController({state, actions, $, canvas, ctx}) {
       if(state.saveMenu?.key(key,event.repeat)){event.preventDefault();return;}
       if(['event','opening'].includes(state.scenes?.phase)&&actions.dialogueKey(key,event.repeat)){event.preventDefault();return;}
       if(state.worldMapView?.key(key,event.repeat)){event.preventDefault();return;}
-      if(state.menuContext){const kind=key==='Escape'?'cancel':[' ','Enter'].includes(key)?'confirm':key==='Tab'?'ignore':'select';const handle=()=>{if(key==='Escape'){if(!event.repeat&&($('partyMenu').hidden||state.operationMenu.escape()))actions.closePartyMenu();return true;}return state.operationMenu.key(key,event.repeat);};const handled=state.menuFeedback?state.menuFeedback.run(kind,handle,{repeat:event.repeat}):handle();if(handled)event.preventDefault();return;}
+      if(state.menuContext){const kind=key==='Escape'?'cancel':key===' '?'confirm':key==='Tab'?'ignore':'select';const handle=()=>{if(key==='Escape'){if(!event.repeat&&($('partyMenu').hidden||state.operationMenu.escape()))actions.closePartyMenu();return true;}return state.operationMenu.key(key,event.repeat);};const handled=state.menuFeedback?state.menuFeedback.run(kind,handle,{repeat:event.repeat}):handle();if(handled)event.preventDefault();return;}
       if(state.scenes?.phase.startsWith('battle-')){if(actions.battleKey(key,event.repeat))event.preventDefault();return;}
       if(state.scenes?.phase!=='map')return;
       if (key === 'Escape') {

@@ -423,8 +423,8 @@ export class OperationTechniqueView{
   }
   directionalFocus(key){const current=document.activeElement,group=this.controls('content'),r=current?.getBoundingClientRect();if(!r)return;const horizontal=['ArrowLeft','ArrowRight'].includes(key),sign=['ArrowLeft','ArrowUp'].includes(key)?-1:1,cx=r.left+r.width/2,cy=r.top+r.height/2;let best=null,score=Infinity;for(const b of group){if(b===current)continue;const q=b.getBoundingClientRect(),dx=q.left+q.width/2-cx,dy=q.top+q.height/2-cy,along=horizontal?dx:dy,across=horizontal?dy:dx;if(along*sign<=1)continue;const value=Math.abs(along)+Math.abs(across)*3;if(value<score){best=b;score=value;}}best?.focus({preventScroll:true});}
   key(key,repeat=false){
-    if(this.element.hidden||!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','PageUp','PageDown',' ','Enter','Tab','x','X','z','Z'].includes(key))return false;
-    if(key==='Tab')return true;if((key===' '||key==='Enter')){if(!repeat)(document.activeElement?.closest('.technique-ui')?document.activeElement:this.controls(this.mode)[0])?.click();return true;}
+    if(this.element.hidden||!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','PageUp','PageDown',' ','Tab','x','X','z','Z'].includes(key))return false;
+    if(key==='Tab')return true;if(key===' '){if(!repeat)(document.activeElement?.closest('.technique-ui')?document.activeElement:this.controls(this.mode)[0])?.click();return true;}
     if(['name-editor','icon-editor'].includes(this.stage)){if(key.startsWith('Arrow'))this.directionalFocus(key);return true;}
     if(this.stage==='candidates'&&this.action==='compose'&&this.composition.length&&['ArrowLeft','ArrowRight'].includes(key)){this.stage='compose-confirm';this.paint();this.focus('content');return true;}
     if(['list','candidates'].includes(this.stage)&&['ArrowUp','ArrowDown','PageUp','PageDown'].includes(key)){

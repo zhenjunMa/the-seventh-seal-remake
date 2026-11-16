@@ -331,7 +331,7 @@ export class BattleMenuView{
   key(key,repeat=false){
     if(this.resultPreparing)return true;
     if(this.resultView?.active)return this.resultView.key(key,repeat);
-    if(this.disposed)return false;if(['Enter',' ','Escape'].includes(key)&&repeat)return true;
+    if(this.disposed)return false;if([' ','Escape'].includes(key)&&repeat)return true;
     if(this.snapshot?.phase==='escaped'||this.autoReturnOnDefeat&&this.snapshot?.phase==='defeat')return true;
     if(key==='Escape'){
       if(this.snapshot?.test_mode&&this.stage==='result')this.onReturn();
@@ -340,10 +340,10 @@ export class BattleMenuView{
       return true;
     }
     if(key==='Tab'||key==='x'||key==='z'){this.cycleActor(key==='z'?-1:1);return true;}
-    if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter',' '].includes(key))return false;
+    if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(key))return false;
     if(['skills','items'].includes(this.stage)){this.listKey(key);return true;}
-    if(this.stage==='result'){if(['Enter',' '].includes(key))this.onReturn();return true;}
-    if(['Enter',' '].includes(key)){if(this.stage==='actors'&&this.available()){this.setStage('wheel');this.syncWheel();this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});this.cue('menuOpen');}else if(this.stage==='wheel')this.activateWheel(this.focusIndex);else if(this.stage==='target')this.commit();return true;}
+    if(this.stage==='result'){if(key===' ')this.onReturn();return true;}
+    if(key===' '){if(this.stage==='actors'&&this.available()){this.setStage('wheel');this.syncWheel();this.wheelButtons[this.focusIndex]?.focus({preventScroll:true});this.cue('menuOpen');}else if(this.stage==='wheel')this.activateWheel(this.focusIndex);else if(this.stage==='target')this.commit();return true;}
     if(this.stage==='actors')this.moveActor(key);
     else if(this.stage==='wheel')this.moveWheel(key);
     else if(this.stage==='target')this.moveTarget(key);

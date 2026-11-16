@@ -29,7 +29,7 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
     if(state.nativeMenuCodeUnlocked&&hasNativeStoryCompletion(state.world?.value))allowResume=false;
     $('menuResume').hidden=!allowResume;
     state.startupView.showMenu({allowResume});
-    actions.status(allowResume?'左右选择，空格确认；离开选项可继续当前游戏。':'左右选择，空格／Enter确认，Esc返回上一层。');
+    actions.status(allowResume?'左右选择，空格确认；离开选项可继续当前游戏。':'左右选择，空格确认，Esc返回上一层。');
   }
   function finishStoryCompletion(){
     const ticket=state.pendingStoryCompletion;if(!ticket)return false;
@@ -81,7 +81,7 @@ export function createSessionController({state, actions, $, canvas, ctx,completi
           },say: actions.say,log: actions.log,
           shade:alpha=>{$('openingShade').style.opacity=String(alpha);}});
         $('openingShade').hidden=false;$('openingShade').style.opacity='1';
-        actions.status('序章正在演出；Enter／空格或点击画面推进字幕，文字未显示完时先补全。');
+        actions.status('序章正在演出；空格或点击画面推进字幕，文字未显示完时先补全。');
         const runner=new OpeningRunner({program:state.openingProgram,hooks:state.openingView.hooks(),playback});
         const result=await runner.run();
         if(playback.paused)await playback.ready();playback.check();const hero=state.openingView.getActor(0);

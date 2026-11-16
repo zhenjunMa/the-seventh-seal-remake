@@ -242,7 +242,7 @@ export class NativeRouletteView{
   key(key){
     if(this.disposed||this.isSuspended())return false;
     if(key==='Escape'){if(this.phase==='choose')this.onClose();return true;}
-    if(key==='Enter'||key===' '){this.down(this.surface.pointer,{button:0,keyboard:true});return true;}
+    if(key===' '){this.down(this.surface.pointer,{button:0,keyboard:true});return true;}
     if(!['ArrowUp','ArrowDown'].includes(key))return false;
     if(this.phase==='no-money')return true;
     this.keyboardIndex=nativeRouletteKeyboardIndex(this.keyboardIndex,key,this.phase);

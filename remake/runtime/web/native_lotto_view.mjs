@@ -229,7 +229,7 @@ export class NativeLottoView{
   key(key){
     if(this.disposed||this.isSuspended())return false;
     if(key==='Escape'){if(this.phase==='choose')this.onClose();return true;}
-    if(key==='Enter'||key===' '){this.down(this.surface.pointer);return true;}
+    if(key===' '){this.down(this.surface.pointer);return true;}
     if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(key))return false;
     if(this.phase==='no-money')return true;
     const index=nativeLottoKeyboardIndex(this.keyboardIndex,key,this.phase);

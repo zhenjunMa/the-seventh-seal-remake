@@ -116,7 +116,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
   function dialogueKey(key,repeat=false){
     if(!session)return false;
     if(inputSuspended())return true;
-    if([' ','Enter'].includes(key)){
+    if(key===' '){
       if(!repeat&&!heldDialogueKeys.has(key)){heldDialogueKeys.add(key);advanceDialogue();}
       return true;
     }

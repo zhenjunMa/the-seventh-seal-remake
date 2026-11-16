@@ -13,33 +13,33 @@ function service(){
 }
 
 test('buy confirmation requires two presses, cancellation spends nothing and repeats never confirm',()=>{
-  const {view,events}=service();view.key('Enter',true);assert.equal(view.confirming,undefined);
-  view.key('Enter');assert.equal(view.confirming,true);assert.deepEqual(events,[]);
+  const {view,events}=service();view.key(' ',true);assert.equal(view.confirming,undefined);
+  view.key(' ');assert.equal(view.confirming,true);assert.deepEqual(events,[]);
   view.key('ArrowRight');assert.equal(view.quantity,2);
   view.key('Escape');assert.equal(view.confirming,false);assert.deepEqual(events,[]);
-  view.key('Enter');view.key('Enter');assert.deepEqual(events.at(-1),{type:'confirm',id:'a',quantity:1});
+  view.key(' ');view.key(' ');assert.deepEqual(events.at(-1),{type:'confirm',id:'a',quantity:1});
 });
 
 test('disabled products refuse a transaction and horizontal navigation follows the active shop panel',()=>{
   const {view,events}=service();view.key('ArrowDown');assert.deepEqual(events.at(-1),{type:'select',id:'b'});
-  view.key('Enter');assert.equal(view.confirming,undefined);
+  view.key(' ');assert.equal(view.confirming,undefined);
   view.key('ArrowLeft');assert.deepEqual(events.at(-1),{type:'filter',index:3});
   view.key('Escape');assert.equal(view.tradeFocus,'header');
   view.key('ArrowRight');assert.equal(view.tradeCommand,'sell');
-  view.key('Enter');assert.deepEqual(events.at(-1),{type:'mode',mode:'sell'});
+  view.key(' ');assert.deepEqual(events.at(-1),{type:'mode',mode:'sell'});
   view.key('Escape');view.key('Escape');assert.equal(view.tradeFocus,'category');
   view.key('Escape');assert.equal(view.active,false);assert.deepEqual(events.at(-1),{type:'close'});
 });
 
 test('suspended service input cannot select, confirm, change quantity or close',()=>{
   const {view,events}=service();view.isSuspended=()=>true;
-  for(const key of ['Enter','Escape','ArrowDown','ArrowRight'])assert.equal(view.key(key),false);
+  for(const key of [' ','Escape','ArrowDown','ArrowRight'])assert.equal(view.key(key),false);
   assert.deepEqual(events,[]);assert.equal(view.active,true);
 });
 
 test('the native all-recipes category is a read-only list',()=>{
   const {view,events}=service();view.state.mode='synthesize';view.state.category='all';
-  view.key('Enter');view.confirm();assert.equal(view.confirming,undefined);assert.deepEqual(events,[]);
+  view.key(' ');view.confirm();assert.equal(view.confirming,undefined);assert.deepEqual(events,[]);
 });
 
 test('native WordDisc keeps its prefills, white-point cursor and render-count animation',()=>{

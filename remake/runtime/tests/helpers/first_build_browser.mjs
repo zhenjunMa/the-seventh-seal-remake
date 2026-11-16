@@ -47,7 +47,7 @@ try{
     await send('Input.dispatchMouseEvent',{type:'mouseReleased',button:'left',clickCount:1,...rect});
   }
   if(action==='key'||action==='advance'){
-    const key=option('--key','Enter'),codes={Enter:13,Escape:27,Tab:9,' ':32,ArrowLeft:37,ArrowUp:38,ArrowRight:39,ArrowDown:40,F4:115,F5:116};
+    const key=option('--key',' '),codes={Enter:13,Escape:27,Tab:9,' ':32,ArrowLeft:37,ArrowUp:38,ArrowRight:39,ArrowDown:40,F4:115,F5:116};
     if(!codes[key])throw Error('未声明的验收按键：'+key);
     const params={key,code:key===' '?'Space':key,windowsVirtualKeyCode:codes[key],nativeVirtualKeyCode:codes[key]};
     const count=action==='advance'?40:1;

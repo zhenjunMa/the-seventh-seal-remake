@@ -63,9 +63,9 @@ test('occupied slot 00 requires overwrite confirmation, cancellation writes noth
   assert.deepEqual(writes,[entries[0]]);assert.equal(writes[0].summary,entries[0].summary);assert.equal(view.pending,false);
 });
 
-test('overwrite keyboard selection can choose cancel with Down and Enter without writing',async()=>{
+test('overwrite keyboard selection can choose cancel with Down and Space without writing',async()=>{
   const writes=[],entries=emptyEntries();entries[0].summary=summary();const {view}=await setup({onConfirm:row=>writes.push(row)});
-  view.show();view.setEntries(entries);await view.confirm();view.key('ArrowDown');view.key('Enter');
+  view.show();view.setEntries(entries);await view.confirm();view.key('ArrowDown');view.key(' ');
   assert.equal(view.confirming,false);assert.equal(view.active,true);assert.deepEqual(writes,[]);
 });
 
@@ -74,7 +74,7 @@ test('pending writes ignore repeated confirm, submit, keys, stale buttons and cl
   view.show();view.setEntries(emptyEntries());
   const staleSave=button(buttons,'保存所选栏位');const pending=view.confirm();
   assert.equal(view.pending,true);assert.equal(writes.length,1);
-  await view.confirm();await view.submit();view.key('Enter');view.key('Enter',true);view.key('ArrowDown');view.key('Escape');staleSave.onclick();
+  await view.confirm();await view.submit();view.key(' ');view.key(' ',true);view.key('ArrowDown');view.key('Escape');staleSave.onclick();
   assert.equal(writes.length,1);assert.equal(view.selected,0);assert.equal(view.active,true);assert.ok(buttons.children.every(button=>button.disabled));
   gate.resolve();await pending;assert.equal(view.pending,false);assert.equal(view.active,true);
 });
@@ -112,7 +112,7 @@ test('load ignores empty or damaged slots, loads an occupied slot directly and E
 
 test('Escape cancels overwrite first and then closes, while loading and held confirmation cannot submit',async()=>{
   const writes=[],entries=emptyEntries();entries[0].summary=summary();const context=await setup({onConfirm:row=>writes.push(row)}),{view}=context;
-  view.show();view.key('Enter');view.key('Escape');assert.equal(view.active,true);assert.deepEqual(writes,[]);
-  view.setEntries(entries);view.key('Enter',true);assert.equal(view.confirming,false);await view.confirm();view.key('Escape');assert.equal(view.confirming,false);assert.equal(context.closes,0);
+  view.show();view.key(' ');view.key('Escape');assert.equal(view.active,true);assert.deepEqual(writes,[]);
+  view.setEntries(entries);view.key(' ',true);assert.equal(view.confirming,false);await view.confirm();view.key('Escape');assert.equal(view.confirming,false);assert.equal(context.closes,0);
   view.key('Escape',true);assert.equal(context.closes,0);view.key('Escape');assert.equal(context.closes,1);assert.deepEqual(writes,[]);
 });

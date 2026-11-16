@@ -117,7 +117,7 @@ export class WorldMapView {
       }
       return true;
     }
-    if (key === ' ' || key === 'Enter') {
+    if (key === ' ') {
       if (!repeat && this.armed) this.confirm(this.selected);
       return true;
     }

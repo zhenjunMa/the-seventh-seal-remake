@@ -127,7 +127,7 @@ export class StartupView {
         this.pressVideo.hidden=false;
       }
     }
-    this.announce(stage==='gametitle'?'片头电影，Esc跳过':stage==='preopenpress'?'启动提示过渡':'按任意键进入主菜单');
+    this.announce(stage==='gametitle'?'片头电影，Esc跳过':stage==='preopenpress'?'启动提示过渡':'按空格进入主菜单');
     this.log({type:'startup-media-enter',stage,source:clip.source,url:clip.url,loop:video.loop});
     const playback=video.play();
     playback?.catch(error=>{
@@ -168,7 +168,7 @@ export class StartupView {
         this.selectRead(next);
       }
       else if(['ArrowUp','ArrowDown'].includes(key)){const count=this.optionCount();if(count>1){const next=Math.max(0,Math.min(count-1,this.subIndex+(key==='ArrowUp'?-1:1)));if(next!==this.subIndex){this.subIndex=next;this.listTop=this.galleryTop(next);this.cue('move');this.draw();this.renderOptions();}}}
-      else if([' ','Enter'].includes(key))this.confirm();
+      else if(key===' ')this.confirm();
       return true;
     }
     if(key==='ArrowLeft')this.select((this.selected+1)%4);
@@ -177,7 +177,7 @@ export class StartupView {
       const next=Math.max(0,Math.min(this.plaqueCount()-1,this.plaqueIndex+(key==='ArrowUp'?-1:1)));
       if(next!==this.plaqueIndex){this.plaqueIndex=next;this.helpX=-432;this.cue('move');this.draw();this.renderOptions();}
     }
-    else if([' ','Enter'].includes(key))this.confirm();
+    else if(key===' ')this.confirm();
     else if(key==='Tab')this.select((this.selected+1)%4);
     return true;
   }
@@ -297,7 +297,7 @@ export class StartupView {
       let refreshErrors;
       if(this.submenu==='read'&&this.refreshSaves){await this.run(async()=>{refreshErrors=await this.refreshSaves();});if(this.sequence.stage!=='menu'||this.submenu!=='read')return;}
       this.draw();this.renderOptions();this.updateButtons();
-      if(this.submenu==='extras')this.status('上下选择音乐，空格／Enter播放，Esc返回主菜单。');
+      if(this.submenu==='extras')this.status('上下选择音乐，空格播放，Esc返回主菜单。');
       if(this.submenu==='read'&&!this.getSave()&&!refreshErrors?.length)this.status('尚无重制存档；可从侧栏导入重制存档，Esc返回。');
       return;
     }

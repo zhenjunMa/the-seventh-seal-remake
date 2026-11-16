@@ -83,7 +83,7 @@ export class NativeCodeView{
     if(selectUp||selectDown){
       this.keyboardIndex=Math.max(0,Math.min(6,this.keyboardIndex+(selectUp?-1:1)));
       this.surface.setPointer(STATUE_CONTROLS[this.keyboardIndex].center);
-    }else if((key==='Enter'||key===' ')&&!repeat)this.activate(this.surface.pointer);
+    }else if(key===' '&&!repeat)this.activate(this.surface.pointer);
     return true;
   }
   dispose(){if(this.disposed)return;this.disposed=true;this.keys.abort();this.onStopSound('roll');this.surface.dispose();}

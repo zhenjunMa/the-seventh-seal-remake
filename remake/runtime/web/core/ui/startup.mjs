@@ -19,7 +19,7 @@ export class StartupSequence {
   key(key,repeat=false) {
     if(!['gametitle','preopenpress','openpress'].includes(this.stage))return false;
     if(!repeat&&this.stage==='gametitle'&&key==='Escape')this.complete();
-    else if(!repeat&&this.stage==='openpress')this.enter('menu');
+    else if(!repeat&&this.stage==='openpress'&&key!=='Enter')this.enter('menu');
     return true;
   }
   pointer(button=0) {

@@ -44,8 +44,8 @@ test('arrival confirmation and held confirm cannot enter the departure or submit
   view.key(' '); assert.equal(calls.length,0);
   view.key('ArrowDown'); assert.equal(view.selected,6);
   view.key(' ',true); assert.equal(calls.filter(c=>c[0]==='select').length,0);
-  view.key('Enter'); assert.deepEqual(calls.at(-1),['select',6]);
-  view.snapshot.phase='loading'; view.key('Enter'); view.key('Escape'); view.confirm(4);
+  view.key(' '); assert.deepEqual(calls.at(-1),['select',6]);
+  view.snapshot.phase='loading'; view.key(' '); view.key('Escape'); view.confirm(4);
   assert.equal(calls.filter(c=>c[0]==='select').length,1);
   assert.equal(calls.filter(c=>c[0]==='close').length,0);
 });

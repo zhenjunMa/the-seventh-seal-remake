@@ -78,7 +78,7 @@ export class OperationSystemView {
     }
     // Native Game005_2 handles confirmation only for the three mute rows.
     // The cursor row changes with left/right or its explicit choice buttons.
-    if([' ','Enter'].includes(key)){if(!repeat&&this.index<3)this.rows[this.index].click();return true;}
+    if(key===' '){if(!repeat&&this.index<3)this.rows[this.index].click();return true;}
     return key==='Tab';
   }
 }

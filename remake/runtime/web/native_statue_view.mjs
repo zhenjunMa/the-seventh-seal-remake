@@ -148,7 +148,7 @@ export class NativeStatueView{
       this.state.keyboardIndex=Math.max(0,Math.min(6,this.state.keyboardIndex+step));
       this.pointer=[...STATUE_CONTROLS[this.state.keyboardIndex].center];this.pointerVisible=true;this.paintPointer();return true;
     }
-    if(key==='Enter'||key===' '){
+    if(key===' '){
       if(!repeat){if(this.state.clueVisible)this.toggleClue();else this.activateAt(...this.pointer);}return true;
     }
     return true;

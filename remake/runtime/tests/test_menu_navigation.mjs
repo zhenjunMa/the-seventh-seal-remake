@@ -182,7 +182,7 @@ test('crystal catalog has no bottom filter, ignores horizontal keys and does not
   assert.equal(view.currentItemFilters().length,0);assert.ok([...view.filters,...view.equipmentFilters].every(button=>button.hidden));
   assert.equal(view.key('ArrowLeft'),true);assert.equal(view.key('ArrowRight'),true);assert.equal(doc.activeElement,active);assert.equal(calls.filter(row=>row[0]==='filter').length,0);
   view.key(' ');assert.equal(calls.filter(row=>row[0]==='confirm').length,0);assert.equal(doc.activeElement,active);
-  onPage('items','equipment');renderItems(view);view.focusItem();view.key('Enter');assert.equal(calls.filter(row=>row[0]==='confirm').length,0);
+  onPage('items','equipment');renderItems(view);view.focusItem();view.key(' ');assert.equal(calls.filter(row=>row[0]==='confirm').length,0);
   onPage('items','items');renderItems(view);view.focusItem();view.key(' ');assert.equal(calls.filter(row=>row[0]==='confirm').length,1);
 });
 

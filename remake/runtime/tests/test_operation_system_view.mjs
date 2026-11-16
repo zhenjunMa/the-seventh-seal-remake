@@ -14,7 +14,7 @@ function keyboard(){
 test('native cursor row uses arrows, confirmation preserves the preference, and row navigation wraps',()=>{
   const {view,changes,confirmed}=keyboard();
   view.key('ArrowUp');assert.equal(view.index,3);
-  for(const key of [' ','Enter'])assert.equal(view.key(key,false),true);
+  assert.equal(view.key(' ',false),true);
   assert.deepEqual(changes,[]);assert.deepEqual(confirmed,[]);assert.equal(view.state.battleCursor,'memory');
   view.key('ArrowLeft');assert.equal(view.state.battleCursor,'initial');
   view.key('ArrowRight');assert.equal(view.state.battleCursor,'memory');

@@ -82,7 +82,7 @@ test('moving onto the central escape command only focuses it; confirmation execu
   view.available=()=>true;view.battle={chooseEscape:()=>commands.push('escape')};
   view.commandSlots=manifest.semantic_bindings.default_commands.slots.reduce((slots,slot)=>(slots[slot.slot]=slot,slots),[]);
   view.key('ArrowDown');assert.equal(view.focusIndex,6);assert.deepEqual(commands,[]);
-  view.key('Enter');await Promise.resolve();assert.deepEqual(commands,['escape']);
+  view.key(' ');await Promise.resolve();assert.deepEqual(commands,['escape']);
 });
 
 function partyFixture(){
@@ -119,7 +119,7 @@ test('Command input selects actors before confirmation, including rotation and t
   view.key(' ');assert.equal(view.stage,'wheel');
   view.snapshot.actors=view.snapshot.actors.filter(a=>a.id==='003');
   view.key('Escape');assert.equal(view.stage,'actors');assert.equal(view.focusedActor,'003');
-  view.key('Enter');assert.equal(view.stage,'wheel');
+  view.key(' ');assert.equal(view.stage,'wheel');
 });
 
 test('An uncharged teammate remains selectable when the current actor is busy, including the only available teammate',()=>{

@@ -58,8 +58,8 @@ test('held confirmation cannot consume two lines or leak a synthesized button cl
   const second=actions.say('凯','第二段',1);
   actions.dialogueKey(' ',true);assert.equal(view.ready,false);
   assert.equal(actions.dialogueKeyUp(' '),true);
-  actions.dialogueKey('Enter');actions.dialogueKeyUp('Enter');
-  actions.dialogueKey('Enter');actions.dialogueKeyUp('Enter');await second;
+  actions.dialogueKey(' ');actions.dialogueKeyUp(' ');
+  actions.dialogueKey(' ');actions.dialogueKeyUp(' ');await second;
   assert.equal(state.dialogueResolve,null);assert.equal(view.active,false);
 });
 

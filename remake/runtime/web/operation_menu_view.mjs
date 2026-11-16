@@ -121,7 +121,7 @@ export class OperationMenuView{
       if(this.current==='weapon'&&this.mode==='content')return this.weaponView.key(key,repeat);
       return false;
     }
-    if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','Enter','Tab'].includes(key))return false;
+    if(!['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' ','Tab'].includes(key))return false;
     if(!this.node('menuShortcutEditor').hidden)return false;
     if(this.current==='formation'&&this.mode==='content')return this.formation.key(key,repeat);
     if(this.current==='equipment'&&this.mode==='content')return this.equipmentView.key(key,repeat);
@@ -130,13 +130,13 @@ export class OperationMenuView{
     if(this.current==='system'&&this.mode==='content')return this.system.key(key,repeat);
     if(key==='Tab')return true;
     const active=document.activeElement;if(this.mode==='content'&&active?.tagName==='SELECT'){
-      if(this.current==='equipment'&&!this.node('menuEquipmentPicker').hidden&&[' ','Enter'].includes(key)){if(!repeat){this.node('menuEquip').click();this.node('menuEquipmentPicker').hidden=true;this.focusGroup('content');}return true;}
+      if(this.current==='equipment'&&!this.node('menuEquipmentPicker').hidden&&key===' '){if(!repeat){this.node('menuEquip').click();this.node('menuEquipmentPicker').hidden=true;this.focusGroup('content');}return true;}
       if(key==='ArrowRight'||key==='ArrowLeft'){const group=this.controls('content'),index=group.indexOf(active);this.focusGroup('content',index+(key==='ArrowRight'?1:-1));return true;}
-      if(this.current==='skills'&&[' ','Enter'].includes(key)){if(!repeat)(active.id==='menuSkill'?this.node('menuSkillTarget'):this.node('menuFieldSkill')).focus();return true;}
+      if(this.current==='skills'&&key===' '){if(!repeat)(active.id==='menuSkill'?this.node('menuSkillTarget'):this.node('menuFieldSkill')).focus();return true;}
       return false;
     }
     const group=this.controls(this.mode),index=Math.max(0,group.indexOf(active));
-    if(key===' '||key==='Enter'){
+    if(key===' '){
       if(repeat)return true;
       if(this.mode==='main'){this.node(this.main[this.mainIndex][0]).click();}
       else if(this.mode==='sub'){active?.click();}
