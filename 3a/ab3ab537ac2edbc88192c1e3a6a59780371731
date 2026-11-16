@@ -1,0 +1,30 @@
+remake/runtime/web/core/resources/audio.mjs
+  s_a182f2f40e2b51::t_dd967dc16d7069 85,207,228,235,247-248,301-305,316,320,325,363
+remake/runtime/web/controllers/boot.mjs
+  s_a182f2f40e2b51::t_dd967dc16d7069 110-111
+README.md
+  s_a182f2f40e2b51::t_2528288fafbeeb 82
+remake/runtime/web/controllers/input.mjs
+  s_a182f2f40e2b51::t_2528288fafbeeb 15-20,23,145-149,176-186
+  s_a182f2f40e2b51::t_93d939f99c74b2 21
+  s_a182f2f40e2b51::t_f365bf8d998bfd 150
+  s_a182f2f40e2b51::t_fb5e245c4ca33d 187
+remake/runtime/web/index.html
+  s_a182f2f40e2b51::t_2528288fafbeeb 75
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "3aab3ab537ac2edbc88192c1e3a6a59780371731",
+  "prompts": {},
+  "sessions": {
+    "s_a182f2f40e2b51": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e42f-dc70-7650-88a0-65a2679058a1",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
