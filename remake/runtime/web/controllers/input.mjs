@@ -12,14 +12,15 @@ import {hdImagesPreference,saveHdImagesPreference} from '../core/resources/hd_im
 export function createInputController({state, actions, $, canvas, ctx}) {
   const listeners=new AbortController(),options={signal:listeners.signal};
   const fullscreen=createFullscreenController({$,canvas});
-  let controlHeld=false;
-  const isGameFastForwarding=()=>controlHeld;
-  function setFastForward(held){
-    if(controlHeld===held)return;
-    controlHeld=held;
-    $('gameSpeed').textContent=held?'2×':'1×';
+  let fastForward=false, controlTapPending=false;
+  const isGameFastForwarding=()=>fastForward;
+  function setFastForward(enabled){
+    if(fastForward===enabled)return;
+    fastForward=enabled;
+    $('gameSpeed').textContent=enabled?'2×':'1×';
+    state.audio?.syncBattleEffectRate?.();
   }
-  function releaseGameInput(){setFastForward(false);actions.releaseInput();}
+  function releaseGameInput(){controlTapPending=false;actions.releaseInput();}
   function saveKey(key,repeat=false){
     if(!['F4','F5'].includes(key))return false;
     const title=state.startupView;
@@ -141,7 +142,12 @@ export function createInputController({state, actions, $, canvas, ctx}) {
     $('layerPrevious').onclick=actions.guarded(async()=>{state.layerIndex=Math.max(0,state.layerIndex-1);await actions.drawLayer();});$('layerNext').onclick=actions.guarded(async()=>{state.layerIndex=Math.min(state.layerData.frames.length-1,state.layerIndex+1);await actions.drawLayer();});$('mainLayer').onchange=actions.guarded(actions.drawLayer);$('intrinsicLayer').onchange=actions.guarded(actions.drawLayer);
     $('layerSelect').onchange=actions.guarded(async()=>{state.layerIndex=Number($('layerSelect').value);await actions.drawLayer();});
     window.addEventListener('keydown',event=>{
-      setFastForward(Boolean(event.ctrlKey));
+      if(event.key==='Control'){
+        if(!event.repeat)controlTapPending=!event.defaultPrevented&&!state.engine?.paused
+          &&!event.altKey&&!event.metaKey&&!event.shiftKey;
+        return;
+      }
+      if(!event.repeat)controlTapPending=false;
       if(event.defaultPrevented)return;
       const key=event.key.length===1?event.key.toLowerCase():event.key;
       if(actions.gameOverKey?.(key,event.repeat)){event.preventDefault();return;}
@@ -167,7 +173,18 @@ export function createInputController({state, actions, $, canvas, ctx}) {
       if(['INPUT','SELECT','TEXTAREA','BUTTON'].includes(document.activeElement?.tagName))return;
       if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','a','s','d','Shift',' '].includes(key)){event.preventDefault();if(key===' '){if(!event.repeat)actions.interact();}else if(key==='Shift'){if(!event.repeat)state.running=!state.running;}else state.keys.add(key);}
     },options);
-    window.addEventListener('keyup',event=>{setFastForward(Boolean(event.ctrlKey));if(actions.dialogueKeyUp(event.key))event.preventDefault();if(state.scenes?.phase.startsWith('battle-')){actions.battleKeyUp?.(event.key);if(event.key===' ')event.preventDefault();}if(state.menuContext&&event.key===' '&&$('menuShortcutEditor').hidden&&state.menuContext.page!=='system')event.preventDefault();state.keys.delete(event.key.length===1?event.key.toLowerCase():event.key);},options);
+    window.addEventListener('keyup',event=>{
+      if(event.key==='Control'){
+        const toggle=controlTapPending&&!event.ctrlKey&&!state.engine?.paused;
+        controlTapPending=false;
+        if(toggle)setFastForward(!fastForward);
+        return;
+      }
+      if(actions.dialogueKeyUp(event.key))event.preventDefault();
+      if(state.scenes?.phase.startsWith('battle-')){actions.battleKeyUp?.(event.key);if(event.key===' ')event.preventDefault();}
+      if(state.menuContext&&event.key===' '&&$('menuShortcutEditor').hidden&&state.menuContext.page!=='system')event.preventDefault();
+      state.keys.delete(event.key.length===1?event.key.toLowerCase():event.key);
+    },options);
     window.addEventListener('blur',releaseGameInput,options);
     document.addEventListener('visibilitychange',releaseGameInput,options);
     window.addEventListener('resize',actions.resize,options);

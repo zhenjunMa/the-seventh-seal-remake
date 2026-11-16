@@ -107,7 +107,8 @@ export function createBootController({state, actions, $, canvas}) {
       actions.json('data/map_ambience.json',{optional:true}),
     ]).then(([audioManifest,startupManifest,mapAmbience])=>{
       signal.throwIfAborted();
-      state.audio=createAudioController({...audioManifest,clips:{...audioManifest.clips,...startupManifest.audio.clips}},{storage:localStorage,mapAmbience});
+      state.audio=createAudioController({...audioManifest,clips:{...audioManifest.clips,...startupManifest.audio.clips}},
+        {storage:localStorage,mapAmbience,getBattleEffectRate:()=>state.engine?.gameSpeed??1});
       state.audio.attachUnlock(document);
       if(interacted)state.audio.unlock();
       view.audio=state.audio;view.syncVideoAudio(true);

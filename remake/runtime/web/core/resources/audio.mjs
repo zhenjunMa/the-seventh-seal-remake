@@ -82,6 +82,7 @@ export function createAudioController(manifest, options = {}) {
   const getClip = id => typeof id === 'string' && (Object.hasOwn(manifest.clips, id)
     ? manifest.clips[id] : clipsByName.get(id.toLowerCase()));
   const createMedia = options.createMedia ?? (path => new Audio(path));
+  const getBattleEffectRate = options.getBattleEffectRate ?? (() => 1);
   const storage = options.storage ?? null, storageKey = options.storageKey ?? 'seventh-seal-audio-v1';
   let saved = null;
   try { saved = JSON.parse(storage?.getItem(storageKey) ?? 'null'); } catch {}
@@ -203,7 +204,7 @@ export function createAudioController(manifest, options = {}) {
     cleanupUnlock = () => { target.removeEventListener('pointerdown', listener, true); target.removeEventListener('keydown', listener, true); };
     return cleanupUnlock;
   }
-  function playClip(clipId, eventKey = null, {position=null,singleVoice=false,loop=false}={}) {
+  function playClip(clipId, eventKey = null, {position=null,singleVoice=false,loop=false,battleEffect=false}={}) {
     if (disposed || channelMuted('effects')) return false;
     if (!unlocked) { stats.suppressed_before_unlock++; return false; }
     const clip = getClip(clipId);
@@ -224,14 +225,14 @@ export function createAudioController(manifest, options = {}) {
     }
     const event={clip:clipId,event_key:eventKey,started:false,...(position?{position:{...position},volume_native:levels.volumeNative,pan_native:levels.panNative}:{})};
     effectEvents.push(event);if(effectEvents.length>256)effectEvents.shift();
-    startVoice(effects,++nextId,clipId,clip.path,{levels,position,loop,event});
+    startVoice(effects,++nextId,clipId,clip.path,{levels,position,loop,event,battleEffect});
     return true;
   }
   function setVoiceLevels(entry,{gain,pan}) {
     if(entry.gain!==gain){entry.gain=gain;entry.media.volume=channelVolume('effects')*gain;}
     if(entry.panner&&entry.panner.pan.value!==pan)entry.panner.pan.value=pan;
   }
-  function startVoice(voices,key,clipId,path,{levels,position,loop,event,onError}) {
+  function startVoice(voices,key,clipId,path,{levels,position,loop,event,onError,battleEffect=false}) {
     const media = createMedia(path);
     let cleanSpatial=()=>{},panner=null;
     const Context = globalThis.AudioContext??globalThis.webkitAudioContext;
@@ -243,7 +244,8 @@ export function createAudioController(manifest, options = {}) {
       if(positionalContext.state==='suspended')positionalContext.resume().catch(error=>errorRecord(error,'positioned-effect',clipId));
     }
     media.preload = 'auto'; media.loop = Boolean(loop); media.muted = channelMuted('effects');
-    const entry = {clip:clipId, media, panner, started:false, clean:() => {}};
+    if(battleEffect)media.playbackRate=getBattleEffectRate();
+    const entry = {clip:clipId, media, panner, battleEffect, started:false, clean:() => {}};
     setVoiceLevels(entry,levels);
     const current = () => !disposed && voices.get(key) === entry;
     const finish = () => { if(current()){entry.clean();voices.delete(key);retire(media);} };
@@ -296,6 +298,11 @@ export function createAudioController(manifest, options = {}) {
     cueEvents.push({sequence:++cueSequence,name,clip:cue.clip,event_key:eventKey,played});if(cueEvents.length>256)cueEvents.shift();
     return played;
   }
+  function syncBattleEffectRate(){
+    const rate=getBattleEffectRate();
+    for(const entry of effects.values())if(entry.battleEffect)entry.media.playbackRate=rate;
+  }
+  const playBattleClip=(clipId,eventKey)=>playClip(clipId,eventKey,{battleEffect:true});
   function playAction(step, eventKey) {
     const raw = step?.source?.raw_hex ?? step?.raw_hex;
     if (typeof raw !== 'string' || !/^(?:[a-f0-9]{2}){176}$/i.test(raw)) return false;
@@ -306,16 +313,16 @@ export function createAudioController(manifest, options = {}) {
     const frameCue = manifest.frame_sounds?.[roleId]?.[step.action_index];
     const key = eventKey ?? `${step.actor_id ?? ''}:${step.source_skill_index}:${step.plan_record_index}:${step.logical_frame}`;
     let played = false;
-    if (frameCue && frameCue.logical_frame === step.logical_frame) played = playClip(frameCue.clip, `${key}:dgp`);
+    if (frameCue && frameCue.logical_frame === step.logical_frame) played = playBattleClip(frameCue.clip, `${key}:dgp`);
     if (step.logical_frame !== v.getUint32(0x8e, true)) return played;
     const token = new TextDecoder().decode(b.slice(0x7a, 0x8e)).split('\0')[0];
     if (!token) return played;
-    return playClip(manifest.action_tokens?.[token] ?? null, `${key}:chr`) || played;
+    return playBattleClip(manifest.action_tokens?.[token] ?? null, `${key}:chr`) || played;
   }
   function playEffect(effectId, eventKey, logicalFrame = 0) {
     const cue = manifest.effect_sounds?.[effectId];
     if (!cue?.clip || logicalFrame !== cue.logical_frame) return false;
-    return playClip(cue.clip, `${eventKey}:effect:${effectId}`);
+    return playBattleClip(cue.clip, `${eventKey}:effect:${effectId}`);
   }
   function playItemEffect(itemId, eventKey, logicalFrame = 0) {
     return playEffect(manifest.item_effects?.[String(itemId)]?.effect_id,eventKey,logicalFrame);
@@ -353,5 +360,5 @@ export function createAudioController(manifest, options = {}) {
   function suspend() { desired = null; clearMusic(); stopEffects(); clearAmbience(); seen.clear(); return snapshot(); }
   function dispose() { if (disposed) return; disposed = true; cleanupUnlock?.(); cleanupUnlock = null; clearMusic(); stopEffects(); clearAmbience(); seen.clear();positionalContext?.close(); }
   return {setScene, setMusic, getClip, unlock, attachUnlock, updateMapAmbience, playCue, playClip, playAction, playEffect, playItemEffect, setMuted, setVolume,
-    setChannelMuted, setChannelVolume,setStoryMusicSuppressed, stopEffects, stopClip, suspend, snapshot, dispose};
+    setChannelMuted, setChannelVolume,setStoryMusicSuppressed, syncBattleEffectRate, stopEffects, stopClip, suspend, snapshot, dispose};
 }
