@@ -86,7 +86,11 @@ class MediaBuilder:
             if row.get('source'):
                 names.add(row['source'])
             names.update(row.get('backgrounds', []))
-        problems.extend(self.fingerprints.check(ignore=self.ignore_fingerprint, allow_missing_media=bool(self.media_formats)))
+        problems.extend(self.fingerprints.check(
+            ignore=self.ignore_fingerprint,
+            allow_missing_media='data/audio.json' in self.media_formats,
+            allow_loading_subset='data/prologue_presentation.json' in self.media_formats,
+        ))
         expected = {key.casefold(): value for key, value in self.plan.inputs.items()}
         for name in sorted(names):
             try:
@@ -661,7 +665,7 @@ def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--original-dir', type=Path, required=True, help='原版安装目录；只读')
     parser.add_argument('--target', nargs='+', default=['media'], choices=['data', 'media', 'game'])
-    parser.add_argument('--run', action='store_true', help='执行素材构建；默认只检查并列计划')
+    parser.add_argument('--dry-run', action='store_true', help='只检查并列出导出计划，不写入文件')
     parser.add_argument('--force', action='store_true', help='重新提取素材；保留固定规则与调参')
     parser.add_argument('--ignore-fingerprint', action='store_true', help='允许来源文件指纹／清单差异；必需文件和导出结果仍须通过校验')
     parser.add_argument('--write-reference', action='store_true', help='维护：从可信原版安装重写 tools/media_inputs.json，然后退出')
@@ -670,10 +674,11 @@ def main(argv=None):
     parser.add_argument('--port', type=int, default=8767)
     parser.add_argument('--save-dir', type=Path, help='独立存档目录，默认使用正式玩家目录')
     args = parser.parse_args(argv)
-    if args.write_reference and (args.run or args.serve or args.force or args.images_only or args.ignore_fingerprint):
+    run = not args.dry_run
+    if args.write_reference and (args.dry_run or args.serve or args.force or args.images_only or args.ignore_fingerprint):
         parser.error('--write-reference 只维护基准，不能与构建／放行选项同用')
-    if args.serve and (not args.run or args.images_only or args.target == ['data']):
-        parser.error('--serve 需要 --run，且不能与 --images-only 同用')
+    if args.serve and (args.dry_run or args.images_only or args.target == ['data']):
+        parser.error('--serve 需要完整素材导出，不能和 --dry-run、--images-only 或 --target data 同用')
     try:
         if args.write_reference:
             result = write_reference(OriginalFiles(args.original_dir), RUNTIME / 'tools/media_inputs.json')
@@ -684,20 +689,24 @@ def main(argv=None):
         # only rebuilding JSON. Config/ is never a recipe output.
         build_media = args.target != ['data'] and not args.images_only
         inputs = SourceFingerprints(OriginalFiles(args.original_dir), RUNTIME / 'tools/media_inputs.json')
-        problems = inputs.check(ignore=args.ignore_fingerprint, allow_missing_media=build_media)
+        problems = inputs.check(ignore=args.ignore_fingerprint, allow_missing_media=build_media,
+                                allow_loading_subset=args.target != ['data'])
         if problems:
             print(json.dumps(dict(problems=problems, fingerprint=inputs.report), ensure_ascii=False, indent=2))
             return 1
-        deferred = MEDIA_DOCUMENTS | {'story/index.json'} if build_media else set()
+        runtime_documents = set(MEDIA_DOCUMENTS) if build_media else set()
+        if args.target != ['data']:
+            runtime_documents.add('prologue_presentation.json')
+        deferred = runtime_documents | {'story/index.json'} if build_media else runtime_documents
         generated = DataRecipes(RUNTIME, args.original_dir, ignore_fingerprint=args.ignore_fingerprint, media_audio=build_media)
-        data_report = generated.build(run=args.run, defer=deferred)
+        data_report = generated.build(run=run, defer=deferred)
         print(json.dumps(dict(data=data_report), ensure_ascii=False, indent=2), flush=True)
         if args.target == ['data']:
             return 0
-        media_documents = {'data/' + name: raw for name, raw in generated.documents(MEDIA_DOCUMENTS)} if build_media else {}
+        media_documents = {'data/' + name: raw for name, raw in generated.documents(runtime_documents)}
         media_formats = {name: generated.manifest['documents'][name.removeprefix('data/')]['format']
                          for name in media_documents}
-        if args.run:
+        if run:
             # Files are now materialized. Release the shared reconstruction
             # graph before media decoding and let the planner read the files.
             generated = None
@@ -720,7 +729,7 @@ def main(argv=None):
             print('已按 --ignore-fingerprint 放行来源差异；缺失必需文件和不匹配的导出结果仍会失败', flush=True)
         if problems:
             return 1
-        if args.run:
+        if run:
             report = builder.build()
             print(json.dumps({key: report[key] for key in ('passed','scope','files','counts','definitions_unchanged','report')}, ensure_ascii=False, indent=2), flush=True)
             del builder

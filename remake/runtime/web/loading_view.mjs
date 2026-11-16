@@ -3,8 +3,10 @@ import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 // Original Progress01 + Progress.mnu in a fixed 640x480 viewport.
 export class LoadingView {
   static async create({manifest,image,...options}) {
-    const [backgrounds,frame,fill]=await Promise.all([
-      Promise.all(manifest.backgrounds.map(item=>image(item.image))),image(manifest.frame),image(manifest.fill)]);
+    const [loaded,frame,fill]=await Promise.all([
+      Promise.allSettled(manifest.backgrounds.map(async item=>image(item.image))),image(manifest.frame),image(manifest.fill)]);
+    const backgrounds=loaded.filter(result=>result.status==='fulfilled').map(result=>result.value);
+    if(!backgrounds.length)throw new Error('缺少可用的载入背景图');
     return new LoadingView({...options,manifest,backgrounds,frame,fill});
   }
   constructor({root,manifest,backgrounds,frame,fill,log}) {

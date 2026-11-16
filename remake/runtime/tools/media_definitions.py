@@ -5,11 +5,13 @@ The old research exporters remain available independently for developer audits.
 """
 from pathlib import Path, PurePosixPath
 import hashlib
+import io
 import json
 import re
 
 MEDIA = re.compile(r'^/?assets/.+\.(?:png|mp3|wav|ogg|mp4|webm)$', re.I)
 ORIGINAL = re.compile(r'^(?!/|[A-Za-z]:)(?!.*(?:^|/)\.\.(?:/|$)).+\.(?:dgp|dat|chr|itm|anm|tlk|mnu|cap|pak|bik|wav|exe|scn|mag|stg|bmp)$', re.I)
+LOADING_BACKGROUND_SOURCE = 'SYSTEM/Progress01.dgp'
 
 # 已筛掉的入场和胜利录音。按内容排除，保留原触发点和同名替换的能力。
 OMITTED_VOICES = {
@@ -85,6 +87,7 @@ class MediaDefinitions:
         self.audio_updates = {}
         self.unavailable_audio = set()
         self.unavailable_video = set()
+        self.loading_frames = {}
         ambience = 'data/map_ambience.json'
         for path in sorted((self.web / 'data').rglob('*.json')):
             relative = path.relative_to(self.web / 'data').as_posix()
@@ -109,8 +112,11 @@ class MediaDefinitions:
             self.documents.update({key: json.loads(raw) for key, raw in media_documents.items()})
             for key, value in media_documents.items():
                 self.definition_hashes[key] = hashlib.sha256(value).hexdigest()
+        if media_documents and 'data/audio.json' in media_documents:
             self.select_audio(fingerprints)
             self.select_videos(fingerprints.original)
+        if media_documents and 'data/prologue_presentation.json' in media_documents:
+            self.select_loading_backgrounds(fingerprints)
         for key, data in self.documents.items():
             if key == 'data/battle_packs.json':
                 continue
@@ -128,7 +134,7 @@ class MediaDefinitions:
         self.specials()
         for path in self.audio_updates:
             self.recipes[path]['inspect_audio'] = True
-        if media_documents:
+        if media_documents and 'data/audio.json' in media_documents:
             # Some packed definitions keep their original sound reference for
             # provenance. Skip the output without rewriting the packed JSON.
             for path, row in self.recipes.items():
@@ -142,6 +148,39 @@ class MediaDefinitions:
                     self.required.discard(path)
                     unavailable = self.unavailable_audio if kind == 'audio' else self.unavailable_video
                     unavailable.add(source)
+
+    def select_loading_backgrounds(self, fingerprints):
+        source = LOADING_BACKGROUND_SOURCE
+        try:
+            path = fingerprints.original.path(source)
+        except FileNotFoundError:
+            return  # The ordinary source preflight reports a missing archive.
+        if fingerprints.file_hash(path) == fingerprints.expected.get(source.casefold()):
+            return
+
+        from source.dgp import DGP, DGPError
+
+        loading = self.documents['data/prologue_presentation.json']['loading']
+        known = {row['sha256']: row['image'] for row in loading['backgrounds']}
+        try:
+            graphics = DGP(path)
+            for index, frame in enumerate(graphics.frames):
+                if frame.size == 0:
+                    continue
+                image = graphics.decode(index)
+                if not image.getchannel('A').getbbox():
+                    continue
+                with io.BytesIO() as png:
+                    image.save(png, format='PNG')
+                    name = known.get(hashlib.sha256(png.getvalue()).hexdigest())
+                if name is None:
+                    raise ValueError(f'{source} 的第 {index + 1} 张载入背景与已核对素材不一致')
+                self.loading_frames.setdefault(name, index)
+        except DGPError as error:
+            raise ValueError(f'无法读取载入背景 {source}：{error}') from error
+        if not self.loading_frames:
+            raise ValueError(f'{source} 缺少可用的载入背景图')
+        loading['backgrounds'] = [row for row in loading['backgrounds'] if row['image'] in self.loading_frames]
 
     def select_videos(self, original):
         def available(source):
@@ -458,7 +497,8 @@ class MediaDefinitions:
                          frame=role['unfocused_frame'] if state == 'unfocused' else role['source_frame'], channel='main')
         presentation = self.documents['data/prologue_presentation.json']['loading']
         for index, frame in enumerate(presentation['backgrounds']):
-            self.add(frame['image'], 'dgp', source='SYSTEM/Progress01.dgp', frame=index, channel='main')
+            self.add(frame['image'], 'dgp', source=LOADING_BACKGROUND_SOURCE,
+                     frame=self.loading_frames.get(frame['image'], index), channel='main')
         # The progress MNU is intentionally represented only by its two
         # runtime images; its source geometry is fixed in the game definition.
         for index, name in enumerate((presentation['frame'], presentation['fill'])):

@@ -14,7 +14,7 @@
 
 ## 快速开始
 
-需要 Python 3.12+、Node.js、FFmpeg（含 FFprobe）和保留目录结构的完整原版安装。请在仓库根目录执行命令。首次运行前，创建虚拟环境并安装依赖。
+需要 Python 3.12+、Node.js、FFmpeg（含 FFprobe）和一份保留原版目录结构的游戏安装。请在仓库根目录执行命令。首次运行前，创建虚拟环境并安装依赖。
 
 ```sh
 python3 -m venv .venv
@@ -25,15 +25,21 @@ Windows 下用 `python -m venv .venv` 创建虚拟环境，并将 `.venv/bin/pyt
 
 ### 1. 导出素材
 
+把 `--original-dir` 指向原版安装目录。命令默认导出运行数据、图片和目录中可用的音视频，原版文件只读。更换版本或补齐素材后，用同一条命令重跑即可，脚本会复用未变化且通过校验的产物。
+
 ```sh
-.venv/bin/python -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/DiQiFengYin" --run
+.venv/bin/python -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/DiQiFengYin"
 ```
 
-| 参数 | 作用 |
-| --- | --- |
-| `--original-dir <目录>` | 指定原版游戏安装目录。脚本只读原版文件。 |
-| `--run` | 导出运行数据、图片、音频和视频。省略时只检查并列出计划。 |
-| `--ignore-fingerprint` | 确认原版安装来源后，可在整文件指纹与基准有差异时使用。必需文件和导出产物仍须通过校验。 |
+只想校验安装目录和查看导出计划时，加 `--dry-run`。这条命令不会写入文件。
+
+```sh
+.venv/bin/python -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/DiQiFengYin" --dry-run
+```
+
+缺少音频时游戏会静默处理，缺少影片时会跳过播放并继续。载入背景可以缺少一部分，至少要有一张通过校验，进度条和边框仍需齐全。这些允许的缺失无需额外参数。
+
+如果换了原版版本，脚本可能提示多出文件或同名文件的内容与基准不同。确认安装来源后，可以加 `--ignore-fingerprint` 重试。脚本仍会校验必需文件、读取的游戏数据和导出产物。
 
 ### 2. 启动游戏
 
