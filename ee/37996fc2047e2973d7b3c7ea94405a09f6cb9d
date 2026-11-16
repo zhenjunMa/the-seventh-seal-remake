@@ -1,0 +1,22 @@
+remake/runtime/web/core/battle/battle_lifecycle.mjs
+  s_6cbdb100c4ce97::t_75c15f4250e05f 27,99
+remake/runtime/tests/test_battle_lifecycle_integration.mjs
+  s_6cbdb100c4ce97::t_300b4eb69cb293 39,45,47-54,56,59-66,68-84
+  s_6cbdb100c4ce97::t_8410f8ec91b544 38,46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ee37996fc2047e2973d7b3c7ea94405a09f6cb9d",
+  "prompts": {},
+  "sessions": {
+    "s_6cbdb100c4ce97": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1d453-9529-76c0-a613-4442351ab6f2",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
