@@ -119,8 +119,10 @@ export function createBootController({state, actions, $, canvas}) {
     const engineReady=afterIntro.then(startEngine).then(()=>{
       signal.throwIfAborted();
       state.engine.start({phase,interface:actions.updateInterface,
-        exploration:actions.updateExploration,battle:actions.updateBattleFrame,
-        suspend:actions.releaseInput,setPageHidden:actions.setPlayTimeHidden});
+        exploration:(now,elapsed)=>actions.updateExploration(now,elapsed,{draw:false}),
+        battle:actions.updateBattleFrame,
+        render:{exploration:actions.renderExploration,battle:actions.renderBattleFrame},
+        fastForward:actions.isGameFastForwarding,suspend:actions.releaseGameInput,setPageHidden:actions.setPlayTimeHidden});
       actions.wire();actions.resize();
     });
     const loadingReady=pictures.then(async()=>{

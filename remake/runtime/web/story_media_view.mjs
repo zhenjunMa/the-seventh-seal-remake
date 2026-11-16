@@ -22,12 +22,12 @@ export function validateStoryMedia(data){
   return data;
 }
 export class StoryMediaView{
-  constructor({manifest,root,audio,playback,createMedia=kind=>document.createElement(kind),
+  constructor({manifest,root,audio,playback,getPlaybackRate=()=>1,createMedia=kind=>document.createElement(kind),
     setTimer=(callback,delay)=>globalThis.setInterval(callback,delay),clearTimer=handle=>globalThis.clearInterval(handle),createAudioContext=()=>{
       const Context=globalThis.AudioContext??globalThis.webkitAudioContext;need(Context,'浏览器不支持剧情音频增益');return new Context();
     }}){
     validateStoryMedia(manifest);need(typeof audio?.setStoryMusicSuppressed==='function','地图音乐接口缺失');
-    Object.assign(this,{manifest,root,audio,playback,createMedia,setTimer,clearTimer,createAudioContext});
+    Object.assign(this,{manifest,root,audio,playback,getPlaybackRate,createMedia,setTimer,clearTimer,createAudioContext});
     this.entries=new Set();this.persistent=null;this.deferredRelease=false;this.disposed=false;this.timer=null;
   }
   check(){need(!this.disposed,'播放器已关闭');this.playback?.check();}
@@ -54,6 +54,7 @@ export class StoryMediaView{
   sync(){
     if(this.disposed)return;
     const channels=this.audio.snapshot?.().channels;
+    const rate=this.getPlaybackRate();
     for(const entry of this.entries){
       if(channels){
         const master=channels.master,channel=entry.kind==='audio'?channels.effects:null;
@@ -61,6 +62,7 @@ export class StoryMediaView{
         entry.media.volume=channel?Math.max(1,Math.min(127,Math.floor(2*Math.round(master.volume*64)*Math.round(channel.volume*64)/64)))/127:master.volume;
       }
       if(entry.ended)continue;
+      if(entry.media.playbackRate!==rate)entry.media.playbackRate=rate;
       if(this.playback?.paused)entry.media.pause();
       else if(entry.media.paused&&!entry.pending)this.start(entry);
     }

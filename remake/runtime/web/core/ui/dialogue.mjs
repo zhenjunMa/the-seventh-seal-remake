@@ -1,5 +1,7 @@
 // Native 460360/466450: DBCS cells and Latin words advance independently.
 // These are presentation pages; no script mutation or world state lives here.
+export const AUTO_ADVANCE_DELAY_MS=120;
+
 export function dialoguePages(text,{width,height,fontHeight,lineHeight,scroll=false,measureLatin=word=>word.length*fontHeight/2}){
   const tokens=[];
   for(const part of String(text).replace(/\r\n?/g,'\n').match(/\n|[^\x00-\x7f]|[^\S\n]|[^\s\x80-\uffff]+ ?/gu)??[]){
@@ -29,15 +31,13 @@ export function dialoguePages(text,{width,height,fontHeight,lineHeight,scroll=fa
 export class DialoguePlayback {
   constructor(pages,{now=0,interval=120,choices=[]}={}){
     this.pages=pages;this.interval=interval;this.choices=choices??[];
-    this.page=0;this.revealed=0;this.lastTick=now;this.elapsed=0;this.stage='typing';this.selected=0;
+    this.page=0;this.revealed=0;this.started=now;this.stage='typing';this.selected=0;
   }
   get current(){return this.pages[this.page];}
   get complete(){return this.revealed>=this.current.runs.length;}
-  tick(now,speed=1){
+  tick(now){
     if(this.stage==='typing'){
-      this.elapsed+=Math.max(0,now-this.lastTick)*speed;
-      this.lastTick=Math.max(this.lastTick,now);
-      this.revealed=Math.max(this.revealed,Math.min(this.current.runs.length,1+Math.floor(this.elapsed/this.interval)));
+      this.revealed=Math.max(this.revealed,Math.min(this.current.runs.length,1+Math.floor(Math.max(0,now-this.started)/this.interval)));
       if(this.complete)this.stage=this.page===this.pages.length-1&&this.choices.length?'choices':'waiting';
     }
     return this.current.runs.slice(0,this.revealed);
@@ -46,7 +46,7 @@ export class DialoguePlayback {
     if(this.stage==='closed')return {kind:'none'};
     if(this.stage==='choices')return {kind:'choice',index:this.choices[this.selected].index};
     if(!this.complete){this.revealed=this.current.runs.length;this.stage='typing';return {kind:'reveal'};}
-    if(this.page+1<this.pages.length){this.page++;this.revealed=0;this.lastTick=now;this.elapsed=0;this.stage='typing';return {kind:'page'};}
+    if(this.page+1<this.pages.length){this.page++;this.revealed=0;this.started=now;this.stage='typing';return {kind:'page'};}
     if(this.choices.length){this.stage='choices';return {kind:'choices'};}
     this.stage='closed';return {kind:'close'};
   }

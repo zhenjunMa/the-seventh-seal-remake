@@ -1,6 +1,7 @@
 import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {CaptionPlayback,captionLayout} from './core/ui/caption.mjs';
+import {AUTO_ADVANCE_DELAY_MS} from './core/ui/dialogue.mjs';
 import {createMenuTextRenderer} from './core/ui/menu_text.mjs';
 
 export class CaptionView {
@@ -26,7 +27,7 @@ export class CaptionView {
     const box=this.root.parentElement.getBoundingClientRect();
     this.root.style.setProperty('--caption-scale',String(Math.min(box.width/640,box.height/480)));
   }
-  show(text) {
+  show(text,isFastForwarding) {
     this.close();this.active=true;this.root.hidden=false;this.label.textContent=text;
     this.font=this.textRenderer.fonts.caption19;this.fontRevision=this.textRenderer.revision;
     this.layout=captionLayout(text,this.manifest.font_height,{
@@ -35,7 +36,16 @@ export class CaptionView {
     this.playback=new CaptionPlayback(text,this.now(),this.manifest.character_interval_ms);
     this.lastText=null;this.resize();this.button.focus({preventScroll:true});
     const epoch=this.epoch;
-    const frame=now=>{if(!this.active||this.epoch!==epoch)return;this.draw(now);this.scheduleFrame(frame);};
+    let advanceAt=null;
+    const frame=now=>{
+      if(!this.active||this.epoch!==epoch)return;
+      this.draw(now);this.scheduleFrame(frame);
+      if(!isFastForwarding?.()||!this.playback.complete){
+        advanceAt=null;return;
+      }
+      advanceAt??=now+AUTO_ADVANCE_DELAY_MS;
+      if(now>=advanceAt){advanceAt=null;this.onAdvance();}
+    };
     this.draw(this.now());this.scheduleFrame(frame);
     this.log?.({type:'caption-open',style:3,text,layout:this.layout});
   }

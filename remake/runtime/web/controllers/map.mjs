@@ -605,7 +605,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     retainedParty = party;
     retainedRevision = state.resources.revision;
   }
-  function updateExploration(now,deltaMs){
+  function updateExploration(now,deltaMs,{draw=true}={}){
     const delta=Math.min(deltaMs/1000,.08);
     state.scenes?.current?.npcRuntime?.update(now,{player:state.world.location,visible:npcAvailable,
       paused:!['map','event'].includes(state.scenes.phase)||Boolean(state.openingView?.active)});
@@ -686,11 +686,15 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       const listener=state.openingView?.active?state.openingView.cameraAt:(state.sceneEntryDraft??state.world.value).location;
       if(listener)state.audio?.updateMapAmbience?.(scene.data.id,listener,now);
     }
+    if(draw)renderExploration();
+  }
+  function renderExploration(){
     paint();
+    const scene=state.scenes?.current;
     if(state.scenes?.phase==='map'&&scene?.loadRemaining&&!scene.backgroundLoadStarted){
       scene.backgroundLoadStarted=true;
       void scene.loadRemaining().catch(error=>actions.log?.({type:'map-background-load-failed',map_id:scene.data.id,error:error.message}));
     }
   }
-  return {explorationPresentation:presentation,role, sheetAction, buildHud, prepareMap, prepareMapView, stopMapPreload, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, mapPointerDown, approachConversation, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, presentLoadedMap, updateExploration,captureScene,captureSavePreview};
+  return {explorationPresentation:presentation,role, sheetAction, buildHud, prepareMap, prepareMapView, stopMapPreload, validateEntry, commitView, changeMap, follow, fit, resize, npcAvailable, updateNearest, mapPointerDown, approachConversation, objectBitmap, transitionFor, renderWorldMap,selectWorldMapDestination,closeWorldMap, routeExit, drawCollision, paint, presentLoadedMap, updateExploration,renderExploration,captureScene,captureSavePreview};
 }

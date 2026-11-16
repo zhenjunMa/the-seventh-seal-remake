@@ -81,11 +81,18 @@ export function createBattleController({host, sessions = createBattleSessions()}
       if(!waiting)current().battle?.advanceClock(now);
       const snapshot=current().battle?.presentationSnapshot();
       if(!waiting&&!current().battleResourceWaits?.size)advanceBattlePresentation(now,snapshot);
-      current().battleView?.draw(snapshot,now);drawBattleInterface(now);
-    }catch(error){
-      current().battlePresentationError=error.message;current().battleView?.stop(error.message);
-      current().battle?.interrupt(error);actions.status(error.message,true);
-    }
+      return {snapshot,now};
+    }catch(error){failBattleFrame(error);}
+  }
+  function renderBattleFrame(frame){
+    if(!frame)return;
+    try{
+      current().battleView?.draw(frame.snapshot,frame.now);drawBattleInterface(frame.now);
+    }catch(error){failBattleFrame(error);}
+  }
+  function failBattleFrame(error){
+    current().battlePresentationError=error.message;current().battleView?.stop(error.message);
+    current().battle?.interrupt(error);actions.status(error.message,true);
   }
   function advanceBattlePresentation(now,snapshot=current().battle?.presentationSnapshot()){
     const battle=current().battle;
@@ -537,5 +544,5 @@ export function createBattleController({host, sessions = createBattleSessions()}
     trimBattleCache();
     sharedView?.destroy();sharedView=null;skillTestRules=null;
   }
-  return {warmBattleShared,warmBattleEntry,updateBattle,startBattle,startScriptedBattle,startTechniqueTest,returnFromBattle,battleKey,battleKeyUp,drawBattleInterface,advanceBattlePresentation,updateBattleFrame,disposeBattles,battleMenuState,chooseBattleItem,focusBattleMenu};
+  return {warmBattleShared,warmBattleEntry,updateBattle,startBattle,startScriptedBattle,startTechniqueTest,returnFromBattle,battleKey,battleKeyUp,drawBattleInterface,advanceBattlePresentation,updateBattleFrame,renderBattleFrame,disposeBattles,battleMenuState,chooseBattleItem,focusBattleMenu};
 }

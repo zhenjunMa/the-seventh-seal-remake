@@ -21,6 +21,7 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
   const heldDialogueKeys=new Set();
   const cancelled=storyCancelled;
   const inputSuspended=()=>Boolean(state.engine?.paused||state.storyPlayback?.paused||state.storyPlayback?.signal.aborted);
+  const isFastForwarding=()=>!inputSuspended()&&state.engine?.gameSpeed===2;
   async function playStory(work){
     if(state.storyPlayback)throw new Error('当前剧情尚未结束');
     const before={world:state.world,value:state.world?.value,revision:state.world?.value?.revision,
@@ -89,10 +90,9 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       state.choicePending=Boolean(choices);
       state.dialogueResolve=choices?null:()=>{if(!inputSuspended()&&closeSession(current))resolve();};
       try{
-        if(style===3&&!choices)state.captionView.show(text);
+        if(style===3&&!choices)state.captionView.show(text,isFastForwarding);
         else state.dialogueView.show({speaker,text,style,choices,record,sessionId:current.id,
-          getAnchor:()=>dialogueAnchor(mapId,record),
-          isFastForwarding:()=>!inputSuspended()&&actions.isDialogueFastForwarding?.()});
+          getAnchor:()=>dialogueAnchor(mapId,record),isFastForwarding});
       }catch(error){if(closeSession(current))reject(error);}
     });
   }
@@ -208,7 +208,8 @@ export function createStoryController({state, actions, $, canvas, ctx}) {
       if(program.commands.some(command=>[60,62,63].includes(command.opcode))){
         const manifest=await playbackTask(actions.json('data/story_media.json'),signal);
         if(playback?.paused)await playback.ready();signal?.throwIfAborted();playback?.check();
-        media=new StoryMediaView({manifest,root:$('screen'),audio:state.audio,playback});
+        media=new StoryMediaView({manifest,root:$('screen'),audio:state.audio,playback,
+          getPlaybackRate:()=>state.engine?.gameSpeed??1});
       }
       const nestedTlk=async args=>{
         // A battle or nested event sees the actual current map/controlled pose,

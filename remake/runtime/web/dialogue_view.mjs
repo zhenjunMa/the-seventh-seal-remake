@@ -1,10 +1,7 @@
 import {drawImageRegion} from './core/resources/image_regions.mjs';
 import {drawingContext} from './phaser/rendering/recorded_surface.mjs';
 import {createMenuTextRenderer} from './core/ui/menu_text.mjs';
-import {dialoguePages,DialoguePlayback} from './core/ui/dialogue.mjs';
-
-const FAST_FORWARD_SPEED=8;
-const FAST_FORWARD_PAGE_HOLD_MS=120;
+import {AUTO_ADVANCE_DELAY_MS,dialoguePages,DialoguePlayback} from './core/ui/dialogue.mjs';
 
 export class DialogueView {
   static async create({manifest,fonts,windowsFonts,image,...options}){
@@ -59,7 +56,7 @@ export class DialogueView {
       if(!this.isFastForwarding?.()||this.playback.stage!=='waiting'){
         advanceAt=null;return;
       }
-      advanceAt??=now+FAST_FORWARD_PAGE_HOLD_MS;
+      advanceAt??=now+AUTO_ADVANCE_DELAY_MS;
       if(now>=advanceAt){advanceAt=null;this.onAdvance();}
     };
     this.draw(this.started);this.scheduleFrame(frame);
@@ -132,8 +129,7 @@ export class DialogueView {
       let revealed=playback.pages.slice(0,playback.page).reduce((sum,page)=>sum+page.runs.length,0)+playback.revealed,page=0;
       while(page+1<pages.length&&revealed>pages[page].runs.length){revealed-=pages[page].runs.length;page++;}
       playback.pages=pages;playback.page=page;playback.revealed=revealed;
-      playback.lastTick=Math.max(now,this.readyAt);
-      playback.elapsed=Math.max(0,revealed-1)*playback.interval;
+      playback.started=Math.max(now,this.readyAt)-Math.max(0,revealed-1)*playback.interval;
       if(playback.stage!=='choices')playback.stage='typing';
       if(!this.choicesRoot.hidden)this.showChoices();
     }
@@ -152,7 +148,7 @@ export class DialogueView {
       }
     }
     if(now<this.readyAt)return;
-    this.playback.tick(now,this.isFastForwarding?.()?FAST_FORWARD_SPEED:1);
+    this.playback.tick(now);
     if(this.playback.stage==='choices'&&this.choicesRoot.hidden)this.showChoices();
     const colors=this.manifest.colors,player=(this.record?.speaker??1)<colors.speaker_cutoff;
     const {foreground,shadow}=player?colors.party:colors.npc;

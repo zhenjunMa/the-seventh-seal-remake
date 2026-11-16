@@ -73,11 +73,12 @@ export class PhaserRuntime {
     this.setPhase(adapters.phase??'map');
   }
   get paused(){return this.pauseReasons.size>0;}
+  get gameSpeed(){return this.adapters.fastForward?.()?2:1;}
   fail(error){this.pause('error');this.onError(error);}
   updateInterface(now,delta){
     if(!this.started||this.paused)return;
     try{
-      this.transitionClock.advance(this.skipDelta?0:this.game.loop.rawDelta);
+      this.transitionClock.advance(this.skipDelta?0:this.game.loop.rawDelta*this.gameSpeed);
       this.clock.advance(this.skipDelta?0:delta);this.skipDelta=false;
       this.adapters.interface?.(now,delta);
     }catch(error){this.fail(error);}
@@ -86,7 +87,16 @@ export class PhaserRuntime {
     if(!this.started||this.paused)return;
     try{
       const elapsed=scene.skipDelta?0:Math.max(0,delta);scene.skipDelta=false;
-      scene.clock.advance(elapsed);this.adapters[key]?.(scene.clock.time,elapsed);
+      const steps=elapsed>0?(this.gameSpeed??1):1,phase=this.phase;
+      let presentation;
+      for(let step=0;step<steps;step++){
+        scene.clock.advance(elapsed);
+        presentation=this.adapters[key]?.(scene.clock.time,elapsed);
+        // The next tick belongs to the new phase when a step starts a cutscene,
+        // changes maps or opens a battle. Do not spend it on the departing phase.
+        if(this.phase!==phase||this.paused||scene.clock.paused||scene.clock.closed)break;
+      }
+      this.adapters.render?.[key]?.(presentation);
     }catch(error){this.fail(error);}
   }
   setPhase(phase){
