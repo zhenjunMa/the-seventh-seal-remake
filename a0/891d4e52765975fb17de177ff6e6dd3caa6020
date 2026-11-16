@@ -1,0 +1,26 @@
+remake/runtime/tools/media_definitions.py
+  s_b8900de057a634::t_381e752a032ee9 119,152,155
+  s_b8900de057a634::t_f26a0eece6cd45 167-187,189
+remake/runtime/web/core/resources/hd_images.mjs
+  s_b8900de057a634::t_fcab538e3b65a8 8
+remake/runtime/tools/media_fingerprints.py
+  s_b8900de057a634::t_fcab538e3b65a8 88
+README.md
+  s_b8900de057a634::t_fcab538e3b65a8 40
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "a0891d4e52765975fb17de177ff6e6dd3caa6020",
+  "prompts": {},
+  "sessions": {
+    "s_b8900de057a634": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e3a6-6b45-7ba1-8081-29b57ea73e4d",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
