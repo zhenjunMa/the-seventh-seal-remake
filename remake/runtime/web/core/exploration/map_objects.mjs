@@ -68,33 +68,37 @@ function activeObjectSource(row){
   return {...actions[0],sounds:actions.map(action=>action.sound),layer:raw[0xce],restoredLayer:actions.at(-1).restoredLayer,fixed:raw[0xb4]!==0};
 }
 
-function researchSealTerrain(object,resource,movement,headerRawHex){
-  const {raw:header}=sourceBytes(headerRawHex,0x172,'研究所地图头');
-  const {terrain_frames:frames,terrain_width_cells:width,terrain_height_cells:height}=resource;
-  const idle=resource.actions.find(action=>action.index===0);
-  const completed=resource.actions.find(action=>action.index===1);
-  const closedFrame=idle&&frames?.[idle.first_frame+idle.logical_frames[0]];
-  const openFrame=completed&&frames?.[completed.first_frame+completed.logical_frames.at(-1)];
-  if(header[0x88]!==1||header[0x142]!==3||header[0x145]!==1
-    ||!closedFrame?.length||openFrame?.length!==0||width!==object.width_cells||height!==object.height_cells)
-    throw new Error('研究所封印地形来源无效');
+function projectObjectVolume(object,frame,header){
+  // Active mechanisms already place their volume in the exported DAT grid.
+  if(!header?.[0x88])return frame.map(([dx,dy,raw])=>({x:object.cell_x+dx,y:object.cell_y+dy,raw}));
 
   const scale=2**header[0x145],cellSize=2**header[0x142];
   const cells=[];
   // 411420 projects DGP volume samples onto the isometric DAT grid.
-  for(const [dx,dy,raw] of closedFrame){
+  for(const [dx,dy,raw] of frame){
     for(let row=dy*scale;row<(dy+1)*scale;row++){
       for(let col=dx*scale;col<(dx+1)*scale;col++){
         const x=Math.floor((object.x_native+8*(col-row))/cellSize);
         const y=Math.floor((object.y_native+4*(col+row))/cellSize);
-        const base=movement.rows[y]?.[x];
-        if(base!==undefined)cells.push({x,y,base,closed:raw===2?'0':'1'});
+        cells.push({x,y,raw});
       }
     }
   }
+  return cells;
+}
+
+function researchSealTerrain(object,resource,movement,header,cells){
+  const {terrain_frames:frames,terrain_width_cells:width,terrain_height_cells:height}=resource;
+  const completed=resource.actions.find(action=>action.index===1);
+  const openFrame=completed&&frames?.[completed.first_frame+completed.logical_frames.at(-1)];
+  if(header[0x88]!==1||header[0x142]!==3||header[0x145]!==1
+    ||!cells.length||openFrame?.length!==0||width!==object.width_cells||height!==object.height_cells)
+    throw new Error('研究所封印地形来源无效');
+
+  const changes=cells.map(({x,y,raw})=>({x,y,base:movement.rows[y][x],closed:raw===2?'0':'1'}));
   // The completed frame writes no terrain, so a reopened scene uses DAT ground.
   return open=>{
-    for(const {x,y,base,closed} of cells){
+    for(const {x,y,base,closed} of changes){
       const row=movement.rows[y];
       movement.rows[y]=row.slice(0,x)+(open?base:closed)+row.slice(x+1);
     }
@@ -137,8 +141,18 @@ export class MapObjectRuntime {
         const {raw:completed}=sourceBytes(action?.source_action_raw_hex??action?.raw_hex,0xac,'CF4完成动作');
         actor.restoredLayer=[2,3,1][completed[13]>>>4];
         if(actor.restoredLayer===undefined)throw new Error('CF4恢复绘制层模式尚未接入');
-        if(mapId==='M71075'&&index===9&&movement)
-          actor.sealTerrain=researchSealTerrain(object,resource,movement,headerRawHex);
+      }
+      const researchSeal=mapId==='M71075'&&index===9&&behavior_raw_cf===4;
+      const largeVolume=resource.terrain_frames&&(object.width_cells>1||object.height_cells>1);
+      if(movement&&(researchSeal||largeVolume)){
+        const idle=resource.actions.find(action=>action.index===0);
+        const frame=resource.terrain_frames?.[idle.first_frame+idle.logical_frames[0]]??[];
+        const header=behavior_raw_cf===4?sourceBytes(headerRawHex,0x172,'地图头').raw:null;
+        const cells=projectObjectVolume(object,frame,header).filter(({x,y})=>movement.rows[y]?.[x]!==undefined);
+        // The idle footprint stays targetable when an open mechanism clears its collision.
+        const footprint=cells.filter(cell=>cell.raw===1);
+        if(footprint.length)object.interactionCells=footprint;
+        if(researchSeal)actor.sealTerrain=researchSealTerrain(object,resource,movement,header,cells);
       }
       if(source){
         // 410850 draws FF first, but resets logical +22 and displayed +3C to0.

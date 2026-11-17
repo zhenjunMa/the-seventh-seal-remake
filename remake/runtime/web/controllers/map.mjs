@@ -16,7 +16,7 @@ import {chapterRouteExits,nativeEmptyEventCells} from "../core/exploration/map_c
 import {DistanceGait,MapLocomotion,mapTravelDistance,playerMapMotionProfile,nativeMapMovement} from "../core/exploration/map_locomotion.mjs";
 
 import {mapPresentation,mapViewport,mapPoseBounds,mapNpcVisible,playerMapDrawAnchor,npcMapDrawAnchor} from '../core/ui/map_presentation.mjs';
-import {mapWorldPoint,mapTargetInFront,pickMapDialogueObject,pickMapNpc,pickMapConversationTarget,mapConversationRoute,mapConversationFacing} from '../core/exploration/map_interaction.mjs';
+import {mapWorldPoint,mapTargetInFront,mapInteractionCellsDistance,pickMapDialogueObject,pickMapNpc,pickMapConversationTarget,mapConversationRoute,mapConversationFacing} from '../core/exploration/map_interaction.mjs';
 import {playbackFrame} from '../core/story/story_playback.mjs';
 
 import {createExplorationPresentation} from './presentation_handoff.mjs';
@@ -420,9 +420,15 @@ export function createMapController({state, actions, $, canvas, ctx}) {
       if(binding.handler==='scripted-object'&&(object.behavior_raw_cf!==2||!object.interaction_record_raw_f6))continue;
       if(binding.handler==='toggle-object'&&object.behavior_raw_cf!==7)continue;
       if(binding.handler==='mechanism'&&object.behavior_raw_cf!==2)continue;
-      const position={x:object.x_native*2,y:object.y_native*2};
-      if(isChest&&!mapTargetInFront(at,position))continue;
-      const distance=Math.hypot(position.x-at.x,position.y-at.y);
+      const cells=scene.objects.find(row=>row.index===object.index)?.interactionCells;
+      let distance;
+      if(cells){
+        distance=mapInteractionCellsDistance(at,cells,scene.movement.cellSize,isChest);
+      }else{
+        const position={x:object.x_native*2,y:object.y_native*2};
+        if(isChest&&!mapTargetInFront(at,position))continue;
+        distance=Math.hypot(position.x-at.x,position.y-at.y);
+      }
       if(distance<64&&(!state.nearest||distance<state.nearest.distance))state.nearest={...object,kind:'object',name:binding.handler==='keyed-chest'?'宝箱':['scripted-switch','toggle-object','mechanism'].includes(binding.handler)?'机关':'物件',distance};
     }
     for(const binding of bindings.rests){

@@ -13,6 +13,27 @@ export function mapTargetInFront(player, target, sideRatio = 1) {
   return forward > 0 && Math.abs(x * dy - y * dx) <= forward * sideRatio;
 }
 
+export function mapInteractionCellsDistance(player, cells, cellSize, requireFacing) {
+  const [fx, fy] = requireFacing ? forwardVectors[player.direction] : [0, 0];
+  let distance = Infinity;
+  for (const cell of cells) {
+    const left = cell.x * cellSize - player.x, top = cell.y * cellSize - player.y;
+    const right = left + cellSize, bottom = top + cellSize;
+    const farX = fx < 0 ? -left : right, farY = fy < 0 ? -top : bottom;
+    const nearX = fx ? Math.max(0, fx < 0 ? -right : left) : Math.max(0, left, -right);
+    const nearY = fy ? Math.max(0, fy < 0 ? -bottom : top) : Math.max(0, top, -bottom);
+
+    // Diagonal poses face a quadrant. Cardinal poses face a wedge where
+    // the forward distance must be at least as large as the sideways distance.
+    const x = fx && !fy ? Math.max(nearX, nearY) : nearX;
+    const y = fy && !fx ? Math.max(nearX, nearY) : nearY;
+    if ((fx && x > farX) || (fy && y > farY)) continue;
+    if (requireFacing && (fx ? farX : 0) + (fy ? farY : 0) <= 0) continue;
+    distance = Math.min(distance, Math.hypot(x, y));
+  }
+  return distance;
+}
+
 export function pickMapConversationTarget(player, npcs, previousId, {
   close_distance_pixels: closeDistance = 24,
   exit_margin_pixels: exitMargin = 8,
