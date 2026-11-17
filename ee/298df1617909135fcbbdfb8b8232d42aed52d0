@@ -1,0 +1,27 @@
+remake/runtime/tools/data_recipes.py
+  s_9068857d3aa952::t_c1a5f2794a5d8a 103-104,132,137-139,148-149,153,155-157,159-165,184
+README.md
+  s_9068857d3aa952::t_7b924a8261980a 17,28-30,33,39
+remake/runtime/tools/export_media.py
+  s_9068857d3aa952::t_cebef4ed980b24 701-702
+remake/runtime/tools/media_definitions.py
+  s_9068857d3aa952::t_3e4477e51262f1 419-429,431-433
+remake/runtime/tools/media_inputs.json
+  s_9068857d3aa952::t_16fcc37689b30c 49,4748,4775,4803,4831,6364,6376,6386,6391,6442,6492-6494,6501,6510-6511,6513,6524-6525,6544-6545,6555-6556,6560,6579-6580,6604,6607,6611,6614,6622,6625-6626,6638,6710,6715-6717,6719,6722,6739-6752,6759-6767,6770,6776,6778,6786-6793,6835,6837,6840,6847,6854,6856,6874-6876,6878,6880-6885,6901,6909-6915,6929,6936-6944,6947,6949,7004-7008
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ee298df1617909135fcbbdfb8b8232d42aed52d0",
+  "prompts": {},
+  "sessions": {
+    "s_9068857d3aa952": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e756-90e4-7182-ac7d-32ea6686d43a",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
