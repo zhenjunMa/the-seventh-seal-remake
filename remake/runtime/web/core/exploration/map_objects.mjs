@@ -68,8 +68,41 @@ function activeObjectSource(row){
   return {...actions[0],sounds:actions.map(action=>action.sound),layer:raw[0xce],restoredLayer:actions.at(-1).restoredLayer,fixed:raw[0xb4]!==0};
 }
 
+function researchSealTerrain(object,resource,movement,headerRawHex){
+  const {raw:header}=sourceBytes(headerRawHex,0x172,'研究所地图头');
+  const {terrain_frames:frames,terrain_width_cells:width,terrain_height_cells:height}=resource;
+  const idle=resource.actions.find(action=>action.index===0);
+  const completed=resource.actions.find(action=>action.index===1);
+  const closedFrame=idle&&frames?.[idle.first_frame+idle.logical_frames[0]];
+  const openFrame=completed&&frames?.[completed.first_frame+completed.logical_frames.at(-1)];
+  if(header[0x88]!==1||header[0x142]!==3||header[0x145]!==1
+    ||!closedFrame?.length||openFrame?.length!==0||width!==object.width_cells||height!==object.height_cells)
+    throw new Error('研究所封印地形来源无效');
+
+  const scale=2**header[0x145],cellSize=2**header[0x142];
+  const cells=[];
+  // 411420 projects DGP volume samples onto the isometric DAT grid.
+  for(const [dx,dy,raw] of closedFrame){
+    for(let row=dy*scale;row<(dy+1)*scale;row++){
+      for(let col=dx*scale;col<(dx+1)*scale;col++){
+        const x=Math.floor((object.x_native+8*(col-row))/cellSize);
+        const y=Math.floor((object.y_native+4*(col+row))/cellSize);
+        const base=movement.rows[y]?.[x];
+        if(base!==undefined)cells.push({x,y,base,closed:raw===2?'0':'1'});
+      }
+    }
+  }
+  // The completed frame writes no terrain, so a reopened scene uses DAT ground.
+  return open=>{
+    for(const {x,y,base,closed} of cells){
+      const row=movement.rows[y];
+      movement.rows[y]=row.slice(0,x)+(open?base:closed)+row.slice(x+1);
+    }
+  };
+}
+
 export class MapObjectRuntime {
-  constructor({objects,resources,mapFlagIndex,mapId=null,movement=null,random=null,onSound=null}) {
+  constructor({objects,resources,mapFlagIndex,mapId=null,movement=null,headerRawHex,random=null,onSound=null}) {
     this.mapFlagIndex=mapFlagIndex;this.mapId=mapId;this.lastTime=null;
     this.onSound=onSound;this.movement=movement;
     // Scene-local visual CRT, like MapNpcRuntime. The original complete global
@@ -104,6 +137,8 @@ export class MapObjectRuntime {
         const {raw:completed}=sourceBytes(action?.source_action_raw_hex??action?.raw_hex,0xac,'CF4完成动作');
         actor.restoredLayer=[2,3,1][completed[13]>>>4];
         if(actor.restoredLayer===undefined)throw new Error('CF4恢复绘制层模式尚未接入');
+        if(mapId==='M71075'&&index===9&&movement)
+          actor.sealTerrain=researchSealTerrain(object,resource,movement,headerRawHex);
       }
       if(source){
         // 410850 draws FF first, but resets logical +22 and displayed +3C to0.
@@ -195,6 +230,8 @@ export class MapObjectRuntime {
       const record=world.event_records?.[this.mapFlagIndex]?.[actor.object.index];
       const saved=record?parseInt(record.slice(0,2),16):0;
       const state=actor.commandState??(actor.behavior===2?restingMapMechanismState(saved):saved);
+      if(actor.sealTerrain&&(!actor.loaded||(actor.state===3)!==(state===3)))
+        actor.sealTerrain(state===3);
       if([2,9].includes(actor.behavior)){
         if(![0,2,3,5].includes(state)||[2,5].includes(state)&&!actor.pending)throw new Error('机关物件主动状态缺少剧情时钟');
         if(!actor.loaded){

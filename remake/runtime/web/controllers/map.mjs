@@ -197,6 +197,7 @@ export function createMapController({state, actions, $, canvas, ctx}) {
     });
     if(effects.length){
       scene.objectRuntime=new MapObjectRuntime({objects,resources:effects,mapFlagIndex:effectMap.map_flag_index,mapId:id,movement,
+        headerRawHex:table?.header_raw_hex,
         onSound:({token,x,y})=>{
           const listener=state.openingView?.active?state.openingView.cameraAt:state.world.location;
           const shift=data.movement.native_coordinate_shift;
