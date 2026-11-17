@@ -100,7 +100,8 @@ class OriginalBytes:
 
 
 class DataRecipes:
-    def __init__(self, runtime, original_dir, *, ignore_fingerprint=False, media_audio=False):
+    def __init__(self, runtime, original_dir, *, ignore_fingerprint=False, media_audio=False,
+                 audio_reference=None):
         self.runtime = Path(runtime).resolve()
         self.directory = self.runtime / 'tools/data_recipes'
         self.original = OriginalFiles(original_dir)
@@ -128,11 +129,14 @@ class DataRecipes:
             if not frozen_document(name):
                 raise ValueError('运行数据不可从固定配方生成：' + name)
         self.audio_headers = {}
+        self.audio_source_hashes = {}
         self.replaceable_headers = set()
         self.optional_audio_sources = set()
         self.audio_header_unavailable = False
         audio = self.manifest['documents'].get('audio.json')
-        if (ignore_fingerprint or media_audio) and audio:
+        audio_reference = audio_reference or {}
+        if (ignore_fingerprint or media_audio or audio_reference) and audio:
+            clip_headers = set()
             definition = dict(self.nodes[audio['root'][0]][1])
             for _, reference in self.nodes[definition['clips'][0]][1]:
                 clip = dict(self.nodes[reference[0]][1])
@@ -141,18 +145,24 @@ class DataRecipes:
                 node = self.nodes[index]
                 if node[0] != 'source' or node[2:5] != [0, 16, 'hex'] or not node[1].casefold().endswith('.wav'):
                     continue
-                if media_audio and node[1].startswith('sound/'):
-                    self.replaceable_headers.add(index)
+                if node[1].startswith('sound/'):
+                    clip_headers.add(index)
                 # These are fixed provenance headers, not game content. Recover
                 # only a RIFF header whose bytes match the retained range SHA.
                 header = b'RIFF' + (source['bytes'] - 8).to_bytes(4, 'little') + b'WAVEfmt '
-                if ignore_fingerprint and digest(header) == node[5]:
+                if (ignore_fingerprint or node[1] in audio_reference) and digest(header) == node[5]:
                     self.audio_headers[index] = header
-            if media_audio:
-                # A file may be absent only if every range reference is clip metadata.
+            if media_audio or audio_reference:
+                # Use the installation reference only for files whose recipe
+                # ranges are all clip headers. Keep other source pins intact.
                 required = {node[1] for i, node in enumerate(self.nodes)
-                            if node[0] == 'source' and i not in self.replaceable_headers}
-                self.optional_audio_sources = {self.nodes[i][1] for i in self.replaceable_headers} - required
+                            if node[0] == 'source' and i not in clip_headers}
+                clip_sources = {self.nodes[i][1] for i in clip_headers} - required
+                self.audio_source_hashes = {name: audio_reference[name] for name in clip_sources
+                                            if name in audio_reference}
+                if media_audio:
+                    self.replaceable_headers = clip_headers
+                    self.optional_audio_sources = clip_sources
 
     def output(self, name):
         path = PurePosixPath(name)
@@ -171,6 +181,7 @@ class DataRecipes:
                 continue
             try:
                 path = self.original.path(name)
+                expected = self.audio_source_hashes.get(name, expected)
                 if not self.ignore_fingerprint and checksum(path) != expected:
                     raise ValueError('原版内容与运行数据配方不一致：' + name)
                 self.paths[name] = path

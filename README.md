@@ -14,7 +14,7 @@
 
 ## 快速开始
 
-需要 Python 3.12+、Node.js、FFmpeg（含 FFprobe）和一份保留原版目录结构的游戏安装。请在仓库根目录执行命令。首次运行前，创建虚拟环境并安装依赖。
+需要 Python 3.12+、Node.js、FFmpeg（含 FFprobe）和《第七封印》的简体中文版安装包。请在仓库根目录执行命令。首次运行前，创建虚拟环境并安装依赖。
 
 ```sh
 python3 -m venv .venv
@@ -25,16 +25,18 @@ Windows 下用 `python -m venv .venv` 创建虚拟环境，并将 `.venv/bin/pyt
 
 ### 1. 导出素材
 
-把 `--original-dir` 指向原版安装目录。命令默认导出运行数据、图片和目录中可用的音视频，原版文件只读。更换版本或补齐素材后，用同一条命令重跑即可，脚本会复用未变化且通过校验的产物。
+安装或解包 `第七封印简体中文版.exe`，把 `--original-dir` 指向包含 `GAME.exe` 和 `SYSTEM` 的游戏目录。默认素材校验以这份简体版安装包为基准。用于核对同名安装包的 SHA-256 为 `1433d83aa37a0c3f5cf543e510681291e43a517c3a80bf47e9535f008d502675`。
+
+命令从安装目录读取运行数据、图片和音视频。重新导出时，脚本会复用通过校验的已有产物。
 
 ```sh
-.venv/bin/python -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/DiQiFengYin"
+.venv/bin/python -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/game"
 ```
 
 只想校验安装目录和查看导出计划时，加 `--dry-run`。这条命令不会写入文件。
 
 ```sh
-.venv/bin/python -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/DiQiFengYin" --dry-run
+.venv/bin/python -B remake/runtime/tools/build_runtime.py --original-dir "/path/to/game" --dry-run
 ```
 
 缺少音频时游戏会静默处理，缺少影片时会跳过播放并继续。载入背景按传入的原版目录导出，至少要有一张能解码且含可见内容的图片，进度条和边框仍需齐全。这些允许的缺失无需额外参数。

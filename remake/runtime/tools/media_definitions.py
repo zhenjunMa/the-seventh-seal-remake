@@ -416,15 +416,21 @@ class MediaDefinitions:
         sensor = node.get('sensor', {})
         self.add(sensor.get('image'), 'plane', source=source, offset=sensor.get('source_offset'),
                  width=node['width'], height=node['height'], raw_sha256=sensor.get('sha256'))
-        if node.get('composed'):
-            overlays = []
-            if node.get('id') == 'game001':
-                overlays = [[widget['normal_images'][0], widget['draw_point_raw']['x'], widget['draw_point_raw']['y']]
-                            for widget in node['widgets'][1:5]]
+        composed = node.get('composed')
+        if composed:
+            main_menu = node.get('id') == 'game001'
+            if main_menu:
+                widgets = node['widgets'][1:5]
+            elif url(composed).startswith('/assets/native_services/'):
+                widgets = [widget for widget in node['widgets'][1:] if widget['normal_images']]
+            else:
+                widgets = ()
+            overlays = [[widget['normal_images'][0], widget['draw_point_raw']['x'], widget['draw_point_raw']['y']]
+                        for widget in widgets]
             fields = dict(base=images[0]['image'], overlays=overlays,
-                          crop=[0, 0, 640, 480] if overlays else None)
-            self.add(node['composed'], 'compose', **fields)
-            if overlays:
+                          crop=[0, 0, 640, 480] if main_menu and overlays else None)
+            self.add(composed, 'compose', **fields)
+            if main_menu and overlays:
                 self.add('assets/menu/main.png', 'compose', **fields)
 
     def visit(self, node, source=None, hashes=None):

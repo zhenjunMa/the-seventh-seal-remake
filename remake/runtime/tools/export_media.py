@@ -698,7 +698,8 @@ def main(argv=None):
         if args.target != ['data']:
             runtime_documents.add('prologue_presentation.json')
         deferred = runtime_documents | {'story/index.json'} if build_media else runtime_documents
-        generated = DataRecipes(RUNTIME, args.original_dir, ignore_fingerprint=args.ignore_fingerprint, media_audio=build_media)
+        generated = DataRecipes(RUNTIME, args.original_dir, ignore_fingerprint=args.ignore_fingerprint,
+                                media_audio=build_media, audio_reference=inputs.expected)
         data_report = generated.build(run=run, defer=deferred)
         print(json.dumps(dict(data=data_report), ensure_ascii=False, indent=2), flush=True)
         if args.target == ['data']:
