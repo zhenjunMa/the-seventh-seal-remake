@@ -1,0 +1,26 @@
+remake/runtime/web/core/exploration/map_interaction.mjs
+  s_abcc6171a2732d::t_0aaa106cced592 16-17,31
+  s_abcc6171a2732d::t_445027f7501354 18-30,32-36
+remake/runtime/web/core/exploration/map_objects.mjs
+  s_abcc6171a2732d::t_0aaa106cced592 71-73,83,87-98,101,144-155
+  s_abcc6171a2732d::t_6518b9a05eb1b0 78
+remake/runtime/web/controllers/map.mjs
+  s_abcc6171a2732d::t_0aaa106cced592 19,423,426
+  s_abcc6171a2732d::t_445027f7501354 424-425,427-431
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ffe61c48e6629c303b8094924806ef96e39d8c41",
+  "prompts": {},
+  "sessions": {
+    "s_abcc6171a2732d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1e8d5-b3c2-7622-8c55-dfa781d31671",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
