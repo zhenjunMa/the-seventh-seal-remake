@@ -1,0 +1,21 @@
+remake/runtime/web/core/party/party_skill_corrections.mjs
+  s_43ebe3951a222d::t_bf3ddaa5ba0c7b 25-32
+remake/runtime/web/core/story/chapter_runner.mjs
+  s_43ebe3951a222d::t_6ae7730788f765 729-735
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "e1f151fc984eeb08ec1a244127f22d8cf61ef186",
+  "prompts": {},
+  "sessions": {
+    "s_43ebe3951a222d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a1eef3-5920-7e23-8a48-cf428d160468",
+        "model": "gpt-6.2-sol"
+      },
+      "human_author": "Marco <lingfenglangshao@gmail.com>"
+    }
+  }
+}
