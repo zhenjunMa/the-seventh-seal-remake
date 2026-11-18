@@ -143,8 +143,16 @@ export class OperationTechniqueView{
   }
   paintRoster(){
     for(const [index,status]of this.rows.entries()){
-      const button=this.button('actor-'+status.id,status.name,20,50+index*86,480,83,{click:()=>this.chooseActor(status.id),focus:()=>{for(const row of this.element.querySelectorAll('[data-role-id]'))setImageSource(row.querySelector('img'),this.manifest.actor_panels[row.dataset.roleId][row===button?'unfocused':'normal']);this.roleFocus=status.id;this.onActor?.(status.id,false);}});button.dataset.roleId=status.id;button.className='roster-actor';
-      const panel=this.manifest.actor_panels?.[status.id];if(panel)this.image(panel[this.roleFocus===status.id?'unfocused':'normal'],0,0,button);
+      const button=this.button('actor-'+status.id,status.name,20,50+index*86,480,83,{
+        click:()=>this.chooseActor(status.id),focus:()=>this.onActor?.(status.id,false),
+      });
+      button.dataset.roleId=status.id;button.className='roster-actor';
+      const panel=this.manifest.actor_panels?.[status.id];
+      if(panel){
+        const portrait=this.image(panel.normal,0,0,button),onFocus=button.onfocus;
+        button.onfocus=()=>{setImageSource(portrait,panel.unfocused);onFocus();};
+        button.onblur=()=>setImageSource(portrait,panel.normal);
+      }
       const dl=document.createElement('dl');dl.className='actor-summary-values';button.append(dl);
       for(const [label,value,className]of operationSummaryFields(status)){const row=document.createElement('div'),number=document.createElement('dd');row.className='summary-'+className;number.setAttribute('aria-label',label+' '+value);if(this.textRenderer){const canvas=document.createElement('canvas');const result=this.textRenderer.paint(canvas,value,{font:className==='level'?'simsun26':'simsun18'});position(canvas,result.offsetX,result.offsetY);number.append(canvas);}else number.textContent=value;row.append(number);dl.append(row);}
     }
