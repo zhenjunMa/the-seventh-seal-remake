@@ -22,12 +22,14 @@ export function correctPartySkill(skill){
       play_support_contact_effect:true};
   }
   if(!hasPartySkillTypeCorrection(skill))return skill;
-  const flags=parseInt(skill.fixed_raw_hex.slice(0x32*2,0x33*2),16);
-  if((flags&15)!==0)return skill;
-  const corrected=(flags&0xf0)|3,raw=skill.fixed_raw_hex;
-  const originalFlags=skill.type_flags_u32_0x32??Array.from({length:4},(_,i)=>parseInt(raw.slice((0x32+i)*2,(0x33+i)*2),16)*2**(i*8)).reduce((a,b)=>a+b,0);
-  return {...skill,fixed_raw_hex:raw.slice(0,0x32*2)+corrected.toString(16).padStart(2,'0')+raw.slice(0x33*2),
-    type_raw:3,type_flags_u32_0x32:originalFlags|3,
+  const bytes=Uint8Array.from(skill.fixed_raw_hex.match(/../g),value=>parseInt(value,16));
+  if((bytes[0x32]&15)!==0)return skill;
+  // 与英格妮和凯的同名援攻一致，归入特殊技巧并占一个编成球。
+  bytes[0x32]|=3;
+  const view=new DataView(bytes.buffer);
+  view.setUint32(0x36,1,true);
+  return {...skill,fixed_raw_hex:Array.from(bytes,value=>value.toString(16).padStart(2,'0')).join(''),
+    type_raw:3,type_flags_u32_0x32:view.getUint32(0x32,true),
     remake_correction:'aid-command-type'};
 }
 

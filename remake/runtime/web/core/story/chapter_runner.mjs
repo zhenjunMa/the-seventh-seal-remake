@@ -726,8 +726,13 @@ export class ChapterRunner {
     }
   }
   applyMutation(draft, table, record, context = {}) {
-    if ([3, 7, 8, 10, 11, 14, 16, 17].includes(record.mutation_type))
-      return applyNativeStoryMutation(draft, record, {roleDefinitions: this.data.role_definitions});
+    if ([3, 7, 8, 10, 11, 14, 16, 17].includes(record.mutation_type)) {
+      // 烈南对话的最后一条记录指向朱特的援攻，原版却用了无效果的类型 16。
+      const teachesJuteAid = table.id === 'M17028' && record.id === 18 &&
+        record.mutation_type === 16 && record.mutation_index === 4 && record.mutation_bit === 71;
+      const mutation = teachesJuteAid ? {...record, mutation_type: 14} : record;
+      return applyNativeStoryMutation(draft, mutation, {roleDefinitions: this.data.role_definitions});
+    }
     if (record.mutation_type === 9) {
       const request = applyWorldMapCommandToDraft(
         draft,
